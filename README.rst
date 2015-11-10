@@ -175,14 +175,14 @@ General instructions:
 ---------------------
 
 
-1. install the following dependencies using your favorite package manager:
+Install the following dependencies using your favorite package manager:
 
 - Python 3
 - pip (the python package manager) for Python3
 - PyQt5 for python3  .
 
 
-2. use pip to install ``hackedit`` and its python dependencies::
+Use pip to install ``hackedit`` and its python dependencies::
 
       pip3 install hackedit --upgrade
 
@@ -251,9 +251,7 @@ Windows
 
 2. Install `PyQt5 for Python 3.4`_
 
-3. Install `Git for Windows`_ and make sure it is added to PATH (if not the
-templates repository won't get sync. Note that you can choose to not add it
-to your system path but only in HackEdit *(Preferences->Environment->Environment Variables)*)
+3. Install `Git for Windows`_ and make sure it is added to PATH (if not the templates repository won't get sync. Note that you can choose to not add it to your system path but only in HackEdit *(Preferences->Environment->Environment Variables)*)
 
 4. Open a command line prompt and run the following commands:
 
