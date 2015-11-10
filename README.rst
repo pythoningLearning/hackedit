@@ -199,7 +199,7 @@ Use pip to install ``hackedit`` and its python dependencies::
       pip3 install hackedit --upgrade
 
 
-   To install the latest development version, run the following command instead::
+To install the latest development version, run the following command instead::
 
       pip3 install git+https://github.com/HackEdit/HackEdit.git --upgrade
 
