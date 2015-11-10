@@ -1,0 +1,3 @@
+# minimum requirements should also include PyQt5 but it is not pip installable.
+pip
+setuptools

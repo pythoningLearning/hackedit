@@ -1,0 +1,35 @@
+#
+# Dependencies that need to be installed to develop hackedit.
+#
+
+# base requirements
+-r requirements.txt
+
+# optional dependencies
+- requirements-opt.txt
+
+# extlibs that are distributed though a zip file (for easier packaging)
+pyqode.qt
+pyqode.core
+pyqode.python
+pyqode.cobol
+future
+pygments
+jedi==0.8.1
+pep8
+pyflakes
+boss
+cement
+qdarkstyle
+
+# required for development
+coverage
+pytest
+sphinx
+pyqt-distutils
+
+
+# required for testing
+pytest-qt
+pytest-cov
+pytest-pep8
