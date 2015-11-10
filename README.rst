@@ -2,6 +2,18 @@
 
 |
 
+.. image:: https://img.shields.io/pypi/v/hackedit.svg
+   :target: https://pypi.python.org/pypi/hackedit/
+   :alt: Latest PyPI version
+
+.. image:: https://img.shields.io/pypi/dm/hackedit.svg
+   :target: https://pypi.python.org/pypi/hackedit/
+   :alt: Number of PyPI downloads
+
+.. image:: https://img.shields.io/pypi/l/hackedit.svg
+
+|
+
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/HackEdit/hackedit
    :target: https://gitter.im/HackEdit/hackedit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
