@@ -19,11 +19,22 @@ def load():
     """
     string = QtCore.QSettings().value('editor/mimetypes', '{}')
     db = json.loads(string)
+    if not db:
+        db = _get_default_mimetypes()
+        QtCore.QSettings().setValue('editor/mimetypes', json.dumps(db))
     for mimetype, exts in db.items():
         if not exts:
             continue
         for ext in exts:
             mimetypes.add_type(mimetype, ext.replace('*', ''))
+
+
+def _get_default_mimetypes():
+    ret_val = {}
+    for mtype in get_supported_mimetypes():
+        exts = get_extensions(mtype)
+        ret_val[mtype] = exts
+    return ret_val
 
 
 def get_supported_mimetypes():
