@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_templates.ui'
+# Form implementation generated from reading ui file 'D:\Documents\HackEdit-Dev\hackedit\data/forms\settings_page_templates.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -15,6 +15,13 @@ class Ui_Form(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setContentsMargins(6, -1, -1, -1)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.lbl_git_not_found = QtWidgets.QLabel(Form)
+        self.lbl_git_not_found.setStyleSheet("background-color: #DD8080;\n"
+"color: white;\n"
+"padding: 10px;\n"
+"border-radius:3px;")
+        self.lbl_git_not_found.setObjectName("lbl_git_not_found")
+        self.verticalLayout.addWidget(self.lbl_git_not_found)
         self.groupBox_2 = QtWidgets.QGroupBox(Form)
         self.groupBox_2.setObjectName("groupBox_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_2)
@@ -106,7 +113,7 @@ class Ui_Form(object):
         self.lbl_boss_version.setObjectName("lbl_boss_version")
         self.verticalLayout_2.addWidget(self.lbl_boss_version)
         self.verticalLayout.addWidget(self.groupBox_2)
-        self.verticalLayout.setStretch(0, 1)
+        self.verticalLayout.setStretch(1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -114,6 +121,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.lbl_git_not_found.setText(_translate("Form", "<html><head/><body><p align=\"center\">Git not found in PATH, Sync will not work!</p></body></html>"))
         self.groupBox_2.setTitle(_translate("Form", "Sources"))
         self.bt_add_source.setToolTip(_translate("Form", "Add a template source repository"))
         self.bt_add_source.setText(_translate("Form", "Add"))

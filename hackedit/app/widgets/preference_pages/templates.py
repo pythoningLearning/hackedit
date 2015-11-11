@@ -2,8 +2,9 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from hackedit.app import settings
+from hackedit.api import system
 from hackedit.api.widgets import PreferencePage, FileIconProvider
+from hackedit.app import settings
 from hackedit.app import boss_wrapper as boss
 from hackedit.app.forms import settings_page_templates_ui
 from hackedit.app.forms import dlg_add_boss_source_ui
@@ -36,6 +37,7 @@ class Templates(PreferencePage):
         self.ui.bt_add_source.clicked.connect(self.add_source)
         self.update_sources()
         self.update_source_details(self.ui.list_sources.currentItem())
+        self.ui.lbl_git_not_found.setVisible(system.which('git') is None)
 
     def update_sources(self):
         row = self.ui.list_sources.currentRow()
