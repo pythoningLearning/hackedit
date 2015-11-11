@@ -13,6 +13,7 @@ from hackedit.app.forms import wizard_new_ui
 class WizardNew(QtWidgets.QWizard):
     def __init__(self, parent, current_project):
         super().__init__(parent)
+        self.is_valid = False
         self.home_path = os.path.expanduser('~')
         if not current_project:
             current_project = self.home_path
