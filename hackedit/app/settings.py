@@ -3,6 +3,7 @@ Provides a simplified access to the common application settings (not specific
 to a plugin).
 """
 import getpass
+import locale
 import logging
 import os
 
@@ -441,7 +442,8 @@ def set_safe_save(val):
 
 
 def default_encoding():
-    return _SETTINGS.value('editor/default_encoding', 'UTF-8')
+    return _SETTINGS.value('editor/default_encoding',
+                           locale.getpreferredencoding())
 
 
 def set_default_encoding(value):
