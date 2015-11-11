@@ -41,13 +41,11 @@ def _window():
 
         if not isinstance(w, MainWindow):
             try:
-                try:
-                    w = _APP._last_window
-                except AttributeError:
-                    w = None
-                if w is None:
-                    w = _APP._editor_windows[0]
+                w = _APP._editor_windows[0]
             except IndexError:
                 w = None
-
-        return w
+            if w is None:
+                w = _APP._last_window
+        if isinstance(w, MainWindow):
+            return w
+        return None
