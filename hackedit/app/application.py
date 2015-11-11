@@ -98,6 +98,7 @@ class Application(QtCore.QObject):
 
         show_msg_on_splash('Setting up welcome window...')
         self._welcome_window = WelcomeWindow(self)
+        self._last_window = self._welcome_window
 
         show_msg_on_splash('')
 
