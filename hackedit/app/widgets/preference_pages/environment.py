@@ -197,5 +197,5 @@ class Environment(PreferencePage):
                 self, 'Change icon theme?',
                 'Would you like to change the icon theme as well?')
             if a == QtWidgets.QMessageBox.Yes:
-                theme = 'Breeze dark' if dark else 'Breeze'
+                theme = 'Breeze Dark' if dark else 'Breeze'
                 self.ui.combo_icon_themes.setCurrentText(theme)
