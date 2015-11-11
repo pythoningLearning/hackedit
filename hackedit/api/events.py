@@ -116,7 +116,9 @@ class ExceptionEvent(Event):
         from hackedit.app import common
         if common.report_bug(
                 self.window, title=self.title,
-                description='``` \n%s\n```' % self.traceback):
+                description='## Steps to reproduce\n\nPLEASE DESCRIBE '
+                'THE CONTEXT OF THIS ISSUE AND THE STEPS TO REPRODUCE'
+                '...\n\n## Traceback\n\n```\n%s\n```' % self.traceback):
             self.remove()
 
 

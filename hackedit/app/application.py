@@ -504,18 +504,36 @@ class Application(QtCore.QObject):
     def _report_exception(self, exc, tb):
         try:
             _logger().critical('unhandled exception:\n%s', tb)
+            title = '[Unhandled exception]  %s: %s' % (
+                exc.__class__.__name__, str(exc))
             try:
                 w = self._last_window
+                if w.notifications is None:
+                    raise AttributeError
             except AttributeError:
-                pass
+                msg_box = QtWidgets.QMessageBox()
+                msg_box.setWindowTitle('Unhandled exception')
+                msg_box.setText('An unhandled exception has occured...')
+                msg_box.setInformativeText(
+                    'Would you like to report the bug to the developer?')
+                msg_box.setIcon(msg_box.Critical)
+                msg_box.setDetailedText(tb)
+                msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok |
+                                           QtWidgets.QMessageBox.Cancel)
+                msg_box.button(msg_box.Ok).setText('Report')
+                msg_box.button(msg_box.Cancel).setText('Close')
+                if msg_box.exec_() == msg_box.Ok:
+                    common.report_bug(
+                        None, title=title,
+                        description='## Steps to reproduce\n\nPLEASE DESCRIBE '
+                        'THE CONTEXT OF THIS ISSUE AND THE STEPS TO REPRODUCE'
+                        '...\n\n## Traceback\n\n```\n%s\n```' % tb)
             else:
                 action = QtWidgets.QAction(None)
                 action.setText('Restart HackEdit')
                 action.triggered.connect(self.restart)
                 ev = api.events.ExceptionEvent(
-                    '[Unhandled exception]  %s: %s' % (
-                        exc.__class__.__name__, str(exc)),
-                    'An unhandled exception has occured: %r\n\n'
+                    title, 'An unhandled exception has occured: %r\n\n'
                     'Please report!' % exc, exc, tb=tb,
                     custom_actions=[action])
                 w.notifications.add(ev, False, True)
