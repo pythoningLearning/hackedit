@@ -73,6 +73,8 @@ def ignore_path(path, ignore_patterns=None):
 def scandir(directory, ignore_patterns, total):
     files = []
     print('scanning directory: %s' % directory)
+    ignore_patterns += ['*.exe', '*.dll', '*.usr', '*.so', '*.dylib', '*.svg',
+                        '*.png', '*.jpeg', '*.jpg', '*.tga', '*.gif', '*.psd']
     join = os.path.join
     isfile = os.path.isfile
     isdir = os.path.isdir
