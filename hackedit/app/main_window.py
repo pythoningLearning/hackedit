@@ -7,6 +7,11 @@ system tree view) that is extended by plugins.
 import logging
 import os
 
+try:
+    import psutil
+except ImportError:
+    psutil = None  # optional dependency.
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core import modes, panels
 from pyqode.core.api import TextHelper, ColorScheme, CodeEdit
@@ -172,6 +177,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.open_folder(path)
         self.project_explorer = ProjectExplorer(self)
         self.project_explorer.apply_preferences()
+
+        self._update_mem_label_timer = QtCore.QTimer()
+        self._update_mem_label_timer.setInterval(500)
+        self._update_mem_label_timer.timeout.connect(self._update_mem_label)
+        self._update_mem_label_timer.start()
+        self._update_mem_label()
 
     def __repr__(self):
         return 'MainWindow(path=%r)' % self.projects
@@ -719,6 +730,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui.tabs.main_tab_widget.setCurrentIndex(self._restore_index)
 
     def _setup_status_bar_widgets(self):
+        if psutil:
+            self.lbl_memory = QtWidgets.QLabel()
+            self.lbl_memory.setText('0 MiB')
+
         self.lbl_cursor = ClickableLabel()
         self.lbl_cursor.setText('1:1', False)
         self.lbl_cursor.setAlignment(
@@ -734,6 +749,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def setup_status_bar(self):
         self.add_statusbar_widget(self.lbl_cursor)
         self.add_statusbar_widget(self.lbl_encoding)
+        if psutil:
+            self.add_statusbar_widget(self.lbl_memory)
 
     def _connect_slots(self):
         self._ui.tabs.editor_created.connect(self.editor_created.emit)
@@ -1155,3 +1172,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.lbl_cursor.setText('%d:%d' % (l+1, c+1), False)
         else:
             self.lbl_cursor.setText('n/a', False)
+
+    def _update_mem_label(self):
+        if psutil:
+            process = psutil.Process(os.getpid())
+            mem = int(process.memory_info().rss) / 1024 / 1024
+            self.lbl_memory.setText('%.3f MiB' % mem)
+            self._update_mem_label_timer.start()
