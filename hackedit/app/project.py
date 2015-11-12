@@ -41,6 +41,9 @@ def _logger():
     return logging.getLogger(__name__)
 
 
+NB_FILES_LIMIT = 1000
+
+
 def ignore_path(path, ignore_patterns=None):
     """
     Utility function that checks if a given path should be ignored.
@@ -67,7 +70,7 @@ def ignore_path(path, ignore_patterns=None):
     return False
 
 
-def scandir(directory, ignore_patterns):
+def scandir(directory, ignore_patterns, total):
     files = []
     print('scanning directory: %s' % directory)
     join = os.path.join
@@ -84,26 +87,36 @@ def scandir(directory, ignore_patterns):
         if not ignored:
             if isfile(full_path):
                 append(full_path)
+                total += 1
+                if total > NB_FILES_LIMIT:
+                    return files, total
             elif isdir(full_path):
                 try:
-                    files += scandir(full_path, ignore_patterns)
+                    results, total = scandir(full_path, ignore_patterns, total)
+                    files += results
                 except PermissionError:
                     pass
             time.sleep(0)
-    return files
+    return files, total
 
 
 def scan_project_directories(_, directories, ignore_patterns, root_proj):
     files = []
+    total = 0
     for directory in directories:
         try:
-            files += scandir(directory, ignore_patterns)
+            results, total = scandir(directory, ignore_patterns, total)
+            files += results
         except PermissionError:
             pass
     files = sorted(files)
     cache = api.project.load_user_cache(root_proj)
     cache['project_files'] = files
     api.project.save_user_cache(root_proj, cache)
+
+    if total > NB_FILES_LIMIT:
+        return False
+
     return True
 
 
@@ -202,7 +215,15 @@ class ProjectExplorer(QtCore.QObject):
     def _on_file_list_available(self, status):
         self._task_running = False
         if status is False:
-            return
+            # too much file indexed, display a warning to let the user know
+            # he should ignore some unwanted directories.
+            event = api.events.Event(
+                'Project directory contains too much files for indexing...',
+                'You might want to mark the directories that contains '
+                'non-project files as ignored (<i>Project View -> Right click '
+                'on a directory -> Mark as ignored</i>)',
+                level=api.events.WARNING)
+            api.events.post(event)
         self._window.project_files_available.emit()
         _logger().debug('project model updated')
 
