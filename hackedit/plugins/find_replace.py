@@ -126,10 +126,9 @@ class FindReplace(plugins.WorkspacePlugin):
 
     def _remove_dock(self):
         if self._dock is not None:
-            window.remove_dock_widget(self._dock)
-            self._dock = None
-            self._find_results_widget = None
-            self._find_widget = None
+            self._dock.hide()
+            self._dock.button.hide()
+            self._dock.button.action.setVisible(False)
 
     def _on_item_activated(self, item, _):
         assert isinstance(item, QtWidgets.QTreeWidgetItem)
@@ -167,11 +166,11 @@ class FindReplace(plugins.WorkspacePlugin):
     def _start_search_in_path(self, search_settings):
         self._search_settings = search_settings
         callback = self._on_search_finished
-        project_files = api.project.get_project_files()
+        project_root = api.project.get_root_project()
         api.tasks.start(
             'searching for %r' % search_settings['find'],
             search_in_path, callback,
-            args=(search_settings, project_files))
+            args=(search_settings, project_root))
 
     def _on_replace_triggered(self):
         text = ''
@@ -190,6 +189,10 @@ class FindReplace(plugins.WorkspacePlugin):
             return
         if self._dock is None:
             self._create_dock()
+        else:
+            self._dock.show()
+            self._dock.button.show()
+            self._dock.button.action.setVisible(True)
         self._dock.show()
         self._find_results_widget.show_results(
             results, self._search_settings['find'])
@@ -483,11 +486,12 @@ def filter_files(files, search_settings):
     return sorted(list(set(ret_val)))
 
 
-def search_in_path(th, search_settings, project_files):
+def search_in_path(th, search_settings, project_root):
     """
     Worker function that performs the actual search.
     """
     results = []
+    project_files = api.project.get_project_files(project_root)
     files = filter_files(project_files, search_settings)
     count = len(files)
     split_path = os.path.split
