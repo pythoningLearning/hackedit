@@ -24,14 +24,12 @@ def read_message(socket):
     """
     Reads a message using our simple protocol (payload + data)
     """
-    data = socket.readAll()
     if not hasattr(socket, '_buffer'):
         socket._buffer = b''
     if not hasattr(socket, '_payload'):
         socket._payload = None
-    if not hasattr(socket, '_data'):
-        socket._data = None
-    socket._buffer += data
+    socket._buffer += socket.readAll()
+    results = None
     while socket._buffer:
         if socket._payload is None:
             if len(socket._buffer) >= 8:
@@ -45,14 +43,16 @@ def read_message(socket):
         else:
             # read data
             if len(socket._buffer) >= socket._payload:
-                socket._data = socket._buffer[:socket._payload]
-                socket._buffer = socket._buffer[socket._payload:]
-                socket._payload = None
-                return pickle.loads(socket._data)
+                results = pickle.loads(socket._buffer)
+                del socket._buffer
+                del socket._payload
+                socket.close()
+                socket.deleteLater()
             else:
                 # data buffer not complete, let's wait for another packet
-                socket._data = None
-                return None
+                pass
+
+        return results
 
 
 def send_message(socket, data):
