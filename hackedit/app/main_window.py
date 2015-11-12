@@ -52,7 +52,7 @@ class MainWindow(QtWidgets.QMainWindow):
     editor_loaded = QtCore.pyqtSignal(QtWidgets.QWidget)
     project_added = QtCore.pyqtSignal(str)
     current_project_changed = QtCore.pyqtSignal(str)
-    project_files_available = QtCore.pyqtSignal(list)
+    project_files_available = QtCore.pyqtSignal()
     about_to_open_tab = QtCore.pyqtSignal(str)
     document_saved = QtCore.pyqtSignal(str, str)
     state_restored = QtCore.pyqtSignal()
@@ -111,8 +111,6 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         super().__init__()
         self.setAcceptDrops(True)
-        #: the full flat list of all projects' files, initially emtpy.
-        self.project_files = []
         self._docks_to_restore = []
         self._toolbars = []
         self._current_tab = None

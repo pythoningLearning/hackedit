@@ -93,7 +93,7 @@ def scandir(directory, ignore_patterns):
     return files
 
 
-def scan_project_directories(_, directories, ignore_patterns):
+def scan_project_directories(_, directories, ignore_patterns, root_proj):
     files = []
     for directory in directories:
         try:
@@ -101,7 +101,10 @@ def scan_project_directories(_, directories, ignore_patterns):
         except PermissionError:
             pass
     files = sorted(files)
-    return files
+    cache = api.project.load_user_cache(root_proj)
+    cache['project_files'] = files
+    api.project.save_user_cache(root_proj, cache)
+    return True
 
 
 class ProjectExplorer(QtCore.QObject):
@@ -148,26 +151,19 @@ class ProjectExplorer(QtCore.QObject):
     def _run_update_projects_model_thread(self):
         if not self._task_running:
             self._task_running = True
-            pth = api.project.get_root_project()
-            usd = api.project.load_user_cache(pth)
-            try:
-                files = usd['project_files']
-            except KeyError:
-                files = []
-            if files:
-                self._window.project_files = files
             directories = api.project.get_projects()
             api.tasks.start('Indexing project files',
                             scan_project_directories,
                             self._on_file_list_available,
-                            args=(directories, self._get_ignored_patterns()),
+                            args=(directories, self._get_ignored_patterns(),
+                                  api.project.get_root_project()),
                             cancellable=False)
 
     def get_files(self):
         """
         Returns the filtered list of files for all open projects.
         """
-        return self._window.project_files
+        return api.project.get_project_files()
 
     def close(self):
         # save active project in first open project
@@ -203,20 +199,12 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', 'Ctrl+G'))
 
-    def _on_file_list_available(self, files):
-        if files is None:
-            return
+    def _on_file_list_available(self, status):
         self._task_running = False
-        if files != self._cached_files:
-            self._window.project_files = files
-            self._window.project_files_available.emit(
-                api.project.get_project_files())
-            self._cached_files = files
-            pth = api.project.get_root_project()
-            cache = api.project.load_user_cache(pth)
-            cache['project_files'] = files
-            api.project.save_user_cache(pth, cache)
-            _logger().debug('project model updated')
+        if status is False:
+            return
+        self._window.project_files_available.emit()
+        _logger().debug('project model updated')
 
     def _setup_tab_bar_context_menu(self, window):
         text = 'Show in %s' % FileSystemContextMenu.get_file_explorer_name()

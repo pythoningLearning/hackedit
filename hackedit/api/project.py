@@ -72,7 +72,7 @@ def get_root_project():
         return None
 
 
-def get_project_files():
+def get_project_files(root_project=None):
     """
     Gets the list of relevant project files.
 
@@ -84,10 +84,19 @@ def get_project_files():
         Use the signal :attr:`hackedit.api.signals.PROJECT_FILES_AVAILABLE`
         to know when the list is available.
     """
-    files = _window().project_files
-    # make sure to include external files currently opened.
-    from hackedit.api.editor import get_all_paths
-    files += get_all_paths()
+    if root_project is None:
+        root_project = get_root_project()
+    usd = load_user_cache(root_project)
+    try:
+        files = usd['project_files']
+    except KeyError:
+        files = []
+    try:
+        # make sure to include external files currently opened.
+        from hackedit.api.editor import get_all_paths
+        files += get_all_paths()
+    except AttributeError:
+        pass
     return sorted(list(set(files)))
 
 

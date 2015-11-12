@@ -22,8 +22,11 @@ def _logger():
     return logging.getLogger(__name__)
 
 
-def index_project_files(th, prj, project_files, indexor_plugins):
+def index_project_files(th, open_paths, prj, indexor_plugins):
     # load user defined mimetypes (we are in a background process!)
+    project_files = api.project.get_project_files(root_project=prj)
+    project_files += open_paths
+    project_files = list(set(project_files))
     mime_types.load()
     all_symbols = []
     path_exists = os.path.exists
@@ -102,7 +105,7 @@ class FileIndexor:
             self._pending_task.cancel()
             self._pending_task = None
 
-    def _index_all(self, project_files):
+    def _index_all(self):
         """
         Indexates symbols found in all project files.
 
@@ -114,8 +117,9 @@ class FileIndexor:
             self._pending_task = api.tasks.start(
                 'Indexing project symbols', index_project_files,
                 self._on_task_finished, args=(
-                    api.project.get_root_project(), project_files,
-                    self._plugins), cancellable=False)
+                    api.editor.get_all_paths(), api.project.get_root_project(),
+                    self._plugins),
+                cancellable=False)
 
     def _index_document(self, path, _):
         """
