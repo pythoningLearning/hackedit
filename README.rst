@@ -21,6 +21,9 @@
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
   :alt: Coverage Status
 
+.. image:: https://landscape.io/github/HackEdit/hackedit/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/HackEdit/hackedit/master
+   :alt: Code Health
 
 
 |
