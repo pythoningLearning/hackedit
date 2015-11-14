@@ -25,6 +25,10 @@
    :target: https://landscape.io/github/HackEdit/hackedit/master
    :alt: Code Health
 
+.. image:: https://codeclimate.com/github/HackEdit/hackedit/badges/gpa.svg
+   :target: https://codeclimate.com/github/HackEdit/hackedit
+   :alt: Code Climate
+
 
 |
 
