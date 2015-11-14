@@ -17,6 +17,12 @@
    :alt: Semaphore CI Build Status
 
 
+.. image:: https://coveralls.io/repos/HackEdit/hackedit/badge.svg?branch=master&service=github
+  :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
+  :alt: Coverage Status
+
+
+
 |
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
