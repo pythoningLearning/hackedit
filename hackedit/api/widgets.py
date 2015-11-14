@@ -222,6 +222,7 @@ class RunWidget(QtWidgets.QWidget):
 
     def __init__(self, window=None):
         super().__init__()
+        self._interactive = True  # set to false when running tests
         self._window = window
         self.ui = run_widget_ui.Ui_Form()
         self.ui.setupUi(self)
@@ -343,7 +344,7 @@ class RunWidget(QtWidgets.QWidget):
             tab = self._tabs[index]
         except IndexError:
             return
-        if tab.is_running:
+        if tab.is_running and self._interactive:
             if QtWidgets.QMessageBox.question(
                     self, 'Process running',
                     'A process is still running, do you want to terminate it '
