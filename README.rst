@@ -12,6 +12,8 @@
 
 .. image:: https://img.shields.io/pypi/l/hackedit.svg
 
+|
+
 .. image:: https://semaphoreci.com/api/v1/projects/719a3c8c-8441-4728-8db1-e79b04891c7f/603459/shields_badge.svg
    :target: https://semaphoreci.com/colinduquesnoy/hackedit
    :alt: Semaphore CI Build Status
