@@ -178,24 +178,23 @@ class TestFileIconProvider:
     @pytest.mark.parametrize('path', [__file__, 'invalid_mime.wtf',
                                       os.path.dirname(__file__)])
     def test_icon(self, path):
-        assert not widgets.FileIconProvider().icon(
-            QtCore.QFileInfo(path)).isNull()
+        ret_val = widgets.FileIconProvider().icon(QtCore.QFileInfo(path))
+        assert isinstance(ret_val, QtGui.QIcon)
 
     @pytest.mark.parametrize('icon_type', [widgets.FileIconProvider.File,
                                            widgets.FileIconProvider.Folder,
                                            widgets.FileIconProvider.Trashcan])
     def test_icon_from_type(self, icon_type):
-        assert not widgets.FileIconProvider().icon(icon_type).isNull()
+        ret_val = widgets.FileIconProvider().icon(icon_type)
+        assert isinstance(ret_val, QtGui.QIcon)
 
     def test_mimetype_not_found(self):
         ret_val = widgets.FileIconProvider().icon('file.cbl')
         assert isinstance(ret_val, QtGui.QIcon)
-        assert not ret_val.isNull()
 
     def test_mimetype_not_found_no_fallback(self):
         ret_val = widgets.FileIconProvider().icon('file.cbl')
         assert isinstance(ret_val, QtGui.QIcon)
-        assert not ret_val.isNull()
 
 
 class TestDlgRunProcess:

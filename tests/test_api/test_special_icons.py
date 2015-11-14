@@ -22,4 +22,3 @@ def test_icon_functions(qtbot, fct):
         settings.set_dark_theme(dark)
         icon = fct()
         assert isinstance(icon, QtGui.QIcon)
-        assert not icon.isNull()
