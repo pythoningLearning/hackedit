@@ -1,5 +1,6 @@
 import shutil
 import os
+import sys
 
 from PyQt5 import QtWidgets
 
@@ -7,6 +8,7 @@ from PyQt5 import QtWidgets
 os.environ['PYTEST_QT_API'] = 'pyqt5'
 os.environ['HACKEDIT_CORE_TEST_SUITE'] = '1'
 os.environ['HACKEDIT_LIBS_PATH'] = 'data/share/extlibs.zip'
+sys.path.append(os.environ['HACKEDIT_LIBS_PATH'])
 
 
 try:
