@@ -36,6 +36,20 @@ try:
 except ImportError:
     build_ui = None
 
+# Babel commands for internationalisation and localisation
+try:
+    from babel.messages import frontend as babel
+except ImportError:
+    compile_catalog = None
+    extract_messages = None
+    init_catalog = None
+    update_catalog = None
+else:
+    compile_catalog = babel.compile_catalog
+    extract_messages = babel.extract_messages
+    init_catalog = babel.init_catalog
+    update_catalog = babel.update_catalog
+
 
 # Get long description
 with open('README.rst', 'r') as readme:
@@ -105,7 +119,14 @@ setup(
             'empty_workspace = hackedit.plugins.workspaces:EmptyWorkspace',
         ]
     },
-    cmdclass={'test': pytest, 'build_ui': build_ui},
+    cmdclass={
+        'test': pytest,
+        'build_ui': build_ui,
+        'compile_catalog': compile_catalog,
+        'extract_messages': extract_messages,
+        'init_catalog': init_catalog,
+        'update_catalog': update_catalog
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: X11 Applications :: Qt',
