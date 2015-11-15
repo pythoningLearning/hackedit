@@ -6,6 +6,10 @@
    :target: https://pypi.python.org/pypi/hackedit/
    :alt: Latest PyPI version
 
+.. image:: https://img.shields.io/pypi/dm/hackedit.svg
+   :target: https://pypi.python.org/pypi/hackedit/
+   :alt: Number of PyPI downloads
+
 .. image:: https://img.shields.io/pypi/l/hackedit.svg
 
 
@@ -17,10 +21,6 @@
 .. image:: https://coveralls.io/repos/HackEdit/hackedit/badge.svg?branch=master&service=github
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
   :alt: Coverage Status
-
-.. image:: https://landscape.io/github/HackEdit/hackedit/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/HackEdit/hackedit/master
-   :alt: Code Health
 
 .. image:: https://codeclimate.com/github/HackEdit/hackedit/badges/gpa.svg
    :target: https://codeclimate.com/github/HackEdit/hackedit
