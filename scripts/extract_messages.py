@@ -1,9 +1,9 @@
 """
-This script compiles the ui files into python scripts.
+Extract the application messages to data/locale/hackedit.pot
 
 YOU SHOULD START THIS SCRIPT FROM THE ROOT DIR OF THE SOURCE REPO:
 
-python3 scripts/build_ui.py
+python3 scripts/extract_messages.py
 """
 import subprocess
 import sys
@@ -13,4 +13,4 @@ print('Extracting messages')
 print(
     subprocess.check_output([
         sys.executable, 'setup.py', 'extract_messages',
-        '--output-file', 'data/locale/messages.pot', '--verbose']).decode('utf-8'))
+        '--output-file', 'data/locale/hackedit.pot']).decode('utf-8'))

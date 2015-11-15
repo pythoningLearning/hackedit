@@ -56,6 +56,17 @@
     {
         "environment": {},
         "interpreter_options": [],
+        "name": "compile_catalog [FR]",
+        "run_in_external_terminal": false,
+        "script": "scripts/compile_catalog.py",
+        "script_parameters": [
+            "fr"
+        ],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
         "name": "copy_hooks",
         "run_in_external_terminal": false,
         "script": "scripts/git-hooks/copy_hooks.py",
@@ -92,6 +103,17 @@
     {
         "environment": {},
         "interpreter_options": [],
+        "name": "init_catalog [FR]",
+        "run_in_external_terminal": false,
+        "script": "scripts/init_catalog.py",
+        "script_parameters": [
+            "fr"
+        ],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
         "name": "runtests",
         "run_in_external_terminal": true,
         "script": "scripts/runtests.py",
@@ -106,5 +128,16 @@
         "script": "scripts/update_breeze_icons.py",
         "script_parameters": [],
         "working_dir": "scripts"
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "update_catalog [FR]",
+        "run_in_external_terminal": false,
+        "script": "scripts/update_catalog.py",
+        "script_parameters": [
+            "fr"
+        ],
+        "working_dir": "."
     }
 ]
