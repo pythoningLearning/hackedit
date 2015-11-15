@@ -65,6 +65,15 @@
     {
         "environment": {},
         "interpreter_options": [],
+        "name": "extract_messages",
+        "run_in_external_terminal": false,
+        "script": "scripts/extract_messages.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
         "name": "gen_extlibs",
         "run_in_external_terminal": false,
         "script": "scripts/gen_extlibs.py",
