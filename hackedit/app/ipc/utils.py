@@ -24,35 +24,19 @@ def read_message(socket):
     """
     Reads a message using our simple protocol (payload + data)
     """
-    if not hasattr(socket, '_buffer'):
-        socket._buffer = b''
-    if not hasattr(socket, '_payload'):
-        socket._payload = None
-    socket._buffer += socket.readAll()
-    results = None
-    while socket._buffer:
-        if socket._payload is None:
-            if len(socket._buffer) >= 8:
-                payload = socket._buffer[:8]
-                socket._buffer = socket._buffer[8:]
-                socket._payload = struct.unpack('Q', payload)[0]
-            else:
-                # payload buffer not complete, let's wait for another
-                # packet
-                return None
-        else:
-            # read data
-            if len(socket._buffer) >= socket._payload:
-                results = pickle.loads(socket._buffer)
-                del socket._buffer
-                del socket._payload
-                socket.close()
-                socket.deleteLater()
-            else:
-                # data buffer not complete, let's wait for another packet
-                pass
-
-        return results
+    if not hasattr(socket, 'buffer'):
+        socket.buffer = b''
+    if not hasattr(socket, 'payload'):
+        socket.payload = None
+    socket.buffer += socket.readAll()
+    if socket.payload is None:
+        if len(socket.buffer) >= 8:
+            payload = socket.buffer[:8]
+            socket.buffer = socket.buffer[8:]
+            socket.payload = struct.unpack('Q', payload)[0]
+            if len(socket.buffer) >= socket.payload:
+                return pickle.loads(socket.buffer)
+    return None  # message not complete, let's wait for other packets
 
 
 def send_message(socket, data):
