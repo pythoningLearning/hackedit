@@ -1,0 +1,3320 @@
+# Translations template for hackedit.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the hackedit project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: hackedit 1.0a2.dev5\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-11-15 17:30+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.1.1\n"
+
+#: hackedit/app/forms/dlg_about_ui.py:145
+#: hackedit/app/forms/main_window_ui.py:220
+msgid "About HackEdit"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:146
+msgid ""
+"<html><head/><body><p align=\"center\"><img "
+"src=\":/icons/hackedit_128.png\"/></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:147
+#, python-format
+msgid ""
+"<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; "
+"font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" "
+"font-weight:600;\">v%s</span></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:148
+msgid ""
+"<html><head/><body><p align=\"center\"><span style=\" font-"
+"size:12pt;\">The hackable IDE, build with </span><a "
+"href=\"https://www.python.org/\"><span style=\" font-size:12pt; text-"
+"decoration: underline; color:#2980b9;\">Python3</span></a><span style=\" "
+"font-size:12pt;\">, </span><a "
+"href=\"http://www.riverbankcomputing.com/software/pyqt/download5\"><span "
+"style=\" font-size:12pt; text-decoration: underline; "
+"color:#2980b9;\">PyQt5</span></a><span style=\" font-size:12pt;\"> and "
+"</span><a href=\"https://github.com/pyQode/pyQode\"><span style=\" font-"
+"size:12pt; text-decoration: underline; "
+"color:#2980b9;\">pyQode</span></a><span style=\" font-"
+"size:12pt;\">.</span></p><p align=\"center\"><br/></p><p "
+"align=\"center\"><span style=\" font-family:'Cantarell'; font-size:9pt; "
+"font-style:italic;\">The program is provided AS IS with NO WARRANTY OF "
+"ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS "
+"FORA PARTICULAR PURPOSE.</span></p><p align=\"center\"><br/></p><p "
+"align=\"center\"><a href=\"https://github.com/HackEdit/hackedit\"><span "
+"style=\" text-decoration: underline; color:#2980b9;\">View on "
+"github</span></a></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:149
+msgid "About"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:150
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR"
+"/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style "
+"type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Droid Sans'; font-size:10pt; "
+"font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Main authors:</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Ubuntu';\">- </span><a "
+"href=\"mailto:colin.duquesnoy@gmail.com\"><span style=\" font-"
+"family:'Ubuntu'; text-decoration: underline; color:#2980b9;\">Colin "
+"Duquesnoy </span></a><span style=\" font-"
+"family:'Ubuntu';\">(developer)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px;"
+" margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+"font-family:'Ubuntu'; text-decoration: underline; color:#0000ff;\"><br "
+"/></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Ubuntu'; font-weight:600;\">Contributors:</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Ubuntu';\">- </span><a href=\"mailto:thiry.celi@gmail.com\"><span"
+" style=\" font-family:'Ubuntu'; text-decoration: underline; "
+"color:#2980b9;\">Céline Thiry </span></a><span style=\" font-"
+"family:'Ubuntu';\">(icon/splashscreen designer)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px;"
+" margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+"font-family:'Ubuntu';\"><br /></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:160
+msgid "Authors"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:161
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR"
+"/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style "
+"type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Droid Sans'; font-size:10pt; "
+"font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'Ubuntu'; font-size:8pt;\">GNU GENERAL PUBLIC "
+"LICENSE</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:131072;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Version 2, June 1991</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Copyright (C) 1989, 1991 Free Software Foundation, Inc., "
+"&lt;http://fsf.org/&gt;</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">51 "
+"Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Everyone is permitted to copy and distribute verbatim "
+"copies</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">of this license document, but changing it is not "
+"allowed.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; -qt-user-state:65536; font-family:'Ubuntu'; font-"
+"size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'Ubuntu'; font-size:8pt;\">Preamble</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"The licenses for most software are designed to take away your</span></p>"
+"\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">freedom to share and change it.  By contrast, the GNU General"
+" Public</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">License is intended to guarantee your freedom to share and "
+"change free</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">software--to make sure the software is free for all its "
+"users.  This</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">General Public License applies to most of the Free "
+"Software</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Foundation's software and to any other program whose authors "
+"commit to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">using it.  (Some other Free Software Foundation software is "
+"covered by</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">the"
+" GNU Lesser General Public License instead.)  You can apply it "
+"to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">your programs, too.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"When we speak of free software, we are referring to freedom, "
+"not</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">price.  Our General Public Licenses are designed to make sure"
+" that you</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">have the freedom to distribute copies of free software (and "
+"charge for</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">this service if you wish), that you receive source code or "
+"can get it</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">if "
+"you want it, that you can change the software or use pieces of "
+"it</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">in "
+"new free programs; and that you know you can do these things.</span></p>"
+"\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"To protect your rights, we need to make restrictions that "
+"forbid</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">anyone to deny you these rights or to ask you to surrender "
+"the rights.</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">These restrictions translate to certain responsibilities for "
+"you if you</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribute copies of the software, or if you modify "
+"it.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"For example, if you distribute copies of such a program, "
+"whether</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">gratis or for a fee, you must give the recipients all the "
+"rights that</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">you"
+" have.  You must make sure that they, too, receive or can get "
+"the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">source code.  And you must show them these terms so they know"
+" their</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">rights.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"We protect your rights with two steps: (1) copyright the software, "
+"and</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">(2)"
+" offer you this license which gives you legal permission to "
+"copy,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribute and/or modify the software.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"Also, for each author's protection and ours, we want to make "
+"certain</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">that everyone understands that there is no warranty for this "
+"free</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">software.  If the software is modified by someone else and "
+"passed on, we</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">want its recipients to know that what they have is not the "
+"original, so</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">that any problems introduced by others will not reflect on "
+"the original</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">authors' reputations.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"Finally, any free program is threatened constantly by software</span></p>"
+"\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">patents.  We wish to avoid the danger that redistributors of "
+"a free</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">program will individually obtain patent licenses, in effect "
+"making the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">program proprietary.  To prevent this, we have made it clear "
+"that any</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">patent must be licensed for everyone's free use or not "
+"licensed at all.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"The precise terms and conditions for copying, distribution and</span></p>"
+"\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">modification follow.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">                    GNU GENERAL PUBLIC LICENSE</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">   "
+"TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND "
+"MODIFICATION</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"0. This License applies to any program or other work which "
+"contains</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">a "
+"notice placed by the copyright holder saying it may be "
+"distributed</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">under the terms of this General Public License.  The "
+"&quot;Program&quot;, below,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">refers to any such program or work, and a &quot;work based on"
+" the Program&quot;</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">means either the Program or any derivative work under "
+"copyright law:</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">that is to say, a work containing the Program or a portion of"
+" it,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">either verbatim or with modifications and/or translated into "
+"another</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">language.  (Hereinafter, translation is included without "
+"limitation in</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">the"
+" term &quot;modification&quot;.)  Each licensee is addressed as "
+"&quot;you&quot;.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Activities other than copying, distribution and modification "
+"are not</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">covered by this License; they are outside its scope.  The act"
+" of</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">running the Program is not restricted, and the output from "
+"the Program</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">is "
+"covered only if its contents constitute a work based on the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Program (independent of having been made by running the "
+"Program).</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Whether that is true depends on what the Program "
+"does.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"1. You may copy and distribute verbatim copies of the "
+"Program's</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">source code as you receive it, in any medium, provided that "
+"you</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">conspicuously and appropriately publish on each copy an "
+"appropriate</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">copyright notice and disclaimer of warranty; keep intact all "
+"the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">notices that refer to this License and to the absence of any "
+"warranty;</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">and"
+" give any other recipients of the Program a copy of this "
+"License</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">along with the Program.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">You"
+" may charge a fee for the physical act of transferring a copy, "
+"and</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">you"
+" may at your option offer warranty protection in exchange for a "
+"fee.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"2. You may modify your copy or copies of the Program or any "
+"portion</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">of "
+"it, thus forming a work based on the Program, and copy and</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribute such modifications or work under the terms of "
+"Section 1</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">above, provided that you also meet all of these "
+"conditions:</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    a) You must cause the modified files to carry prominent "
+"notices</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    stating that you changed the files and the date of any "
+"change.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    b) You must cause any work that you distribute or "
+"publish, that in</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    whole or in part contains or is derived from the Program "
+"or any</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    part thereof, to be licensed as a whole at no charge to "
+"all third</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    parties under the terms of this License.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    c) If the modified program normally reads commands "
+"interactively</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    when run, you must cause it, when started running for "
+"such</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    interactive use in the most ordinary way, to print or "
+"display an</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    announcement including an appropriate copyright notice "
+"and a</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    notice that there is no warranty (or else, saying that "
+"you provide</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    a warranty) and that users may redistribute the program "
+"under</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    these conditions, and telling the user how to view a copy"
+" of this</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    License.  (Exception: if the Program itself is "
+"interactive but</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    does not normally print such an announcement, your work "
+"based on</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    the Program is not required to print an "
+"announcement.)</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">These requirements apply to the modified work as a whole.  "
+"If</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">identifiable sections of that work are not derived from the "
+"Program,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">and"
+" can be reasonably considered independent and separate works "
+"in</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">themselves, then this License, and its terms, do not apply to"
+" those</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">sections when you distribute them as separate works.  But "
+"when you</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribute the same sections as part of a whole which is a "
+"work based</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">on "
+"the Program, the distribution of the whole must be on the terms "
+"of</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">this License, whose permissions for other licensees extend to"
+" the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">entire whole, and thus to each and every part regardless of "
+"who wrote it.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Thus, it is not the intent of this section to claim rights or"
+" contest</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">your rights to work written entirely by you; rather, the "
+"intent is to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">exercise the right to control the distribution of derivative "
+"or</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">collective works based on the Program.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">In "
+"addition, mere aggregation of another work not based on the "
+"Program</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">with the Program (or with a work based on the Program) on a "
+"volume of</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">a "
+"storage or distribution medium does not bring the other work "
+"under</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">the"
+" scope of this License.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"3. You may copy and distribute the Program (or a work based on "
+"it,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">under Section 2) in object code or executable form under the "
+"terms of</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Sections 1 and 2 above provided that you also do one of the "
+"following:</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    a) Accompany it with the complete corresponding machine-"
+"readable</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    source code, which must be distributed under the terms of"
+" Sections</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    1 and 2 above on a medium customarily used for software "
+"interchange; or,</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    b) Accompany it with a written offer, valid for at least "
+"three</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    years, to give any third party, for a charge no more than"
+" your</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    cost of physically performing source distribution, a "
+"complete</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    machine-readable copy of the corresponding source code, "
+"to be</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    distributed under the terms of Sections 1 and 2 above on "
+"a medium</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    customarily used for software interchange; or,</span></p>"
+"\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    c) Accompany it with the information you received as to "
+"the offer</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    to distribute corresponding source code.  (This "
+"alternative is</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    allowed only for noncommercial distribution and only if "
+"you</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    received the program in object code or executable form "
+"with such</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    an offer, in accord with Subsection b above.)</span></p>"
+"\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">The"
+" source code for a work means the preferred form of the work "
+"for</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">making modifications to it.  For an executable work, complete"
+" source</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">code means all the source code for all modules it contains, "
+"plus any</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">associated interface definition files, plus the scripts used "
+"to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">control compilation and installation of the executable.  "
+"However, as a</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">special exception, the source code distributed need not "
+"include</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">anything that is normally distributed (in either source or "
+"binary</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">form) with the major components (compiler, kernel, and so on)"
+" of the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">operating system on which the executable runs, unless that "
+"component</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">itself accompanies the executable.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">If "
+"distribution of executable or object code is made by offering</span></p>"
+"\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">access to copy from a designated place, then offering "
+"equivalent</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">access to copy the source code from the same place counts "
+"as</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribution of the source code, even though third parties "
+"are not</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">compelled to copy the source along with the object "
+"code.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"4. You may not copy, modify, sublicense, or distribute the "
+"Program</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">except as expressly provided under this License.  Any "
+"attempt</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">otherwise to copy, modify, sublicense or distribute the "
+"Program is</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">void, and will automatically terminate your rights under this"
+" License.</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">However, parties who have received copies, or rights, from "
+"you under</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">this License will not have their licenses terminated so long "
+"as such</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">parties remain in full compliance.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"5. You are not required to accept this License, since you have "
+"not</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">signed it.  However, nothing else grants you permission to "
+"modify or</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribute the Program or its derivative works.  These "
+"actions are</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">prohibited by law if you do not accept this License.  "
+"Therefore, by</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">modifying or distributing the Program (or any work based on "
+"the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Program), you indicate your acceptance of this License to do "
+"so, and</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">all"
+" its terms and conditions for copying, distributing or "
+"modifying</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">the"
+" Program or works based on it.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"6. Each time you redistribute the Program (or any work based on "
+"the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Program), the recipient automatically receives a license from"
+" the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">original licensor to copy, distribute or modify the Program "
+"subject to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">these terms and conditions.  You may not impose any "
+"further</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">restrictions on the recipients' exercise of the rights "
+"granted herein.</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">You"
+" are not responsible for enforcing compliance by third parties "
+"to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">this License.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"7. If, as a consequence of a court judgment or allegation of "
+"patent</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">infringement or for any other reason (not limited to patent "
+"issues),</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">conditions are imposed on you (whether by court order, "
+"agreement or</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">otherwise) that contradict the conditions of this License, "
+"they do not</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">excuse you from the conditions of this License.  If you "
+"cannot</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">distribute so as to satisfy simultaneously your obligations "
+"under this</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">License and any other pertinent obligations, then as a "
+"consequence you</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">may"
+" not distribute the Program at all.  For example, if a patent</span></p>"
+"\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">license would not permit royalty-free redistribution of the "
+"Program by</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">all"
+" those who receive copies directly or indirectly through you, "
+"then</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">the"
+" only way you could satisfy both it and this License would be "
+"to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">refrain entirely from distribution of the Program.</span></p>"
+"\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">If "
+"any portion of this section is held invalid or unenforceable "
+"under</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">any"
+" particular circumstance, the balance of the section is intended "
+"to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">apply and the section as a whole is intended to apply in "
+"other</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">circumstances.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">It "
+"is not the purpose of this section to induce you to infringe "
+"any</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">patents or other property right claims or to contest validity"
+" of any</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">such claims; this section has the sole purpose of protecting "
+"the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">integrity of the free software distribution system, which "
+"is</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">implemented by public license practices.  Many people have "
+"made</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">generous contributions to the wide range of software "
+"distributed</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">through that system in reliance on consistent application of "
+"that</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">system; it is up to the author/donor to decide if he or she "
+"is willing</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">to "
+"distribute software through any other system and a licensee "
+"cannot</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">impose that choice.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">This section is intended to make thoroughly clear what is "
+"believed to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">be "
+"a consequence of the rest of this License.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"8. If the distribution and/or use of the Program is restricted "
+"in</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">certain countries either by patents or by copyrighted "
+"interfaces, the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">original copyright holder who places the Program under this "
+"License</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">may"
+" add an explicit geographical distribution limitation "
+"excluding</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">those countries, so that distribution is permitted only in or"
+" among</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">countries not thus excluded.  In such case, this License "
+"incorporates</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">the"
+" limitation as if written in the body of this License.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"9. The Free Software Foundation may publish revised and/or new "
+"versions</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">of "
+"the General Public License from time to time.  Such new versions "
+"will</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">be "
+"similar in spirit to the present version, but may differ in detail "
+"to</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">address new problems or concerns.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Each version is given a distinguishing version number.  If "
+"the Program</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">specifies a version number of this License which applies to "
+"it and &quot;any</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">later version&quot;, you have the option of following the "
+"terms and conditions</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">either of that version or of any later version published by "
+"the Free</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Software Foundation.  If the Program does not specify a "
+"version number of</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">this License, you may choose any version ever published by "
+"the Free Software</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Foundation.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"10. If you wish to incorporate parts of the Program into other "
+"free</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">programs whose distribution conditions are different, write "
+"to the author</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">to "
+"ask for permission.  For software which is copyrighted by the "
+"Free</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Software Foundation, write to the Free Software Foundation; "
+"we sometimes</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">make exceptions for this.  Our decision will be guided by the"
+" two goals</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">of "
+"preserving the free status of all derivatives of our free software "
+"and</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">of promoting the sharing and reuse of software "
+"generally.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">                            NO WARRANTY</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO "
+"WARRANTY</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">FOR"
+" THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT "
+"WHEN</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR "
+"OTHER PARTIES</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">PROVIDE THE PROGRAM &quot;AS IS&quot; WITHOUT WARRANTY OF ANY"
+" KIND, EITHER EXPRESSED</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">OR "
+"IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES "
+"OF</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE "
+"ENTIRE RISK AS</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">TO "
+"THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD "
+"THE</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY"
+" SERVICING,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">REPAIR OR CORRECTION.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN "
+"WRITING</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY "
+"AND/OR</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU"
+" FOR DAMAGES,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL "
+"DAMAGES ARISING</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">OUT"
+" OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT "
+"LIMITED</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">TO "
+"LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED "
+"BY</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">YOU"
+" OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY "
+"OTHER</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN "
+"ADVISED OF THE</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">POSSIBILITY OF SUCH DAMAGES.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67174400;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">                     END OF TERMS AND CONDITIONS</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:131072;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">            How to Apply These Terms to Your New "
+"Programs</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"If you develop a new program, and you want it to be of the "
+"greatest</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">possible use to the public, the best way to achieve this is "
+"to make it</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">free software which everyone can redistribute and change "
+"under these terms.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"To do so, attach the following notices to the program.  It is "
+"safest</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">to "
+"attach them to the start of each source file to most "
+"effectively</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">convey the exclusion of warranty; and each file should have "
+"at least</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">the &quot;copyright&quot; line and a pointer to where the "
+"full notice is found.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    {description}</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    Copyright (C) {year}  {fullname}</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    This program is free software; you can redistribute it "
+"and/or modify</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    it under the terms of the GNU General Public License as "
+"published by</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    the Free Software Foundation; either version 2 of the "
+"License, or</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    (at your option) any later version.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    This program is distributed in the hope that it will be "
+"useful,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    but WITHOUT ANY WARRANTY; without even the implied "
+"warranty of</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See"
+" the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    GNU General Public License for more details.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    You should have received a copy of the GNU General Public"
+" License along</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    with this program; if not, write to the Free Software "
+"Foundation, Inc.,</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 "
+"USA.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Also add information on how to contact you by electronic and "
+"paper mail.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">If "
+"the program is interactive, make it output a short notice like "
+"this</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:67108864;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">when it starts in an interactive mode:</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    Gnomovision version 69, Copyright (C) year name of "
+"author</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    Gnomovision comes with ABSOLUTELY NO WARRANTY; for "
+"details type `show w'.</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    This is free software, and you are welcome to "
+"redistribute it</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:65536;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">    under certain conditions; type `show c' for "
+"details.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">The"
+" hypothetical commands `show w' and `show c' should show the "
+"appropriate</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">parts of the General Public License.  Of course, the commands"
+" you use may</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">be "
+"called something other than `show w' and `show c'; they could even "
+"be</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt"
+";\">mouse-clicks or menu items--whatever suits your program.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">You"
+" should also get your employer (if you work as a programmer) or "
+"your</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">school, if any, to sign a &quot;copyright disclaimer&quot; "
+"for the program, if</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">necessary.  Here is a sample; alter the names:</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"Yoyodyne, Inc., hereby disclaims all copyright interest in the "
+"program</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"`Gnomovision' (which makes passes at compilers) written by James "
+"Hacker.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"{signature of Ty Coon}, 1 April 1989</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-size:8pt;\">  "
+"Ty Coon, President of Vice</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">This General Public License does not permit incorporating "
+"your program into</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">proprietary programs.  If your program is a subroutine "
+"library, you may</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">consider it more useful to permit linking proprietary "
+"applications with the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">library.  If this is what you want to do, use the GNU Lesser "
+"General</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-"
+"user-state:0;\"><span style=\" font-family:'Ubuntu'; font-"
+"size:8pt;\">Public License instead of this License.</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px; font-family:'Ubuntu'; font-size:8pt;\"><br "
+"/></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:505
+msgid "License"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:507
+msgid "Version"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:508
+msgid "Versions"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:509
+msgid "Log level:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:510
+msgid "ERROR"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:511
+msgid "WARNING"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:512
+msgid "INFO"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:513
+msgid "DEBUG"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:514
+msgid "PYQODE_DEBUG"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:515
+msgid "Log"
+msgstr ""
+
+#: hackedit/app/forms/dlg_about_ui.py:516
+msgid "Copyright 2015 Colin Duquesnoy. All rights reserved."
+msgstr ""
+
+#: hackedit/app/forms/dlg_add_boss_source_ui.py:47
+msgid "Add source"
+msgstr ""
+
+#: hackedit/app/forms/dlg_add_boss_source_ui.py:48
+#: hackedit/app/forms/settings_page_templates_ui.py:138
+msgid "Label:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_add_boss_source_ui.py:49
+msgid "Give a meaningfull name to this source so that you can recognize it."
+msgstr ""
+
+#: hackedit/app/forms/dlg_add_boss_source_ui.py:50
+msgid "URL"
+msgstr ""
+
+#: hackedit/app/forms/dlg_add_boss_source_ui.py:51
+msgid ""
+"<html><head/><body><p>URL of the template repository. "
+"</p><p><br/></p><p>Boss supports both local and remote (git) template "
+"repositories.</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:130
+#: hackedit/app/forms/dlg_open_ui.py:44
+#: hackedit/app/forms/dlg_progress_ui.py:44
+#: hackedit/app/forms/dlg_run_process_ui.py:35
+msgid "Dialog"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:131
+msgid "Text to find:   "
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:132
+msgid "Text to find"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:133
+msgid "Replace with:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:134
+msgid "Replacement text"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:135
+msgid "Options"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:136
+msgid "Case sensitive search"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:137
+msgid "Case sensitive"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:138
+msgid "Search whole words only (may be faster)"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:139
+msgid "Whole words only"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:140
+msgid "Use a regular expression"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:141
+msgid "Regular expression"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:142
+msgid "Scope"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:143
+msgid "Search in all open projects"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:144
+msgid "A&ll projects"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:145
+msgid "Search in the specified project"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:146
+msgid "Specific pro&ject"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:147
+msgid "The project to search in"
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:148
+msgid "File patterns:     "
+msgstr ""
+
+#: hackedit/app/forms/dlg_find_replace_ui.py:149
+msgid ""
+"<html><head/><body><p>Match pattern. Files that don't match any pattern "
+"will get excluded from search.</p><p><br/></p><p>Use ';' to separate "
+"patterns</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_ignore_file_ui.py:50
+msgid "Mark as ignored"
+msgstr ""
+
+#: hackedit/app/forms/dlg_ignore_file_ui.py:51
+msgid "Ignore explicitely"
+msgstr ""
+
+#: hackedit/app/forms/dlg_ignore_file_ui.py:52
+msgid "I&gnore explicitely (e.g. 'file.obj')"
+msgstr ""
+
+#: hackedit/app/forms/dlg_ignore_file_ui.py:53
+msgid "Use an ignore pattern"
+msgstr ""
+
+#: hackedit/app/forms/dlg_ignore_file_ui.py:54
+msgid "Ignore as pa&ttern (e.g. '*.obj')"
+msgstr ""
+
+#: hackedit/app/forms/dlg_ignore_file_ui.py:55
+msgid "Ignore pattern"
+msgstr ""
+
+#: hackedit/app/forms/dlg_open_ui.py:45
+#, python-format
+msgid "How would you like to open the %s?"
+msgstr ""
+
+#: hackedit/app/forms/dlg_open_ui.py:46
+msgid "Open file/project in a new window"
+msgstr ""
+
+#: hackedit/app/forms/dlg_open_ui.py:47
+msgid "Open in &new window"
+msgstr ""
+
+#: hackedit/app/forms/dlg_open_ui.py:48
+msgid "Add project to current window and add it to the list of opened projects."
+msgstr ""
+
+#: hackedit/app/forms/dlg_open_ui.py:49
+msgid "Open in current window (add &to currently opened projects)"
+msgstr ""
+
+#: hackedit/app/forms/dlg_preferences_ui.py:76
+#: hackedit/app/forms/welcome_window_ui.py:145
+msgid "Preferences"
+msgstr ""
+
+#: hackedit/app/forms/dlg_preferences_ui.py:77
+msgid "Categories"
+msgstr ""
+
+#: hackedit/app/forms/dlg_preferences_ui.py:78
+msgid "item"
+msgstr ""
+
+#: hackedit/app/forms/dlg_preferences_ui.py:79
+msgid "Page title"
+msgstr ""
+
+#: hackedit/app/forms/dlg_preferences_ui.py:80
+msgid ""
+"<html><head/><body><p>Ok: Apply settings and quit the "
+"dialog</p><p>Cancel: Quit the dialog without applying the "
+"settings</p><p>Reset: reset the value of the changed settings of the "
+"current page (cancel any changes you've made)</p><p>Restore defaults: "
+"restore the initial default values of the current page</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_progress_ui.py:45
+#: hackedit/app/forms/dlg_run_process_ui.py:37
+#: hackedit/app/forms/task_widget_ui.py:68
+msgid "Cancel operation"
+msgstr ""
+
+#: hackedit/app/forms/dlg_progress_ui.py:46
+msgid "Operation in progress..."
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:68
+#: hackedit/app/forms/main_window_ui.py:227
+msgid "Report a bug"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:69
+msgid "Title:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:70
+msgid "<html><head/><body><p>Bug report title</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:71
+#: hackedit/app/forms/settings_page_workspaces_ui.py:150
+msgid "Description:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:72
+msgid ""
+"<html><head/><body><p>Use <span style=\" font-"
+"weight:600;\">markdown</span> to format text and make sure to mention the"
+" context of the issue and the <span style=\" font-weight:600;\">steps to "
+"reproduce</span>!</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:73
+msgid "Enable/Disable sending system infos (OS name, versions,...)"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:74
+msgid "Include system informations"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:75
+msgid ""
+"<html><head/><body><p>Submit bug report on our issue tracker on "
+"Github.</p><p>Note that you'll need a github account to actually submit "
+"the issue.</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:76
+msgid "Submit on github"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:77
+msgid ""
+"<html><head/><body><p>Send an email with the bug report directly to the "
+"main author.</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/dlg_report_bug_ui.py:78
+msgid "Send an e-mail"
+msgstr ""
+
+#: hackedit/app/forms/dlg_run_process_ui.py:36
+msgid "Process output"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:223
+msgid "Python run configuration"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:224
+msgid "Project interpreter:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:225
+msgid "Select project interpreter"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:226
+msgid "Project:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:227
+msgid "Select project to edit"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:228
+msgid "Configurations"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:229
+msgid "List of available run configurations"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:230
+msgid "Add new configuration"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:231
+msgid "Remove selected config"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:232
+msgid "Settings"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:233
+#: hackedit/app/forms/settings_page_workspaces_ui.py:148
+msgid "Name:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:234
+msgid "Name of the configuration"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:235
+msgid "Script:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:236
+msgid "Path to the script to run"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:237
+msgid "Choose script"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:238
+#: hackedit/app/forms/dlg_script_run_config_ui.py:244
+#: hackedit/app/forms/dlg_terminal_history_ui.py:49
+#: hackedit/app/forms/event_history_widget_ui.py:53
+#: hackedit/app/forms/locator_ui.py:53 hackedit/app/forms/locator_ui.py:55
+#: hackedit/app/forms/settings_page_environment_ui.py:184
+#: hackedit/app/forms/settings_page_environment_ui.py:186
+#: hackedit/app/forms/settings_page_notifications_ui.py:90
+#: hackedit/app/forms/settings_page_notifications_ui.py:92
+#: hackedit/app/forms/settings_page_workspaces_ui.py:141
+#: hackedit/app/forms/settings_page_workspaces_ui.py:143
+#: hackedit/app/forms/task_widget_ui.py:69
+msgid "..."
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:239
+msgid "Script parameters:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:240
+msgid "Script paramters"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:241
+msgid "Working directory:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:242
+msgid "Working directory"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:243
+msgid "Choose working dir"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:245
+msgid "Interpreter options:"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:246
+msgid "Interpreter options"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:247
+#: hackedit/app/forms/settings_page_environment_ui.py:176
+msgid "Environment variables"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:248
+msgid "Environment variables to set on the run process"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:251
+#: hackedit/app/forms/task_widget_ui.py:67
+msgid "Name"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:253
+#: hackedit/app/forms/settings_page_environment_ui.py:182
+msgid "Value"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:254
+msgid "Add a new environment variable"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:255
+msgid "Remove the selected environment variable"
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:256
+msgid "Check this to run the script in an external terminal."
+msgstr ""
+
+#: hackedit/app/forms/dlg_script_run_config_ui.py:257
+msgid "Run in external terminal"
+msgstr ""
+
+#: hackedit/app/forms/dlg_select_workspaces_ui.py:49
+msgid "Select workspace"
+msgstr ""
+
+#: hackedit/app/forms/dlg_select_workspaces_ui.py:50
+msgid "Select a workspace"
+msgstr ""
+
+#: hackedit/app/forms/dlg_select_workspaces_ui.py:51
+#: hackedit/app/forms/settings_page_workspaces_ui.py:145
+msgid "The list of available workspaces."
+msgstr ""
+
+#: hackedit/app/forms/dlg_select_workspaces_ui.py:52
+msgid "Workspace description..."
+msgstr ""
+
+#: hackedit/app/forms/dlg_terminal_history_ui.py:46
+msgid "Terminal history"
+msgstr ""
+
+#: hackedit/app/forms/dlg_terminal_history_ui.py:47
+msgid "The list of terminal commands"
+msgstr ""
+
+#: hackedit/app/forms/dlg_terminal_history_ui.py:48
+msgid "Remove the selected entry from history"
+msgstr ""
+
+#: hackedit/app/forms/event_history_widget_ui.py:51
+#: hackedit/app/forms/event_widget_ui.py:92
+#: hackedit/app/forms/run_widget_ui.py:68
+#: hackedit/app/forms/settings_page_behaviour_ui.py:83
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:86
+#: hackedit/app/forms/settings_page_editor_display_ui.py:92
+#: hackedit/app/forms/settings_page_editor_ui.py:180
+#: hackedit/app/forms/settings_page_environment_ui.py:152
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:79
+#: hackedit/app/forms/settings_page_notifications_ui.py:76
+#: hackedit/app/forms/settings_page_shortcuts_ui.py:41
+#: hackedit/app/forms/settings_page_templates_ui.py:125
+#: hackedit/app/forms/settings_page_workspaces_ui.py:138
+#: hackedit/app/forms/task_widget_ui.py:66
+#: hackedit/app/forms/terminal_widget_ui.py:40
+msgid "Form"
+msgstr ""
+
+#: hackedit/app/forms/event_history_widget_ui.py:52
+msgid "Clear history"
+msgstr ""
+
+#: hackedit/app/forms/event_widget_ui.py:93
+msgid "09:03:30"
+msgstr ""
+
+#: hackedit/app/forms/event_widget_ui.py:94
+msgid "Title"
+msgstr ""
+
+#: hackedit/app/forms/event_widget_ui.py:95
+#: hackedit/app/forms/task_widget_ui.py:70
+msgid "Description"
+msgstr ""
+
+#: hackedit/app/forms/event_widget_ui.py:96
+msgid "Close this notification"
+msgstr ""
+
+#: hackedit/app/forms/locator_ui.py:51
+msgid "Frame"
+msgstr ""
+
+#: hackedit/app/forms/locator_ui.py:52
+msgid "Help"
+msgstr ""
+
+#: hackedit/app/forms/locator_ui.py:54
+msgid "Close"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:190
+msgid "HackEdit"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:191
+msgid ""
+"<html><head/><body><p align=\"center\"><span style=\" font-"
+"size:18pt;\">Open a document</span></p><hr/><ul style=\"margin-top: 0px; "
+"margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent:"
+" 1;\"><li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; "
+"margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
+"font-style:italic;\">File &gt; Open File</span> (<span style=\" font-"
+"style:italic;\">Ctrl+O</span>)</li><li style=\" margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-style:italic;\">Goto &gt; Goto "
+"anything</span> (<span style=\" font-style:italic;\">Ctrl+P</span>) and "
+"type to open file from any open project</li><li style=\" margin-top:0px; "
+"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+" text-indent:0px;\">Use the project tree view</li></ul><ul style"
+"=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: "
+"0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\">Drag and drop files here</li></ul></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:192
+msgid "&File"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:193
+msgid "&View"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:194
+msgid "The list of windows"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:195
+msgid "&Windows"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:196
+msgid "?"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:197
+msgid "&Edit"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:198
+msgid "Active editor actions"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:199
+msgid "&Active editor"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:200
+msgid "&Tools"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:201
+msgid "FileToolBar"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:202
+msgid "&Open project"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:203
+msgid "Open a project"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:204
+#: hackedit/app/forms/welcome_window_ui.py:140
+msgid "Ctrl+O"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:205
+msgid "&Save"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:206
+msgid "Save current editor"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:207
+msgid "Ctrl+S"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:208
+msgid "Sa&ve as"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:209
+msgid "Save current editor as"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:210
+msgid "Ctrl+Alt+S"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:211
+msgid "&Close window"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:212
+msgid "Ctrl+Shift+Q"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:213
+msgid "&Quit"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:214
+#: hackedit/app/forms/welcome_window_ui.py:141
+msgid "Quit application"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:215
+#: hackedit/app/forms/welcome_window_ui.py:143
+msgid "Ctrl+Q"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:216
+msgid "&Preferences"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:217
+#: hackedit/app/forms/welcome_window_ui.py:144
+msgid "Edit preferences"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:218
+#: hackedit/app/forms/welcome_window_ui.py:146
+msgid "Ctrl+,"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:219
+msgid "&About"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:221
+msgid "&Help"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:222
+#: hackedit/app/forms/welcome_window_ui.py:147
+msgid "Get some help"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:223
+msgid "&New"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:224
+#: hackedit/app/forms/welcome_window_ui.py:135
+msgid "Create a new file/project"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:225
+#: hackedit/app/forms/welcome_window_ui.py:137
+msgid "Ctrl+N"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:226
+msgid "&Report bug"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:228
+msgid "Save a&ll"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:229
+msgid "Save all editors"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:230
+msgid "Ctrl+Shift+S"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:231
+msgid "&Check for update"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:232
+msgid "&Toggle fullscreen"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:233
+msgid "Toggle fullscreen"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:234
+msgid "Toggle &menu"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:235
+msgid "Show/Hide menu bar"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:236
+msgid "T&oggle toolbars"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:237
+msgid "Show/Hide toolbars"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:238
+msgid "Ctrl+Shift+T"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:239
+msgid "Open &file"
+msgstr ""
+
+#: hackedit/app/forms/main_window_ui.py:240
+msgid "Open a file"
+msgstr ""
+
+#: hackedit/app/forms/run_widget_ui.py:69
+msgid "Run current tab"
+msgstr ""
+
+#: hackedit/app/forms/run_widget_ui.py:70
+msgid "Pin/Unpin current tab"
+msgstr ""
+
+#: hackedit/app/forms/run_widget_ui.py:71
+msgid "Print current tab"
+msgstr ""
+
+#: hackedit/app/forms/run_widget_ui.py:72
+msgid "Clear current output"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:84
+msgid "Startup/Shutdown"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:85
+msgid "Show/Hide splashscreen on application startup."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:86
+msgid "Show splash screen"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:87
+msgid "Reopen most recent project automatically"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:88
+msgid "Reopen last window on startup"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:89
+msgid "Restore session (remember open files and current editor)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:90
+msgid "Restore session (remember open files and current index)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:91
+msgid "Ask for confirmation before quitting the application."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:92
+msgid "Confirm application exit "
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:93
+msgid "Project opening"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:94
+msgid ""
+"<html><head/><body><p>Add project to the current window (add to currently"
+" open projects)</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:95
+msgid "Add &to currently open projects"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:96
+msgid "<html><head/><body><p>Open project in a new window.</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:97
+msgid "Open pro&ject in a new window"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:98
+msgid "Always ask"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:99
+msgid "As&k each time"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:100
+msgid "Updates"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:101
+msgid "Check for updates on application startup"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_behaviour_ui.py:102
+msgid "Automatically check for update on startup"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:87
+msgid "Font"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:88
+msgid "Family:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:89
+msgid "The editor font"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:90
+msgid "Font size:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:91
+msgid "Default editor font size"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:92
+msgid "Colors"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:93
+msgid "Color scheme:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:94
+msgid "Available editor color schemes"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:95
+msgid "Preview"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_colors_ui.py:96
+msgid "Color scheme/Font preview"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:93
+msgid "Text Wrapping"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:94
+msgid "Enable/Disable text wrapping"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:95
+msgid "Enable text wrapping"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:96
+msgid "Show/Hide margin at the specified column"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:97
+msgid "Show right margin at column:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:98
+msgid "Column where to draw the margin"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:99
+msgid "Display"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:100
+msgid "Show/Hide global panel (next to editor's vertical scrollbars)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:101
+msgid "Display global error panel"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:102
+msgid "Show/Hide line numbers panel"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:103
+msgid "Display line numbers"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:104
+msgid "Highlight scope under caret"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:105
+msgid "Highlight caret scope"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:106
+msgid "Show/Hide code folding markers"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:107
+msgid "Display folding markers"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:108
+msgid "Show whitespaces in editor"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:109
+msgid "Vizualize whitespaces"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:110
+msgid "Highlight line under caret"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:111
+msgid "Highlight caret line"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:112
+msgid "Display linter/checker messages panel"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:113
+msgid "Display linter panel"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:114
+msgid "Highlight matching/unmatching parentheses/brackets"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:115
+msgid "Highlight matching parentheses"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:116
+msgid "Center text cursor on scroll"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_display_ui.py:117
+msgid "Center on scroll"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:181
+msgid "File encodings & EOL"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:182
+msgid "Default encoding:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:183
+msgid "Default encoding to use when opening files"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:184
+msgid "Preferred EOL"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:185
+msgid ""
+"Preferred EOL (will be used for new files and for saving files if auto "
+"detect is unchecked)."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:186
+msgid "System"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:187
+msgid "Linux"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:188
+msgid "Mac"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:189
+msgid "Windows"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:190
+msgid ""
+"Automatically detects file line endings on open and use them for furute "
+"saves."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:191
+msgid "Autodetect EOL"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:192
+msgid "Typing"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:193
+msgid "Enable automatic completion of quotes, parentheses and brackets."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:194
+msgid "Enable auto complete (of quotes and parentheses)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:195
+msgid "Enable/Disable automatic indentation"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:196
+msgid "Enable automatic indentation"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:197
+msgid ""
+"Enable/Disable backspaces unindents. If checked, pressing backspace will "
+"deintent."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:198
+msgid "Backspace unindents"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:199
+msgid "Code completion"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:200
+msgid "Trigger length:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:201
+msgid ""
+"<html><head/><body><p>Numbers of character needed in a word to "
+"automatically  trigger code completion</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:202
+msgid "Show tooltips:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:203
+msgid "Show completion tooltip if available"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:204
+msgid "Case sensitive:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:205
+msgid "Case sensitive completion"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:206
+msgid "Filter mode:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:207
+msgid ""
+"<html><head/><body><p>Completion filter mode: </p><p>  - Prefix (classic,"
+" fast and simple)</p><p>  - Subsequence (fuzzy, slower but more "
+"powerful)</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:208
+msgid "Prefix"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:209
+msgid "Contains"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:210
+msgid "Subsequence"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:211
+msgid "Open/Save"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:212
+msgid ""
+"Use a temporary file for the save, and rename that temporary file to "
+"final destination path if everything went right)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:213
+msgid "Safe save (save to a temporary file first)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:214
+msgid "Convert tabs to spaces on open"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:215
+msgid "Convert tabs to spaces"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:216
+msgid "Remember and restore previous cursor position on close/open"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:217
+msgid "Restore cursor position"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:218
+msgid "Clean trailing whitespaces when saving editor content to disk"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:219
+msgid "Clean trailing white-spaces"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:220
+msgid "Tabs and indentation"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:221
+msgid "Use n spaces instead of t"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:222
+msgid "Use spaces instead of tabs"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:223
+msgid "Indent size"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_editor_ui.py:224
+msgid "Number of spaces that makes up a t"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:153
+msgid "User Interface"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:154
+msgid "Toolbar icon size:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:155
+msgid "Size of the toolbar items"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:156
+msgid "Theme:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:157
+msgid "Switch between native and dark theme"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:158
+msgid "Native"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:159
+msgid "Dark"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:160
+msgid ""
+"Show/Hide system tray icon (needed to display notifications on Windows "
+"and OSX)."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:161
+msgid "Show system tray icon"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:162
+msgid ""
+"Use a widescreen layout for the dock widgets (lateral panels will take "
+"the whole height of the window)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:163
+msgid "Use widescreen layout"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:164
+msgid "Icon theme:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:165
+msgid "Select the icon theme."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:166
+msgid "System commands"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:167
+msgid "Run command in terminal:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:168
+#, python-format
+msgid ""
+"<html><head/><body><p>The command for running a program in an external "
+"terminal</p><p>Use %s to indicate file path argument, e.g.: &quot;konsole"
+" -e %s&quot;</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:169
+msgid "Open folder in terminal:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:170
+#, python-format
+msgid ""
+"<html><head/><body><p>The command for opening folders in "
+"terminal.</p><p>Use %s to indicate file path argument, e.g.: "
+"&quot;konsole --workdir %s&quot;</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:171
+msgid "Open in file manager:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:172
+#, python-format
+msgid ""
+"<html><head/><body><p>The command for opening files in a file "
+"manager.</p><p>Use %s to indicate file path argument, e.g.: &quot;dolphin"
+" --select %s&quot;</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:173
+msgid "Open in web browser:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:174
+msgid ""
+"<html><head/><body><p>If checked, the system default browser will be "
+"used. Otherwise you need to specify the command.</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:175
+msgid "Use system browser"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:177
+msgid ""
+"<html><head/><body><p>The list of environment "
+"variables.</p><p><br/></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:180
+msgid "Key"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:183
+msgid "Add an environment variable"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:185
+msgid "Remove the selected environment variable."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:80
+msgid "Recognized mimetypes"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:81
+msgid "The list of mimetypes and their handler"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:83
+msgid "0"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:85
+msgid "Mimetype"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:87
+msgid "Handler"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:91
+msgid "text/x-python"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:93
+msgid "PyCodeEdit"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:95
+msgid "Patterns:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:96
+msgid "Mimetype patterns (separated by ;)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:97
+msgid "Ignored files and directories"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_mimetypes_ui.py:98
+msgid ""
+"<html><head/><body><p>The list of ignore patterns (each pattern must be "
+"separated by a semi-colon ;)</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:77
+msgid ""
+"Show notifications in system tray (depends on the OS and whether the tray"
+" icon is visible or not)"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:78
+msgid ""
+"If checked, the IDE notifications will be shown through the system tray "
+"icon (or libnotify on GNU/Linux)."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:79
+msgid "Show notification in system tray"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:80
+msgid "Open pane automatically for"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:81
+msgid "General purpose information messages"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:82
+msgid "Information messages"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:83
+msgid "User warnings"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:84
+msgid "Warning messages"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:85
+msgid "Internal errors,..."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:86
+msgid "Error messages"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:87
+msgid "Blacklist"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:88
+msgid "The list of ignored notifications"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:89
+msgid "Remove the select notification from the blacklist."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_notifications_ui.py:91
+msgid "Clear tjhe blacklist"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_shortcuts_ui.py:42
+msgid "Filter actions by name or by shortcut"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_shortcuts_ui.py:43
+msgid "The list of application shortcuts"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_shortcuts_ui.py:45
+msgid "Action"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_shortcuts_ui.py:47
+msgid "Shortcut"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:126
+msgid ""
+"<html><head/><body><p align=\"center\">Git not found in PATH, Sync will "
+"not work!</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:127
+#: hackedit/app/forms/wizard_new_ui.py:111
+msgid "Sources"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:128
+msgid "Add a template source repository"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:129
+msgid "Add"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:130
+msgid "Remove a source repository"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:131
+msgid "Remove"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:132
+msgid "Sync source repositories (you need to have git in PATH)."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:133
+msgid "Sync"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:134
+msgid ""
+"Check this to automatically sync template repositories on application "
+"startup"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:135
+msgid "Sync on startup"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:136
+msgid "The list of template source repositories"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:137
+msgid "Details"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:139
+msgid "Path:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:140
+msgid "Cache:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:141
+msgid "Last sync time:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:142
+msgid "Available templates:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:143
+msgid "The list of available templates provided by the selected source."
+msgstr ""
+
+#: hackedit/app/forms/settings_page_templates_ui.py:144
+#: hackedit/app/forms/wizard_new_ui.py:122
+msgid "Powered by BOSS v0.9.20"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:139
+msgid "Workspaces"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:140
+msgid "Add a new empty workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:142
+msgid "Delete selected workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:144
+msgid "Copy the selected workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:146
+msgid "Properties"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:147
+msgid ""
+"<html><head/><body><p align=\"center\">This workspace is read-only. You "
+"must clone it if you want to modify it...</p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:149
+msgid "Name of the workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:151
+msgid "Description of the workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:152
+msgid "Available"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:153
+msgid "List of available workspaces"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:154
+msgid "Add the selected plugin to the workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:155
+msgid "Remove the selected plugin from workspace"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:156
+msgid "Used"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_workspaces_ui.py:157
+msgid "List of plugins used by the workspace"
+msgstr ""
+
+#: hackedit/app/forms/terminal_widget_ui.py:41
+msgid "Command output"
+msgstr ""
+
+#: hackedit/app/forms/terminal_widget_ui.py:42
+msgid "Type a command to execute"
+msgstr ""
+
+#: hackedit/app/forms/terminal_widget_ui.py:43
+msgid "Run command (keep pressed to access the terminal history)"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:131
+msgid "Welcome to HackEdit"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:132
+msgid "The list of recent documents/projects"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:133
+#, python-format
+msgid "Version %s"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:134
+msgid ""
+"<html><head/><body><p align=\"center\"><img "
+"src=\":/icons/hackedit_128.png\"/></p><p align=\"center\"><span style=\" "
+"font-size:48pt;\">HackEdit</span></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:136
+#: hackedit/app/forms/wizard_new_ui.py:108
+msgid "New"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:138
+msgid "Open a project (directory)."
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:139
+msgid "Open"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:142
+msgid "Quit"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:148
+msgid "Get Help"
+msgstr ""
+
+#: hackedit/app/forms/welcome_window_ui.py:149
+msgid "F1"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:109
+msgid "Select template"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:110
+msgid "Select a project or a single file template"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:112
+msgid "The list of template sources"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:113
+msgid "Templates"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:114
+msgid "The list of templates for the selected source"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:115
+msgid "Template"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:118
+msgid "Project templates"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:119
+msgid "File templates"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:120
+msgid "Un-categorized templates"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:123
+msgid "Set location"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:124
+msgid "Set the location of the project/file"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:125
+msgid "Create in:"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:126
+msgid "Select the project/file destination."
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:127
+msgid "Browse"
+msgstr ""
+
+#: hackedit/app/forms/wizard_new_ui.py:128
+msgid "TextLabel"
+msgstr ""
+
