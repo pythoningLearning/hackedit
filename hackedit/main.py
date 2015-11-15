@@ -12,6 +12,10 @@ from hackedit import __version__
 from hackedit.app import argparser, logger
 
 
+import faulthandler
+faulthandler.enable()
+
+
 ZIP_PATH = os.environ.get('HACKEDIT_LIBS_PATH', None)
 if not ZIP_PATH:
     # make sure external libs can be imported even if not installed.
