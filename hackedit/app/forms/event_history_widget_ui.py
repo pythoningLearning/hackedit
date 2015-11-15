@@ -46,10 +46,9 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.bt_clear.setToolTip(_translate("Form", "Clear history"))
-        self.bt_clear.setText(_translate("Form", "..."))
+        Form.setWindowTitle(_("Form"))
+        self.bt_clear.setToolTip(_("Clear history"))
+        self.bt_clear.setText(_("..."))
 

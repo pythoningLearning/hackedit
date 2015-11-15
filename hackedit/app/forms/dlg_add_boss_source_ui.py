@@ -42,12 +42,11 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Add source"))
-        self.label.setText(_translate("Dialog", "Label:"))
-        self.edit_label.setToolTip(_translate("Dialog", "Give a meaningfull name to this source so that you can recognize it."))
-        self.label_2.setText(_translate("Dialog", "URL"))
-        self.edit_url.setToolTip(_translate("Dialog", "<html><head/><body><p>URL of the template repository. </p><p><br/></p><p>Boss supports both local and remote (git) template repositories.</p></body></html>"))
+        Dialog.setWindowTitle(_("Add source"))
+        self.label.setText(_("Label:"))
+        self.edit_label.setToolTip(_("Give a meaningfull name to this source so that you can recognize it."))
+        self.label_2.setText(_("URL"))
+        self.edit_url.setToolTip(_("<html><head/><body><p>URL of the template repository. </p><p><br/></p><p>Boss supports both local and remote (git) template repositories.</p></body></html>"))
 

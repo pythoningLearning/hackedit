@@ -35,12 +35,11 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.console.setToolTip(_translate("Form", "Command output"))
-        self.edit_command.setToolTip(_translate("Form", "Type a command to execute"))
-        self.bt_run.setToolTip(_translate("Form", "Run command (keep pressed to access the terminal history)"))
+        Form.setWindowTitle(_("Form"))
+        self.console.setToolTip(_("Command output"))
+        self.edit_command.setToolTip(_("Type a command to execute"))
+        self.bt_run.setToolTip(_("Run command (keep pressed to access the terminal history)"))
 
 from pyqode.core.widgets import InteractiveConsole, PromptLineEdit

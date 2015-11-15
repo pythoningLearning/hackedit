@@ -41,11 +41,10 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Terminal history"))
-        self.listWidget.setToolTip(_translate("Dialog", "The list of terminal commands"))
-        self.bt_remove.setToolTip(_translate("Dialog", "Remove the selected entry from history"))
-        self.bt_remove.setText(_translate("Dialog", "..."))
+        Dialog.setWindowTitle(_("Terminal history"))
+        self.listWidget.setToolTip(_("The list of terminal commands"))
+        self.bt_remove.setToolTip(_("Remove the selected entry from history"))
+        self.bt_remove.setText(_("..."))
 

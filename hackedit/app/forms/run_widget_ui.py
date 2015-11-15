@@ -63,12 +63,11 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.bt_run.setToolTip(_translate("Form", "Run current tab"))
-        self.bt_pin.setToolTip(_translate("Form", "Pin/Unpin current tab"))
-        self.bt_print.setToolTip(_translate("Form", "Print current tab"))
-        self.bt_clear.setToolTip(_translate("Form", "Clear current output"))
+        Form.setWindowTitle(_("Form"))
+        self.bt_run.setToolTip(_("Run current tab"))
+        self.bt_pin.setToolTip(_("Pin/Unpin current tab"))
+        self.bt_print.setToolTip(_("Print current tab"))
+        self.bt_clear.setToolTip(_("Clear current output"))
 

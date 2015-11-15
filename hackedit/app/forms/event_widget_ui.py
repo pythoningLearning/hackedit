@@ -87,13 +87,12 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.lbl_time.setText(_translate("Form", "09:03:30"))
-        self.lbl_title.setText(_translate("Form", "Title"))
-        self.lbl_description.setText(_translate("Form", "Description"))
-        self.toolButton.setToolTip(_translate("Form", "Close this notification"))
+        Form.setWindowTitle(_("Form"))
+        self.lbl_time.setText(_("09:03:30"))
+        self.lbl_title.setText(_("Title"))
+        self.lbl_description.setText(_("Description"))
+        self.toolButton.setToolTip(_("Close this notification"))
 
 from . import hackedit_rc

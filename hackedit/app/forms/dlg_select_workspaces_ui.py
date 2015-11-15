@@ -44,11 +44,10 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Select workspace"))
-        self.groupBox.setTitle(_translate("Dialog", "Select a workspace"))
-        self.list_workspaces.setToolTip(_translate("Dialog", "The list of available workspaces."))
-        self.lbl_description.setText(_translate("Dialog", "Workspace description..."))
+        Dialog.setWindowTitle(_("Select workspace"))
+        self.groupBox.setTitle(_("Select a workspace"))
+        self.list_workspaces.setToolTip(_("The list of available workspaces."))
+        self.lbl_description.setText(_("Workspace description..."))
 

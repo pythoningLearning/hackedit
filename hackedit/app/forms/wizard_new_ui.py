@@ -103,29 +103,28 @@ class Ui_Wizard(object):
 
     def retranslateUi(self, Wizard):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Wizard.setWindowTitle(_translate("Wizard", "New"))
-        self.wizardPageHome.setTitle(_translate("Wizard", "Select template"))
-        self.wizardPageHome.setSubTitle(_translate("Wizard", "Select a project or a single file template"))
-        self.groupBox.setTitle(_translate("Wizard", "Sources"))
-        self.list_sources.setToolTip(_translate("Wizard", "The list of template sources"))
-        self.groupBox_2.setTitle(_translate("Wizard", "Templates"))
-        self.tree_templates.setToolTip(_translate("Wizard", "The list of templates for the selected source"))
-        self.tree_templates.headerItem().setText(0, _translate("Wizard", "Template"))
+        Wizard.setWindowTitle(_("New"))
+        self.wizardPageHome.setTitle(_("Select template"))
+        self.wizardPageHome.setSubTitle(_("Select a project or a single file template"))
+        self.groupBox.setTitle(_("Sources"))
+        self.list_sources.setToolTip(_("The list of template sources"))
+        self.groupBox_2.setTitle(_("Templates"))
+        self.tree_templates.setToolTip(_("The list of templates for the selected source"))
+        self.tree_templates.headerItem().setText(0, _("Template"))
         __sortingEnabled = self.tree_templates.isSortingEnabled()
         self.tree_templates.setSortingEnabled(False)
-        self.tree_templates.topLevelItem(0).setText(0, _translate("Wizard", "Project templates"))
-        self.tree_templates.topLevelItem(1).setText(0, _translate("Wizard", "File templates"))
-        self.tree_templates.topLevelItem(2).setText(0, _translate("Wizard", "Un-categorized templates"))
+        self.tree_templates.topLevelItem(0).setText(0, _("Project templates"))
+        self.tree_templates.topLevelItem(1).setText(0, _("File templates"))
+        self.tree_templates.topLevelItem(2).setText(0, _("Un-categorized templates"))
         self.tree_templates.setSortingEnabled(__sortingEnabled)
-        self.lbl_boss_version.setText(_translate("Wizard", "Powered by BOSS v0.9.20"))
-        self.wizardPageLocation.setTitle(_translate("Wizard", "Set location"))
-        self.wizardPageLocation.setSubTitle(_translate("Wizard", "Set the location of the project/file"))
-        self.label.setText(_translate("Wizard", "Create in:"))
-        self.edit_prj_path.setToolTip(_translate("Wizard", "Select the project/file destination."))
-        self.bt_select_prj_path.setText(_translate("Wizard", "Browse"))
-        self.lbl_prj_location_error.setText(_translate("Wizard", "TextLabel"))
+        self.lbl_boss_version.setText(_("Powered by BOSS v0.9.20"))
+        self.wizardPageLocation.setTitle(_("Set location"))
+        self.wizardPageLocation.setSubTitle(_("Set the location of the project/file"))
+        self.label.setText(_("Create in:"))
+        self.edit_prj_path.setToolTip(_("Select the project/file destination."))
+        self.bt_select_prj_path.setText(_("Browse"))
+        self.lbl_prj_location_error.setText(_("TextLabel"))
 
 from hackedit.api.widgets import PathLineEdit

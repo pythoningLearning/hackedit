@@ -71,12 +71,11 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Preferences"))
-        self.categories.setToolTip(_translate("Dialog", "Categories"))
-        self.categories.headerItem().setText(0, _translate("Dialog", "item"))
-        self.label_title.setText(_translate("Dialog", "Page title"))
-        self.buttons.setToolTip(_translate("Dialog", "<html><head/><body><p>Ok: Apply settings and quit the dialog</p><p>Cancel: Quit the dialog without applying the settings</p><p>Reset: reset the value of the changed settings of the current page (cancel any changes you\'ve made)</p><p>Restore defaults: restore the initial default values of the current page</p></body></html>"))
+        Dialog.setWindowTitle(_("Preferences"))
+        self.categories.setToolTip(_("Categories"))
+        self.categories.headerItem().setText(0, _("item"))
+        self.label_title.setText(_("Page title"))
+        self.buttons.setToolTip(_("<html><head/><body><p>Ok: Apply settings and quit the dialog</p><p>Cancel: Quit the dialog without applying the settings</p><p>Reset: reset the value of the changed settings of the current page (cancel any changes you\'ve made)</p><p>Restore defaults: restore the initial default values of the current page</p></body></html>"))
 

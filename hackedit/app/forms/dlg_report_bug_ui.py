@@ -63,19 +63,18 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Report a bug"))
-        self.label.setText(_translate("Dialog", "Title:"))
-        self.edit_title.setToolTip(_translate("Dialog", "<html><head/><body><p>Bug report title</p></body></html>"))
-        self.label_2.setText(_translate("Dialog", "Description:"))
-        self.edit_desc.setToolTip(_translate("Dialog", "<html><head/><body><p>Use <span style=\" font-weight:600;\">markdown</span> to format text and make sure to mention the context of the issue and the <span style=\" font-weight:600;\">steps to reproduce</span>!</p></body></html>"))
-        self.cb_include_sys_info.setToolTip(_translate("Dialog", "Enable/Disable sending system infos (OS name, versions,...)"))
-        self.cb_include_sys_info.setText(_translate("Dialog", "Include system informations"))
-        self.bt_submit.setToolTip(_translate("Dialog", "<html><head/><body><p>Submit bug report on our issue tracker on Github.</p><p>Note that you\'ll need a github account to actually submit the issue.</p></body></html>"))
-        self.bt_submit.setText(_translate("Dialog", "Submit on github"))
-        self.bt_send_mail.setToolTip(_translate("Dialog", "<html><head/><body><p>Send an email with the bug report directly to the main author.</p></body></html>"))
-        self.bt_send_mail.setText(_translate("Dialog", "Send an e-mail"))
+        Dialog.setWindowTitle(_("Report a bug"))
+        self.label.setText(_("Title:"))
+        self.edit_title.setToolTip(_("<html><head/><body><p>Bug report title</p></body></html>"))
+        self.label_2.setText(_("Description:"))
+        self.edit_desc.setToolTip(_("<html><head/><body><p>Use <span style=\" font-weight:600;\">markdown</span> to format text and make sure to mention the context of the issue and the <span style=\" font-weight:600;\">steps to reproduce</span>!</p></body></html>"))
+        self.cb_include_sys_info.setToolTip(_("Enable/Disable sending system infos (OS name, versions,...)"))
+        self.cb_include_sys_info.setText(_("Include system informations"))
+        self.bt_submit.setToolTip(_("<html><head/><body><p>Submit bug report on our issue tracker on Github.</p><p>Note that you\'ll need a github account to actually submit the issue.</p></body></html>"))
+        self.bt_submit.setText(_("Submit on github"))
+        self.bt_send_mail.setToolTip(_("<html><head/><body><p>Send an email with the bug report directly to the main author.</p></body></html>"))
+        self.bt_send_mail.setText(_("Send an e-mail"))
 
 from . import hackedit_rc

@@ -30,11 +30,10 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.console.setToolTip(_translate("Dialog", "Process output"))
-        self.buttonBox.setToolTip(_translate("Dialog", "Cancel operation"))
+        Dialog.setWindowTitle(_("Dialog"))
+        self.console.setToolTip(_("Process output"))
+        self.buttonBox.setToolTip(_("Cancel operation"))
 
 from pyqode.core.widgets import InteractiveConsole

@@ -140,15 +140,14 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "About HackEdit"))
-        self.lbl_icon.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
-        self.lbl_version.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" font-weight:600;\">v%s</span></p></body></html>"))
-        self.lbl_copyright.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">The hackable IDE, build with </span><a href=\"https://www.python.org/\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">Python3</span></a><span style=\" font-size:12pt;\">, </span><a href=\"http://www.riverbankcomputing.com/software/pyqt/download5\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">PyQt5</span></a><span style=\" font-size:12pt;\"> and </span><a href=\"https://github.com/pyQode/pyQode\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">pyQode</span></a><span style=\" font-size:12pt;\">.</span></p><p align=\"center\"><br/></p><p align=\"center\"><span style=\" font-family:\'Cantarell\'; font-size:9pt; font-style:italic;\">The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FORA PARTICULAR PURPOSE.</span></p><p align=\"center\"><br/></p><p align=\"center\"><a href=\"https://github.com/HackEdit/hackedit\"><span style=\" text-decoration: underline; color:#2980b9;\">View on github</span></a></p></body></html>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_about), _translate("Dialog", "About"))
-        self.text_authors.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        Dialog.setWindowTitle(_("About HackEdit"))
+        self.lbl_icon.setText(_("<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
+        self.lbl_version.setText(_("<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" font-weight:600;\">v%s</span></p></body></html>"))
+        self.lbl_copyright.setText(_("<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">The hackable IDE, build with </span><a href=\"https://www.python.org/\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">Python3</span></a><span style=\" font-size:12pt;\">, </span><a href=\"http://www.riverbankcomputing.com/software/pyqt/download5\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">PyQt5</span></a><span style=\" font-size:12pt;\"> and </span><a href=\"https://github.com/pyQode/pyQode\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">pyQode</span></a><span style=\" font-size:12pt;\">.</span></p><p align=\"center\"><br/></p><p align=\"center\"><span style=\" font-family:\'Cantarell\'; font-size:9pt; font-style:italic;\">The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FORA PARTICULAR PURPOSE.</span></p><p align=\"center\"><br/></p><p align=\"center\"><a href=\"https://github.com/HackEdit/hackedit\"><span style=\" text-decoration: underline; color:#2980b9;\">View on github</span></a></p></body></html>"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_about), _("About"))
+        self.text_authors.setHtml(_("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
@@ -158,8 +157,8 @@ class Ui_Dialog(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-weight:600;\">Contributors:</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">- </span><a href=\"mailto:thiry.celi@gmail.com\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#2980b9;\">Céline Thiry </span></a><span style=\" font-family:\'Ubuntu\';\">(icon/splashscreen designer)</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\';\"><br /></p></body></html>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_authors), _translate("Dialog", "Authors"))
-        self.edit_license.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_authors), _("Authors"))
+        self.edit_license.setHtml(_("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
@@ -503,17 +502,17 @@ class Ui_Dialog(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">library.  If this is what you want to do, use the GNU Lesser General</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">Public License instead of this License.</span></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:8pt;\"><br /></p></body></html>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_license), _translate("Dialog", "License"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_license), _("License"))
         item = self.table_versions.horizontalHeaderItem(0)
-        item.setText(_translate("Dialog", "Version"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_versions), _translate("Dialog", "Versions"))
-        self.label_2.setText(_translate("Dialog", "Log level:"))
-        self.combo_log_level.setItemText(0, _translate("Dialog", "ERROR"))
-        self.combo_log_level.setItemText(1, _translate("Dialog", "WARNING"))
-        self.combo_log_level.setItemText(2, _translate("Dialog", "INFO"))
-        self.combo_log_level.setItemText(3, _translate("Dialog", "DEBUG"))
-        self.combo_log_level.setItemText(4, _translate("Dialog", "PYQODE_DEBUG"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_log), _translate("Dialog", "Log"))
-        self.label.setText(_translate("Dialog", "Copyright 2015 Colin Duquesnoy. All rights reserved."))
+        item.setText(_("Version"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_versions), _("Versions"))
+        self.label_2.setText(_("Log level:"))
+        self.combo_log_level.setItemText(0, _("ERROR"))
+        self.combo_log_level.setItemText(1, _("WARNING"))
+        self.combo_log_level.setItemText(2, _("INFO"))
+        self.combo_log_level.setItemText(3, _("DEBUG"))
+        self.combo_log_level.setItemText(4, _("PYQODE_DEBUG"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_log), _("Log"))
+        self.label.setText(_("Copyright 2015 Colin Duquesnoy. All rights reserved."))
 
 from . import hackedit_rc

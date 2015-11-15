@@ -61,12 +61,11 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.group.setTitle(_translate("Form", "Name"))
-        self.bt_cancel.setToolTip(_translate("Form", "Cancel operation"))
-        self.bt_cancel.setText(_translate("Form", "..."))
-        self.lbl_description.setText(_translate("Form", "Description"))
+        Form.setWindowTitle(_("Form"))
+        self.group.setTitle(_("Name"))
+        self.bt_cancel.setToolTip(_("Cancel operation"))
+        self.bt_cancel.setText(_("..."))
+        self.lbl_description.setText(_("Description"))
 

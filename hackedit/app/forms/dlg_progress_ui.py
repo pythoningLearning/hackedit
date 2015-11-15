@@ -39,10 +39,9 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.pushButton.setToolTip(_translate("Dialog", "Cancel operation"))
-        self.label.setText(_translate("Dialog", "Operation in progress..."))
+        Dialog.setWindowTitle(_("Dialog"))
+        self.pushButton.setToolTip(_("Cancel operation"))
+        self.label.setText(_("Operation in progress..."))
 

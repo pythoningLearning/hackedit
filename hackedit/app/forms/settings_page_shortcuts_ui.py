@@ -36,15 +36,14 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.edit_filter.setToolTip(_translate("Form", "Filter actions by name or by shortcut"))
-        self.table.setToolTip(_translate("Form", "The list of application shortcuts"))
+        Form.setWindowTitle(_("Form"))
+        self.edit_filter.setToolTip(_("Filter actions by name or by shortcut"))
+        self.table.setToolTip(_("The list of application shortcuts"))
         item = self.table.horizontalHeaderItem(0)
-        item.setText(_translate("Form", "Action"))
+        item.setText(_("Action"))
         item = self.table.horizontalHeaderItem(1)
-        item.setText(_translate("Form", "Shortcut"))
+        item.setText(_("Shortcut"))
 
 from pyqode.core.widgets import PromptLineEdit

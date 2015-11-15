@@ -39,13 +39,12 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "How would you like to open the %s?"))
-        self.rb_open_new.setToolTip(_translate("Dialog", "Open file/project in a new window"))
-        self.rb_open_new.setText(_translate("Dialog", "Open in &new window"))
-        self.rb_open_current.setToolTip(_translate("Dialog", "Add project to current window and add it to the list of opened projects."))
-        self.rb_open_current.setText(_translate("Dialog", "Open in current window (add &to currently opened projects)"))
+        Dialog.setWindowTitle(_("Dialog"))
+        self.label.setText(_("How would you like to open the %s?"))
+        self.rb_open_new.setToolTip(_("Open file/project in a new window"))
+        self.rb_open_new.setText(_("Open in &new window"))
+        self.rb_open_current.setToolTip(_("Add project to current window and add it to the list of opened projects."))
+        self.rb_open_current.setText(_("Open in current window (add &to currently opened projects)"))
 

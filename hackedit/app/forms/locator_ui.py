@@ -46,13 +46,12 @@ class Ui_Frame(object):
 
     def retranslateUi(self, Frame):
         import gettext
-        def _translate(_, string):
-            return gettext.gettext(string)
+        _ = gettext.gettext
 
-        Frame.setWindowTitle(_translate("Frame", "Frame"))
-        self.bt_infos.setToolTip(_translate("Frame", "Help"))
-        self.bt_infos.setText(_translate("Frame", "..."))
-        self.bt_close.setToolTip(_translate("Frame", "Close"))
-        self.bt_close.setText(_translate("Frame", "..."))
+        Frame.setWindowTitle(_("Frame"))
+        self.bt_infos.setToolTip(_("Help"))
+        self.bt_infos.setText(_("..."))
+        self.bt_close.setToolTip(_("Close"))
+        self.bt_close.setText(_("..."))
 
 from pyqode.core.widgets import PromptLineEdit
