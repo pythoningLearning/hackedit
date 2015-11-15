@@ -3,6 +3,7 @@
 Entry point of HackEdit.
 """
 import logging
+import gettext
 import os
 import sys
 
@@ -26,6 +27,17 @@ if not ZIP_PATH:
 # append insead of prepend to allow user to
 # install another version if they want to...
 sys.path.append(ZIP_PATH)
+
+
+def setup_translations():
+    try:
+        locale = QtCore.QSettings().value('env/locale', 'fr')
+        tr = gettext.translation(
+            'hackedit', localedir='data/locale', languages=[locale])
+        tr.install()
+    except OSError:
+        import builtins
+        builtins.__dict__['_'] = lambda x: x
 
 
 def main():
@@ -65,6 +77,8 @@ def main():
     qapp.setApplicationDisplayName('HackEdit')
     qapp.setApplicationName('HackEdit')
     qapp.setApplicationVersion(__version__)
+
+    setup_translations()
 
     # setup logger
     from hackedit.app import settings

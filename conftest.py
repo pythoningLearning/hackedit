@@ -26,6 +26,9 @@ QtWidgets.qApp.setOrganizationName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationDisplayName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationName('HackEdit-TestSuite')
 
+from hackedit.main import setup_translations
+setup_translations()
+
 
 for pth in ['tests/data/FooBarProj/.hackedit',
             'tests/data/SpamEggsProj/.hackedit',
