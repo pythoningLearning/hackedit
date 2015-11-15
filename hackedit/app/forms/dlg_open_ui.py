@@ -38,8 +38,6 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Dialog"))
         self.label.setText(_("How would you like to open the %s?"))

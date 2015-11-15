@@ -73,8 +73,6 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        import gettext
-        _ = gettext.gettext
 
         Form.setWindowTitle(_("Form"))
         self.groupBox.setTitle(_("Recognized mimetypes"))

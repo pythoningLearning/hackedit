@@ -119,8 +119,6 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        import gettext
-        _ = gettext.gettext
 
         Form.setWindowTitle(_("Form"))
         self.lbl_git_not_found.setText(_("<html><head/><body><p align=\"center\">Git not found in PATH, Sync will not work!</p></body></html>"))

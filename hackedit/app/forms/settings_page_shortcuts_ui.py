@@ -35,8 +35,6 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        import gettext
-        _ = gettext.gettext
 
         Form.setWindowTitle(_("Form"))
         self.edit_filter.setToolTip(_("Filter actions by name or by shortcut"))

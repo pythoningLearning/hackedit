@@ -44,8 +44,6 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Mark as ignored"))
         self.rb_explicit.setToolTip(_("Ignore explicitely"))

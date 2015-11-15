@@ -102,8 +102,6 @@ class Ui_Wizard(object):
         Wizard.setTabOrder(self.edit_prj_path, self.bt_select_prj_path)
 
     def retranslateUi(self, Wizard):
-        import gettext
-        _ = gettext.gettext
 
         Wizard.setWindowTitle(_("New"))
         self.wizardPageHome.setTitle(_("Select template"))

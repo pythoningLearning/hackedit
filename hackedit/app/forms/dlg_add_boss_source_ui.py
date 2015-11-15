@@ -41,8 +41,6 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Add source"))
         self.label.setText(_("Label:"))

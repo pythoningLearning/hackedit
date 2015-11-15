@@ -70,8 +70,6 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Preferences"))
         self.categories.setToolTip(_("Categories"))

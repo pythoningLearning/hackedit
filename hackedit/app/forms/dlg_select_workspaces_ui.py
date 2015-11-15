@@ -43,8 +43,6 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Select workspace"))
         self.groupBox.setTitle(_("Select a workspace"))

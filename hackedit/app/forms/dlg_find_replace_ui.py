@@ -124,8 +124,6 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.combo_projects, self.edit_pattern)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Dialog"))
         self.label.setText(_("Text to find:   "))

@@ -86,8 +86,6 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        import gettext
-        _ = gettext.gettext
 
         Form.setWindowTitle(_("Form"))
         self.lbl_time.setText(_("09:03:30"))

@@ -70,8 +70,6 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        import gettext
-        _ = gettext.gettext
 
         Form.setWindowTitle(_("Form"))
         Form.setToolTip(_("Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))

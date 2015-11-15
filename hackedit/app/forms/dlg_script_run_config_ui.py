@@ -217,8 +217,6 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.bt_rm_env_var, self.list_configs)
 
     def retranslateUi(self, Dialog):
-        import gettext
-        _ = gettext.gettext
 
         Dialog.setWindowTitle(_("Python run configuration"))
         self.label_prj_interpreter.setText(_("Project interpreter:"))

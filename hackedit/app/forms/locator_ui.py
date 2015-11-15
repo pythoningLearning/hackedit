@@ -45,8 +45,6 @@ class Ui_Frame(object):
         QtCore.QMetaObject.connectSlotsByName(Frame)
 
     def retranslateUi(self, Frame):
-        import gettext
-        _ = gettext.gettext
 
         Frame.setWindowTitle(_("Frame"))
         self.bt_infos.setToolTip(_("Help"))
