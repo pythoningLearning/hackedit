@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_preferences.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_preferences.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -70,7 +70,10 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Dialog.setWindowTitle(_translate("Dialog", "Preferences"))
         self.categories.setToolTip(_translate("Dialog", "Categories"))
         self.categories.headerItem().setText(0, _translate("Dialog", "item"))

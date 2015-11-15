@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/event_widget.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/event_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -86,7 +86,10 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Form.setWindowTitle(_translate("Form", "Form"))
         self.lbl_time.setText(_translate("Form", "09:03:30"))
         self.lbl_title.setText(_translate("Form", "Title"))

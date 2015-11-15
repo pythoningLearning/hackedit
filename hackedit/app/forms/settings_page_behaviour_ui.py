@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_behaviour.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/settings_page_behaviour.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -77,7 +77,10 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Form.setWindowTitle(_translate("Form", "Form"))
         self.groupBox.setTitle(_translate("Form", "Startup/Shutdown"))
         self.cb_splashscreen.setToolTip(_translate("Form", "Show/Hide splashscreen on application startup."))

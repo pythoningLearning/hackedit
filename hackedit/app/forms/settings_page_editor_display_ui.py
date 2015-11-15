@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/HackEdit/hackedit/data/forms/settings_page_editor_display.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/settings_page_editor_display.ui'
 #
-# Created by: PyQt5 UI code generator 5.4.2
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -86,7 +86,10 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Form.setWindowTitle(_translate("Form", "Form"))
         self.groupBox_5.setTitle(_translate("Form", "Text Wrapping"))
         self.cb_text_wrapping.setToolTip(_translate("Form", "Enable/Disable text wrapping"))

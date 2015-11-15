@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_run_process.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_run_process.ui'
 #
-# Created by: PyQt5 UI code generator 5.4.2
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -29,7 +29,10 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.console.setToolTip(_translate("Dialog", "Process output"))
         self.buttonBox.setToolTip(_translate("Dialog", "Cancel operation"))

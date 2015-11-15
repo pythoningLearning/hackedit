@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/work/hackedit/data/forms/dlg_add_boss_source.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_add_boss_source.ui'
 #
-# Created by: PyQt5 UI code generator 5.5
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -41,7 +41,10 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Dialog.setWindowTitle(_translate("Dialog", "Add source"))
         self.label.setText(_translate("Dialog", "Label:"))
         self.edit_label.setToolTip(_translate("Dialog", "Give a meaningfull name to this source so that you can recognize it."))

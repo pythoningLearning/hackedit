@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_notifications.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/settings_page_notifications.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -70,7 +70,10 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Form.setWindowTitle(_translate("Form", "Form"))
         Form.setToolTip(_translate("Form", "Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))
         self.cb_allow_system_tray.setToolTip(_translate("Form", "If checked, the IDE notifications will be shown through the system tray icon (or libnotify on GNU/Linux)."))

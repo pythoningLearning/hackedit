@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_ignore_file.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_ignore_file.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -44,7 +44,10 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Dialog.setWindowTitle(_translate("Dialog", "Mark as ignored"))
         self.rb_explicit.setToolTip(_translate("Dialog", "Ignore explicitely"))
         self.rb_explicit.setText(_translate("Dialog", "I&gnore explicitely (e.g. \'file.obj\')"))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_about.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_about.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -139,7 +139,10 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
+        import gettext
+        def _translate(_, string):
+            return gettext.gettext(string)
+
         Dialog.setWindowTitle(_translate("Dialog", "About HackEdit"))
         self.lbl_icon.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
         self.lbl_version.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" font-weight:600;\">v%s</span></p></body></html>"))
