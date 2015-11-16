@@ -301,8 +301,8 @@ class TaskListWidget(QtWidgets.QWidget):
             self.vertical_layout.SetMinimumSize)
         self.setLayout(self.vertical_layout)
         self.tm = task_manager
-        # self.tm.task_started.connect(self._add_task)
-        # self.tm.task_finished.connect(self._rm_task)
+        self.tm.task_started.connect(self._add_task)
+        self.tm.task_finished.connect(self._rm_task)
         self._insert_index = 0
 
     def close(self):
