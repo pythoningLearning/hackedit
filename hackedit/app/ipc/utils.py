@@ -2,7 +2,10 @@
 Contains some utility functions used by both the client and the server.
 """
 import logging
-import pickle
+try:
+    import dill as pickle
+except ImportError:
+    import pickle
 import struct
 
 from PyQt5 import QtNetwork
@@ -49,9 +52,6 @@ def send_message(socket, data):
     data = pickle.dumps(data)
     payload = struct.pack('Q', len(data))
     socket.write(payload + data)
-    socket.flush()
-    data = None
-    del data
 
 
 def echo(*args):
