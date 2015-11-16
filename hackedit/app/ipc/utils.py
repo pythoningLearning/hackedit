@@ -3,8 +3,9 @@ Contains some utility functions used by both the client and the server.
 """
 import logging
 import pickle
-import socket
 import struct
+
+from PyQt5 import QtNetwork
 
 
 def _logger():
@@ -13,11 +14,12 @@ def _logger():
 
 def pick_free_port():
     """ Picks a free port """
-    test_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    test_socket.bind(('127.0.0.1', 0))
-    free_port = int(test_socket.getsockname()[1])
-    test_socket.close()
-    return free_port
+    srv = QtNetwork.QTcpServer()
+    srv.listen()
+    port = srv.serverPort()
+    srv.close()
+    del srv
+    return port
 
 
 def read_message(socket):
@@ -34,8 +36,8 @@ def read_message(socket):
             payload = socket.buffer[:8]
             socket.buffer = socket.buffer[8:]
             socket.payload = struct.unpack('Q', payload)[0]
-            if len(socket.buffer) >= socket.payload:
-                return pickle.loads(socket.buffer)
+    if socket.payload is not None and len(socket.buffer) >= socket.payload:
+        return pickle.loads(socket.buffer)
     return None  # message not complete, let's wait for other packets
 
 
@@ -43,6 +45,7 @@ def send_message(socket, data):
     """
     Sends a message using our rudimentary protocol.
     """
+
     data = pickle.dumps(data)
     payload = struct.pack('Q', len(data))
     socket.write(payload + data)
