@@ -35,20 +35,21 @@ class Process(QtCore.QObject):
         """
         super().__init__()
         atexit.register(self.terminate)
-        self._process = QtCore.QProcess()
-        self._process.readyRead.connect(self._on_ready_read)
-        self._process.setProcessChannelMode(self._process.MergedChannels)
-        self._process.finished.connect(self._on_finished)
+        self._process = None
         self._interpreter = interpreter
         self._func = func
         self._args = args
-        self._process.stateChanged.connect(self._on_state_changed)
         self._socket = None
 
     def terminate(self):
         _logger().debug('terminating process')
-        self._process.terminate()
-        self._process.kill()
+        if self._process:
+            self._process.terminate()
+            self._process.kill()
+        try:
+            atexit.unregister(self.terminate)
+        except ValueError:
+            pass
 
     def is_alive(self):
         return self._process.state() != self._process.NotRunning
@@ -58,6 +59,11 @@ class Process(QtCore.QObject):
         _logger().debug('starting server process: %s',
                         ' '.join([self._interpreter, server.__file__,
                                   str(self._port)]))
+        self._process = QtCore.QProcess()
+        self._process.readyRead.connect(self._on_ready_read)
+        self._process.setProcessChannelMode(self._process.MergedChannels)
+        self._process.finished.connect(self._on_finished)
+        self._process.stateChanged.connect(self._on_state_changed)
         self._process.start(
             self._interpreter, (server.__file__, str(self._port)))
 
@@ -77,10 +83,7 @@ class Process(QtCore.QObject):
                 _logger().debug('server::localhost:%s> %s', self._port, line)
 
     def _on_state_changed(self, state):
-        if not state:
-            # not running
-            atexit.unregister(self.terminate)
-        elif state == self._process.Running:
+        if state == self._process.Running:
             # connect to server
             QtCore.QTimer.singleShot(100, self._connect)
 
@@ -130,6 +133,9 @@ class Process(QtCore.QObject):
             exit_code = 139
         _logger().debug('process finished with exit code %d' % exit_code)
         self.finished.emit(exit_code)
+        QtCore.QTimer.singleShot(1, self.cleanup)
+
+    def cleanup(self):
         if self._socket:
             self._socket.buffer = None
             self._socket.payload = None
