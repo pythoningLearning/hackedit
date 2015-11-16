@@ -43,10 +43,7 @@ class Process(QtCore.QObject):
         self._func = func
         self._args = args
         self._process.stateChanged.connect(self._on_state_changed)
-        self._socket = QtNetwork.QTcpSocket()
-        self._socket.connected.connect(self._on_connected)
-        self._socket.error.connect(self._on_socket_error)
-        self._socket.readyRead.connect(self._on_socket_ready_read)
+        self._socket = None
 
     def terminate(self):
         _logger().debug('terminating process')
@@ -62,7 +59,7 @@ class Process(QtCore.QObject):
                         ' '.join([self._interpreter, server.__file__,
                                   str(self._port)]))
         self._process.start(
-            self._interpreter, [server.__file__, str(self._port)])
+            self._interpreter, (server.__file__, str(self._port)))
 
     def _on_ready_read(self):
         output = self._process.readAllStandardOutput().data().decode(
@@ -89,6 +86,10 @@ class Process(QtCore.QObject):
 
     def _connect(self):
         _logger().debug('connecting to server: localhost:%s', self._port)
+        if self._socket:
+            self._socket.setParent(None)
+            self._socket.deleteLater()
+            self._socket = None
         self._socket = QtNetwork.QTcpSocket()
         self._socket.connected.connect(self._on_connected)
         self._socket.error.connect(self._on_socket_error)
@@ -129,6 +130,20 @@ class Process(QtCore.QObject):
             exit_code = 139
         _logger().debug('process finished with exit code %d' % exit_code)
         self.finished.emit(exit_code)
+        if self._socket:
+            self._socket.buffer = None
+            self._socket.payload = None
+            self._socket.close()
+            self._socket.setParent(None)
+            self._socket.deleteLater()
+            self._socket = None
+        self.terminate()
+        if self._process:
+            self._process.setParent(None)
+            self._process.deleteLater()
+            self._process = None
+        self._func = None
+        self._args = None
 
 
 def _logger():

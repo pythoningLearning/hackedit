@@ -78,7 +78,6 @@ def handle(conn):
         tb = traceback.format_exc()
         print('function error: ', tb)
         send(conn, {'exception': e, 'traceback': tb})
-        ret_val = None
     else:
         print('function finished, sending result')
         send(conn, {'ret_val': ret_val})

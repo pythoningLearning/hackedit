@@ -102,9 +102,12 @@ class Task(QtCore.QObject):
     #: Signal emitted when the worker has started
     started = QtCore.pyqtSignal(object)
 
+    #: Signal emitted when results are available
+    results_avaialble = QtCore.pyqtSignal(object, object)
+
     #: Signal emitted when the worker has finished.
     #: Parameter is the task instance and the task's return value.
-    finished = QtCore.pyqtSignal(object, object)
+    finished = QtCore.pyqtSignal(object)
 
     #: Signal emitted when the progress has changed
     #: Parameters:
@@ -127,6 +130,14 @@ class Task(QtCore.QObject):
         self._finished = False
         self.use_thread = use_thread
 
+    def __del__(self):
+        self.args = None
+        self.function = None
+        self.callback = None
+        self.worker.setParent(None)
+        self.worker.deleteLater()
+        self.worker = None
+
     @QtCore.pyqtSlot()
     def cancel(self):
         """
@@ -135,7 +146,7 @@ class Task(QtCore.QObject):
         .. note:: It is up to the worker implementation to check this flag to
                   and exit from its process method.
         """
-        self.finished.emit(self, None)
+        self.finished.emit(self)
         try:
             self.process.terminate()
         except AttributeError:
@@ -159,12 +170,11 @@ class Task(QtCore.QObject):
 
     def _on_result_available(self, ret_val):
         _logger().debug('<{}> results available'.format(self.name))
-        self._finished = True
-        self.finished.emit(self, ret_val)
+        self.results_avaialble.emit(self, ret_val)
 
     def _on_finished(self, _):
         if not self._finished:
-            self.finished.emit(self, None)
+            self.finished.emit(self)
             self._finished = True
 
     def _on_error(self, exc, tb):
@@ -213,6 +223,7 @@ class TaskManager(QtCore.QObject):
         task.callback = callback
         task.started.connect(self.task_started.emit)
         task.finished.connect(self._on_task_finished)
+        task.results_avaialble.connect(self._on_task_results_available)
         task.errored.connect(self._post_errored_event)
         task.start()
         self._running_tasks.append(task)
@@ -222,7 +233,7 @@ class TaskManager(QtCore.QObject):
     def _post_errored_event(self, task, traceback, exception):
         events.post(TaskExceptionEvent(task, traceback, exception))
 
-    def _on_task_finished(self, task, ret_val):
+    def _on_task_finished(self, task):
         _logger().debug('task finished <%s>' % task.name)
         try:
             self._running_tasks.remove(task)
@@ -230,6 +241,11 @@ class TaskManager(QtCore.QObject):
             pass
         self.task_finished.emit(task)
         self.task_count_changed.emit(len(self._running_tasks))
+        task.setParent(None)
+        task.deleteLater()
+        del task
+
+    def _on_task_results_available(self, task, ret_val):
         if task.callback:
             task.callback(ret_val)
 
@@ -285,8 +301,8 @@ class TaskListWidget(QtWidgets.QWidget):
             self.vertical_layout.SetMinimumSize)
         self.setLayout(self.vertical_layout)
         self.tm = task_manager
-        self.tm.task_started.connect(self._add_task)
-        self.tm.task_finished.connect(self._rm_task)
+        # self.tm.task_started.connect(self._add_task)
+        # self.tm.task_finished.connect(self._rm_task)
         self._insert_index = 0
 
     def close(self):
