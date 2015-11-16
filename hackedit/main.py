@@ -13,7 +13,11 @@ from hackedit.app import argparser, logger
 
 
 import faulthandler
-faulthandler.enable()
+try:
+	faulthandler.enable()
+except RuntimeError:
+	# no stderr, happens on windows with the native launcher
+	pass
 
 
 ZIP_PATH = os.environ.get('HACKEDIT_LIBS_PATH', None)
