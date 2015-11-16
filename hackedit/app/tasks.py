@@ -130,7 +130,7 @@ class Task(QtCore.QObject):
         self._finished = False
         self.use_thread = use_thread
 
-    def __del__(self):
+    def cleanup(self):
         self.args = None
         self.function = None
         self.callback = None
@@ -241,9 +241,9 @@ class TaskManager(QtCore.QObject):
             pass
         self.task_finished.emit(task)
         self.task_count_changed.emit(len(self._running_tasks))
+        task.cleanup()
         task.setParent(None)
         task.deleteLater()
-        del task
 
     def _on_task_results_available(self, task, ret_val):
         if task.callback:
