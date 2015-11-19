@@ -263,7 +263,7 @@ class RunWidget(QtWidgets.QWidget):
             :class:`pyqode.core.widgets.InteractiveConsole`.
         """
         if name is None:
-            name = QtCore.QFileInfo(pgm).baseName()
+            name = QtCore.QFileInfo(pgm).completeBaseName()
         identifier = '-'.join([pgm] + args)
         tab = self._find_free_tab(klass, identifier)
         if tab is None:
@@ -482,8 +482,9 @@ class FileIconProvider(QtWidgets.QFileIconProvider):
                     ret_val = plugin.icon(type_or_info)
                     if ret_val is not None:
                         return ret_val
-                return self.mimetype_icon(
-                    'file.%s' % type_or_info.suffix())
+                # simplify path to help memoization
+                simplified_path = 'file.%s' % type_or_info.suffix()
+                return self.mimetype_icon(simplified_path)
         else:
             map = {
                 FileIconProvider.File: QtGui.QIcon.fromTheme('text-x-generic'),

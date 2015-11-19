@@ -621,7 +621,8 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
                 ' '.join(self.interpreter_manager.extensions)))
         if path:
             self._ui.edit_script.setText(os.path.normpath(path))
-            self._ui.edit_name.setText(QtCore.QFileInfo(path).baseName())
+            self._ui.edit_name.setText(
+                QtCore.QFileInfo(path).completeBaseName())
             self._ui.edit_working_dir.setText(os.path.dirname(path))
 
     def _pick_working_dir(self):
@@ -798,7 +799,7 @@ def create_default_config(path):
     """
     if os.path.isfile(path):
         return {
-                'name': QtCore.QFileInfo(path).baseName(),
+                'name': QtCore.QFileInfo(path).completeBaseName(),
                 'script': path,
                 'script_parameters': [],
                 'working_dir': os.path.dirname(path),

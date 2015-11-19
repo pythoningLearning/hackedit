@@ -34,7 +34,7 @@ class OpenDocuments(api.plugins.WorkspacePlugin):
         for n, p in zip(names, paths):
             if names.count(n) > 1:
                 n = os.path.join(
-                    QtCore.QFileInfo(os.path.dirname(p)).baseName(), n)
+                    QtCore.QFileInfo(os.path.dirname(p)).completeBaseName(), n)
             itm = QtWidgets.QListWidgetItem(
                 self.icon_provider.icon(QtCore.QFileInfo(n)), n)
             itm.setToolTip(p)
