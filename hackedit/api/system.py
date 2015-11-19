@@ -135,15 +135,15 @@ def get_cmd_open_folder_in_terminal():
         return 'open -b com.apple.terminal %s'
 
 
-def get_cmd_run_command_in_terminal(use_pyqode_console=True):
+def get_cmd_run_command_in_terminal(use_hackedit_console=True):
     """
     Gets a cross-platform, format string which contains the command needed for
     running a command in a terminal. The format string contains one placeholder
     for command to run.
 
-    If use_pyqode_console is True, programs will run through the pyqode-console
-    binary, whose sole purpose is to maintain the terminal open after the
-    command terminated.
+    If use_hackedit_console is True, programs will run through the
+    ``heconsole`` binary, whose sole purpose is to maintain the terminal open
+    after the command terminated.
 
     .. note:: The user is free to change that command, if you want to use it
         in your plugin, use api.utils.get_cmd_run_command_in_terminal which
@@ -165,6 +165,6 @@ def get_cmd_run_command_in_terminal(use_pyqode_console=True):
         cmd = '%s'
     elif DARWIN:
         cmd = 'open %s'
-    if use_pyqode_console:
-        cmd = cmd % 'pyqode-console' + ' %s'
+    if use_hackedit_console:
+        cmd = cmd % 'heconsole' + ' %s'
     return cmd
