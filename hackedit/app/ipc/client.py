@@ -106,7 +106,11 @@ class Process(QtCore.QObject):
             return
         if 'ret_val' in data.keys():
             ret_val = data['ret_val']
-            self.result_available.emit(ret_val)
+            try:
+                self.result_available.emit(ret_val)
+            except TypeError:
+                # c++ instance deleted
+                pass
         elif 'exception' in data.keys():
             self.errored.emit(data['exception'], data['traceback'])
         else:
