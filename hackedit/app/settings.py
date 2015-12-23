@@ -493,7 +493,7 @@ def set_cc_show_tooltips(val):
 
 
 def cc_case_sensitive():
-    return bool(int(_SETTINGS.value('editor/cc_case_sensitive', 0)))
+    return bool(int(_SETTINGS.value('editor/cc_case_sensitive', 1)))
 
 
 def set_cc_case_sensitive(val):
