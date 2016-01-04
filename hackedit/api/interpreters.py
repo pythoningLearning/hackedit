@@ -19,7 +19,7 @@ import shlex
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 from . import (editor, events, plugins, project, shortcuts, widgets, window,
-               signals, special_icons, utils)
+               signals, special_icons, system, utils)
 from hackedit.app import mime_types
 from hackedit.app.forms import dlg_script_run_config_ui
 
@@ -267,6 +267,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
             cmd = ' '.join([interpreter] + args)
             cmd = utils.get_cmd_run_command_in_terminal() % cmd
             tokens = shlex.split(cmd, posix=False)
+            if system.LINUX:
+                tokens = tokens[:2] + [' '.join(tokens[2:])]
             pgm, args = tokens[0], tokens[1:]
             QtCore.QProcess.startDetached(pgm, args, cwd)
             events.post(
