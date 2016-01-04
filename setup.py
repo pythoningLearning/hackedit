@@ -104,6 +104,7 @@ setup(
             'FindReplace = hackedit.plugins.find_replace:FindReplace',
             'DocumentOutline = hackedit.plugins.outline:DocumentOutline',
             'OpenDocuments = hackedit.plugins.documents:OpenDocuments',
+            'HtmlPreview = hackedit.plugins.html_preview:HtmlPreview'
         ],
         'hackedit.plugins.workspace_providers': [
             'generic_workspace = hackedit.plugins.workspaces:GenericWorkspace',
