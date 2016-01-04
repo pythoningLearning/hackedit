@@ -15,15 +15,12 @@ Example:
     $ Press a key to close this window...
     $
 """
-import os
 import sys
 import subprocess
 
 
 def main():
     """ heconsole main entrypoint """
-    global program, args, ret
-    print(os.getcwd())
     ret = 0
     if '--help' in sys.argv or '-h' in sys.argv or len(sys.argv) == 1:
         print(__doc__)
