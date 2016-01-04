@@ -27,12 +27,15 @@ import pyqode.core
 import pyqode.python
 import pyqode.cobol
 import pyqode.qt
+import pyqode.rst
 
 import future
 
 import jedi
 import pep8
 import pyflakes
+
+import restructuredtext_lint
 
 import boss
 import cement
@@ -96,9 +99,10 @@ except FileExistsError:
     os.mkdir(BUILD)
 embed_packages([
     # all pyqode packages and deps
-    pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol, future, pygments,
+    pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol, pyqode.rst, future,
+    pygments,
     # pyqode python dependencies
-    jedi, pep8, pyflakes,
+    jedi, pep8, pyflakes, restructuredtext_lint,
     # boss
     boss, cement,
     # dark stylesheet
