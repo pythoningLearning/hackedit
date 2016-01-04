@@ -28,10 +28,11 @@ MSG_ICONS = {
 
 ICON_SIZE = 24
 
+Notify = None
 try:
     import gi
 except ImportError:
-    Notify = None
+    pass
 else:
     try:
         gi.require_version('Notify', '0.7')
