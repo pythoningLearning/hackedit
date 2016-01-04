@@ -72,7 +72,7 @@ def handle(conn):
     fct = data['function']
     args = data['arguments']
     try:
-        print('running function <%s> with arguments %r' % (fct, args))
+        print('running function <%s>' % fct)
         ret_val = fct(*args)
     except Exception as e:
         tb = traceback.format_exc()
