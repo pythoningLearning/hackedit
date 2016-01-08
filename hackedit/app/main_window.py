@@ -691,13 +691,20 @@ class MainWindow(QtWidgets.QMainWindow):
         current_index = 0
         for i, w in enumerate(widgets):
             try:
-                path = w.file.path
+                # widget that have this attribute set won't be restored when
+                # restoring session
+                w.dont_remember
             except AttributeError:
-                pass
+                try:
+                    path = w.file.path
+                except AttributeError:
+                    pass
+                else:
+                    files.append(path)
+                    if path == self._ui.tabs.current_widget().file.path:
+                        current_index = i
             else:
-                files.append(path)
-                if path == self._ui.tabs.current_widget().file.path:
-                    current_index = i
+                continue
         return current_index, files
 
     def _close_documents(self, event=None):
@@ -1167,7 +1174,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._apply_editor_plugin_preferences(editor)
 
     def _update_cursor_label(self):
-        if self.current_tab:
+        if self.current_tab and isinstance(self.current_tab, CodeEdit):
             l, c = TextHelper(self.current_tab).cursor_position()
             self.lbl_cursor.setText('%d:%d' % (l+1, c+1), False)
         else:
