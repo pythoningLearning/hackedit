@@ -109,6 +109,11 @@ setup(
         'hackedit.plugins.workspace_providers': [
             'generic_workspace = hackedit.plugins.workspaces:GenericWorkspace',
             'empty_workspace = hackedit.plugins.workspaces:EmptyWorkspace',
+        ],
+        'pygments.styles': [
+            'aube = hackedit.styles.aube:AubeStyle',
+            'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
+            'nuit = hackedit.styles.nuit:NuitStyle'
         ]
     },
     cmdclass={'test': pytest, 'build_ui': build_ui},

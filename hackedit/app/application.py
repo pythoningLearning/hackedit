@@ -559,6 +559,15 @@ def get_style_by_name(name):
         elif name == 'darcula':
             from pyqode.core.styles import DarculaStyle
             style = DarculaStyle
+        elif name == 'aube':
+            from hackedit.styles.aube import AubeStyle
+            style = AubeStyle
+        elif name == 'crepuscule':
+            from hackedit.styles.crepuscule import CrepusculeStyle
+            style = CrepusculeStyle
+        elif name == 'nuit':
+            from hackedit.styles.nuit import NuitStyle
+            style = NuitStyle
         else:
             raise e
     finally:
