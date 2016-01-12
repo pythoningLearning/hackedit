@@ -44,7 +44,7 @@ class AubeStyle(Style):
         Name.Builtin.Pseudo: '#8959A8 italic',
         Name.Builtin: '#8959A8',
         Name.Class: '#CC6666 bold underline',
-        Name.Constant: '#8959A8',
+        Name.Constant: '#B200B2',
         Name.Decorator: '#DFB500',
         Name.Entity: '#8959A8',
         Name.Exception: '#CC6666 bold',
