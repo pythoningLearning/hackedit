@@ -80,7 +80,8 @@ class Application(QtCore.QObject):
         mime_types.load()
 
         show_msg_on_splash('Setting up user interface...')
-        self._qapp.setWindowIcon(QtGui.QIcon(':/icons/hackedit_128.png'))
+        self._qapp.setWindowIcon(QtGui.QIcon.fromTheme(
+            'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self._qapp.lastWindowClosed.connect(self.quit)
         self._qapp.focusWindowChanged.connect(self._on_current_window_changed)
         self._setup_tray_icon()

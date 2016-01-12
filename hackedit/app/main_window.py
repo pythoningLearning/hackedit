@@ -142,7 +142,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addActions(self._ui.mnu_help.actions())
         self.addActions(self._ui.mnu_view.actions())
 
-        self.setWindowIcon(QtGui.QIcon(':/icons/hackedit_128.png'))
+        self.setWindowIcon(QtGui.QIcon.fromTheme(
+            'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self._setup_actions()
 
         #: Menus map

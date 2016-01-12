@@ -25,7 +25,8 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         self._ui = welcome_window_ui.Ui_MainWindow()
         self._ui.setupUi(self)
         self.setFixedSize(QtCore.QSize(865, 600))
-        self.setWindowIcon(QtGui.QIcon(':/icons/hackedit_128.png'))
+        self.setWindowIcon(QtGui.QIcon.fromTheme(
+            'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self.setWindowTitle('Welcome')
         self._app.get_recent_files_manager().updated.connect(
             self.update_recents)
