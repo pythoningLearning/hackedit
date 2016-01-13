@@ -19,7 +19,6 @@ BUG_DESCRIPTION = '''%s
 '''
 
 EMAIL_ADDRESS = 'colin.duquesnoy@gmail.com'
-MAX_BODY_LEN = 1200
 
 
 def _logger():
@@ -66,7 +65,6 @@ class DlgReportBug(QtWidgets.QDialog):
 
     def submit(self):
         title, description = self._get_data()
-        description = description[:MAX_BODY_LEN]
         url_data = urllib.parse.urlencode({
             'title': title, 'body': description[:self.GITHUB_REPORT_LIMIT]
         })
