@@ -186,7 +186,7 @@ class Environment(PreferencePage):
             'Would you like to change the color scheme as well?')
         dark = bool(self.ui.combo_theme.currentIndex())
         if a == QtWidgets.QMessageBox.Yes:
-            scheme = 'nuit' if dark else 'aube'
+            scheme = 'crepuscule' if dark else 'aube'
             settings.set_color_scheme(scheme)
             self.colors.ui.combo_color_schemes.setCurrentText(scheme)
             self.colors.update_preview()

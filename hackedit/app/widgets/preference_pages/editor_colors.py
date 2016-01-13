@@ -42,7 +42,8 @@ class EditorColors(PreferencePage):
             PREVIEW_TEXT, 'text/x-python', 'utf8')
         self.ui.combo_color_schemes.clear()
         styles = api.PYGMENTS_STYLES
-        for custom_style in ['qt', 'darcula', 'aube', 'crepuscule', 'nuit']:
+        for custom_style in ['qt', 'darcula', 'aube', 'crepuscule',
+                             'ark-dark']:
             if custom_style not in styles:
                 styles.append(custom_style)
         for style in sorted(styles):

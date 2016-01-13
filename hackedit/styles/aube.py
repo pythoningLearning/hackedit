@@ -41,7 +41,7 @@ class AubeStyle(Style):
         Literal.String: '#007EA1',
         Literal.String.Doc: '#4271AE',
         Name.Attribute: '#800080',
-        Name.Builtin.Pseudo: '#8959A8 italic',
+        Name.Builtin.Pseudo: '#705050 italic',
         Name.Builtin: '#8959A8',
         Name.Class: '#CC6666 bold underline',
         Name.Constant: '#B200B2',

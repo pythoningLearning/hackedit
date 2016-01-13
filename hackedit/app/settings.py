@@ -585,7 +585,7 @@ def color_scheme():
     from hackedit.api.utils import is_dark_theme
     dark = is_dark_theme()
     return _SETTINGS.value(
-        'editor/color_scheme', 'aube' if not dark else 'nuit')
+        'editor/color_scheme', 'aube' if not dark else 'crepuscule')
 
 
 def set_color_scheme(value):
@@ -602,7 +602,7 @@ def is_dark_color_scheme(scheme=None):
         scheme = color_scheme()
     return scheme in [
         'darcula', 'fruity', 'native', 'monokai', 'vim', 'paraiso-dark',
-        'crepuscule', 'nuit']
+        'crepuscule', 'ark-dark']
 
 
 def editor_font():

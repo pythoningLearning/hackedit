@@ -566,9 +566,9 @@ def get_style_by_name(name):
         elif name == 'crepuscule':
             from hackedit.styles.crepuscule import CrepusculeStyle
             style = CrepusculeStyle
-        elif name == 'nuit':
-            from hackedit.styles.nuit import NuitStyle
-            style = NuitStyle
+        elif name == 'ark-dark':
+            from hackedit.styles.arkdark import ArkDarkStyle
+            style = ArkDarkStyle
         else:
             raise e
     finally:

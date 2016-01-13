@@ -113,7 +113,7 @@ setup(
         'pygments.styles': [
             'aube = hackedit.styles.aube:AubeStyle',
             'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
-            'nuit = hackedit.styles.nuit:NuitStyle'
+            'ark-dark = hackedit.styles.arkdark:ArkDarkStyle'
         ]
     },
     cmdclass={'test': pytest, 'build_ui': build_ui},

@@ -9,10 +9,11 @@ from pygments.token import Comment, Error, Generic, Keyword, Literal, Name, \
 class CrepusculeStyle(Style):
     """
     A dark theme for hackedit inspired by the Tomorrow Night theme from
-    fish shell (this color scheme looks good when using arc-dark gtk theme).
+    fish shell, adapted to look when using the Breeze Dark Theme (KDE) or the
+    dark stylesheet (all platforms).
     """
-    background_color = '#404552'
-    highlight_color = '#303542'
+    background_color = '#232629'
+    highlight_color = '#353535'
 
     styles = {
         Comment.Multiline: '#969896',
@@ -42,10 +43,10 @@ class CrepusculeStyle(Style):
         Literal.String: '#B5BD68',
         Literal.String.Doc: '#81A2BE',
         Name.Attribute: '#800080',
-        Name.Builtin.Pseudo: '#B294BB italic',
+        Name.Builtin.Pseudo: '#dca3a3 italic',
         Name.Builtin: '#B294BB',
         Name.Class: '#CC6666 bold underline',
-        Name.Constant: '#B200B2',
+        Name.Constant: '#93e0e3',
         Name.Decorator: '#CBC539',
         Name.Entity: '#CC6666',
         Name.Exception: '#CC6666 bold',
