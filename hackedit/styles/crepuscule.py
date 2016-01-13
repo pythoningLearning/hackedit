@@ -47,7 +47,7 @@ class CrepusculeStyle(Style):
         Name.Builtin: '#af81bd',
         Name.Class: '#CC6666 bold underline',
         Name.Constant: '#87feb9',
-        Name.Decorator: '#CBC539',
+        Name.Decorator: '#f5f069',
         Name.Entity: '#CC6666',
         Name.Exception: '#CC6666 bold',
         Name.Function: '#CC6666 bold',
