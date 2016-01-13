@@ -99,6 +99,9 @@ def set_extensions(mimetype, extensions):
     db = json.loads(string)
     db[mimetype] = sorted(extensions)
     QtCore.QSettings().setValue('editor/mimetypes', json.dumps(db))
+    if mimetype not in mimetypes.types_map.values():
+        for ext in extensions:
+            mimetypes.add_type(mimetype, ext.replace('*', ''))
 
 
 def reset_custom_extensions():
