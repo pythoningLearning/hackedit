@@ -13,7 +13,7 @@ class CrepusculeStyle(Style):
     dark stylesheet (all platforms).
     """
     background_color = '#232629'
-    highlight_color = '#353535'
+    highlight_color = '#1D2124'
 
     styles = {
         Comment.Multiline: '#969896',
