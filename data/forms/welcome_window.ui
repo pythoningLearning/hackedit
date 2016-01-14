@@ -349,7 +349,7 @@
   <customwidget>
    <class>RecentFilesListWidget</class>
    <extends>QListWidget</extends>
-   <header>open_cobol_ide/view/widgets</header>
+   <header>hackedit.app.widgets.recents</header>
   </customwidget>
  </customwidgets>
  <resources>

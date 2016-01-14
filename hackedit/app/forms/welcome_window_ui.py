@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/welcome_window.ui'
+# Form implementation generated from reading ui file '/home/colin/Dev/hackedit/data/forms/welcome_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -94,7 +94,7 @@ class Ui_MainWindow(object):
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem4)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_3.setContentsMargins(6, 6, 6, 6)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.bt_quit = QtWidgets.QPushButton(self.centralwidget)
         icon = QtGui.QIcon.fromTheme("application-exit")
