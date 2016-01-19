@@ -107,7 +107,7 @@ class Application(QtCore.QObject):
         force_sync = False
         for template_provider in self.plugin_manager.template_providers:
             try:
-                url = template_provider.get_remote_url()
+                url = template_provider.get_url()
                 label = template_provider.get_label()
             except TypeError:
                 pass
@@ -122,7 +122,8 @@ class Application(QtCore.QObject):
                             if src['label'] == label:
                                 exists = True
                     if not exists:
-                        boss_wrapper.add_source(label, url)
+                        local = os.path.exists(url)
+                        boss_wrapper.add_source(label, url, local=local)
                         force_sync = True
 
         if (force_sync or settings.auto_sync_templates() or
