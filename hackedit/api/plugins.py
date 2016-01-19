@@ -220,7 +220,7 @@ class PreferencePagePlugin:
         pass
 
 
-class TemplateProviderPlugins:
+class TemplateProviderPlugin:
     """
     A template provider plugin provides an additional source of templates
     to the application.
@@ -234,9 +234,11 @@ class TemplateProviderPlugins:
         """
         pass
 
-    def get_remote_url(cls):
+    def get_url(cls):
         """
-        Gets the remote url of the git repository that contains your templates.
+        Gets the template url. This can be a remote url (pointing to a git
+        repository) or a local url (pointing to the directory that contains the
+        templates)
         """
         pass
 
