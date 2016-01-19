@@ -100,6 +100,7 @@ def create_new(app, window, current_project=None):
 
 def create_new_from_template(source, template, dest_dir, single_file, window,
                              app):
+    from .main_window import MainWindow
     files = boss.create(source, template, dest_dir,
                         input_handler=boss.qt_input_handler)
     if single_file:
@@ -112,7 +113,7 @@ def create_new_from_template(source, template, dest_dir, single_file, window,
         sender = None
     else:
         sender = window
-    if single_file:
+    if single_file and isinstance(window, MainWindow):
         window.open_file(path)
     else:
         app.open_path(path, sender=sender)
