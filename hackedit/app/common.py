@@ -112,4 +112,7 @@ def create_new_from_template(source, template, dest_dir, single_file, window,
         sender = None
     else:
         sender = window
-    app.open_path(path, sender=sender)
+    if single_file:
+        window.open_file(path)
+    else:
+        app.open_path(path, sender=sender)
