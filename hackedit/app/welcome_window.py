@@ -137,6 +137,9 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         Updates the recent files list.
         """
         _logger().debug('update recent files list')
+        if self._app is None:
+            self.sender().updated.disconnect(self.update_recents)
+            return
         self._ui.list_recents.clear()
         for file in self._app.get_recent_files_manager().get_recent_files():
             item = QtWidgets.QListWidgetItem()

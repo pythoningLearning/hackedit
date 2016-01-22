@@ -52,6 +52,7 @@ class Application(QtCore.QObject):
                         msg, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                         QtCore.Qt.white)
                     qapp.processEvents()
+        self._closed = False
         self._args = args
         self._qapp = qapp
         self._splash = splash
@@ -180,10 +181,12 @@ class Application(QtCore.QObject):
 
         :param force: True to force exit, bypassing the exit question.
         """
-        self._qapp.closeAllWindows()
-        if not self.window_count:
-            self.tray_icon.hide()
-            self._qapp.exit(0)
+        if self._closed:
+            return
+        self.tray_icon.hide()
+        self._closed = True
+        self._qapp.exit(0)
+        self._qapp = None
 
     def set_active_window(self, window):
         """
@@ -422,7 +425,7 @@ class Application(QtCore.QObject):
         self._qapp.restoreOverrideCursor()
 
         # hide welcome window
-        self._welcome_window.hide()
+        self._welcome_window.close()
 
         return True
 

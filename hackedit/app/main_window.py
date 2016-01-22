@@ -615,6 +615,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 for plugin in self.plugins:
                     try:
                         plugin.close()
+                        plugin._window = None
                     except AttributeError:
                         pass
                     plugin._window = None
@@ -771,7 +772,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._show_not_implemented_msg)
         self._ui.tabs.current_changed.connect(self.on_current_tab_changed)
         self._ui.action_close.triggered.connect(self.close)
-        self._ui.action_quit.triggered.connect(self._app.quit)
+        self._ui.action_quit.triggered.connect(QtWidgets.qApp.closeAllWindows)
         self._ui.action_save.triggered.connect(self.save_current)
         self._ui.action_save_as.triggered.connect(self.save_current_as)
         self._ui.action_save_all.triggered.connect(self.save_all)
