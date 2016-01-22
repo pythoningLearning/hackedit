@@ -278,7 +278,7 @@ class ProjectExplorer(QtCore.QObject):
         self._window._save_state(*self._window._get_session_info())
         window = self._window
         open_path(prj, force=True)
-        window.close()
+        QtCore.QTimer.singleShot(1, window.close)
 
     def _setup_locator(self):
         menu = api.window.get_menu('&Goto')
