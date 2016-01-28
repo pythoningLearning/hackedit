@@ -52,7 +52,10 @@ class InterpreterManager:
         """
         default = self._default_interpreter
         if default is None or not os.path.exists(default):
-            default = self.all_interpreters[0]
+            try:
+                default = self.all_interpreters[0]
+            except IndexError:
+                default = ''  # interpreter not found
         return QtCore.QSettings().value(
             '%s/default' % self.name, default)
 

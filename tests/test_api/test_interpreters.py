@@ -28,7 +28,7 @@ class BrokenManager(InterpreterManager):
         super().__init__('python', default_interpreter='/usr/bin/python39')
 
     def _detect_system_interpreters(self):
-        return ['/usr/bin/python', sys.executable]
+        return []
 
 
 class TestInterpreterManager:
@@ -49,7 +49,7 @@ class TestInterpreterManager:
         assert PythonManager().default_interpreter == '/usr/bin/python2.7'
 
     def test_boken_default_interpreter(self):
-        assert BrokenManager().default_interpreter == '/usr/bin/python'
+        assert BrokenManager().default_interpreter == ''
 
     def test_add_interpreter(self):
         assert len(PythonManager().all_interpreters) == 2
