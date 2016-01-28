@@ -22,11 +22,6 @@
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
   :alt: Coverage Status
 
-.. image:: https://codeclimate.com/github/HackEdit/hackedit/badges/gpa.svg
-   :target: https://codeclimate.com/github/HackEdit/hackedit
-   :alt: Code Climate
-
-
 |
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
