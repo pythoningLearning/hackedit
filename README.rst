@@ -28,6 +28,10 @@
    :alt: Join the chat at https://gitter.im/HackEdit/hackedit
    :target: https://gitter.im/HackEdit/hackedit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
+.. image:: https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png
+   :target: https://zenhub.io
+   :alt: Supercharged by zenhub
+
 |
 
 - `About`_
