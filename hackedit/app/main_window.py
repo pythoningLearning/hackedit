@@ -4,6 +4,7 @@ This module contains the main window implementation.
 The main window is a windows with a set of preset objects (tab widget, file
 system tree view) that is extended by plugins.
 """
+import traceback
 import logging
 import os
 
@@ -22,7 +23,7 @@ from hackedit import __version__
 from hackedit.app import settings
 from hackedit.app.project import ProjectExplorer
 from hackedit.api import system, shortcuts
-from hackedit.api.events import Event, WARNING
+from hackedit.api.events import Event, WARNING, ExceptionEvent
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import ClickableLabel, FileIconProvider
 from hackedit.app import common, events, indexor, generic_pyqode_server
@@ -337,9 +338,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 color_scheme=color_scheme)
         except Exception as e:
             tab = None
-            self.notifications.add(Event(
-                'Failed to open file: %s' % path, str(e), level=WARNING),
-                show_balloon=False)
+            tb = traceback.format_exc()
+            self.notifications.add(ExceptionEvent(
+                'Failed to open file: %s' % path,
+                'An unhandled exception occured while opening file: %r' % e, e,
+                tb=tb), show_balloon=False)
         else:
             _logger().debug('document opened: %s', path)
             # remove encodings menu, user can change that through the status
