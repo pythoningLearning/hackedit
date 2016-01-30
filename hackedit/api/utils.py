@@ -8,7 +8,8 @@ from hackedit.app import settings, mime_types
 
 def add_mimetype_extension(mimetype, extension):
     """
-    Adds an extension to an existing mimetype.
+    Adds an extension to an existing mimetype. If the mimetypes does not
+    exists it is automatically added to the mimetypes database.
 
     :param mimetype: mimetype to modify
     :param extension: extension to add

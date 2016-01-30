@@ -7,7 +7,8 @@ running pip3 install -r requirements-dev.txt).
 Note: if you would like to work on some pyqode packages, it is recommended to
 install all pyqode packages as editable packages before running
 ``pip3 install -r requirements-dev`` (and make sure to install them in the
-proper order: first pyqode.qt then pyqode.core. Afterwards the order does not matter.)
+proper order: first pyqode.qt then pyqode.core. Afterwards the order does not
+matter).
 
 
 YOU SHOULD START THIS SCRIPT FROM THE ROOT DIR OF THE SOURCE REPO:

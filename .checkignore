@@ -1,0 +1,7 @@
+hackedit/app/forms/*
+tests/*
+scripts/*
+docs/*
+data/*
+conftest.py
+bootstrap.pyw

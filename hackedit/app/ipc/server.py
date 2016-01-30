@@ -72,13 +72,12 @@ def handle(conn):
     fct = data['function']
     args = data['arguments']
     try:
-        print('running function <%s> with arguments %r' % (fct, args))
+        print('running function <%s>' % fct)
         ret_val = fct(*args)
     except Exception as e:
         tb = traceback.format_exc()
         print('function error: ', tb)
         send(conn, {'exception': e, 'traceback': tb})
-        ret_val = None
     else:
         print('function finished, sending result')
         send(conn, {'ret_val': ret_val})

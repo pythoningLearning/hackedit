@@ -51,21 +51,14 @@ class DlgPreferences(QtWidgets.QDialog):
     @classmethod
     def edit_preferences(cls, parent, app):
         QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
-        cls._dlg = DlgPreferences(parent, app)
-        cls._dlg.restore_state()
+        dlg = DlgPreferences(parent, app)
+        dlg.restore_state()
         QtWidgets.qApp.restoreOverrideCursor()
         if system.DARWIN:
-            cls._dlg.showMaximized()
+            dlg.showMaximized()
         else:
-            cls._dlg.show()
-        cls._dlg.raise_()
-        cls._dlg.closed.connect(cls._on_dialog_closed)
-
-    @classmethod
-    def _on_dialog_closed(cls):
-        cls._dlg.setParent(None)
-        cls._dlg.deleteLater()
-        cls._dlg = None
+            dlg.show()
+        dlg.exec_()
 
     def goto_page(self, page_name):
         def get_page():

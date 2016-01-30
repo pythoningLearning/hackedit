@@ -493,7 +493,7 @@ def set_cc_show_tooltips(val):
 
 
 def cc_case_sensitive():
-    return bool(int(_SETTINGS.value('editor/cc_case_sensitive', 0)))
+    return bool(int(_SETTINGS.value('editor/cc_case_sensitive', 1)))
 
 
 def set_cc_case_sensitive(val):
@@ -585,7 +585,7 @@ def color_scheme():
     from hackedit.api.utils import is_dark_theme
     dark = is_dark_theme()
     return _SETTINGS.value(
-        'editor/color_scheme', 'qt' if not dark else 'darcula')
+        'editor/color_scheme', 'aube' if not dark else 'crepuscule')
 
 
 def set_color_scheme(value):
@@ -601,7 +601,8 @@ def is_dark_color_scheme(scheme=None):
     if scheme is None:
         scheme = color_scheme()
     return scheme in [
-        'darcula', 'fruity', 'native', 'monokai', 'vim', 'paraiso-dark']
+        'darcula', 'fruity', 'native', 'monokai', 'vim', 'paraiso-dark',
+        'crepuscule', 'ark-dark']
 
 
 def editor_font():

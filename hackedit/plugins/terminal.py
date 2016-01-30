@@ -192,7 +192,11 @@ class _Terminal(QtWidgets.QWidget):
                         self._ui.edit_command.setText(history_item)
                     except IndexError:
                         pass
-        return super().eventFilter(obj, event)
+        try:
+            return super().eventFilter(obj, event)
+        except RuntimeError:
+            # wrapped C/C++ object of type _Terminal has been deleted
+            return False
 
     def _on_current_project_changed(self, new_path):
         self._cwd = new_path

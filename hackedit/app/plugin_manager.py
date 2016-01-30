@@ -67,7 +67,7 @@ class PluginManager:
         """
         _logger().info('loading template provider plugins')
         entrypoints = list(pkg_resources.iter_entry_points(
-            plugins.TemplateProviderPlugins.ENTRYPOINT))
+            plugins.TemplateProviderPlugin.ENTRYPOINT))
         for entrypoint in entrypoints:
             _logger().info('  - loading plugin: %s', entrypoint)
             try:

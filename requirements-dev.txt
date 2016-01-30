@@ -24,12 +24,11 @@ qdarkstyle
 
 # required for development
 coverage
-pytest
 sphinx
 pyqt-distutils
 
-
 # required for testing
+pytest
 pytest-qt
 pytest-cov
 pytest-pep8

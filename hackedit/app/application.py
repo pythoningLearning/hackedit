@@ -52,6 +52,7 @@ class Application(QtCore.QObject):
                         msg, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                         QtCore.Qt.white)
                     qapp.processEvents()
+        self._closed = False
         self._args = args
         self._qapp = qapp
         self._splash = splash
@@ -80,7 +81,8 @@ class Application(QtCore.QObject):
         mime_types.load()
 
         show_msg_on_splash('Setting up user interface...')
-        self._qapp.setWindowIcon(QtGui.QIcon(':/icons/hackedit_128.png'))
+        self._qapp.setWindowIcon(QtGui.QIcon.fromTheme(
+            'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self._qapp.lastWindowClosed.connect(self.quit)
         self._qapp.focusWindowChanged.connect(self._on_current_window_changed)
         self._setup_tray_icon()
@@ -106,7 +108,7 @@ class Application(QtCore.QObject):
         force_sync = False
         for template_provider in self.plugin_manager.template_providers:
             try:
-                url = template_provider.get_remote_url()
+                url = template_provider.get_url()
                 label = template_provider.get_label()
             except TypeError:
                 pass
@@ -121,7 +123,8 @@ class Application(QtCore.QObject):
                             if src['label'] == label:
                                 exists = True
                     if not exists:
-                        boss_wrapper.add_source(label, url)
+                        local = os.path.exists(url)
+                        boss_wrapper.add_source(label, url, local=local)
                         force_sync = True
 
         if (force_sync or settings.auto_sync_templates() or
@@ -178,10 +181,12 @@ class Application(QtCore.QObject):
 
         :param force: True to force exit, bypassing the exit question.
         """
-        self._qapp.closeAllWindows()
-        if not self.window_count:
-            self.tray_icon.hide()
-            self._qapp.exit(0)
+        if self._closed:
+            return
+        self.tray_icon.hide()
+        self._closed = True
+        self._qapp.exit(0)
+        self._qapp = None
 
     def set_active_window(self, window):
         """
@@ -420,7 +425,7 @@ class Application(QtCore.QObject):
         self._qapp.restoreOverrideCursor()
 
         # hide welcome window
-        self._welcome_window.hide()
+        self._welcome_window.close()
 
         return True
 
@@ -559,6 +564,15 @@ def get_style_by_name(name):
         elif name == 'darcula':
             from pyqode.core.styles import DarculaStyle
             style = DarculaStyle
+        elif name == 'aube':
+            from hackedit.styles.aube import AubeStyle
+            style = AubeStyle
+        elif name == 'crepuscule':
+            from hackedit.styles.crepuscule import CrepusculeStyle
+            style = CrepusculeStyle
+        elif name == 'ark-dark':
+            from hackedit.styles.arkdark import ArkDarkStyle
+            style = ArkDarkStyle
         else:
             raise e
     finally:

@@ -13,25 +13,24 @@
 .. image:: https://img.shields.io/pypi/l/hackedit.svg
 
 
-.. image:: https://semaphoreci.com/api/v1/projects/719a3c8c-8441-4728-8db1-e79b04891c7f/603459/shields_badge.svg
-   :target: https://semaphoreci.com/colinduquesnoy/hackedit
-   :alt: Semaphore CI Build Status
+.. image:: https://travis-ci.org/HackEdit/hackedit.svg?branch=master
+   :target: https://travis-ci.org/HackEdit/hackedit
+   :alt: Travis-CI Build Status
 
 
 .. image:: https://coveralls.io/repos/HackEdit/hackedit/badge.svg?branch=master&service=github
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
   :alt: Coverage Status
 
-.. image:: https://codeclimate.com/github/HackEdit/hackedit/badges/gpa.svg
-   :target: https://codeclimate.com/github/HackEdit/hackedit
-   :alt: Code Climate
-
-
 |
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/HackEdit/hackedit
    :target: https://gitter.im/HackEdit/hackedit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
+.. image:: https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png
+   :target: https://zenhub.io
+   :alt: Supercharged by zenhub
 
 |
 

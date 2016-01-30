@@ -81,6 +81,8 @@ if 'bdist_wheel' in sys.argv:
     raise RuntimeError("This setup.py does not support wheels")
 
 
+console_wrapper_entrypoint = 'heconsole = hackedit.console:main'
+
 # run setup
 setup(
     name='hackedit',
@@ -101,8 +103,11 @@ setup(
     entry_points={
         # Main gui script
         'gui_scripts': ['hackedit = hackedit.main:main'],
-        'console_scripts': ['hackedit-console = hackedit.main:main'] if
-            sys.platform == 'win32' else [],
+        'console_scripts': [
+            'hackedit-console = hackedit.main:main',
+            console_wrapper_entrypoint] if sys.platform == 'win32' else [
+            console_wrapper_entrypoint
+        ],
         # Plugin entry-points
         'hackedit.plugins.editors': [
             'ImageViewer = hackedit.plugins.image_viewer:ImageViewer'
@@ -113,10 +118,16 @@ setup(
             'FindReplace = hackedit.plugins.find_replace:FindReplace',
             'DocumentOutline = hackedit.plugins.outline:DocumentOutline',
             'OpenDocuments = hackedit.plugins.documents:OpenDocuments',
+            'HtmlPreview = hackedit.plugins.html_preview:HtmlPreview'
         ],
         'hackedit.plugins.workspace_providers': [
             'generic_workspace = hackedit.plugins.workspaces:GenericWorkspace',
             'empty_workspace = hackedit.plugins.workspaces:EmptyWorkspace',
+        ],
+        'pygments.styles': [
+            'aube = hackedit.styles.aube:AubeStyle',
+            'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
+            'ark-dark = hackedit.styles.arkdark:ArkDarkStyle'
         ]
     },
     cmdclass={

@@ -35,23 +35,21 @@ class Process(QtCore.QObject):
         """
         super().__init__()
         atexit.register(self.terminate)
-        self._process = QtCore.QProcess()
-        self._process.readyRead.connect(self._on_ready_read)
-        self._process.setProcessChannelMode(self._process.MergedChannels)
-        self._process.finished.connect(self._on_finished)
+        self._process = None
         self._interpreter = interpreter
         self._func = func
         self._args = args
-        self._process.stateChanged.connect(self._on_state_changed)
-        self._socket = QtNetwork.QTcpSocket()
-        self._socket.connected.connect(self._on_connected)
-        self._socket.error.connect(self._on_socket_error)
-        self._socket.readyRead.connect(self._on_socket_ready_read)
+        self._socket = None
 
     def terminate(self):
         _logger().debug('terminating process')
-        self._process.terminate()
-        self._process.kill()
+        if self._process:
+            self._process.terminate()
+            self._process.kill()
+        try:
+            atexit.unregister(self.terminate)
+        except ValueError:
+            pass
 
     def is_alive(self):
         return self._process.state() != self._process.NotRunning
@@ -61,8 +59,13 @@ class Process(QtCore.QObject):
         _logger().debug('starting server process: %s',
                         ' '.join([self._interpreter, server.__file__,
                                   str(self._port)]))
+        self._process = QtCore.QProcess()
+        self._process.readyRead.connect(self._on_ready_read)
+        self._process.setProcessChannelMode(self._process.MergedChannels)
+        self._process.finished.connect(self._on_finished)
+        self._process.stateChanged.connect(self._on_state_changed)
         self._process.start(
-            self._interpreter, [server.__file__, str(self._port)])
+            self._interpreter, (server.__file__, str(self._port)))
 
     def _on_ready_read(self):
         output = self._process.readAllStandardOutput().data().decode(
@@ -80,15 +83,16 @@ class Process(QtCore.QObject):
                 _logger().debug('server::localhost:%s> %s', self._port, line)
 
     def _on_state_changed(self, state):
-        if not state:
-            # not running
-            atexit.unregister(self.terminate)
-        elif state == self._process.Running:
+        if state == self._process.Running:
             # connect to server
             QtCore.QTimer.singleShot(100, self._connect)
 
     def _connect(self):
         _logger().debug('connecting to server: localhost:%s', self._port)
+        if self._socket:
+            self._socket.setParent(None)
+            self._socket.deleteLater()
+            self._socket = None
         self._socket = QtNetwork.QTcpSocket()
         self._socket.connected.connect(self._on_connected)
         self._socket.error.connect(self._on_socket_error)
@@ -102,7 +106,11 @@ class Process(QtCore.QObject):
             return
         if 'ret_val' in data.keys():
             ret_val = data['ret_val']
-            self.result_available.emit(ret_val)
+            try:
+                self.result_available.emit(ret_val)
+            except TypeError:
+                # c++ instance deleted
+                pass
         elif 'exception' in data.keys():
             self.errored.emit(data['exception'], data['traceback'])
         else:
@@ -129,6 +137,23 @@ class Process(QtCore.QObject):
             exit_code = 139
         _logger().debug('process finished with exit code %d' % exit_code)
         self.finished.emit(exit_code)
+        QtCore.QTimer.singleShot(1, self.cleanup)
+
+    def cleanup(self):
+        if self._socket:
+            self._socket.buffer = None
+            self._socket.payload = None
+            self._socket.close()
+            self._socket.setParent(None)
+            self._socket.deleteLater()
+            self._socket = None
+        self.terminate()
+        if self._process:
+            self._process.setParent(None)
+            self._process.deleteLater()
+            self._process = None
+        self._func = None
+        self._args = None
 
 
 def _logger():

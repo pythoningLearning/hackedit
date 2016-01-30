@@ -4,6 +4,7 @@ This module contains the main window implementation.
 The main window is a windows with a set of preset objects (tab widget, file
 system tree view) that is extended by plugins.
 """
+import traceback
 import logging
 import os
 
@@ -22,7 +23,7 @@ from hackedit import __version__
 from hackedit.app import settings
 from hackedit.app.project import ProjectExplorer
 from hackedit.api import system, shortcuts
-from hackedit.api.events import Event, WARNING
+from hackedit.api.events import Event, WARNING, ExceptionEvent
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import ClickableLabel, FileIconProvider
 from hackedit.app import common, events, indexor, generic_pyqode_server
@@ -142,7 +143,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addActions(self._ui.mnu_help.actions())
         self.addActions(self._ui.mnu_view.actions())
 
-        self.setWindowIcon(QtGui.QIcon(':/icons/hackedit_128.png'))
+        self.setWindowIcon(QtGui.QIcon.fromTheme(
+            'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self._setup_actions()
 
         #: Menus map
@@ -336,9 +338,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 color_scheme=color_scheme)
         except Exception as e:
             tab = None
-            self.notifications.add(Event(
-                'Failed to open file: %s' % path, str(e), level=WARNING),
-                show_balloon=False)
+            tb = traceback.format_exc()
+            self.notifications.add(ExceptionEvent(
+                'Failed to open file: %s' % path,
+                'An unhandled exception occured while opening file: %r' % e, e,
+                tb=tb), show_balloon=False)
         else:
             _logger().debug('document opened: %s', path)
             # remove encodings menu, user can change that through the status
@@ -614,6 +618,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 for plugin in self.plugins:
                     try:
                         plugin.close()
+                        plugin._window = None
                     except AttributeError:
                         pass
                     plugin._window = None
@@ -691,13 +696,20 @@ class MainWindow(QtWidgets.QMainWindow):
         current_index = 0
         for i, w in enumerate(widgets):
             try:
-                path = w.file.path
+                # widget that have this attribute set won't be restored when
+                # restoring session
+                w.dont_remember
             except AttributeError:
-                pass
+                try:
+                    path = w.file.path
+                except AttributeError:
+                    pass
+                else:
+                    files.append(path)
+                    if path == self._ui.tabs.current_widget().file.path:
+                        current_index = i
             else:
-                files.append(path)
-                if path == self._ui.tabs.current_widget().file.path:
-                    current_index = i
+                continue
         return current_index, files
 
     def _close_documents(self, event=None):
@@ -763,7 +775,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._show_not_implemented_msg)
         self._ui.tabs.current_changed.connect(self.on_current_tab_changed)
         self._ui.action_close.triggered.connect(self.close)
-        self._ui.action_quit.triggered.connect(self._app.quit)
+        self._ui.action_quit.triggered.connect(QtWidgets.qApp.closeAllWindows)
         self._ui.action_save.triggered.connect(self.save_current)
         self._ui.action_save_as.triggered.connect(self.save_current_as)
         self._ui.action_save_all.triggered.connect(self.save_all)
@@ -1167,7 +1179,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._apply_editor_plugin_preferences(editor)
 
     def _update_cursor_label(self):
-        if self.current_tab:
+        if self.current_tab and isinstance(self.current_tab, CodeEdit):
             l, c = TextHelper(self.current_tab).cursor_position()
             self.lbl_cursor.setText('%d:%d' % (l+1, c+1), False)
         else:

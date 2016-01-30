@@ -19,7 +19,7 @@ import shlex
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 from . import (editor, events, plugins, project, shortcuts, widgets, window,
-               signals, special_icons, utils)
+               signals, special_icons, system, utils)
 from hackedit.app import mime_types
 from hackedit.app.forms import dlg_script_run_config_ui
 
@@ -52,7 +52,10 @@ class InterpreterManager:
         """
         default = self._default_interpreter
         if default is None or not os.path.exists(default):
-            default = self.all_interpreters[0]
+            try:
+                default = self.all_interpreters[0]
+            except IndexError:
+                default = ''  # interpreter not found
         return QtCore.QSettings().value(
             '%s/default' % self.name, default)
 
@@ -267,6 +270,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
             cmd = ' '.join([interpreter] + args)
             cmd = utils.get_cmd_run_command_in_terminal() % cmd
             tokens = shlex.split(cmd, posix=False)
+            if system.LINUX:
+                tokens = tokens[:2] + [' '.join(tokens[2:])]
             pgm, args = tokens[0], tokens[1:]
             QtCore.QProcess.startDetached(pgm, args, cwd)
             events.post(
@@ -621,7 +626,8 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
                 ' '.join(self.interpreter_manager.extensions)))
         if path:
             self._ui.edit_script.setText(os.path.normpath(path))
-            self._ui.edit_name.setText(QtCore.QFileInfo(path).baseName())
+            self._ui.edit_name.setText(
+                QtCore.QFileInfo(path).completeBaseName())
             self._ui.edit_working_dir.setText(os.path.dirname(path))
 
     def _pick_working_dir(self):
@@ -798,7 +804,7 @@ def create_default_config(path):
     """
     if os.path.isfile(path):
         return {
-                'name': QtCore.QFileInfo(path).baseName(),
+                'name': QtCore.QFileInfo(path).completeBaseName(),
                 'script': path,
                 'script_parameters': [],
                 'working_dir': os.path.dirname(path),
