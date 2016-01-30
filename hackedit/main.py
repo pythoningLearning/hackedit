@@ -10,15 +10,16 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from hackedit import __version__
+from hackedit.api.gettext import translation
 from hackedit.app import argparser, logger
 
 
 import faulthandler
 try:
-	faulthandler.enable()
+    faulthandler.enable()
 except RuntimeError:
-	# no stderr, happens on windows with the native launcher
-	pass
+    # no stderr, happens on windows with the native launcher
+    pass
 
 
 ZIP_PATH = os.environ.get('HACKEDIT_LIBS_PATH', None)
@@ -35,17 +36,6 @@ if not ZIP_PATH:
 # append insead of prepend to allow user to
 # install another version if they want to...
 sys.path.append(ZIP_PATH)
-
-
-def setup_translations():
-    try:
-        locale = QtCore.QSettings().value('env/locale', 'fr')
-        tr = gettext.translation(
-            'hackedit', localedir='data/locale', languages=[locale])
-        tr.install()
-    except OSError:
-        import builtins
-        builtins.__dict__['_'] = lambda x: x
 
 
 def main():
@@ -86,7 +76,7 @@ def main():
     qapp.setApplicationName('HackEdit')
     qapp.setApplicationVersion(__version__)
 
-    setup_translations()
+    translation()
 
     # setup logger
     from hackedit.app import settings

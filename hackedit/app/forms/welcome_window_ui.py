@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Dev/hackedit/data/forms/welcome_window.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/welcome_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -125,7 +125,8 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         MainWindow.setWindowTitle(_("Welcome to HackEdit"))
         self.list_recents.setToolTip(_("The list of recent documents/projects"))
         self.label_version.setText(_("Version %s"))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/settings_page_templates.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_templates.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -119,7 +119,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.lbl_git_not_found.setText(_("<html><head/><body><p align=\"center\">Git not found in PATH, Sync will not work!</p></body></html>"))
         self.groupBox_2.setTitle(_("Sources"))

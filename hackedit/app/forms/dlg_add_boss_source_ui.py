@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_add_boss_source.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_add_boss_source.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -41,7 +41,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Dialog.setWindowTitle(_("Add source"))
         self.label.setText(_("Label:"))
         self.edit_label.setToolTip(_("Give a meaningfull name to this source so that you can recognize it."))

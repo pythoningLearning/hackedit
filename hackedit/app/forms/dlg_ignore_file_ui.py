@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_ignore_file.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_ignore_file.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -44,7 +44,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Dialog.setWindowTitle(_("Mark as ignored"))
         self.rb_explicit.setToolTip(_("Ignore explicitely"))
         self.rb_explicit.setText(_("I&gnore explicitely (e.g. \'file.obj\')"))

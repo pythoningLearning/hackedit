@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_find_replace.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_find_replace.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -124,7 +124,8 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.combo_projects, self.edit_pattern)
 
     def retranslateUi(self, Dialog):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Dialog.setWindowTitle(_("Dialog"))
         self.label.setText(_("Text to find:   "))
         self.edit_find.setToolTip(_("Text to find"))

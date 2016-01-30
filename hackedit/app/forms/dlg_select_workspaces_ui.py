@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_select_workspaces.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_select_workspaces.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -43,7 +43,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Dialog.setWindowTitle(_("Select workspace"))
         self.groupBox.setTitle(_("Select a workspace"))
         self.list_workspaces.setToolTip(_("The list of available workspaces."))

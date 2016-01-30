@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/wizard_new.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/wizard_new.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -102,7 +102,8 @@ class Ui_Wizard(object):
         Wizard.setTabOrder(self.edit_prj_path, self.bt_select_prj_path)
 
     def retranslateUi(self, Wizard):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Wizard.setWindowTitle(_("New"))
         self.wizardPageHome.setTitle(_("Select template"))
         self.wizardPageHome.setSubTitle(_("Select a project or a single file template"))

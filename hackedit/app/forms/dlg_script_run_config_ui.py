@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/dlg_script_run_config.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_script_run_config.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -217,7 +217,8 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.bt_rm_env_var, self.list_configs)
 
     def retranslateUi(self, Dialog):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Dialog.setWindowTitle(_("Python run configuration"))
         self.label_prj_interpreter.setText(_("Project interpreter:"))
         self.combo_prj_interpreter.setToolTip(_("Select project interpreter"))

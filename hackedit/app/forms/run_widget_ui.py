@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/run_widget.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/run_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -62,7 +62,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.bt_run.setToolTip(_("Run current tab"))
         self.bt_pin.setToolTip(_("Pin/Unpin current tab"))

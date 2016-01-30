@@ -9,5 +9,6 @@
     "pyrcc_options": "",
     "pyuic": "pyuic5",
     "pyuic_options": "--from-import",
-    "hooks": ["gettext"]
+    "hooks": ["hackedit_gettext"],
+    "package_name": "hackedit"
 }

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/event_history_widget.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/event_history_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -45,7 +45,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.bt_clear.setToolTip(_("Clear history"))
         self.bt_clear.setText(_("..."))

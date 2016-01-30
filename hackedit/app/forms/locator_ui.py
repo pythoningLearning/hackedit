@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/locator.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/locator.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -45,7 +45,8 @@ class Ui_Frame(object):
         QtCore.QMetaObject.connectSlotsByName(Frame)
 
     def retranslateUi(self, Frame):
-
+        from hackedit.api.gettext import translation
+        _ = translation(package="hackedit")
         Frame.setWindowTitle(_("Frame"))
         self.bt_infos.setToolTip(_("Help"))
         self.bt_infos.setText(_("..."))
