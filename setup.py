@@ -58,7 +58,7 @@ with open('README.rst', 'r') as readme:
 
 # Get data files
 # zip contains 3rd party libraries
-data_files = [('share/hackedit', ['data/share/extlibs.zip'])]
+data_files = []
 # translations
 translations = [
     ('share/locale/%s' % x[0].replace('data/locale/', ''),

@@ -13,11 +13,13 @@ matter).
 
 YOU SHOULD START THIS SCRIPT FROM THE ROOT DIR OF THE SOURCE REPO:
 
-python3 scripts/hackedit-dev.py
+python3 scripts/hackedit-dev.pyw
 
 """
-from hackedit.main import main
-
+import os
+os.environ['HACKEDIT_EXTLIBS_PATH'] = 'no-override'
 
 if __name__ == '__main__':
+    from hackedit.main import main
+
     main()

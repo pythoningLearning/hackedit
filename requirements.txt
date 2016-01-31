@@ -1,3 +1,30 @@
-# minimum requirements should also include PyQt5 but it is not pip installable.
-pip
-setuptools
+#
+# Dependencies that need to be installed to develop hackedit.
+#
+# extlibs that are distributed though an internal package put on sys.path
+pyqode.qt
+pyqode.core
+pyqode.python
+pyqode.cobol
+pyqode.rst
+pyqode.json
+future
+pygments
+jedi
+pep8
+pyflakes
+restructuredtext_lint
+boss
+cement
+qdarkstyle
+
+# required for development
+sphinx
+pyqt-distutils
+
+# required for testing
+coverage
+pytest
+pytest-qt
+pytest-cov
+pytest-pep8

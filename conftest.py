@@ -4,11 +4,10 @@ import sys
 
 from PyQt5 import QtWidgets
 
-
 os.environ['PYTEST_QT_API'] = 'pyqt5'
 os.environ['HACKEDIT_CORE_TEST_SUITE'] = '1'
-os.environ['HACKEDIT_LIBS_PATH'] = 'data/share/extlibs.zip'
-sys.path.append(os.environ['HACKEDIT_LIBS_PATH'])
+os.environ['HACKEDIT_EXTLIBS_PATH'] = 'hackedit/extlibs'
+sys.path.insert(0, os.environ['HACKEDIT_EXTLIBS_PATH'])
 
 
 try:
@@ -26,8 +25,9 @@ QtWidgets.qApp.setOrganizationName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationDisplayName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationName('HackEdit-TestSuite')
 
-from hackedit.main import setup_translations
-setup_translations()
+
+from hackedit.api.gettext import translation  # noqa
+translation()
 
 
 for pth in ['tests/data/FooBarProj/.hackedit',

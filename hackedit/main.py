@@ -3,39 +3,29 @@
 Entry point of HackEdit.
 """
 import logging
-import gettext
 import os
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from hackedit import __version__
-from hackedit.api.gettext import translation
-from hackedit.app import argparser, logger
+import hackedit
+EXTLIBS_PATH = os.environ.get('HACKEDIT_EXTLIBS_PATH', None)
+if not EXTLIBS_PATH:
+    EXTLIBS_PATH = os.path.join(os.path.dirname(hackedit.__file__), 'extlibs')
+    os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
+sys.path.insert(0, EXTLIBS_PATH)
+
+from hackedit import __version__                 # noqa
+from hackedit.api.gettext import translation     # noqa
+from hackedit.app import argparser, logger       # noqa
+import faulthandler                              # noqa
 
 
-import faulthandler
 try:
     faulthandler.enable()
 except RuntimeError:
     # no stderr, happens on windows with the native launcher
     pass
-
-
-ZIP_PATH = os.environ.get('HACKEDIT_LIBS_PATH', None)
-if not ZIP_PATH:
-    # make sure external libs can be imported even if not installed.
-    BASE = os.path.join(sys.prefix, 'share/hackedit/')
-    if not os.path.exists(BASE):
-        BASE = os.path.join(sys.prefix, 'local/share/hackedit/')
-    if not os.path.exists(BASE):
-        BASE = '/usr/local/share/hackedit/'
-    ZIP_PATH = os.path.join(BASE, 'extlibs.zip')
-    os.environ['HACKEDIT_LIBS_PATH'] = ZIP_PATH
-
-# append insead of prepend to allow user to
-# install another version if they want to...
-sys.path.append(ZIP_PATH)
 
 
 def main():

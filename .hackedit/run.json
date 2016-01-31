@@ -11,7 +11,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "build_rc",
+        "name": "dev/build_rc",
         "run_in_external_terminal": false,
         "script": "scripts/build_rc.py",
         "script_parameters": [],
@@ -20,7 +20,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "build_ui",
+        "name": "dev/build_ui",
         "run_in_external_terminal": false,
         "script": "scripts/build_ui.py",
         "script_parameters": [],
@@ -29,45 +29,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "check_api_coverage",
-        "run_in_external_terminal": true,
-        "script": "scripts/check_api_coverage.py",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "check_coverage",
-        "run_in_external_terminal": true,
-        "script": "scripts/check_coverage.py",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "check_pep8",
-        "run_in_external_terminal": true,
-        "script": "scripts/check_pep8.py",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "compile_catalog [FR]",
-        "run_in_external_terminal": false,
-        "script": "scripts/compile_catalog.py",
-        "script_parameters": [
-            "fr"
-        ],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "copy_hooks",
+        "name": "dev/copy_hooks",
         "run_in_external_terminal": false,
         "script": "scripts/git-hooks/copy_hooks.py",
         "script_parameters": [],
@@ -76,25 +38,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "extract_messages",
-        "run_in_external_terminal": false,
-        "script": "scripts/extract_messages.py",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "gen_extlibs",
-        "run_in_external_terminal": false,
-        "script": "scripts/gen_extlibs.py",
-        "script_parameters": [],
-        "working_dir": "scripts"
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "hackedit-dev",
+        "name": "dev/hackedit-dev",
         "run_in_external_terminal": false,
         "script": "scripts/hackedit-dev.pyw",
         "script_parameters": [],
@@ -103,27 +47,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "init_catalog [FR]",
-        "run_in_external_terminal": false,
-        "script": "scripts/init_catalog.py",
-        "script_parameters": [
-            "fr"
-        ],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "runtests",
-        "run_in_external_terminal": true,
-        "script": "scripts/runtests.py",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "update_breeze_icons",
+        "name": "dev/update_breeze_icons",
         "run_in_external_terminal": true,
         "script": "scripts/update_breeze_icons.py",
         "script_parameters": [],
@@ -132,9 +56,85 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "update_catalog [FR]",
+        "name": "dev/update_extlibs",
         "run_in_external_terminal": false,
-        "script": "scripts/update_catalog.py",
+        "script": "scripts/update_extlibs.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tests/check_api_coverage",
+        "run_in_external_terminal": true,
+        "script": "scripts/tests/check_api_coverage.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tests/check_coverage",
+        "run_in_external_terminal": true,
+        "script": "scripts/tests/check_coverage.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tests/check_pep8",
+        "run_in_external_terminal": true,
+        "script": "scripts/tests/check_pep8.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tests/runtests",
+        "run_in_external_terminal": true,
+        "script": "scripts/tests/runtests.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tr/compile_catalog [FR]",
+        "run_in_external_terminal": false,
+        "script": "scripts/tr/compile_catalog.py",
+        "script_parameters": [
+            "fr"
+        ],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tr/extract_messages",
+        "run_in_external_terminal": false,
+        "script": "scripts/tr/extract_messages.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tr/init_catalog [FR]",
+        "run_in_external_terminal": false,
+        "script": "scripts/tr/init_catalog.py",
+        "script_parameters": [
+            "fr"
+        ],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "tr/update_catalog [FR]",
+        "run_in_external_terminal": false,
+        "script": "scripts/tr/update_catalog.py",
         "script_parameters": [
             "fr"
         ],
