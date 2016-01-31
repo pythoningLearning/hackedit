@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: hackedit 1.0a2.dev10\n"
+"Project-Id-Version: hackedit 1.0a2.dev13\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-31 18:01+0100\n"
+"POT-Creation-Date: 2016-01-31 19:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,545 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 
-#: hackedit/app/forms/dlg_about_ui.py:144
+#: hackedit/api/events.py:78
+msgid "Don't show again"
+msgstr ""
+
+#: hackedit/api/events.py:102 hackedit/api/events.py:112
+#: hackedit/app/forms/settings_page_templates_ui.py:136
+msgid "Details"
+msgstr ""
+
+#: hackedit/api/events.py:104 hackedit/app/application.py:530
+msgid "Report"
+msgstr ""
+
+#: hackedit/api/events.py:113
+#, python-format
+msgid ""
+"Exception details:\n"
+"\n"
+" %s"
+msgstr ""
+
+#: hackedit/api/interpreters.py:207
+msgid "No interpreter found"
+msgstr ""
+
+#: hackedit/api/interpreters.py:208
+#, python-format
+msgid "%s: no interpreter found"
+msgstr ""
+
+#: hackedit/api/interpreters.py:278
+msgid "Program running in external terminal"
+msgstr ""
+
+#: hackedit/api/interpreters.py:362 hackedit/api/interpreters.py:372
+msgid "Run"
+msgstr ""
+
+#: hackedit/api/interpreters.py:364
+msgid "Configure"
+msgstr ""
+
+#: hackedit/api/interpreters.py:377
+#: hackedit/app/forms/dlg_script_run_config_ui.py:227
+msgid "Configurations"
+msgstr ""
+
+#: hackedit/api/interpreters.py:623
+#, python-format
+msgid "Choose %s script"
+msgstr ""
+
+#: hackedit/api/interpreters.py:624
+#, python-format
+msgid "%s files (%s)"
+msgstr ""
+
+#: hackedit/api/interpreters.py:639
+msgid "Choose the working directory"
+msgstr ""
+
+#: hackedit/api/widgets.py:140
+#, python-format
+msgid "No %s of \"%s\" found"
+msgstr ""
+
+#: hackedit/api/widgets.py:144
+#, python-format
+msgid "Found %d %s of \"%s\" in %d files"
+msgstr ""
+
+#: hackedit/api/widgets.py:166
+#, python-format
+msgid "%s (%d occurrences)"
+msgstr ""
+
+#: hackedit/api/widgets.py:350
+msgid "Process running"
+msgstr ""
+
+#: hackedit/api/widgets.py:351
+msgid "A process is still running, do you want to terminate it now?"
+msgstr ""
+
+#: hackedit/api/widgets.py:366 hackedit/api/widgets.py:377
+msgid "Unlock current tab"
+msgstr ""
+
+#: hackedit/api/widgets.py:366 hackedit/api/widgets.py:378
+msgid "Lock current tab"
+msgstr ""
+
+#: hackedit/app/application.py:270
+msgid "Restore window"
+msgstr ""
+
+#: hackedit/app/application.py:277 hackedit/app/main_window.py:991
+#: hackedit/app/forms/welcome_window_ui.py:141
+msgid "Quit"
+msgstr ""
+
+#: hackedit/app/application.py:311
+#, python-format
+msgid "%r plugin activation failed"
+msgstr ""
+
+#: hackedit/app/application.py:312
+#, python-format
+msgid ""
+"Failed to active plugin: %r. Either the plugin is missing or the plugin "
+"failed to load..."
+msgstr ""
+
+#: hackedit/app/application.py:522
+msgid "Unhandled exception"
+msgstr ""
+
+#: hackedit/app/application.py:523
+msgid "An unhandled exception has occured..."
+msgstr ""
+
+#: hackedit/app/application.py:525
+msgid "Would you like to report the bug to the developer?"
+msgstr ""
+
+#: hackedit/app/application.py:531 hackedit/app/forms/locator_ui.py:53
+#: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:273
+#: hackedit/extlibs/pyqode/core/widgets/tabs.py:72
+#: hackedit/plugins/find_replace.py:102
+msgid "Close"
+msgstr ""
+
+#: hackedit/app/application.py:540
+msgid "Restart HackEdit"
+msgstr ""
+
+#: hackedit/app/application.py:543
+#, python-format
+msgid ""
+"An unhandled exception has occured: %r\n"
+"\n"
+msgstr ""
+
+#: hackedit/app/application.py:544
+msgid "Please report!"
+msgstr ""
+
+#: hackedit/app/boss_wrapper.py:229
+msgid "Create from template"
+msgstr ""
+
+#: hackedit/app/common.py:72 hackedit/app/main_window.py:979
+msgid "Open directory"
+msgstr ""
+
+#: hackedit/app/common.py:89
+msgid "Not implementeded"
+msgstr ""
+
+#: hackedit/app/common.py:90
+msgid "This action has not been implemented yet..."
+msgstr ""
+
+#: hackedit/app/indexor.py:118
+msgid "Indexing project symbols"
+msgstr ""
+
+#: hackedit/app/indexor.py:131
+msgid "Indexing file symbols"
+msgstr ""
+
+#: hackedit/app/main_window.py:343
+#, python-format
+msgid "Failed to open file: %s"
+msgstr ""
+
+#: hackedit/app/main_window.py:344
+#, python-format
+msgid "An unhandled exception occured while opening file: %r"
+msgstr ""
+
+#: hackedit/app/main_window.py:352
+msgid "Encodings"
+msgstr ""
+
+#: hackedit/app/main_window.py:408 hackedit/app/main_window.py:419
+#: hackedit/app/main_window.py:432
+msgid "Failed to save file"
+msgstr ""
+
+#: hackedit/app/main_window.py:607
+msgid "Confirm exit"
+msgstr ""
+
+#: hackedit/app/main_window.py:608
+msgid "Are you sure you want to exit HackEdit?"
+msgstr ""
+
+#: hackedit/app/main_window.py:756
+msgid "n/a"
+msgstr ""
+
+#: hackedit/app/main_window.py:907 hackedit/app/main_window.py:987
+msgid "Open file"
+msgstr ""
+
+#: hackedit/app/main_window.py:977 hackedit/app/forms/welcome_window_ui.py:135
+#: hackedit/app/forms/wizard_new_ui.py:107
+msgid "New"
+msgstr ""
+
+#: hackedit/app/main_window.py:981
+#: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:51
+#: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:1047
+msgid "Save"
+msgstr ""
+
+#: hackedit/app/main_window.py:983
+msgid "Save as"
+msgstr ""
+
+#: hackedit/app/main_window.py:985
+#: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:57
+msgid "Save all"
+msgstr ""
+
+#: hackedit/app/main_window.py:989
+msgid "Close window"
+msgstr ""
+
+#: hackedit/app/main_window.py:994 hackedit/app/forms/dlg_preferences_ui.py:75
+#: hackedit/app/forms/welcome_window_ui.py:144
+msgid "Preferences"
+msgstr ""
+
+#: hackedit/app/main_window.py:1003 hackedit/app/forms/main_window_ui.py:232
+msgid "Toggle fullscreen"
+msgstr ""
+
+#: hackedit/app/main_window.py:1005
+msgid "Toggle menu"
+msgstr ""
+
+#: hackedit/app/main_window.py:1007
+msgid "Toggle toolbars"
+msgstr ""
+
+#: hackedit/app/main_window.py:1011
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1106
+msgid "Undo"
+msgstr ""
+
+#: hackedit/app/main_window.py:1013
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1116
+msgid "Redo"
+msgstr ""
+
+#: hackedit/app/main_window.py:1015
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1126
+#: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:366
+#: hackedit/extlibs/pyqode/core/widgets/interactive.py:74
+msgid "Copy"
+msgstr ""
+
+#: hackedit/app/main_window.py:1017
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1134
+msgid "Cut"
+msgstr ""
+
+#: hackedit/app/main_window.py:1019
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1142
+#: hackedit/extlibs/pyqode/core/widgets/interactive.py:78
+msgid "Paste"
+msgstr ""
+
+#: hackedit/app/main_window.py:1021
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1151
+msgid "Duplicate line"
+msgstr ""
+
+#: hackedit/app/main_window.py:1023 hackedit/app/project.py:215
+#: hackedit/app/project.py:309 hackedit/app/project.py:311
+msgid "Goto line"
+msgstr ""
+
+#: hackedit/app/main_window.py:1030 hackedit/plugins/find_replace.py:349
+msgid "Find"
+msgstr ""
+
+#: hackedit/app/main_window.py:1032
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:178
+msgid "Replace"
+msgstr ""
+
+#: hackedit/app/main_window.py:1034
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:187
+msgid "Find next"
+msgstr ""
+
+#: hackedit/app/main_window.py:1036
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:190
+msgid "Find previous"
+msgstr ""
+
+#: hackedit/app/main_window.py:1043
+msgid "Folding: collapse"
+msgstr ""
+
+#: hackedit/app/main_window.py:1045
+msgid "Folding: expand"
+msgstr ""
+
+#: hackedit/app/main_window.py:1047
+msgid "Folding: collapse all"
+msgstr ""
+
+#: hackedit/app/main_window.py:1049
+msgid "Folding: expand all"
+msgstr ""
+
+#: hackedit/app/main_window.py:1057
+#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:39
+msgid "Select word"
+msgstr ""
+
+#: hackedit/app/main_window.py:1059
+#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:47
+msgid "Select extended word"
+msgstr ""
+
+#: hackedit/app/main_window.py:1061
+#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:57
+msgid "Matched select"
+msgstr ""
+
+#: hackedit/app/main_window.py:1063
+#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:66
+msgid "Select line"
+msgstr ""
+
+#: hackedit/app/main_window.py:1071
+#: hackedit/extlibs/pyqode/core/modes/case_converter.py:45
+msgid "Convert to lower case"
+msgstr ""
+
+#: hackedit/app/main_window.py:1073
+#: hackedit/extlibs/pyqode/core/modes/case_converter.py:47
+msgid "Convert to UPPER CASE"
+msgstr ""
+
+#: hackedit/app/plugin_manager.py:97
+#, python-format
+msgid "%r load failed"
+msgstr ""
+
+#: hackedit/app/plugin_manager.py:98
+#, python-format
+msgid "Failed to load plugin %r because of the following error: %r"
+msgstr ""
+
+#: hackedit/app/project.py:170
+msgid "Indexing project files"
+msgstr ""
+
+#: hackedit/app/project.py:206 hackedit/app/project.py:233
+#: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:642
+#, python-format
+msgid "Show in %s"
+msgstr ""
+
+#: hackedit/app/project.py:209 hackedit/app/project.py:287
+msgid "Goto anything"
+msgstr ""
+
+#: hackedit/app/project.py:211 hackedit/app/project.py:295
+msgid "Goto symbol"
+msgstr ""
+
+#: hackedit/app/project.py:213 hackedit/app/project.py:302
+msgid "Goto symbol in project"
+msgstr ""
+
+#: hackedit/app/project.py:223
+msgid "Project directory contains too much files for indexing..."
+msgstr ""
+
+#: hackedit/app/project.py:248
+msgid "Project"
+msgstr ""
+
+#: hackedit/app/project.py:253 hackedit/app/forms/main_window_ui.py:192
+msgid "&View"
+msgstr ""
+
+#: hackedit/app/project.py:254
+#: hackedit/app/forms/settings_page_workspaces_ui.py:138
+#: hackedit/app/widgets/preference_pages/workspaces.py:22
+msgid "Workspaces"
+msgstr ""
+
+#: hackedit/app/project.py:284
+msgid "&Goto"
+msgstr ""
+
+#: hackedit/app/project.py:285
+msgid "Goto anything..."
+msgstr ""
+
+#: hackedit/app/project.py:293
+msgid "Goto symbol..."
+msgstr ""
+
+#: hackedit/app/project.py:300
+msgid "Goto symbol in project..."
+msgstr ""
+
+#: hackedit/app/project.py:366
+msgid "Refresh tree view and run project indexation"
+msgstr ""
+
+#: hackedit/app/project.py:373
+msgid "Remove project from view"
+msgstr ""
+
+#: hackedit/app/project.py:414 hackedit/app/forms/wizard_new_ui.py:112
+#: hackedit/app/widgets/preference_pages/templates.py:24
+msgid "Templates"
+msgstr ""
+
+#: hackedit/app/project.py:440 hackedit/app/forms/dlg_ignore_file_ui.py:49
+msgid "Mark as ignored"
+msgstr ""
+
+#: hackedit/app/project.py:453
+msgid "Open in terminal"
+msgstr ""
+
+#: hackedit/app/project.py:460
+msgid "Open in web browser"
+msgstr ""
+
+#: hackedit/app/tasks.py:22
+#, python-format
+msgid "Task <%s> failed"
+msgstr ""
+
+#: hackedit/app/tasks.py:391
+#, python-format
+msgid "%d process running"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:30
+msgid "Welcome"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:34
+#: hackedit/app/forms/welcome_window_ui.py:132
+#, python-format
+msgid "Version %s"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:45 hackedit/app/forms/locator_ui.py:51
+msgid "Help"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:46 hackedit/app/forms/main_window_ui.py:221
+#: hackedit/app/forms/welcome_window_ui.py:146
+msgid "Get some help"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:50 hackedit/app/forms/dlg_about_ui.py:148
+msgid "About"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:51 hackedit/app/forms/dlg_about_ui.py:144
 #: hackedit/app/forms/main_window_ui.py:219
 msgid "About HackEdit"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:60
+msgid "Report bug"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:62 hackedit/app/forms/dlg_report_bug_ui.py:67
+#: hackedit/app/forms/main_window_ui.py:226
+msgid "Report a bug"
+msgstr ""
+
+#: hackedit/app/welcome_window.py:70 hackedit/app/welcome_window.py:71
+msgid "Check for update"
+msgstr ""
+
+#: hackedit/app/dialogs/open_path.py:14
+msgid "file"
+msgstr ""
+
+#: hackedit/app/dialogs/open_path.py:14
+msgid "project"
+msgstr ""
+
+#: hackedit/app/dialogs/open_path.py:15
+#, python-format
+msgid "Open %s"
+msgstr ""
+
+#: hackedit/app/dialogs/preferences.py:36
+msgid "Reset changes made to the current page."
+msgstr ""
+
+#: hackedit/app/dialogs/preferences.py:38
+msgid "Restore factory defaults for the current page."
+msgstr ""
+
+#: hackedit/app/dialogs/preferences.py:40
+msgid "Apply changes but keep dialog open."
+msgstr ""
+
+#: hackedit/app/dialogs/preferences.py:42
+msgid "Apply changes and close dialog."
+msgstr ""
+
+#: hackedit/app/dialogs/preferences.py:44
+msgid "Close dialog and cancel any changes."
+msgstr ""
+
+#: hackedit/app/dialogs/preferences.py:178
+#: hackedit/app/widgets/preference_pages/editor.py:15
+#: hackedit/app/widgets/preference_pages/editor_colors.py:35
+#: hackedit/app/widgets/preference_pages/editor_display.py:19
+msgid "Editor"
+msgstr ""
+
+#: hackedit/app/dialogs/report_bug.py:97
+#, python-format
+msgid "[Unhandled exception] %s"
+msgstr ""
+
+#: hackedit/app/dialogs/workspace.py:21
+msgid "Edit workspaces"
 msgstr ""
 
 #: hackedit/app/forms/dlg_about_ui.py:145
@@ -57,10 +593,6 @@ msgid ""
 "align=\"center\"><a href=\"https://github.com/HackEdit/hackedit\"><span "
 "style=\" text-decoration: underline; color:#2980b9;\">View on "
 "github</span></a></p></body></html>"
-msgstr ""
-
-#: hackedit/app/forms/dlg_about_ui.py:148
-msgid "About"
 msgstr ""
 
 #: hackedit/app/forms/dlg_about_ui.py:149
@@ -1816,10 +2348,6 @@ msgid ""
 "patterns</p></body></html>"
 msgstr ""
 
-#: hackedit/app/forms/dlg_ignore_file_ui.py:49
-msgid "Mark as ignored"
-msgstr ""
-
 #: hackedit/app/forms/dlg_ignore_file_ui.py:50
 msgid "Ignore explicitely"
 msgstr ""
@@ -1861,11 +2389,6 @@ msgstr ""
 msgid "Open in current window (add &to currently opened projects)"
 msgstr ""
 
-#: hackedit/app/forms/dlg_preferences_ui.py:75
-#: hackedit/app/forms/welcome_window_ui.py:144
-msgid "Preferences"
-msgstr ""
-
 #: hackedit/app/forms/dlg_preferences_ui.py:76
 msgid "Categories"
 msgstr ""
@@ -1895,11 +2418,6 @@ msgstr ""
 
 #: hackedit/app/forms/dlg_progress_ui.py:45
 msgid "Operation in progress..."
-msgstr ""
-
-#: hackedit/app/forms/dlg_report_bug_ui.py:67
-#: hackedit/app/forms/main_window_ui.py:226
-msgid "Report a bug"
 msgstr ""
 
 #: hackedit/app/forms/dlg_report_bug_ui.py:68
@@ -1974,10 +2492,6 @@ msgstr ""
 
 #: hackedit/app/forms/dlg_script_run_config_ui.py:226
 msgid "Select project to edit"
-msgstr ""
-
-#: hackedit/app/forms/dlg_script_run_config_ui.py:227
-msgid "Configurations"
 msgstr ""
 
 #: hackedit/app/forms/dlg_script_run_config_ui.py:228
@@ -2147,6 +2661,7 @@ msgid "Form"
 msgstr ""
 
 #: hackedit/app/forms/event_history_widget_ui.py:51
+#: hackedit/plugins/terminal.py:94 hackedit/plugins/terminal.py:95
 msgid "Clear history"
 msgstr ""
 
@@ -2169,16 +2684,6 @@ msgstr ""
 
 #: hackedit/app/forms/locator_ui.py:50
 msgid "Frame"
-msgstr ""
-
-#: hackedit/app/forms/locator_ui.py:51
-msgid "Help"
-msgstr ""
-
-#: hackedit/app/forms/locator_ui.py:53
-#: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:273
-#: hackedit/extlibs/pyqode/core/widgets/tabs.py:72
-msgid "Close"
 msgstr ""
 
 #: hackedit/app/forms/main_window_ui.py:189
@@ -2211,10 +2716,6 @@ msgstr ""
 msgid "&File"
 msgstr ""
 
-#: hackedit/app/forms/main_window_ui.py:192
-msgid "&View"
-msgstr ""
-
 #: hackedit/app/forms/main_window_ui.py:193
 msgid "The list of windows"
 msgstr ""
@@ -2227,7 +2728,7 @@ msgstr ""
 msgid "?"
 msgstr ""
 
-#: hackedit/app/forms/main_window_ui.py:196
+#: hackedit/app/forms/main_window_ui.py:196 hackedit/plugins/find_replace.py:28
 msgid "&Edit"
 msgstr ""
 
@@ -2328,11 +2829,6 @@ msgstr ""
 msgid "&Help"
 msgstr ""
 
-#: hackedit/app/forms/main_window_ui.py:221
-#: hackedit/app/forms/welcome_window_ui.py:146
-msgid "Get some help"
-msgstr ""
-
 #: hackedit/app/forms/main_window_ui.py:222
 msgid "&New"
 msgstr ""
@@ -2369,10 +2865,6 @@ msgstr ""
 
 #: hackedit/app/forms/main_window_ui.py:231
 msgid "&Toggle fullscreen"
-msgstr ""
-
-#: hackedit/app/forms/main_window_ui.py:232
-msgid "Toggle fullscreen"
 msgstr ""
 
 #: hackedit/app/forms/main_window_ui.py:233
@@ -2562,6 +3054,7 @@ msgid "Column where to draw the margin"
 msgstr ""
 
 #: hackedit/app/forms/settings_page_editor_display_ui.py:98
+#: hackedit/app/widgets/preference_pages/editor_display.py:19
 msgid "Display"
 msgstr ""
 
@@ -3125,10 +3618,6 @@ msgstr ""
 msgid "The list of template source repositories"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_templates_ui.py:136
-msgid "Details"
-msgstr ""
-
 #: hackedit/app/forms/settings_page_templates_ui.py:138
 msgid "Path:"
 msgstr ""
@@ -3152,10 +3641,6 @@ msgstr ""
 #: hackedit/app/forms/settings_page_templates_ui.py:143
 #: hackedit/app/forms/wizard_new_ui.py:121
 msgid "Powered by BOSS v0.9.20"
-msgstr ""
-
-#: hackedit/app/forms/settings_page_workspaces_ui.py:138
-msgid "Workspaces"
 msgstr ""
 
 #: hackedit/app/forms/settings_page_workspaces_ui.py:139
@@ -3232,21 +3717,11 @@ msgstr ""
 msgid "The list of recent documents/projects"
 msgstr ""
 
-#: hackedit/app/forms/welcome_window_ui.py:132
-#, python-format
-msgid "Version %s"
-msgstr ""
-
 #: hackedit/app/forms/welcome_window_ui.py:133
 msgid ""
 "<html><head/><body><p align=\"center\"><img "
 "src=\":/icons/hackedit_128.png\"/></p><p align=\"center\"><span style=\" "
 "font-size:48pt;\">HackEdit</span></p></body></html>"
-msgstr ""
-
-#: hackedit/app/forms/welcome_window_ui.py:135
-#: hackedit/app/forms/wizard_new_ui.py:107
-msgid "New"
 msgstr ""
 
 #: hackedit/app/forms/welcome_window_ui.py:137
@@ -3255,10 +3730,6 @@ msgstr ""
 
 #: hackedit/app/forms/welcome_window_ui.py:138
 msgid "Open"
-msgstr ""
-
-#: hackedit/app/forms/welcome_window_ui.py:141
-msgid "Quit"
 msgstr ""
 
 #: hackedit/app/forms/welcome_window_ui.py:147
@@ -3279,10 +3750,6 @@ msgstr ""
 
 #: hackedit/app/forms/wizard_new_ui.py:111
 msgid "The list of template sources"
-msgstr ""
-
-#: hackedit/app/forms/wizard_new_ui.py:112
-msgid "Templates"
 msgstr ""
 
 #: hackedit/app/forms/wizard_new_ui.py:113
@@ -3327,6 +3794,168 @@ msgstr ""
 
 #: hackedit/app/forms/wizard_new_ui.py:127
 msgid "TextLabel"
+msgstr ""
+
+#: hackedit/app/widgets/locator.py:45
+msgid "Type to locate..."
+msgstr ""
+
+#: hackedit/app/widgets/locator.py:301
+msgid ""
+"<p>Use <i>Goto</i> to navigate your projectâs files\n"
+"swiftly.</p>\n"
+"\n"
+"<p>Use the <i>arrow keys</i> to navigate into the list and press "
+"<i>ENTER</i>\n"
+"to open the selected entry. Press <i>ESCAPE</i> to close the popup "
+"window.<p>\n"
+"\n"
+"<p><i>Goto</i> accepts several operators:\n"
+"\n"
+"<ul>\n"
+"    <li> <b>@</b> to locate a symbol in the current editor.</li>\n"
+"    <li> <b>!</b> to locate a symbol in the opened project(s).</li>\n"
+"    <li> <b>:</b> to specify the line number to go to.</li>\n"
+"</ul>\n"
+"\n"
+"</p>\n"
+msgstr ""
+
+#: hackedit/app/widgets/locator.py:318
+msgid "Goto: help"
+msgstr ""
+
+#: hackedit/app/widgets/recents.py:28
+msgid "Remove from recent files list"
+msgstr ""
+
+#: hackedit/app/widgets/recents.py:29
+msgid "Remove path from recent files list"
+msgstr ""
+
+#: hackedit/app/widgets/recents.py:31
+msgid "Clear recent files list"
+msgstr ""
+
+#: hackedit/app/widgets/recents.py:33
+msgid "Clear the recent files list"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/behaviour.py:14
+msgid "Behaviour"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/behaviour.py:16
+#: hackedit/app/widgets/preference_pages/environment.py:37
+#: hackedit/app/widgets/preference_pages/mimetypes.py:23
+#: hackedit/app/widgets/preference_pages/shortcuts.py:12
+msgid "Environment"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/editor_colors.py:35
+msgid "Font & Colors"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/environment.py:68
+#, python-format
+msgid "%s: command not found"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/environment.py:185
+msgid "Change color scheme?"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/environment.py:186
+msgid "Would you like to change the color scheme as well?"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/environment.py:197
+msgid "Change icon theme?"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/environment.py:198
+msgid "Would you like to change the icon theme as well?"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/mimetypes.py:23
+msgid "Mimetypes"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/mimetypes.py:28
+msgid "Filter by pattern/mimetype"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/shortcuts.py:11
+msgid "Shortcuts"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/shortcuts.py:15
+msgid "Filter by name or by shortcut"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/shortcuts.py:63
+msgid "Shortcuts conflict"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/shortcuts.py:64
+#, python-format
+msgid ""
+"The shortcut %s is already used by action %r.\n"
+"You will need to fix it otherwise both shortcus won't work..."
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/templates.py:28
+#: hackedit/app/wizards/new.py:24
+#, python-format
+msgid ""
+"<i>Powered by <a href=\"https://github.com/datafolklabs/boss\">BOSS</a> "
+"(v%s)</i>"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/templates.py:115
+msgid "Remove source"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/templates.py:115
+#, python-format
+msgid "Are you sure you want to remove the source %r?"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/workspaces.py:79
+msgid "Confirm delete workspace"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/workspaces.py:80
+#, python-format
+msgid "Are you sure you want to remove workspace %r?"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/workspaces.py:192
+msgid "Add workspace"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/workspaces.py:192
+msgid "Workspace name:"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/workspaces.py:199
+msgid "Cannot create workspace"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/workspaces.py:200
+#, python-format
+msgid ""
+"Cannot create workspace %s, a workspace with the same name already "
+"exists.\n"
+"Please choose another name!"
+msgstr ""
+
+#: hackedit/app/wizards/new.py:136
+msgid "Directory is not empty"
+msgstr ""
+
+#: hackedit/app/wizards/new.py:140
+msgid "Path does is not a directory"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/cobol/modes/comments.py:25
@@ -3495,10 +4124,6 @@ msgstr ""
 msgid "Replace current occurence"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:178
-msgid "Replace"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:179
 msgid "Replace all occurences"
 msgstr ""
@@ -3531,10 +4156,6 @@ msgstr ""
 msgid "Ctrl+R"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:187
-msgid "Find next"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:188
 msgid "Find the next occurrence (downward)"
 msgstr ""
@@ -3543,43 +4164,12 @@ msgstr ""
 msgid "F3"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:190
-msgid "Find previous"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:191
 msgid "Find previous occurrence (upward)"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:192
 msgid "Shift+F3"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1106
-msgid "Undo"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1116
-msgid "Redo"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1126
-#: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:366
-#: hackedit/extlibs/pyqode/core/widgets/interactive.py:74
-msgid "Copy"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1134
-msgid "Cut"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1142
-#: hackedit/extlibs/pyqode/core/widgets/interactive.py:78
-msgid "Paste"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1151
-msgid "Duplicate line"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1157
@@ -3603,45 +4193,12 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:51
-#: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:1047
-msgid "Save"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:55
 msgid "Save selected"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:57
-msgid "Save all"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/modes/case_converter.py:45
-msgid "Convert to lower case"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/modes/case_converter.py:47
-msgid "Convert to UPPER CASE"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/modes/case_converter.py:49
 msgid "Case"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:39
-msgid "Select word"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:47
-msgid "Select extended word"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:57
-msgid "Matched select"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:66
-msgid "Select line"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/modes/filewatcher.py:167
@@ -3817,11 +4374,6 @@ msgstr ""
 msgid "&Delete"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:642
-#, python-format
-msgid "Show in %s"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:754
 msgid "Open in explorer"
 msgstr ""
@@ -3897,5 +4449,92 @@ msgstr ""
 
 #: hackedit/extlibs/pyqode/python/panels/quick_doc.py:108
 msgid "Documentation not found"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:35 hackedit/plugins/find_replace.py:36
+#: hackedit/plugins/find_replace.py:39 hackedit/plugins/find_replace.py:74
+msgid "Find in path"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:46 hackedit/plugins/find_replace.py:47
+#: hackedit/plugins/find_replace.py:49 hackedit/plugins/find_replace.py:72
+msgid "Replace in path"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:86
+msgid "Search again"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:92
+msgid "Replace all"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:97
+msgid "Replace selected"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:171
+#, python-format
+msgid "searching for %r"
+msgstr ""
+
+#: hackedit/plugins/find_replace.py:355
+msgid "Choose directory"
+msgstr ""
+
+#: hackedit/plugins/image_viewer.py:128
+msgid "Image viewer"
+msgstr ""
+
+#: hackedit/plugins/image_viewer.py:129
+#, python-format
+msgid "Failed to load image %r."
+msgstr ""
+
+#: hackedit/plugins/image_viewer.py:142
+#, python-format
+msgid "%dx%d %s (%d-bit color) %s"
+msgstr ""
+
+#: hackedit/plugins/image_viewer.py:178
+msgid "Zoom in"
+msgstr ""
+
+#: hackedit/plugins/image_viewer.py:183
+msgid "Zoom out"
+msgstr ""
+
+#: hackedit/plugins/image_viewer.py:188
+msgid "Original size"
+msgstr ""
+
+#: hackedit/plugins/outline.py:37 hackedit/plugins/outline.py:89
+msgid "Lock view"
+msgstr ""
+
+#: hackedit/plugins/outline.py:89
+msgid "Unlock view"
+msgstr ""
+
+#: hackedit/plugins/terminal.py:78
+msgid "Type a command here"
+msgstr ""
+
+#: hackedit/plugins/terminal.py:88 hackedit/plugins/terminal.py:89
+msgid "Edit history"
+msgstr ""
+
+#: hackedit/plugins/terminal.py:133
+#, python-format
+msgid "cd: The directory %r does not exist"
+msgstr ""
+
+#: hackedit/plugins/terminal.py:210
+msgid "Command finished"
+msgstr ""
+
+#: hackedit/plugins/terminal.py:211
+#, python-format
+msgid "The command %r finished with exit code %d"
 msgstr ""
 
