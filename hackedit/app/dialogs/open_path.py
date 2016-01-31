@@ -11,8 +11,8 @@ class DlgOpen(QtWidgets.QDialog):
         super().__init__(parent)
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        name = 'file' if os.path.isfile(path) else 'project'
-        self.setWindowTitle('Open %s' % name)
+        name = _('file') if os.path.isfile(path) else _('project')
+        self.setWindowTitle(_('Open %s') % name)
         self.ui.label.setText(self.ui.label.text() % name)
 
     @classmethod

@@ -98,7 +98,7 @@ def test_add__action(qtbot):
 
 def test_get_menu(qtbot):
     win(qtbot)
-    mnu = window.get_menu('Edit')
+    mnu = window.get_menu(_('Edit'))
     assert mnu is not None
     assert isinstance(mnu, QtWidgets.QMenu)
 

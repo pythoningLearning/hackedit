@@ -20,12 +20,12 @@ class Mimetypes(PreferencePage):
             icon = QtGui.QIcon.fromTheme('file-manager')
         else:
             icon = QtGui.QIcon.fromTheme('applications-libraries')
-        super().__init__('Mimetypes', icon=icon, category='Environment')
+        super().__init__(_('Mimetypes'), icon=icon, category=_('Environment'))
         self.ui = settings_page_mimetypes_ui.Ui_Form()
         self.ui.setupUi(self)
         self.ui.table_mimes.currentItemChanged.connect(self._show_extensions)
         self.ui.edit_filter.editingFinished.connect(self._filter)
-        self.ui.edit_filter.prompt_text = 'Filter by pattern/mimetype'
+        self.ui.edit_filter.prompt_text = _('Filter by pattern/mimetype')
 
     def _filter(self):
         filter_text = self.ui.edit_filter.text().lower()

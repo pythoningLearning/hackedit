@@ -34,7 +34,7 @@ class Environment(PreferencePage):
     color scheme, font,...)
     """
     def __init__(self):
-        super().__init__('Environment', icon=QtGui.QIcon.fromTheme(
+        super().__init__(_('Environment'), icon=QtGui.QIcon.fromTheme(
             'applications-system'))
         self.ui = settings_page_environment_ui.Ui_Form()
         self.ui.setupUi(self)
@@ -65,7 +65,7 @@ class Environment(PreferencePage):
         if system.which(pgm) is None:
             sender.setStyleSheet(
                 'QLineEdit{background-color: #DD8080;color: white;}')
-            sender.setToolTip('%s not found' % pgm)
+            sender.setToolTip(_('%s: command not found') % pgm)
         else:
             sender.setStyleSheet('')
             sender.setToolTip('')
@@ -182,8 +182,8 @@ class Environment(PreferencePage):
             return
         # change color scheme
         a = QtWidgets.QMessageBox.question(
-            self, 'Change color scheme?',
-            'Would you like to change the color scheme as well?')
+            self, _('Change color scheme?'),
+            _('Would you like to change the color scheme as well?'))
         dark = bool(self.ui.combo_theme.currentIndex())
         if a == QtWidgets.QMessageBox.Yes:
             scheme = 'crepuscule' if dark else 'aube'
@@ -194,8 +194,8 @@ class Environment(PreferencePage):
         # change icon theme (on Windows/OSX only).
         if not system.LINUX:
             a = QtWidgets.QMessageBox.question(
-                self, 'Change icon theme?',
-                'Would you like to change the icon theme as well?')
+                self, _('Change icon theme?'),
+                _('Would you like to change the icon theme as well?'))
             if a == QtWidgets.QMessageBox.Yes:
                 theme = 'Breeze Dark' if dark else 'Breeze'
                 self.ui.combo_icon_themes.setCurrentText(theme)

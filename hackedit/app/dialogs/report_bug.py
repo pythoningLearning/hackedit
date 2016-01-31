@@ -40,7 +40,6 @@ class DlgReportBug(QtWidgets.QDialog):
         if utils.is_dark_theme():
             icon = icons[1]
         self.ui.bt_submit.setIcon(QtGui.QIcon(icon))
-        print(icon)
         self.ui.edit_title.textChanged.connect(self.enable_submit)
         self.ui.edit_desc.textChanged.connect(self.enable_submit)
         self.ui.edit_title.setText(title)
@@ -95,7 +94,7 @@ class DlgReportBug(QtWidgets.QDialog):
     def crash_report(cls, parent, exception_info):
         dlg = cls(parent)
         dlg.ui.edit_title.setText(
-            '[Unhandled exception] %s' % exception_info.splitlines()[-1])
+            _('[Unhandled exception] %s') % exception_info.splitlines()[-1])
         dlg.ui.edit_desc.setPlainText('``` python\n%s\n```' %
                                       exception_info.lstrip())
         dlg.ui.cb_include_sys_info.setChecked(True)

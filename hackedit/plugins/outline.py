@@ -34,7 +34,7 @@ class DocumentOutline(plugins.WorkspacePlugin):
         self.bt_lock = QtWidgets.QToolButton(self._widget)
         self.bt_lock.setCheckable(True)
         self.bt_lock.setChecked(not self._outline.sync_with_editor)
-        self.bt_lock.setToolTip('Lock view')
+        self.bt_lock.setToolTip(_('Lock view'))
         self.bt_lock.toggled.connect(self._on_sync_toggled)
         self.bt_lock.setIcon(api.special_icons.object_locked())
         controls_layout.addWidget(self.bt_lock)
@@ -85,4 +85,5 @@ class DocumentOutline(plugins.WorkspacePlugin):
                              else api.special_icons.object_locked())
         self.bt_lock.blockSignals(False)
         self._outline.sync_with_editor = not toggled
-        self.bt_lock.setToolTip('Unlock view' if toggled else 'Lock view')
+        self.bt_lock.setToolTip(
+            _('Unlock view') if toggled else _('Lock view'))

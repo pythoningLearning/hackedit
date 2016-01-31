@@ -137,10 +137,11 @@ class FindResultsWidget(QtWidgets.QTreeWidget):
         cpt_files, cpt_occurrences, first_item, root = self.fill_tree(
             find_results)
         if not cpt_occurrences:
-            root.setText(0, 'No %s of "%s" found' % (self.term, search_term))
+            root.setText(0, _('No %s of "%s" found') % (
+                self.term, search_term))
         else:
             root.setText(
-                0, 'Found %d %s of "%s" in %d files' %
+                0, _('Found %d %s of "%s" in %d files') %
                 (cpt_occurrences, self.term, search_term, cpt_files))
             root.setExpanded(True)
             root.child(0).setExpanded(True)
@@ -162,7 +163,7 @@ class FindResultsWidget(QtWidgets.QTreeWidget):
             for line_nbr, text, line_occurrences in occurrences:
                 cpt_occurrences += len(line_occurrences)
                 occurrences_in_file += len(line_occurrences)
-            file_item.setText(0, '%s (%d occurrences)' % (
+            file_item.setText(0, _('%s (%d occurrences)') % (
                 path, occurrences_in_file))
             file_item.setChildIndicatorPolicy(file_item.ShowIndicator)
             file_item.setData(0, QtCore.Qt.UserRole, (path, occurrences))
@@ -346,9 +347,9 @@ class RunWidget(QtWidgets.QWidget):
             return
         if tab.is_running and self._interactive:
             if QtWidgets.QMessageBox.question(
-                    self, 'Process running',
-                    'A process is still running, do you want to terminate it '
-                    'now?',
+                    self, _('Process running'),
+                    _('A process is still running, do you want to terminate it'
+                      ' now?'),
                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                     QtWidgets.QMessageBox.Yes) == QtWidgets.QMessageBox.Yes:
                 tab.stop_process()
@@ -362,7 +363,7 @@ class RunWidget(QtWidgets.QWidget):
         self.ui.bt_pin.setIcon(self.icon_unlock if tab.pinned else
                                self.icon_lock)
         self.ui.bt_pin.setToolTip(
-            'Unlock current tab' if tab.pinned else 'Lock current tab')
+            _('Unlock current tab') if tab.pinned else _('Lock current tab'))
 
     def _on_tab_changed(self, index):
         if index >= 0:
@@ -373,7 +374,8 @@ class RunWidget(QtWidgets.QWidget):
             self.ui.bt_pin.setIcon(
                 self.icon_unlock if tab.pinned else self.icon_lock)
             self.ui.bt_pin.setToolTip(
-                'Unlock current tab' if tab.pinned else 'Lock current tab')
+                _('Unlock current tab') if tab.pinned else
+                _('Lock current tab'))
 
     def _on_process_finished(self):
         self._on_tab_changed(self.ui.tabWidget.currentIndex())

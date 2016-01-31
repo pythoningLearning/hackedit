@@ -75,7 +75,7 @@ class _Terminal(QtWidgets.QWidget):
         self._ui.edit_command.setCompleter(self._completer)
         self._ui.edit_command.button.setIcon(QtGui.QIcon.fromTheme(
             'edit-clear'))
-        self._ui.edit_command.prompt_text = 'Type a command here'
+        self._ui.edit_command.prompt_text = _('Type a command here')
         self._ui.bt_run.clicked.connect(self._run)
         self._ui.bt_run.setIcon(QtGui.QIcon.fromTheme('system-run'))
         self._ui.edit_command.returnPressed.connect(self._run)
@@ -85,14 +85,14 @@ class _Terminal(QtWidgets.QWidget):
         self._cwd = self._window.current_project
 
         self.action_edit_history = QtWidgets.QAction(
-            'Edit history', self._ui.bt_run)
-        self.action_edit_history.setToolTip('Edit history')
+            _('Edit history'), self._ui.bt_run)
+        self.action_edit_history.setToolTip(_('Edit history'))
         self.action_edit_history.triggered.connect(self._edit_history)
         self._ui.bt_run.addAction(self.action_edit_history)
 
         self.action_clear_history = QtWidgets.QAction(
-            'Clear history', self._ui.bt_run)
-        self.action_clear_history.setToolTip('Clear history')
+            _('Clear history'), self._ui.bt_run)
+        self.action_clear_history.setToolTip(_('Clear history'))
         self.action_clear_history.setIcon(QtGui.QIcon.fromTheme('edit-clear'))
         self.action_clear_history.triggered.connect(self._clear_history)
         self._ui.bt_run.addAction(self.action_clear_history)
@@ -130,7 +130,7 @@ class _Terminal(QtWidgets.QWidget):
             path = os.path.abspath(os.path.join(self._cwd, path))
             if not os.path.exists(path):
                 self._ui.console.setText(
-                    'cd: The directory %r does not exist' % path)
+                    _('cd: The directory %r does not exist') % path)
             else:
                 self._cwd = path
                 self._ui.console.clear()
@@ -207,8 +207,8 @@ class _Terminal(QtWidgets.QWidget):
         if not self.isVisible() or QtWidgets.qApp.activeWindow() != \
                 self._window:
             e = api.events.Event(
-                'Command finished',
-                'The command %r finished with exit code %d' % (
+                _('Command finished'),
+                _('The command %r finished with exit code %d') % (
                     self._last_command, self._ui.console.exit_code))
             api.events.post(e)
 

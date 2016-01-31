@@ -69,7 +69,7 @@ def check_for_update(window, show_up_to_date_msg=True):
 
 def open_folder(window, app):
     path = QtWidgets.QFileDialog.getExistingDirectory(
-        window, 'Open directory', settings.last_open_dir())
+        window, _('Open directory'), settings.last_open_dir())
     if path:
         settings.set_last_open_dir(os.path.dirname(path))
         app.open_path(path, sender=window)
@@ -86,8 +86,8 @@ def edit_preferences(window, app):
 
 def not_implemented_action(window):
     QtWidgets.QMessageBox.information(
-        window, 'Not implementeded',
-        'This action has not been implemented yet...')
+        window, _('Not implementeded'),
+        _('This action has not been implemented yet...'))
 
 
 def create_new(app, window, current_project=None):

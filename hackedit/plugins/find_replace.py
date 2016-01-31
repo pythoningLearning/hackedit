@@ -25,28 +25,28 @@ class FindReplace(plugins.WorkspacePlugin):
         self._find_results_widget = None
         self._replace = False
         action_before = self._window._ui.action_preferences
-        mnu_edit = window.get_menu('&Edit')
+        mnu_edit = window.get_menu(_('&Edit'))
         sep = QtWidgets.QAction(mnu_edit)
         sep.setSeparator(True)
         mnu_edit.insertAction(action_before, sep)
 
         # find
         self.afind = QtWidgets.QAction(mnu_edit)
-        self.afind.setText('Find in path')
-        self.afind.setToolTip('Find in path')
+        self.afind.setText(_('Find in path'))
+        self.afind.setToolTip(_('Find in path'))
         self.afind.setIcon(QtGui.QIcon.fromTheme('edit-find'))
         self.afind.setShortcut(shortcuts.get(
-            'Find in path', 'Ctrl+Shift+F'))
+            _('Find in path'), 'Ctrl+Shift+F'))
         self.afind.triggered.connect(self._on_find_triggered)
         mnu_edit.insertAction(action_before, self.afind)
 
         # replace
         self.areplace = QtWidgets.QAction(mnu_edit)
         self.areplace.setIcon(QtGui.QIcon.fromTheme('edit-find-replace'))
-        self.areplace.setText('Replace in path')
-        self.areplace.setToolTip('Replace in path')
+        self.areplace.setText(_('Replace in path'))
+        self.areplace.setToolTip(_('Replace in path'))
         self.areplace.setShortcut(shortcuts.get(
-            'Replace in path', 'Ctrl+Shift+H'))
+            _('Replace in path'), 'Ctrl+Shift+H'))
         self.areplace.triggered.connect(self._on_replace_triggered)
         mnu_edit.insertAction(action_before, self.areplace)
 
@@ -69,9 +69,9 @@ class FindReplace(plugins.WorkspacePlugin):
 
     def apply_preferences(self):
         self.areplace.setShortcut(shortcuts.get(
-            'Replace in path', 'Ctrl+Shift+H'))
+            _('Replace in path'), 'Ctrl+Shift+H'))
         self.afind.setShortcut(shortcuts.get(
-            'Find in path', 'Ctrl+Shift+F'))
+            _('Find in path'), 'Ctrl+Shift+F'))
 
     def _create_dock(self):
         self._find_widget = QtWidgets.QWidget()
@@ -83,23 +83,23 @@ class FindReplace(plugins.WorkspacePlugin):
         buttons_layout.setContentsMargins(0, 0, 0, 0)
         # Search again
         bt = QtWidgets.QPushButton()
-        bt.setText('Search again')
+        bt.setText(_('Search again'))
         bt.clicked.connect(self._search_again)
         buttons_layout.addWidget(bt)
         if self._replace:
             # Replace
             bt = QtWidgets.QPushButton()
-            bt.setText('Replace all')
+            bt.setText(_('Replace all'))
             bt.clicked.connect(self._replace_all)
             buttons_layout.addWidget(bt)
             # Replace selected
             bt = QtWidgets.QPushButton()
-            bt.setText('Replace selected')
+            bt.setText(_('Replace selected'))
             bt.clicked.connect(self._replace_selected)
             buttons_layout.addWidget(bt)
         # Close
         bt = QtWidgets.QPushButton()
-        bt.setText('Close')
+        bt.setText(_('Close'))
         bt.clicked.connect(self._remove_dock)
         buttons_layout.addWidget(bt)
         # Spacer
@@ -168,7 +168,7 @@ class FindReplace(plugins.WorkspacePlugin):
         callback = self._on_search_finished
         project_root = api.project.get_root_project()
         api.tasks.start(
-            'searching for %r' % search_settings['find'],
+            _('searching for %r') % search_settings['find'],
             search_in_path, callback,
             args=(search_settings, project_root))
 
@@ -346,13 +346,13 @@ class _DlgFindReplace(QtWidgets.QDialog):
         self._ui.edit_find.setText(text_to_find)
         self._ui.label_replace.setVisible(enable_replace)
         self._ui.edit_replace.setVisible(enable_replace)
-        self._ui.buttonBox.button(self._ui.buttonBox.Ok).setText('Find')
+        self._ui.buttonBox.button(self._ui.buttonBox.Ok).setText(_('Find'))
         self._ui.combo_projects.addItems(parent.projects)
         self._ui.edit_find.selectAll()
 
     def _on_bt_dir_clicked(self):
         path = QtWidgets.QFileDialog.getExistingDirectory(
-            self, 'Choose directory', self._ui.edit_directory.text())
+            self, _('Choose directory'), self._ui.edit_directory.text())
         if path:
             self._ui.edit_directory.setText(os.path.normpath(path))
 

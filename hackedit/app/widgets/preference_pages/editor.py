@@ -12,7 +12,7 @@ class Editor(PreferencePage):
     to any editor independently from the target language).
     """
     def __init__(self):
-        super().__init__('Editor', icon=QtGui.QIcon.fromTheme(
+        super().__init__(_('Editor'), icon=QtGui.QIcon.fromTheme(
             'accessories-text-editor'))
         self.ui = settings_page_editor_ui.Ui_Form()
         self.ui.setupUi(self)

@@ -8,11 +8,11 @@ from hackedit.app.forms import settings_page_shortcuts_ui
 class Shortcuts(PreferencePage):
     def __init__(self):
         super().__init__(
-            'Shortcuts', icon=QtGui.QIcon.fromTheme(
-                'preferences-desktop-keyboard'), category='Environment')
+            _('Shortcuts'), icon=QtGui.QIcon.fromTheme(
+                'preferences-desktop-keyboard'), category=_('Environment'))
         self._ui = settings_page_shortcuts_ui.Ui_Form()
         self._ui.setupUi(self)
-        self._ui.edit_filter.prompt_text = 'Filter by name or by shortcut'
+        self._ui.edit_filter.prompt_text = _('Filter by name or by shortcut')
         self._ui.edit_filter.textChanged.connect(self._filter)
         header_view = self._ui.table.horizontalHeader()
         header_view.setSectionResizeMode(0, header_view.Stretch)
@@ -60,10 +60,10 @@ class Shortcuts(PreferencePage):
                 existing = names[shortcuts.index(shortcut)]
                 if existing != self.sender().objectName():
                     QtWidgets.QMessageBox.warning(
-                        self, 'Shortcuts conflict',
-                        'The shortcut %s is already used by action %r.\n'
-                        'You will need to fix it otherwise both '
-                        "shortcus won't work..." % (shortcut, existing))
+                        self, _('Shortcuts conflict'),
+                        _('The shortcut %s is already used by action %r.\n'
+                          'You will need to fix it otherwise both '
+                          "shortcus won't work...") % (shortcut, existing))
                 break
             else:
                 shortcuts.append(shortcut)

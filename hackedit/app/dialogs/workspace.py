@@ -18,7 +18,7 @@ class DlgSelectWorkspace(QtWidgets.QDialog):
         self.ui.setupUi(self)
         self.bt_ok = self.ui.buttonBox.button(self.ui.buttonBox.Ok)
         self.bt_edit = self.ui.buttonBox.button(self.ui.buttonBox.Apply)
-        self.bt_edit.setText('Edit workspaces')
+        self.bt_edit.setText(_('Edit workspaces'))
         self._load_workspaces()
         self.ui.list_workspaces.itemSelectionChanged.connect(
             self._on_selection_changed)

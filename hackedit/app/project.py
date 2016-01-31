@@ -167,7 +167,7 @@ class ProjectExplorer(QtCore.QObject):
         if not self._task_running:
             self._task_running = True
             directories = api.project.get_projects()
-            api.tasks.start('Indexing project files',
+            api.tasks.start(_('Indexing project files'),
                             scan_project_directories,
                             self._on_file_list_available,
                             args=(directories, self._get_ignored_patterns(),
@@ -203,16 +203,16 @@ class ProjectExplorer(QtCore.QObject):
         self._run_update_projects_model_thread()
         self._fs.context_menu.update_show_in_explorer_action()
         self._tab_bar_action_show_in_explorer.setText(
-            'Show in %s' % FileSystemContextMenu.get_file_explorer_name())
+            _('Show in %s') % FileSystemContextMenu.get_file_explorer_name())
         self._update_workspaces_menu()
         self.action_goto_anything.setShortcut(shortcuts.get(
-            'Goto anything', 'Ctrl+P'))
+            _('Goto anything'), 'Ctrl+P'))
         self.action_goto_symbol.setShortcut(shortcuts.get(
-            'Goto symbol', 'Ctrl+R'))
+            _('Goto symbol'), 'Ctrl+R'))
         self.action_goto_symbol_in_project.setShortcut(shortcuts.get(
-            'Goto symbol in project', 'Ctrl+Shift+R'))
+            _('Goto symbol in project'), 'Ctrl+Shift+R'))
         self.action_goto_line.setShortcut(shortcuts.get(
-            'Goto line', 'Ctrl+G'))
+            _('Goto line'), 'Ctrl+G'))
 
     def _on_file_list_available(self, status):
         self._task_running = False
@@ -220,17 +220,17 @@ class ProjectExplorer(QtCore.QObject):
             # too much file indexed, display a warning to let the user know
             # he should ignore some unwanted directories.
             event = api.events.Event(
-                'Project directory contains too much files for indexing...',
-                'You might want to mark the directories that contains '
-                'non-project files as ignored (<i>Project View -> Right click '
-                'on a directory -> Mark as ignored</i>)',
+                _('Project directory contains too much files for indexing...',
+                  'You might want to mark the directories that contains '
+                  'non-project files as ignored (<i>Project View -> Right '
+                  'click on a directory -> Mark as ignored</i>)'),
                 level=api.events.WARNING)
             api.events.post(event)
         self._window.project_files_available.emit()
         _logger().debug('project model updated')
 
     def _setup_tab_bar_context_menu(self, window):
-        text = 'Show in %s' % FileSystemContextMenu.get_file_explorer_name()
+        text = _('Show in %s') % FileSystemContextMenu.get_file_explorer_name()
         action = QtWidgets.QAction(text, window)
         action.setToolTip(text)
         action.setIcon(QtGui.QIcon.fromTheme('system-file-manager'))
@@ -245,13 +245,13 @@ class ProjectExplorer(QtCore.QObject):
         layout.setContentsMargins(3, 3, 3, 3)
         self._widget.setLayout(layout)
         dock = api.window.add_dock_widget(
-            self._widget, 'Project', QtGui.QIcon.fromTheme('folder'),
+            self._widget, _('Project'), QtGui.QIcon.fromTheme('folder'),
             QtCore.Qt.LeftDockWidgetArea)
         dock.show()
 
     def _setup_project_menu(self):
-        menu = api.window.get_menu('&View')
-        self.workspaces_menu = menu.addMenu('Workspace')
+        menu = api.window.get_menu(_('&View'))
+        self.workspaces_menu = menu.addMenu(_('Workspaces'))
         menu.addSeparator()
 
     def _update_workspaces_menu(self):
@@ -281,34 +281,34 @@ class ProjectExplorer(QtCore.QObject):
         QtCore.QTimer.singleShot(1, window.close)
 
     def _setup_locator(self):
-        menu = api.window.get_menu('&Goto')
-        self.action_goto_anything = menu.addAction('Goto anything...')
+        menu = api.window.get_menu(_('&Goto'))
+        self.action_goto_anything = menu.addAction(_('Goto anything...'))
         self.action_goto_anything.setShortcut(shortcuts.get(
-            'Goto anything', 'Ctrl+P'))
+            _('Goto anything'), 'Ctrl+P'))
         self._window.addAction(self.action_goto_anything)
         self.action_goto_anything.triggered.connect(self._goto_anything)
 
         menu.addSeparator()
 
-        self.action_goto_symbol = menu.addAction('Goto symbol...')
+        self.action_goto_symbol = menu.addAction(_('Goto symbol...'))
         self.action_goto_symbol.setShortcut(shortcuts.get(
-            'Goto symbol', 'Ctrl+R'))
+            _('Goto symbol'), 'Ctrl+R'))
         self._window.addAction(self.action_goto_symbol)
         self.action_goto_symbol.triggered.connect(self._goto_symbol)
 
         self.action_goto_symbol_in_project = menu.addAction(
-            'Goto symbol in project...')
+            _('Goto symbol in project...'))
         self.action_goto_symbol_in_project.setShortcut(shortcuts.get(
-            'Goto symbol in project', 'Ctrl+Shift+R'))
+            _('Goto symbol in project'), 'Ctrl+Shift+R'))
         self._window.addAction(self.action_goto_symbol_in_project)
         self.action_goto_symbol_in_project.triggered.connect(
             self._goto_symbol_in_project)
 
         menu.addSeparator()
 
-        self.action_goto_line = menu.addAction('Goto line')
+        self.action_goto_line = menu.addAction(_('Goto line'))
         self.action_goto_line.setShortcut(shortcuts.get(
-            'Goto line', 'Ctrl+G'))
+            _('Goto line'), 'Ctrl+G'))
         self._window.addAction(self.action_goto_line)
         self.action_goto_line.triggered.connect(self._goto_line)
 
@@ -362,13 +362,15 @@ class ProjectExplorer(QtCore.QObject):
             self._on_current_index_changed)
         bt_refresh = QtWidgets.QToolButton()
         bt_refresh.setIcon(QtGui.QIcon.fromTheme('view-refresh'))
-        bt_refresh.setToolTip('Refresh tree view and run project indexation')
+        bt_refresh.setToolTip(
+            _('Refresh tree view and run project indexation'))
         bt_refresh.clicked.connect(self._refresh)
         layout.addWidget(bt_refresh)
 
         bt_remove_project = QtWidgets.QToolButton()
         bt_remove_project.setIcon(QtGui.QIcon.fromTheme('list-remove'))
-        bt_remove_project.setToolTip('Remove project from view')
+        bt_remove_project.setToolTip(
+            _('Remove project from view'))
         bt_remove_project.clicked.connect(self._remove_current_project)
         layout.addWidget(bt_remove_project)
         self._widget_active_projects.setLayout(layout)
@@ -408,7 +410,8 @@ class ProjectExplorer(QtCore.QObject):
         context_menu = FileSystemContextMenu()
         self._fs.set_context_menu(context_menu)
         self.templates_menu = context_menu.menu_new.addSeparator()
-        self.templates_menu = context_menu.menu_new.addMenu('Templates')
+        self.templates_menu = context_menu.menu_new.addMenu(
+            _('Templates'))
         self.templates_menu.menuAction().setIcon(QtGui.QIcon.fromTheme(
             'folder-templates'))
         sources = {}
@@ -434,7 +437,7 @@ class ProjectExplorer(QtCore.QObject):
         self._fs.activated.connect(self._on_file_activated)
 
         self.action_mark_as_ignored = QtWidgets.QAction(
-            'Mark as ignored', self._fs)
+            _('Mark as ignored'), self._fs)
         self.action_mark_as_ignored.triggered.connect(
             self._on_mark_as_ignored)
         self.action_mark_as_ignored.setIcon(QtGui.QIcon.fromTheme(
@@ -446,15 +449,15 @@ class ProjectExplorer(QtCore.QObject):
             self._fs.context_menu.action_show_in_explorer)
 
         self.action_show_in_terminal = QtWidgets.QAction(
-            QtGui.QIcon.fromTheme('utilities-terminal'), 'Open in terminal',
-            self._fs)
+            QtGui.QIcon.fromTheme('utilities-terminal'),
+            _('Open in terminal'), self._fs)
         self.action_show_in_terminal.triggered.connect(
             self._on_show_in_terminal_triggered)
         self._fs.context_menu.addAction(self.action_show_in_terminal)
 
         self.action_open_in_browser = QtWidgets.QAction(
             QtGui.QIcon.fromTheme('applications-internet'),
-            'Open in web browser', self._fs)
+            _('Open in web browser'), self._fs)
         self.action_open_in_browser.triggered.connect(
             self._on_action_open_in_browser_triggered)
         self._fs.context_menu.addAction(self.action_open_in_browser)

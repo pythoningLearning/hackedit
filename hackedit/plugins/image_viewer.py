@@ -125,7 +125,8 @@ class _FileLoader:
         image = QtGui.QImage(path)
         if image.isNull():
             QtWidgets.QMessageBox.information(
-                self.viewer, "Image viewer", "Failed to load image %r." % path)
+                self.viewer, _("Image viewer"),
+                _("Failed to load image %r.") % path)
             return
 
         self.viewer.imageLabel.setPixmap(QtGui.QPixmap.fromImage(image))
@@ -138,7 +139,7 @@ class _FileLoader:
         ext = QtCore.QFileInfo(path).suffix().upper()
         depth = image.depth()
 
-        self.infos.setText('%dx%d %s (%d-bit color) %s' %
+        self.infos.setText(_('%dx%d %s (%d-bit color) %s') %
                            (w, h, ext, depth, size))
 
     def save(self, *_):
@@ -174,17 +175,17 @@ class _ImageViewer(QtWidgets.QWidget):
         hlayout = QtWidgets.QHBoxLayout()
         self._bt_zoom_in = QtWidgets.QPushButton()
         self._bt_zoom_in.setIcon(QtGui.QIcon.fromTheme('zoom-in'))
-        self._bt_zoom_in.setToolTip('Zoom in')
+        self._bt_zoom_in.setToolTip(_('Zoom in'))
         self._bt_zoom_in.clicked.connect(self._viewer.zoom_in)
         hlayout.addWidget(self._bt_zoom_in)
         self._bt_zoom_out = QtWidgets.QPushButton()
         self._bt_zoom_out.setIcon(QtGui.QIcon.fromTheme('zoom-out'))
-        self._bt_zoom_out.setToolTip('Zoom out')
+        self._bt_zoom_out.setToolTip(_('Zoom out'))
         self._bt_zoom_out.clicked.connect(self._viewer.zoom_out)
         hlayout.addWidget(self._bt_zoom_out)
         self._bt_zoom_original = QtWidgets.QPushButton()
         self._bt_zoom_original.setIcon(QtGui.QIcon.fromTheme('zoom-original'))
-        self._bt_zoom_original.setToolTip('Original size')
+        self._bt_zoom_original.setToolTip(_('Original size'))
         self._bt_zoom_original.clicked.connect(self._viewer.normal_size)
         hlayout.addWidget(self._bt_zoom_original)
         hlayout.addSpacerItem(QtWidgets.QSpacerItem(

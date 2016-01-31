@@ -266,14 +266,15 @@ class Application(QtCore.QObject):
         self.tray_icon.messageClicked.connect(self._restore_last_msg_window)
         self.tray_icon.activated.connect(self._restore_last_active_window)
         tray_icon_menu = QtWidgets.QMenu(None)
-        self.tray_icon_menu_windows = tray_icon_menu.addMenu('Restore window')
+        self.tray_icon_menu_windows = tray_icon_menu.addMenu(
+            _('Restore window'))
         self.tray_icon_menu_windows.setEnabled(False)
         self.tray_icon_menu_windows.setIcon(QtGui.QIcon.fromTheme(
             'view-restore'))
         tray_icon_menu.addSeparator()
         if not system.PLASMA_DESKTOP:
             # plasma desktop already adds a "quit" action automatically
-            action = tray_icon_menu.addAction('Quit')
+            action = tray_icon_menu.addAction(_('Quit'))
             action.setIcon(QtGui.QIcon.fromTheme('application-exit'))
             action.triggered.connect(self.quit)
         self.tray_icon.setContextMenu(tray_icon_menu)
@@ -307,10 +308,10 @@ class Application(QtCore.QObject):
             except Exception as e:
                 _logger().exception('Plugin activattion failed')
                 event = api.events.ExceptionEvent(
-                    '%r plugin activation failed' % plugin,
-                    'Failed to active plugin: %r. '
-                    'Either the plugin is missing or the plugin failed to '
-                    'load...' % plugin, e)
+                    _('%r plugin activation failed') % plugin,
+                    _('Failed to active plugin: %r. '
+                      'Either the plugin is missing or the plugin failed to '
+                      'load...') % plugin, e)
                 event.level = api.events.WARNING
                 win.notifications.add(event, force_show=True)
             else:
@@ -518,16 +519,16 @@ class Application(QtCore.QObject):
                     raise AttributeError
             except AttributeError:
                 msg_box = QtWidgets.QMessageBox()
-                msg_box.setWindowTitle('Unhandled exception')
-                msg_box.setText('An unhandled exception has occured...')
+                msg_box.setWindowTitle(_('Unhandled exception'))
+                msg_box.setText(_('An unhandled exception has occured...'))
                 msg_box.setInformativeText(
-                    'Would you like to report the bug to the developer?')
+                    _('Would you like to report the bug to the developer?'))
                 msg_box.setIcon(msg_box.Critical)
                 msg_box.setDetailedText(tb)
                 msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok |
                                            QtWidgets.QMessageBox.Cancel)
-                msg_box.button(msg_box.Ok).setText('Report')
-                msg_box.button(msg_box.Cancel).setText('Close')
+                msg_box.button(msg_box.Ok).setText(_('Report'))
+                msg_box.button(msg_box.Cancel).setText(_('Close'))
                 if msg_box.exec_() == msg_box.Ok:
                     common.report_bug(
                         None, title=title,
@@ -536,11 +537,11 @@ class Application(QtCore.QObject):
                         '...\n\n## Traceback\n\n```\n%s\n```' % tb)
             else:
                 action = QtWidgets.QAction(None)
-                action.setText('Restart HackEdit')
+                action.setText(_('Restart HackEdit'))
                 action.triggered.connect(self.restart)
                 ev = api.events.ExceptionEvent(
-                    title, 'An unhandled exception has occured: %r\n\n'
-                    'Please report!' % exc, exc, tb=tb,
+                    title, _('An unhandled exception has occured: %r\n\n'),
+                    _('Please report!') % exc, exc, tb=tb,
                     custom_actions=[action])
                 w.notifications.add(ev, False, True)
         except Exception:
