@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: hackedit 1.0a2.dev13\n"
+"Project-Id-Version: hackedit 1.0a2.dev14\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-31 19:32+0100\n"
+"POT-Creation-Date: 2016-01-31 19:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,6 +199,7 @@ msgid "An unhandled exception occured while opening file: %r"
 msgstr ""
 
 #: hackedit/app/main_window.py:352
+#: hackedit/extlibs/pyqode/core/widgets/encodings.py:100
 msgid "Encodings"
 msgstr ""
 
@@ -4133,6 +4134,7 @@ msgid "Replace All"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:181
+#: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:189
 msgid "Search"
 msgstr ""
 
@@ -4172,6 +4174,10 @@ msgstr ""
 msgid "Shift+F3"
 msgstr ""
 
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1099
+msgid "Advanced"
+msgstr ""
+
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1157
 msgid "Select all"
 msgstr ""
@@ -4201,6 +4207,14 @@ msgstr ""
 msgid "Case"
 msgstr ""
 
+#: hackedit/extlibs/pyqode/core/modes/cursor_history.py:42
+msgid "Cursor history"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/modes/extended_selection.py:78
+msgid "Select"
+msgstr ""
+
 #: hackedit/extlibs/pyqode/core/modes/filewatcher.py:167
 msgid "File changed"
 msgstr ""
@@ -4217,6 +4231,10 @@ msgstr ""
 msgid "There was a problem opening the file %r"
 msgstr ""
 
+#: hackedit/extlibs/pyqode/core/panels/folding.py:187
+msgid "Folding"
+msgstr ""
+
 #: hackedit/extlibs/pyqode/core/panels/folding.py:189
 msgid "Collapse"
 msgstr ""
@@ -4231,6 +4249,10 @@ msgstr ""
 
 #: hackedit/extlibs/pyqode/core/panels/folding.py:205
 msgid "Expand all"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:134
+msgid " Replace"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:567
@@ -4398,6 +4420,14 @@ msgstr ""
 msgid "No data"
 msgstr ""
 
+#: hackedit/extlibs/pyqode/core/widgets/prompt_line_edit.py:23
+msgid " Search"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/widgets/prompt_line_edit.py:35
+msgid "Clear"
+msgstr ""
+
 #: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:274
 #: hackedit/extlibs/pyqode/core/widgets/tabs.py:73
 msgid "Close others"
@@ -4424,6 +4454,14 @@ msgstr ""
 msgid "Split vertically"
 msgstr ""
 
+#: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:994
+msgid "All files (*)"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:996
+msgid "Save file as"
+msgstr ""
+
 #: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:1164
 msgid "Failed to save file as"
 msgstr ""
@@ -4433,6 +4471,15 @@ msgstr ""
 msgid ""
 "Failed to save file as %s\n"
 "Error=%s"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/widgets/tabs.py:144
+msgid "Choose destination path"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/widgets/tabs.py:307
+#, python-format
+msgid "Save as (%s)"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/python/modes/goto_assignements.py:187
