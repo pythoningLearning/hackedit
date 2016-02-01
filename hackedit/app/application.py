@@ -551,9 +551,9 @@ class Application(QtCore.QObject):
                 action.setText(_('Restart HackEdit'))
                 action.triggered.connect(self.restart)
                 ev = api.events.ExceptionEvent(
-                    title, _('An unhandled exception has occured: %r\n\n'),
-                    _('Please report!') % exc, exc, tb=tb,
-                    custom_actions=[action])
+                    title, _('An unhandled exception has occured: %r\n\n'
+                             'Please report!') % exc,
+                    exc, tb=tb, custom_actions=[action])
                 w.notifications.add(ev, False, True)
         except Exception:
             _logger().exception('exception in excepthook')
