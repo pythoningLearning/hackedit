@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: hackedit 1.0a2.dev14\n"
+"Project-Id-Version: hackedit 1.0a2.dev15\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-31 19:34+0100\n"
+"POT-Creation-Date: 2016-02-01 09:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,7 @@ msgid "Program running in external terminal"
 msgstr ""
 
 #: hackedit/api/interpreters.py:362 hackedit/api/interpreters.py:372
+#: hackedit/api/interpreters.py:419
 msgid "Run"
 msgstr ""
 
@@ -62,6 +63,10 @@ msgstr ""
 #: hackedit/api/interpreters.py:377
 #: hackedit/app/forms/dlg_script_run_config_ui.py:227
 msgid "Configurations"
+msgstr ""
+
+#: hackedit/api/interpreters.py:508
+msgid "Setup project run configurations"
 msgstr ""
 
 #: hackedit/api/interpreters.py:623
@@ -93,6 +98,10 @@ msgstr ""
 msgid "%s (%d occurrences)"
 msgstr ""
 
+#: hackedit/api/widgets.py:314
+msgid "Print run output"
+msgstr ""
+
 #: hackedit/api/widgets.py:350
 msgid "Process running"
 msgstr ""
@@ -109,11 +118,16 @@ msgstr ""
 msgid "Lock current tab"
 msgstr ""
 
+#: hackedit/api/widgets.py:551
+#, python-format
+msgid "Running %s %s"
+msgstr ""
+
 #: hackedit/app/application.py:270
 msgid "Restore window"
 msgstr ""
 
-#: hackedit/app/application.py:277 hackedit/app/main_window.py:991
+#: hackedit/app/application.py:277 hackedit/app/main_window.py:992
 #: hackedit/app/forms/welcome_window_ui.py:141
 msgid "Quit"
 msgstr ""
@@ -168,7 +182,7 @@ msgstr ""
 msgid "Create from template"
 msgstr ""
 
-#: hackedit/app/common.py:72 hackedit/app/main_window.py:979
+#: hackedit/app/common.py:72 hackedit/app/main_window.py:980
 msgid "Open directory"
 msgstr ""
 
@@ -180,6 +194,22 @@ msgstr ""
 msgid "This action has not been implemented yet..."
 msgstr ""
 
+#: hackedit/app/docks.py:200
+msgid "Dock manager left"
+msgstr ""
+
+#: hackedit/app/docks.py:207
+msgid "Dock manager right"
+msgstr ""
+
+#: hackedit/app/docks.py:214
+msgid "Dock manager bottom"
+msgstr ""
+
+#: hackedit/app/events.py:152
+msgid "Events"
+msgstr ""
+
 #: hackedit/app/indexor.py:118
 msgid "Indexing project symbols"
 msgstr ""
@@ -188,182 +218,180 @@ msgstr ""
 msgid "Indexing file symbols"
 msgstr ""
 
-#: hackedit/app/main_window.py:343
+#: hackedit/app/main_window.py:344
 #, python-format
 msgid "Failed to open file: %s"
 msgstr ""
 
-#: hackedit/app/main_window.py:344
+#: hackedit/app/main_window.py:345
 #, python-format
 msgid "An unhandled exception occured while opening file: %r"
 msgstr ""
 
-#: hackedit/app/main_window.py:352
+#: hackedit/app/main_window.py:353
 #: hackedit/extlibs/pyqode/core/widgets/encodings.py:100
 msgid "Encodings"
 msgstr ""
 
-#: hackedit/app/main_window.py:408 hackedit/app/main_window.py:419
-#: hackedit/app/main_window.py:432
+#: hackedit/app/main_window.py:409 hackedit/app/main_window.py:420
+#: hackedit/app/main_window.py:433
 msgid "Failed to save file"
 msgstr ""
 
-#: hackedit/app/main_window.py:607
+#: hackedit/app/main_window.py:608
 msgid "Confirm exit"
 msgstr ""
 
-#: hackedit/app/main_window.py:608
+#: hackedit/app/main_window.py:609
 msgid "Are you sure you want to exit HackEdit?"
 msgstr ""
 
-#: hackedit/app/main_window.py:756
+#: hackedit/app/main_window.py:757
 msgid "n/a"
 msgstr ""
 
-#: hackedit/app/main_window.py:907 hackedit/app/main_window.py:987
+#: hackedit/app/main_window.py:908 hackedit/app/main_window.py:988
 msgid "Open file"
 msgstr ""
 
-#: hackedit/app/main_window.py:977 hackedit/app/forms/welcome_window_ui.py:135
+#: hackedit/app/main_window.py:978 hackedit/app/forms/welcome_window_ui.py:135
 #: hackedit/app/forms/wizard_new_ui.py:107
 msgid "New"
 msgstr ""
 
-#: hackedit/app/main_window.py:981
+#: hackedit/app/main_window.py:982
 #: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:51
 #: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:1047
 msgid "Save"
 msgstr ""
 
-#: hackedit/app/main_window.py:983
+#: hackedit/app/main_window.py:984
 msgid "Save as"
 msgstr ""
 
-#: hackedit/app/main_window.py:985
+#: hackedit/app/main_window.py:986
 #: hackedit/extlibs/pyqode/core/dialogs/unsaved_files.py:57
 msgid "Save all"
 msgstr ""
 
-#: hackedit/app/main_window.py:989
+#: hackedit/app/main_window.py:990
 msgid "Close window"
 msgstr ""
 
-#: hackedit/app/main_window.py:994 hackedit/app/forms/dlg_preferences_ui.py:75
+#: hackedit/app/main_window.py:995 hackedit/app/forms/dlg_preferences_ui.py:75
 #: hackedit/app/forms/welcome_window_ui.py:144
 msgid "Preferences"
 msgstr ""
 
-#: hackedit/app/main_window.py:1003 hackedit/app/forms/main_window_ui.py:232
+#: hackedit/app/main_window.py:1004 hackedit/app/forms/main_window_ui.py:232
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: hackedit/app/main_window.py:1005
+#: hackedit/app/main_window.py:1006
 msgid "Toggle menu"
 msgstr ""
 
-#: hackedit/app/main_window.py:1007
+#: hackedit/app/main_window.py:1008
 msgid "Toggle toolbars"
 msgstr ""
 
-#: hackedit/app/main_window.py:1011
+#: hackedit/app/main_window.py:1012
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1106
 msgid "Undo"
 msgstr ""
 
-#: hackedit/app/main_window.py:1013
+#: hackedit/app/main_window.py:1014
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1116
 msgid "Redo"
 msgstr ""
 
-#: hackedit/app/main_window.py:1015
+#: hackedit/app/main_window.py:1016
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1126
 #: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:366
 #: hackedit/extlibs/pyqode/core/widgets/interactive.py:74
 msgid "Copy"
 msgstr ""
 
-#: hackedit/app/main_window.py:1017
+#: hackedit/app/main_window.py:1018
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1134
 msgid "Cut"
 msgstr ""
 
-#: hackedit/app/main_window.py:1019
+#: hackedit/app/main_window.py:1020
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1142
 #: hackedit/extlibs/pyqode/core/widgets/interactive.py:78
 msgid "Paste"
 msgstr ""
 
-#: hackedit/app/main_window.py:1021
+#: hackedit/app/main_window.py:1022
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1151
 msgid "Duplicate line"
 msgstr ""
 
-#: hackedit/app/main_window.py:1023 hackedit/app/project.py:215
+#: hackedit/app/main_window.py:1024 hackedit/app/project.py:215
 #: hackedit/app/project.py:309 hackedit/app/project.py:311
 msgid "Goto line"
 msgstr ""
 
-#: hackedit/app/main_window.py:1030 hackedit/plugins/find_replace.py:349
+#: hackedit/app/main_window.py:1031 hackedit/plugins/find_replace.py:118
+#: hackedit/plugins/find_replace.py:341 hackedit/plugins/find_replace.py:349
 msgid "Find"
 msgstr ""
 
-#: hackedit/app/main_window.py:1032
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:178
+#: hackedit/app/main_window.py:1033
 msgid "Replace"
 msgstr ""
 
-#: hackedit/app/main_window.py:1034
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:187
+#: hackedit/app/main_window.py:1035
 msgid "Find next"
 msgstr ""
 
-#: hackedit/app/main_window.py:1036
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:190
+#: hackedit/app/main_window.py:1037
 msgid "Find previous"
 msgstr ""
 
-#: hackedit/app/main_window.py:1043
+#: hackedit/app/main_window.py:1044
 msgid "Folding: collapse"
 msgstr ""
 
-#: hackedit/app/main_window.py:1045
+#: hackedit/app/main_window.py:1046
 msgid "Folding: expand"
 msgstr ""
 
-#: hackedit/app/main_window.py:1047
+#: hackedit/app/main_window.py:1048
 msgid "Folding: collapse all"
 msgstr ""
 
-#: hackedit/app/main_window.py:1049
+#: hackedit/app/main_window.py:1050
 msgid "Folding: expand all"
 msgstr ""
 
-#: hackedit/app/main_window.py:1057
+#: hackedit/app/main_window.py:1058
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:39
 msgid "Select word"
 msgstr ""
 
-#: hackedit/app/main_window.py:1059
+#: hackedit/app/main_window.py:1060
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:47
 msgid "Select extended word"
 msgstr ""
 
-#: hackedit/app/main_window.py:1061
+#: hackedit/app/main_window.py:1062
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:57
 msgid "Matched select"
 msgstr ""
 
-#: hackedit/app/main_window.py:1063
+#: hackedit/app/main_window.py:1064
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:66
 msgid "Select line"
 msgstr ""
 
-#: hackedit/app/main_window.py:1071
+#: hackedit/app/main_window.py:1072
 #: hackedit/extlibs/pyqode/core/modes/case_converter.py:45
 msgid "Convert to lower case"
 msgstr ""
 
-#: hackedit/app/main_window.py:1073
+#: hackedit/app/main_window.py:1074
 #: hackedit/extlibs/pyqode/core/modes/case_converter.py:47
 msgid "Convert to UPPER CASE"
 msgstr ""
@@ -462,6 +490,10 @@ msgstr ""
 #: hackedit/app/tasks.py:22
 #, python-format
 msgid "Task <%s> failed"
+msgstr ""
+
+#: hackedit/app/tasks.py:331
+msgid "Background tasks"
 msgstr ""
 
 #: hackedit/app/tasks.py:391
@@ -2263,9 +2295,6 @@ msgstr ""
 #: hackedit/app/forms/dlg_open_ui.py:43
 #: hackedit/app/forms/dlg_progress_ui.py:43
 #: hackedit/app/forms/dlg_run_process_ui.py:34
-#: hackedit/extlibs/pyqode/core/_forms/dlg_encodings_ui.py:54
-#: hackedit/extlibs/pyqode/core/_forms/dlg_unsaved_files_ui.py:37
-#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:53
 msgid "Dialog"
 msgstr ""
 
@@ -2282,7 +2311,6 @@ msgid "Replace with:"
 msgstr ""
 
 #: hackedit/app/forms/dlg_find_replace_ui.py:133
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:176
 msgid "Replacement text"
 msgstr ""
 
@@ -2655,9 +2683,6 @@ msgstr ""
 #: hackedit/app/forms/settings_page_workspaces_ui.py:137
 #: hackedit/app/forms/task_widget_ui.py:65
 #: hackedit/app/forms/terminal_widget_ui.py:39
-#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:59
-#: hackedit/extlibs/pyqode/core/_forms/pnl_read_only_ui.py:32
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:164
 msgid "Form"
 msgstr ""
 
@@ -3977,203 +4002,6 @@ msgstr ""
 msgid "Compute the PIC offset of the fields in the selected text"
 msgstr ""
 
-#: hackedit/extlibs/pyqode/core/_forms/dlg_encodings_ui.py:55
-#, python-format
-msgid ""
-"<html><head/><body><p><span style=\" font-"
-"weight:600;\">%s</span></p><p><span style=\" font-size:9pt;\">Please, "
-"choose another character encoding and try again.</span></p></body></html>"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_encodings_ui.py:56
-#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:61
-msgid "Character Encoding:"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:52
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1184
-msgid "Go to line"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:53
-msgid "You are here:"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:54
-#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:57
-msgid "1"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:55
-msgid "You want to go:"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:56
-msgid "You can't go further than:"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:106
-msgid "Edit preferred encodings"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:107
-msgid "Available encodings"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:108
-msgid "Add selected encoding to the list of preferred encodings"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:109
-msgid "Preferred encodings"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/dlg_unsaved_files_ui.py:38
-msgid "The following files have unsaved changes:"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:60
-#, python-format
-msgid ""
-"<html><head/><body><p><span style=\" font-"
-"weight:600;\">%s</span></p><p><span style=\" font-size:9pt;\">The file "
-"you opened has some invalid characters. If you continue editing this file"
-" you could corrupt this document. You can also choose another character "
-"encoding and try again.</span></p></body></html>"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:62
-msgid "Retry"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:63
-msgid "Edit Anyway"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:64
-msgid "Cancel"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/pnl_read_only_ui.py:33
-msgid ""
-"<html><head/><body><p>The file you opened is read-only.</p><p>Use "
-"&quot;save as&quot; or change the file's permission to edit the "
-"document...</p></body></html>"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:54
-msgid "Open files"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:55
-msgid "Sort alphabetically"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:57
-msgid "Filename"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:59
-msgid "Path"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:165
-msgid "Search term"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:166
-msgid "Select previous occurence"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:167
-msgid "Select next occurence"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:168
-msgid "Use a regular expression for search occurences"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:169
-msgid "Regex"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:170
-msgid "Enable case sensitive search"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:171
-msgid "Match case"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:172
-msgid "Search for whole words only"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:173
-msgid "Whole words"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:174
-msgid "In Selection"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:175
-msgid "0 matches"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:177
-msgid "Replace current occurence"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:179
-msgid "Replace all occurences"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:180
-msgid "Replace All"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:181
-#: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:189
-msgid "Search"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:182
-msgid "Show the search panel"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:183
-msgid "Ctrl+F"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:184
-msgid "Search and replace"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:185
-msgid "Show the search and replace panel"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:186
-msgid "Ctrl+R"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:188
-msgid "Find the next occurrence (downward)"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:189
-msgid "F3"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:191
-msgid "Find previous occurrence (upward)"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:192
-msgid "Shift+F3"
-msgstr ""
-
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1099
 msgid "Advanced"
 msgstr ""
@@ -4188,6 +4016,10 @@ msgstr ""
 
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1174
 msgid "Un-indent"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1184
+msgid "Go to line"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/dialogs/encodings.py:158
@@ -4253,6 +4085,10 @@ msgstr ""
 
 #: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:134
 msgid " Replace"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:189
+msgid "Search"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:567
@@ -4498,6 +4334,10 @@ msgstr ""
 msgid "Documentation not found"
 msgstr ""
 
+#: hackedit/plugins/documents.py:15
+msgid "Documents"
+msgstr ""
+
 #: hackedit/plugins/find_replace.py:35 hackedit/plugins/find_replace.py:36
 #: hackedit/plugins/find_replace.py:39 hackedit/plugins/find_replace.py:74
 msgid "Find in path"
@@ -4525,8 +4365,16 @@ msgstr ""
 msgid "searching for %r"
 msgstr ""
 
+#: hackedit/plugins/find_replace.py:339
+msgid "Find and replace"
+msgstr ""
+
 #: hackedit/plugins/find_replace.py:355
 msgid "Choose directory"
+msgstr ""
+
+#: hackedit/plugins/html_preview.py:15
+msgid "HTML Preview"
 msgstr ""
 
 #: hackedit/plugins/image_viewer.py:128
@@ -4559,8 +4407,16 @@ msgstr ""
 msgid "Lock view"
 msgstr ""
 
+#: hackedit/plugins/outline.py:47
+msgid "Outline"
+msgstr ""
+
 #: hackedit/plugins/outline.py:89
 msgid "Unlock view"
+msgstr ""
+
+#: hackedit/plugins/terminal.py:28
+msgid "Terminal"
 msgstr ""
 
 #: hackedit/plugins/terminal.py:78
