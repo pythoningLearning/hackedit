@@ -14,7 +14,6 @@ if not EXTLIBS_PATH:
     EXTLIBS_PATH = os.path.join(os.path.dirname(hackedit.__file__), 'extlibs')
     os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
 sys.path.insert(0, EXTLIBS_PATH)
-os.environ['QT_API'] = 'pyqt5'
 
 from hackedit import __version__                 # noqa
 from hackedit.api.gettext import translation     # noqa
