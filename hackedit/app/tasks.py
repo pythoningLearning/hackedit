@@ -328,7 +328,7 @@ class TaskListPopup(QtWidgets.QDialog):
     """
     def __init__(self, parent, task_manager):
         super().__init__(parent)
-        self.setWindowTitle('Background tasks')
+        self.setWindowTitle(_('Background tasks'))
         self.setContentsMargins(0, 0, 0, 0)
         layout = QtWidgets.QHBoxLayout()
         self.scroll_area = QtWidgets.QScrollArea()

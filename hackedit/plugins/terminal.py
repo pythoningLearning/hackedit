@@ -25,7 +25,7 @@ class Terminal(api.plugins.WorkspacePlugin):
         self.widget = _Terminal(api.window.get_main_window())
         self.widget.apply_preferences()
         dock = api.window.add_dock_widget(
-            self.widget, 'Terminal', QtGui.QIcon.fromTheme(
+            self.widget, _('Terminal'), QtGui.QIcon.fromTheme(
                 'utilities-terminal'),
             QtCore.Qt.BottomDockWidgetArea)
         dock.hide()

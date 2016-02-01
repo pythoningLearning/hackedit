@@ -416,7 +416,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
     def _create_dock(self):
         self._run_widget = widgets.RunWidget(self._window)
         self._dock_run = window.add_dock_widget(
-            self._run_widget, 'Run', special_icons.run_icon(),
+            self._run_widget, _('Run'), special_icons.run_icon(),
             QtCore.Qt.BottomDockWidgetArea)
         self._run_widget.last_tab_closed.connect(self._remove_dock)
 
@@ -505,7 +505,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
     def _setup_ui(self):
         self._ui = dlg_script_run_config_ui.Ui_Dialog()
         self._ui.setupUi(self)
-        self.setWindowTitle('Setup project run configurations')
+        self.setWindowTitle(_('Setup project run configurations'))
 
     def _show_project_configs(self, path):
         if self._current_project:

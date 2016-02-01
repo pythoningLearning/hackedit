@@ -44,7 +44,7 @@ class DocumentOutline(plugins.WorkspacePlugin):
         layout.setContentsMargins(3, 3, 3, 3)
         self._widget.setLayout(layout)
         dock = api.window.add_dock_widget(
-            self._widget, 'Outline', special_icons.class_icon(),
+            self._widget, _('Outline'), special_icons.class_icon(),
             QtCore.Qt.RightDockWidgetArea)
         dock.hide()
         self._window.current_tab_changed.connect(self._on_current_tab_changed)

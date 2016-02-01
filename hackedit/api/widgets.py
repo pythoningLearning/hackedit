@@ -311,7 +311,7 @@ class RunWidget(QtWidgets.QWidget):
     def _print(self):
         printer = QtPrintSupport.QPrinter()
         dialog = QtPrintSupport.QPrintDialog(printer, self)
-        dialog.setWindowTitle('Print run output')
+        dialog.setWindowTitle(_('Print run output'))
         if dialog.exec_() == dialog.Accepted:
             tab = self._tabs[self.ui.tabWidget.currentIndex()]
             tab.document().print(printer)
@@ -548,7 +548,7 @@ class DlgRunProcess(QtWidgets.QDialog):
     def run_process(cls, parent, program, arguments=[], cwd=None, env=None,
                     autoclose=False):
         dlg = cls(parent, autoclose=autoclose)
-        dlg.setWindowTitle('Running %s %s' % (program, ' '.join(arguments)))
+        dlg.setWindowTitle(_('Running %s %s') % (program, ' '.join(arguments)))
         dlg.ui.console.start_process(program, args=arguments, cwd=cwd, env=env)
         ret = dlg.exec_()
         return dlg.ui.console.process.exitCode() == 0 and ret == cls.Accepted

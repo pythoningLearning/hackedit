@@ -115,7 +115,7 @@ class FindReplace(plugins.WorkspacePlugin):
 
         # Dock widget
         self._dock = window.add_dock_widget(
-            self._find_widget, 'Find', QtGui.QIcon.fromTheme('edit-find'),
+            self._find_widget, _('Find'), QtGui.QIcon.fromTheme('edit-find'),
             QtCore.Qt.BottomDockWidgetArea)
         self._find_results_widget.itemActivated.connect(
             self._on_item_activated)
@@ -336,9 +336,9 @@ class _DlgFindReplace(QtWidgets.QDialog):
         self._ui.setupUi(self)
         data = _last_search_data()
         if enable_replace:
-            self.setWindowTitle('Find and replace')
+            self.setWindowTitle(_('Find and replace'))
         else:
-            self.setWindowTitle('Find')
+            self.setWindowTitle(_('Find'))
         self._ui.checkbox_case_sensitive.setChecked(data['case_sensitive'])
         self._ui.checkbox_whole_words.setChecked(data['whole_words_only'])
         self._ui.checkbox_regexp.setChecked(data['regex'])

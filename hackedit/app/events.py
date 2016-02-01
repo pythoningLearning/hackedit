@@ -149,7 +149,7 @@ class Manager(QtCore.QObject):
         self._history.contents_cleared.connect(self._on_content_cleared)
         # custom dock widget
         self.dock = api.window.add_dock_widget(
-            self._history, 'Events', QtGui.QIcon.fromTheme(
+            self._history, _('Events'), QtGui.QIcon.fromTheme(
                 'preferences-desktop-notification'), special=True)
         api.signals.connect_slot(api.signals.STATE_RESTORED,
                                  self.dock.hide)
