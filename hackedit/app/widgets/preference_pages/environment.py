@@ -55,7 +55,7 @@ class Environment(PreferencePage):
             self._check_cmd)
         self.ui.edit_browser_command.textChanged.connect(self._check_cmd)
 
-    def _check_cmd(self, *_, sender=None):
+    def _check_cmd(self, *__, sender=None):
         if sender is None:
             sender = self.sender()
         try:
