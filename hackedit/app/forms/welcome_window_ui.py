@@ -125,8 +125,8 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         MainWindow.setWindowTitle(_("Welcome to HackEdit"))
         self.list_recents.setToolTip(_("The list of recent documents/projects"))
         self.label_version.setText(_("Version %s"))

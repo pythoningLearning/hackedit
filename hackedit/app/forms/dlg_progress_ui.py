@@ -38,8 +38,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Dialog"))
         self.pushButton.setToolTip(_("Cancel operation"))
         self.label.setText(_("Operation in progress..."))

@@ -41,8 +41,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Add source"))
         self.label.setText(_("Label:"))
         self.edit_label.setToolTip(_("Give a meaningfull name to this source so that you can recognize it."))

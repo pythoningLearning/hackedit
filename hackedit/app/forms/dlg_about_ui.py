@@ -139,8 +139,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("About HackEdit"))
         self.lbl_icon.setText(_("<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
         self.lbl_version.setText(_("<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" font-weight:600;\">v%s</span></p></body></html>"))

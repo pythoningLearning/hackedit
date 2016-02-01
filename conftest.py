@@ -26,8 +26,8 @@ QtWidgets.qApp.setApplicationDisplayName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationName('HackEdit-TestSuite')
 
 
-from hackedit.api.gettext import translation  # noqa
-translation()
+from hackedit.api.gettext import get_translation  # noqa
+get_translation()
 
 
 for pth in ['tests/data/FooBarProj/.hackedit',

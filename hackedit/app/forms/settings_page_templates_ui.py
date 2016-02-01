@@ -119,8 +119,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.lbl_git_not_found.setText(_("<html><head/><body><p align=\"center\">Git not found in PATH, Sync will not work!</p></body></html>"))
         self.groupBox_2.setTitle(_("Sources"))

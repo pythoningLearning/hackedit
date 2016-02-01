@@ -44,8 +44,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Mark as ignored"))
         self.rb_explicit.setToolTip(_("Ignore explicitely"))
         self.rb_explicit.setText(_("I&gnore explicitely (e.g. \'file.obj\')"))

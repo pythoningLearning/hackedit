@@ -40,8 +40,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Terminal history"))
         self.listWidget.setToolTip(_("The list of terminal commands"))
         self.bt_remove.setToolTip(_("Remove the selected entry from history"))

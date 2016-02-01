@@ -102,8 +102,8 @@ class Ui_Wizard(object):
         Wizard.setTabOrder(self.edit_prj_path, self.bt_select_prj_path)
 
     def retranslateUi(self, Wizard):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Wizard.setWindowTitle(_("New"))
         self.wizardPageHome.setTitle(_("Select template"))
         self.wizardPageHome.setSubTitle(_("Select a project or a single file template"))

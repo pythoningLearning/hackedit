@@ -15,7 +15,7 @@ from pyqode.core.api.utils import memoized
 @memoized
 def get_available_locales():
     """
-    Gets the list of available locales (the one for which a translation is
+    Gets the list of available locales (the one for which a get_translation is
     available)
     """
     ret_val = set()
@@ -28,7 +28,7 @@ def get_available_locales():
     return ret_val
 
 
-def current_locale():
+def get_locale():
     """
     Gets the current locale defined in the application settings
     """
@@ -36,25 +36,32 @@ def current_locale():
     return QtCore.QSettings().value('env/locale', default)
 
 
-def translation(package='hackedit'):
+def set_locale(locale):
     """
-    Gets the translation function for the language selected by the user.
+    Sets the application locale
+    """
+    QtCore.QSettings().setValue('env/locale', locale)
+
+
+def get_translation(package='hackedit'):
+    """
+    Gets the get_translation function for the language selected by the user.
 
     Use this function at the top of each of your plugin modules::
 
-        from hackedit.api.gettext import translation
-        _ = translation(package='hackedit-python')
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package='hackedit-python')
         _('translatable string')
 
-    :param package: Name of the package to get the translation for...
+    :param package: Name of the package to get the get_translation for...
 
-    :returns: None if package == 'hackedit' otherwise return the translation
-              function usable directly in your module.
+    :returns: None if package == 'hackedit' otherwise return the
+        get_translation function usable directly in your module.
     """
     locale_dir = os.path.join(sys.prefix, 'share', 'locale')
     try:
         t = gettext.translation(package, localedir=locale_dir,
-                                languages=[current_locale()])
+                                languages=[get_locale()])
         if package == 'hackedit':
             # we can install globally
             t.install()
@@ -84,8 +91,8 @@ def hackedit_gettext_hook(ui_script_path):
     package_name = cfg.package_name
     content = content.replace(
         '        _translate = QtCore.QCoreApplication.translate',
-        '        from hackedit.api.gettext import translation\n'
-        '        _ = translation(package="%s")' % package_name)
+        '        from hackedit.api.gettext import get_translation\n'
+        '        _ = get_translation(package="%s")' % package_name)
 
     with open(ui_script_path, 'w') as fout:
         fout.write(content)

@@ -52,35 +52,46 @@ class Application(QtCore.QObject):
                         msg, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                         QtCore.Qt.white)
                     qapp.processEvents()
+
         self._closed = False
         self._args = args
         self._qapp = qapp
         self._splash = splash
         super().__init__()
         _shared._APP = self
-        environ.apply()
-        shortcuts.load()
-        show_msg_on_splash('Setting up log file...')
-        show_msg_on_splash('Setting up except hook...')
+        self._editor_windows = []
+        show_msg_on_splash(_('Setting up except hook...'))
         self._report_exception_requested.connect(self._report_exception)
         self._old_except_hook = sys.excepthook
         sys.excepthook = self._except_hook
-        self._editor_windows = []
 
-        show_msg_on_splash('Loading fonts...')
+        show_msg_on_splash(_('Loading translations...'))
+        _logger().info('available locales: %r',
+                       api.gettext.get_available_locales())
+
+        show_msg_on_splash(_('Loading environemnt...'))
+        environ.apply()
+
+        show_msg_on_splash(_('Loading shortcuts...'))
+        shortcuts.load()
+
+        show_msg_on_splash(_('Loading font: Hack-Bold.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-Bold.ttf')
+        show_msg_on_splash(_('Loading font: Hack-BoldItalic.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-BoldItalic.ttf')
+        show_msg_on_splash(_('Loading font: Hack-Italic.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-Italic.ttf')
+        show_msg_on_splash(_('Loading font: Hack-Regular.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-Regular.ttf')
 
-        show_msg_on_splash('Setting up mimetypes...')
+        show_msg_on_splash(_('Setting up mimetypes...'))
         mime_types.load()
 
-        show_msg_on_splash('Setting up user interface...')
+        show_msg_on_splash(_('Setting up user interface...'))
         self._qapp.setWindowIcon(QtGui.QIcon.fromTheme(
             'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self._qapp.lastWindowClosed.connect(self.quit)
@@ -88,17 +99,17 @@ class Application(QtCore.QObject):
         self._setup_tray_icon()
         self.apply_preferences()
 
-        show_msg_on_splash('Loading plugins...')
+        show_msg_on_splash(_('Loading plugins...'))
         self.plugin_manager = PluginManager()
 
-        show_msg_on_splash('Setting up templates...')
+        show_msg_on_splash(_('Setting up templates...'))
         self.setup_templates()
 
-        show_msg_on_splash('Loading recent files...')
+        show_msg_on_splash(_('Loading recent files...'))
         self._recents = RecentFilesManager(
             qapp.organizationName(), qapp.applicationName())
 
-        show_msg_on_splash('Setting up welcome window...')
+        show_msg_on_splash(_('Setting up welcome window...'))
         self._welcome_window = WelcomeWindow(self)
         self._last_window = self._welcome_window
 

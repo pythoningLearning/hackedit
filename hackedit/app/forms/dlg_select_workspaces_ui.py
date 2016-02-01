@@ -43,8 +43,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Select workspace"))
         self.groupBox.setTitle(_("Select a workspace"))
         self.list_workspaces.setToolTip(_("The list of available workspaces."))

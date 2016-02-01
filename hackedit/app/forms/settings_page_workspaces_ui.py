@@ -132,8 +132,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.groupBox.setTitle(_("Workspaces"))
         self.bt_add_workspace.setToolTip(_("Add a new empty workspace"))

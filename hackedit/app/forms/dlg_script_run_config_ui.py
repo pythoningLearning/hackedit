@@ -217,8 +217,8 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.bt_rm_env_var, self.list_configs)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Python run configuration"))
         self.label_prj_interpreter.setText(_("Project interpreter:"))
         self.combo_prj_interpreter.setToolTip(_("Select project interpreter"))

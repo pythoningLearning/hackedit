@@ -70,8 +70,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         Form.setToolTip(_("Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))
         self.cb_allow_system_tray.setToolTip(_("If checked, the IDE notifications will be shown through the system tray icon (or libnotify on GNU/Linux)."))

@@ -153,18 +153,18 @@ Dependencies
 
 **Optional dependencies**:
 
-- `dill`_   (improved pickle)
-- `pyyaml`_ (if your templates use boss.yml instead of boss.json)
+- `babel`_  (to see translated language name instead of the language code in the application preferences)
 - `PyGObject`_ and `libnotify`_ on GNU/Linux for nicer notifications on gtk based desktops.
 
 
-The following dependencies are include in a zip archive and do not need to
-be installed by the user.
+The following dependencies are bundled with the hackedit package:
 
 - `pyqode.qt`_
 - `pyqode.core`_
 - `pyqode.cobol`_
 - `pyqode.python`_
+- `pyqode.rst`_
+- `pyqode.json`_
 - `pygments`_
 - `future`_
 - `pep8`_
@@ -173,6 +173,7 @@ be installed by the user.
 - `boss`_
 - `cement`_
 - `qdarkstyle`_
+- `restructuredtext_lint`_
 
 Plugins
 =======
@@ -328,14 +329,13 @@ OSX
 .. _setuptools: https://pypi.python.org/pypi/setuptools
 .. _pip: https://pypi.python.org/pypi/pip
 
-.. _dill: https://pypi.python.org/pypi/dill
-.. _pyyaml: https://pypi.python.org/pypi/pyyaml
-
 .. _pyQode: https://github.com/pyQode/pyQode
 .. _pyqode.qt: https://github.com/pyQode/pyqode.qt
 .. _pyqode.core: https://github.com/pyQode/pyqode.core
 .. _pyqode.python: https://github.com/pyQode/pyqode.python
 .. _pyqode.cobol: https://github.com/pyQode/pyqode.cobol
+.. _pyqode.rst: https://github.com/pyQode/pyqode.rst
+.. _pyqode.json: https://github.com/pyQode/pyqode.json
 
 .. _pygments: https://pypi.python.org/pypi/pygments
 .. _future: https://pypi.python.org/pypi/future
@@ -345,12 +345,15 @@ OSX
 .. _boss: https://pypi.python.org/pypi/boss
 .. _cement: https://pypi.python.org/pypi/cement
 .. _qdarkstyle: https://pypi.python.org/pypi/cement
+.. _restructuredtext_lint: https://pypi.python.org/pypi/restructuredtext_lint
 .. _git: https://git-scm.com/
 .. _Python 3.4: https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi
 .. _PyQt5 for Python 3.4: http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.5.1/PyQt5-5.5.1-gpl-Py3.4-Qt5.5.1-x32.exe?r=&ts=1446908240&use_mirror=heanet
 .. _Git for Windows: https://git-scm.com/download/win
 .. _PyGObject: https://wiki.gnome.org/Projects/PyGObject
 .. _libnotify: http://www.linuxfromscratch.org/blfs/view/svn/x/libnotify.html
+.. _babel: https://github.com/python-babel/babel
+
 
 .. _Hack: https://github.com/chrissimpkins/Hack
 .. _Breeze: https://github.com/NitruxSA/breeze-icon-theme

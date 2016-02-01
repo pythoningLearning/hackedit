@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hackedit 1.0a2.dev15\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-01 09:52+0100\n"
+"POT-Creation-Date: 2016-02-01 12:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
+
+#: hackedit/main.py:113
+msgid "Loading application module"
+msgstr ""
 
 #: hackedit/api/events.py:78
 msgid "Don't show again"
@@ -26,7 +30,7 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: hackedit/api/events.py:104 hackedit/app/application.py:530
+#: hackedit/api/events.py:104 hackedit/app/application.py:541
 msgid "Report"
 msgstr ""
 
@@ -51,35 +55,35 @@ msgstr ""
 msgid "Program running in external terminal"
 msgstr ""
 
-#: hackedit/api/interpreters.py:362 hackedit/api/interpreters.py:372
-#: hackedit/api/interpreters.py:419
+#: hackedit/api/interpreters.py:363 hackedit/api/interpreters.py:374
+#: hackedit/api/interpreters.py:421
 msgid "Run"
 msgstr ""
 
-#: hackedit/api/interpreters.py:364
+#: hackedit/api/interpreters.py:365
 msgid "Configure"
 msgstr ""
 
-#: hackedit/api/interpreters.py:377
+#: hackedit/api/interpreters.py:379
 #: hackedit/app/forms/dlg_script_run_config_ui.py:227
 msgid "Configurations"
 msgstr ""
 
-#: hackedit/api/interpreters.py:508
+#: hackedit/api/interpreters.py:510
 msgid "Setup project run configurations"
 msgstr ""
 
-#: hackedit/api/interpreters.py:623
+#: hackedit/api/interpreters.py:625
 #, python-format
 msgid "Choose %s script"
 msgstr ""
 
-#: hackedit/api/interpreters.py:624
+#: hackedit/api/interpreters.py:626
 #, python-format
 msgid "%s files (%s)"
 msgstr ""
 
-#: hackedit/api/interpreters.py:639
+#: hackedit/api/interpreters.py:641
 msgid "Choose the working directory"
 msgstr ""
 
@@ -123,58 +127,114 @@ msgstr ""
 msgid "Running %s %s"
 msgstr ""
 
-#: hackedit/app/application.py:270
+#: hackedit/app/application.py:63
+msgid "Setting up except hook..."
+msgstr ""
+
+#: hackedit/app/application.py:68
+msgid "Loading translations..."
+msgstr ""
+
+#: hackedit/app/application.py:72
+msgid "Loading environemnt..."
+msgstr ""
+
+#: hackedit/app/application.py:75
+msgid "Loading shortcuts..."
+msgstr ""
+
+#: hackedit/app/application.py:78
+msgid "Loading font: Hack-Bold.ttf"
+msgstr ""
+
+#: hackedit/app/application.py:81
+msgid "Loading font: Hack-BoldItalic.ttf"
+msgstr ""
+
+#: hackedit/app/application.py:84
+msgid "Loading font: Hack-Italic.ttf"
+msgstr ""
+
+#: hackedit/app/application.py:87
+msgid "Loading font: Hack-Regular.ttf"
+msgstr ""
+
+#: hackedit/app/application.py:91
+msgid "Setting up mimetypes..."
+msgstr ""
+
+#: hackedit/app/application.py:94
+msgid "Setting up user interface..."
+msgstr ""
+
+#: hackedit/app/application.py:102
+msgid "Loading plugins..."
+msgstr ""
+
+#: hackedit/app/application.py:105
+msgid "Setting up templates..."
+msgstr ""
+
+#: hackedit/app/application.py:108
+msgid "Loading recent files..."
+msgstr ""
+
+#: hackedit/app/application.py:112
+msgid "Setting up welcome window..."
+msgstr ""
+
+#: hackedit/app/application.py:281
 msgid "Restore window"
 msgstr ""
 
-#: hackedit/app/application.py:277 hackedit/app/main_window.py:992
+#: hackedit/app/application.py:288 hackedit/app/main_window.py:992
 #: hackedit/app/forms/welcome_window_ui.py:141
 msgid "Quit"
 msgstr ""
 
-#: hackedit/app/application.py:311
+#: hackedit/app/application.py:322
 #, python-format
 msgid "%r plugin activation failed"
 msgstr ""
 
-#: hackedit/app/application.py:312
+#: hackedit/app/application.py:323
 #, python-format
 msgid ""
 "Failed to active plugin: %r. Either the plugin is missing or the plugin "
 "failed to load..."
 msgstr ""
 
-#: hackedit/app/application.py:522
+#: hackedit/app/application.py:533
 msgid "Unhandled exception"
 msgstr ""
 
-#: hackedit/app/application.py:523
+#: hackedit/app/application.py:534
 msgid "An unhandled exception has occured..."
 msgstr ""
 
-#: hackedit/app/application.py:525
+#: hackedit/app/application.py:536
 msgid "Would you like to report the bug to the developer?"
 msgstr ""
 
-#: hackedit/app/application.py:531 hackedit/app/forms/locator_ui.py:53
+#: hackedit/app/application.py:542 hackedit/app/forms/locator_ui.py:53
 #: hackedit/extlibs/pyqode/core/widgets/splittable_tab_widget.py:273
 #: hackedit/extlibs/pyqode/core/widgets/tabs.py:72
 #: hackedit/plugins/find_replace.py:102
 msgid "Close"
 msgstr ""
 
-#: hackedit/app/application.py:540
+#: hackedit/app/application.py:551
 msgid "Restart HackEdit"
 msgstr ""
 
-#: hackedit/app/application.py:543
+#: hackedit/app/application.py:554
 #, python-format
 msgid ""
 "An unhandled exception has occured: %r\n"
 "\n"
 msgstr ""
 
-#: hackedit/app/application.py:544
+#: hackedit/app/application.py:555
 msgid "Please report!"
 msgstr ""
 
@@ -328,8 +388,8 @@ msgstr ""
 msgid "Duplicate line"
 msgstr ""
 
-#: hackedit/app/main_window.py:1024 hackedit/app/project.py:215
-#: hackedit/app/project.py:309 hackedit/app/project.py:311
+#: hackedit/app/main_window.py:1024 hackedit/app/project.py:216
+#: hackedit/app/project.py:311 hackedit/app/project.py:313
 msgid "Goto line"
 msgstr ""
 
@@ -339,14 +399,17 @@ msgid "Find"
 msgstr ""
 
 #: hackedit/app/main_window.py:1033
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:178
 msgid "Replace"
 msgstr ""
 
 #: hackedit/app/main_window.py:1035
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:187
 msgid "Find next"
 msgstr ""
 
 #: hackedit/app/main_window.py:1037
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:190
 msgid "Find previous"
 msgstr ""
 
@@ -362,36 +425,36 @@ msgstr ""
 msgid "Folding: collapse all"
 msgstr ""
 
-#: hackedit/app/main_window.py:1050
+#: hackedit/app/main_window.py:1051
 msgid "Folding: expand all"
 msgstr ""
 
-#: hackedit/app/main_window.py:1058
+#: hackedit/app/main_window.py:1060
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:39
 msgid "Select word"
 msgstr ""
 
-#: hackedit/app/main_window.py:1060
+#: hackedit/app/main_window.py:1062
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:47
 msgid "Select extended word"
 msgstr ""
 
-#: hackedit/app/main_window.py:1062
+#: hackedit/app/main_window.py:1065
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:57
 msgid "Matched select"
 msgstr ""
 
-#: hackedit/app/main_window.py:1064
+#: hackedit/app/main_window.py:1067
 #: hackedit/extlibs/pyqode/core/modes/extended_selection.py:66
 msgid "Select line"
 msgstr ""
 
-#: hackedit/app/main_window.py:1072
+#: hackedit/app/main_window.py:1075
 #: hackedit/extlibs/pyqode/core/modes/case_converter.py:45
 msgid "Convert to lower case"
 msgstr ""
 
-#: hackedit/app/main_window.py:1074
+#: hackedit/app/main_window.py:1077
 #: hackedit/extlibs/pyqode/core/modes/case_converter.py:47
 msgid "Convert to UPPER CASE"
 msgstr ""
@@ -410,80 +473,80 @@ msgstr ""
 msgid "Indexing project files"
 msgstr ""
 
-#: hackedit/app/project.py:206 hackedit/app/project.py:233
+#: hackedit/app/project.py:206 hackedit/app/project.py:234
 #: hackedit/extlibs/pyqode/core/widgets/filesystem_treeview.py:642
 #, python-format
 msgid "Show in %s"
 msgstr ""
 
-#: hackedit/app/project.py:209 hackedit/app/project.py:287
+#: hackedit/app/project.py:209 hackedit/app/project.py:288
 msgid "Goto anything"
 msgstr ""
 
-#: hackedit/app/project.py:211 hackedit/app/project.py:295
+#: hackedit/app/project.py:211 hackedit/app/project.py:296
 msgid "Goto symbol"
 msgstr ""
 
-#: hackedit/app/project.py:213 hackedit/app/project.py:302
+#: hackedit/app/project.py:213 hackedit/app/project.py:303
 msgid "Goto symbol in project"
 msgstr ""
 
-#: hackedit/app/project.py:223
+#: hackedit/app/project.py:224
 msgid "Project directory contains too much files for indexing..."
 msgstr ""
 
-#: hackedit/app/project.py:248
+#: hackedit/app/project.py:249
 msgid "Project"
 msgstr ""
 
-#: hackedit/app/project.py:253 hackedit/app/forms/main_window_ui.py:192
+#: hackedit/app/project.py:254 hackedit/app/forms/main_window_ui.py:192
 msgid "&View"
 msgstr ""
 
-#: hackedit/app/project.py:254
+#: hackedit/app/project.py:255
 #: hackedit/app/forms/settings_page_workspaces_ui.py:138
 #: hackedit/app/widgets/preference_pages/workspaces.py:22
 msgid "Workspaces"
 msgstr ""
 
-#: hackedit/app/project.py:284
+#: hackedit/app/project.py:285
 msgid "&Goto"
 msgstr ""
 
-#: hackedit/app/project.py:285
+#: hackedit/app/project.py:286
 msgid "Goto anything..."
 msgstr ""
 
-#: hackedit/app/project.py:293
+#: hackedit/app/project.py:294
 msgid "Goto symbol..."
 msgstr ""
 
-#: hackedit/app/project.py:300
+#: hackedit/app/project.py:301
 msgid "Goto symbol in project..."
 msgstr ""
 
-#: hackedit/app/project.py:366
+#: hackedit/app/project.py:368
 msgid "Refresh tree view and run project indexation"
 msgstr ""
 
-#: hackedit/app/project.py:373
+#: hackedit/app/project.py:375
 msgid "Remove project from view"
 msgstr ""
 
-#: hackedit/app/project.py:414 hackedit/app/forms/wizard_new_ui.py:112
+#: hackedit/app/project.py:416 hackedit/app/forms/wizard_new_ui.py:112
 #: hackedit/app/widgets/preference_pages/templates.py:24
 msgid "Templates"
 msgstr ""
 
-#: hackedit/app/project.py:440 hackedit/app/forms/dlg_ignore_file_ui.py:49
+#: hackedit/app/project.py:442 hackedit/app/forms/dlg_ignore_file_ui.py:49
 msgid "Mark as ignored"
 msgstr ""
 
-#: hackedit/app/project.py:453
+#: hackedit/app/project.py:455
 msgid "Open in terminal"
 msgstr ""
 
-#: hackedit/app/project.py:460
+#: hackedit/app/project.py:462
 msgid "Open in web browser"
 msgstr ""
 
@@ -2295,6 +2358,9 @@ msgstr ""
 #: hackedit/app/forms/dlg_open_ui.py:43
 #: hackedit/app/forms/dlg_progress_ui.py:43
 #: hackedit/app/forms/dlg_run_process_ui.py:34
+#: hackedit/extlibs/pyqode/core/_forms/dlg_encodings_ui.py:54
+#: hackedit/extlibs/pyqode/core/_forms/dlg_unsaved_files_ui.py:37
+#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:53
 msgid "Dialog"
 msgstr ""
 
@@ -2311,6 +2377,7 @@ msgid "Replace with:"
 msgstr ""
 
 #: hackedit/app/forms/dlg_find_replace_ui.py:133
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:176
 msgid "Replacement text"
 msgstr ""
 
@@ -2566,8 +2633,8 @@ msgstr ""
 #: hackedit/app/forms/dlg_terminal_history_ui.py:48
 #: hackedit/app/forms/event_history_widget_ui.py:52
 #: hackedit/app/forms/locator_ui.py:52 hackedit/app/forms/locator_ui.py:54
-#: hackedit/app/forms/settings_page_environment_ui.py:183
-#: hackedit/app/forms/settings_page_environment_ui.py:185
+#: hackedit/app/forms/settings_page_environment_ui.py:191
+#: hackedit/app/forms/settings_page_environment_ui.py:193
 #: hackedit/app/forms/settings_page_notifications_ui.py:89
 #: hackedit/app/forms/settings_page_notifications_ui.py:91
 #: hackedit/app/forms/settings_page_workspaces_ui.py:140
@@ -2605,7 +2672,7 @@ msgid "Interpreter options"
 msgstr ""
 
 #: hackedit/app/forms/dlg_script_run_config_ui.py:246
-#: hackedit/app/forms/settings_page_environment_ui.py:175
+#: hackedit/app/forms/settings_page_environment_ui.py:183
 msgid "Environment variables"
 msgstr ""
 
@@ -2619,7 +2686,7 @@ msgid "Name"
 msgstr ""
 
 #: hackedit/app/forms/dlg_script_run_config_ui.py:252
-#: hackedit/app/forms/settings_page_environment_ui.py:181
+#: hackedit/app/forms/settings_page_environment_ui.py:189
 msgid "Value"
 msgstr ""
 
@@ -2675,7 +2742,7 @@ msgstr ""
 #: hackedit/app/forms/settings_page_editor_colors_ui.py:85
 #: hackedit/app/forms/settings_page_editor_display_ui.py:91
 #: hackedit/app/forms/settings_page_editor_ui.py:179
-#: hackedit/app/forms/settings_page_environment_ui.py:151
+#: hackedit/app/forms/settings_page_environment_ui.py:157
 #: hackedit/app/forms/settings_page_mimetypes_ui.py:78
 #: hackedit/app/forms/settings_page_notifications_ui.py:75
 #: hackedit/app/forms/settings_page_shortcuts_ui.py:40
@@ -2683,6 +2750,9 @@ msgstr ""
 #: hackedit/app/forms/settings_page_workspaces_ui.py:137
 #: hackedit/app/forms/task_widget_ui.py:65
 #: hackedit/app/forms/terminal_widget_ui.py:39
+#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:59
+#: hackedit/extlibs/pyqode/core/_forms/pnl_read_only_ui.py:32
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:164
 msgid "Form"
 msgstr ""
 
@@ -3345,71 +3415,82 @@ msgstr ""
 msgid "Number of spaces that makes up a t"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:152
+#: hackedit/app/forms/settings_page_environment_ui.py:158
 msgid "User Interface"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:153
+#: hackedit/app/forms/settings_page_environment_ui.py:159
 msgid "Toolbar icon size:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:154
+#: hackedit/app/forms/settings_page_environment_ui.py:160
 msgid "Size of the toolbar items"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:155
+#: hackedit/app/forms/settings_page_environment_ui.py:161
 msgid "Theme:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:156
+#: hackedit/app/forms/settings_page_environment_ui.py:162
 msgid "Switch between native and dark theme"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:157
+#: hackedit/app/forms/settings_page_environment_ui.py:163
 msgid "Native"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:158
+#: hackedit/app/forms/settings_page_environment_ui.py:164
 msgid "Dark"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:159
+#: hackedit/app/forms/settings_page_environment_ui.py:165
 msgid ""
 "Show/Hide system tray icon (needed to display notifications on Windows "
 "and OSX)."
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:160
+#: hackedit/app/forms/settings_page_environment_ui.py:166
 msgid "Show system tray icon"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:161
+#: hackedit/app/forms/settings_page_environment_ui.py:167
 msgid ""
 "Use a widescreen layout for the dock widgets (lateral panels will take "
 "the whole height of the window)"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:162
+#: hackedit/app/forms/settings_page_environment_ui.py:168
 msgid "Use widescreen layout"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:163
+#: hackedit/app/forms/settings_page_environment_ui.py:169
 msgid "Icon theme:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:164
+#: hackedit/app/forms/settings_page_environment_ui.py:170
 msgid "Select the icon theme."
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:165
+#: hackedit/app/forms/settings_page_environment_ui.py:171
+msgid "Language:"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:172
+msgid ""
+"<html><head/><body><p>Select the language used by the application. "
+"</p><p><span style=\" font-weight:600;\">You'll need to restart the "
+"application for the change to be applied.</span></p></body></html>"
+msgstr ""
+
+#: hackedit/app/forms/settings_page_environment_ui.py:173
 msgid "System commands"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:166
+#: hackedit/app/forms/settings_page_environment_ui.py:174
 msgid "Run command in terminal:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:167
+#: hackedit/app/forms/settings_page_environment_ui.py:175
 #, python-format
 msgid ""
 "<html><head/><body><p>The command for running a program in an external "
@@ -3417,11 +3498,11 @@ msgid ""
 " -e %s&quot;</p></body></html>"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:168
+#: hackedit/app/forms/settings_page_environment_ui.py:176
 msgid "Open folder in terminal:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:169
+#: hackedit/app/forms/settings_page_environment_ui.py:177
 #, python-format
 msgid ""
 "<html><head/><body><p>The command for opening folders in "
@@ -3429,11 +3510,11 @@ msgid ""
 "&quot;konsole --workdir %s&quot;</p></body></html>"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:170
+#: hackedit/app/forms/settings_page_environment_ui.py:178
 msgid "Open in file manager:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:171
+#: hackedit/app/forms/settings_page_environment_ui.py:179
 #, python-format
 msgid ""
 "<html><head/><body><p>The command for opening files in a file "
@@ -3441,35 +3522,35 @@ msgid ""
 " --select %s&quot;</p></body></html>"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:172
+#: hackedit/app/forms/settings_page_environment_ui.py:180
 msgid "Open in web browser:"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:173
+#: hackedit/app/forms/settings_page_environment_ui.py:181
 msgid ""
 "<html><head/><body><p>If checked, the system default browser will be "
 "used. Otherwise you need to specify the command.</p></body></html>"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:174
+#: hackedit/app/forms/settings_page_environment_ui.py:182
 msgid "Use system browser"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:176
+#: hackedit/app/forms/settings_page_environment_ui.py:184
 msgid ""
 "<html><head/><body><p>The list of environment "
 "variables.</p><p><br/></p></body></html>"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:179
+#: hackedit/app/forms/settings_page_environment_ui.py:187
 msgid "Key"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:182
+#: hackedit/app/forms/settings_page_environment_ui.py:190
 msgid "Add an environment variable"
 msgstr ""
 
-#: hackedit/app/forms/settings_page_environment_ui.py:184
+#: hackedit/app/forms/settings_page_environment_ui.py:192
 msgid "Remove the selected environment variable."
 msgstr ""
 
@@ -3882,24 +3963,28 @@ msgstr ""
 msgid "Font & Colors"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/environment.py:68
+#: hackedit/app/widgets/preference_pages/environment.py:60
+msgid "default"
+msgstr ""
+
+#: hackedit/app/widgets/preference_pages/environment.py:81
 #, python-format
 msgid "%s: command not found"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/environment.py:185
+#: hackedit/app/widgets/preference_pages/environment.py:208
 msgid "Change color scheme?"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/environment.py:186
+#: hackedit/app/widgets/preference_pages/environment.py:209
 msgid "Would you like to change the color scheme as well?"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/environment.py:197
+#: hackedit/app/widgets/preference_pages/environment.py:220
 msgid "Change icon theme?"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/environment.py:198
+#: hackedit/app/widgets/preference_pages/environment.py:221
 msgid "Would you like to change the icon theme as well?"
 msgstr ""
 
@@ -3919,11 +4004,11 @@ msgstr ""
 msgid "Filter by name or by shortcut"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/shortcuts.py:63
+#: hackedit/app/widgets/preference_pages/shortcuts.py:73
 msgid "Shortcuts conflict"
 msgstr ""
 
-#: hackedit/app/widgets/preference_pages/shortcuts.py:64
+#: hackedit/app/widgets/preference_pages/shortcuts.py:74
 #, python-format
 msgid ""
 "The shortcut %s is already used by action %r.\n"
@@ -4002,6 +4087,203 @@ msgstr ""
 msgid "Compute the PIC offset of the fields in the selected text"
 msgstr ""
 
+#: hackedit/extlibs/pyqode/core/_forms/dlg_encodings_ui.py:55
+#, python-format
+msgid ""
+"<html><head/><body><p><span style=\" font-"
+"weight:600;\">%s</span></p><p><span style=\" font-size:9pt;\">Please, "
+"choose another character encoding and try again.</span></p></body></html>"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_encodings_ui.py:56
+#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:61
+msgid "Character Encoding:"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:52
+#: hackedit/extlibs/pyqode/core/api/code_edit.py:1184
+msgid "Go to line"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:53
+msgid "You are here:"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:54
+#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:57
+msgid "1"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:55
+msgid "You want to go:"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_goto_line_ui.py:56
+msgid "You can't go further than:"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:106
+msgid "Edit preferred encodings"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:107
+msgid "Available encodings"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:108
+msgid "Add selected encoding to the list of preferred encodings"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_preferred_encodings_editor_ui.py:109
+msgid "Preferred encodings"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/dlg_unsaved_files_ui.py:38
+msgid "The following files have unsaved changes:"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:60
+#, python-format
+msgid ""
+"<html><head/><body><p><span style=\" font-"
+"weight:600;\">%s</span></p><p><span style=\" font-size:9pt;\">The file "
+"you opened has some invalid characters. If you continue editing this file"
+" you could corrupt this document. You can also choose another character "
+"encoding and try again.</span></p></body></html>"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:62
+msgid "Retry"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:63
+msgid "Edit Anyway"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/pnl_encoding_ui.py:64
+msgid "Cancel"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/pnl_read_only_ui.py:33
+msgid ""
+"<html><head/><body><p>The file you opened is read-only.</p><p>Use "
+"&quot;save as&quot; or change the file's permission to edit the "
+"document...</p></body></html>"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:54
+msgid "Open files"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:55
+msgid "Sort alphabetically"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:57
+msgid "Filename"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/popup_open_files_ui.py:59
+msgid "Path"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:165
+msgid "Search term"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:166
+msgid "Select previous occurence"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:167
+msgid "Select next occurence"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:168
+msgid "Use a regular expression for search occurences"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:169
+msgid "Regex"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:170
+msgid "Enable case sensitive search"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:171
+msgid "Match case"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:172
+msgid "Search for whole words only"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:173
+msgid "Whole words"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:174
+msgid "In Selection"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:175
+msgid "0 matches"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:177
+msgid "Replace current occurence"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:179
+msgid "Replace all occurences"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:180
+msgid "Replace All"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:181
+#: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:189
+msgid "Search"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:182
+msgid "Show the search panel"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:183
+msgid "Ctrl+F"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:184
+msgid "Search and replace"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:185
+msgid "Show the search and replace panel"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:186
+msgid "Ctrl+R"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:188
+msgid "Find the next occurrence (downward)"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:189
+msgid "F3"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:191
+msgid "Find previous occurrence (upward)"
+msgstr ""
+
+#: hackedit/extlibs/pyqode/core/_forms/search_panel_ui.py:192
+msgid "Shift+F3"
+msgstr ""
+
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1099
 msgid "Advanced"
 msgstr ""
@@ -4016,10 +4298,6 @@ msgstr ""
 
 #: hackedit/extlibs/pyqode/core/api/code_edit.py:1174
 msgid "Un-indent"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/api/code_edit.py:1184
-msgid "Go to line"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/dialogs/encodings.py:158
@@ -4085,10 +4363,6 @@ msgstr ""
 
 #: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:134
 msgid " Replace"
-msgstr ""
-
-#: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:189
-msgid "Search"
 msgstr ""
 
 #: hackedit/extlibs/pyqode/core/panels/search_and_replace.py:567

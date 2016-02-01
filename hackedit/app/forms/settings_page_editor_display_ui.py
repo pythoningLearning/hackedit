@@ -86,8 +86,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import translation
-        _ = translation(package="hackedit")
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.groupBox_5.setTitle(_("Text Wrapping"))
         self.cb_text_wrapping.setToolTip(_("Enable/Disable text wrapping"))

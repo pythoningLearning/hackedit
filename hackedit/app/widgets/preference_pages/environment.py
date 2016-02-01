@@ -4,7 +4,7 @@ import shlex
 from PyQt5 import QtGui, QtWidgets
 from pyqode.core.widgets import FileSystemContextMenu
 
-from hackedit.api import system
+from hackedit.api import system, gettext
 from hackedit.api.widgets import PreferencePage
 from hackedit.app import settings, environ, icons
 from hackedit.app.forms import settings_page_environment_ui
@@ -54,6 +54,19 @@ class Environment(PreferencePage):
         self.ui.edit_run_command_in_terminal.textChanged.connect(
             self._check_cmd)
         self.ui.edit_browser_command.textChanged.connect(self._check_cmd)
+
+        for lang_code in sorted(gettext.get_available_locales()):
+            if lang_code == 'default':
+                self.ui.combo_lang.addItem(_('default'), lang_code)
+                continue
+            try:
+                # try to get lang display name with babel (if installed)
+                from babel import Locale
+                display = Locale(lang_code).display_name
+            except ImportError:
+                # babel not installed (optional dependency)
+                display = lang_code
+            self.ui.combo_lang.addItem(display, lang_code)
 
     def _check_cmd(self, *__, sender=None):
         if sender is None:
@@ -121,6 +134,13 @@ class Environment(PreferencePage):
             vitem.setText(v)
             self.ui.table.setItem(i, 1, vitem)
         self.ui.table.resizeColumnsToContents()
+
+        current_code = gettext.get_locale()
+        for i in range(self.ui.combo_lang.count()):
+            code = self.ui.combo_lang.itemData(i)
+            if code == current_code:
+                self.ui.combo_lang.setCurrentIndex(i)
+                break
         self._reset_flg = False
 
     def restore_defaults(self):
@@ -142,6 +162,7 @@ class Environment(PreferencePage):
         settings.set_use_default_browser(True)
         settings.set_custom_browser_command('')
         settings.set_show_tray_icon(True)
+        gettext.set_locale('default')
         # environment variables
         environ.restore()
 
@@ -162,6 +183,8 @@ class Environment(PreferencePage):
             self.ui.cb_use_default_browser.isChecked())
         settings.set_custom_browser_command(
             self.ui.edit_browser_command.text())
+        code = self.ui.combo_lang.currentData()
+        gettext.set_locale(code)
         # environment variables
         env = {}
         for i in range(self.ui.table.rowCount()):

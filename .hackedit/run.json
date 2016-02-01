@@ -11,7 +11,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "dev/build_rc",
+        "name": "build_rc",
         "run_in_external_terminal": false,
         "script": "scripts/build_rc.py",
         "script_parameters": [],
@@ -20,7 +20,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "dev/build_ui",
+        "name": "build_ui",
         "run_in_external_terminal": false,
         "script": "scripts/build_ui.py",
         "script_parameters": [],
@@ -29,7 +29,7 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "dev/copy_hooks",
+        "name": "git-hooks/copy_hooks",
         "run_in_external_terminal": false,
         "script": "scripts/git-hooks/copy_hooks.py",
         "script_parameters": [],
@@ -38,27 +38,9 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "dev/hackedit-dev",
+        "name": "hackedit-dev",
         "run_in_external_terminal": false,
         "script": "scripts/hackedit-dev.pyw",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "dev/update_breeze_icons",
-        "run_in_external_terminal": true,
-        "script": "scripts/update_breeze_icons.py",
-        "script_parameters": [],
-        "working_dir": "scripts"
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "dev/update_extlibs",
-        "run_in_external_terminal": false,
-        "script": "scripts/update_extlibs.py",
         "script_parameters": [],
         "working_dir": "."
     },
@@ -138,6 +120,24 @@
         "script_parameters": [
             "fr"
         ],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "update_breeze_icons",
+        "run_in_external_terminal": true,
+        "script": "scripts/update_breeze_icons.py",
+        "script_parameters": [],
+        "working_dir": "scripts"
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "update_extlibs",
+        "run_in_external_terminal": false,
+        "script": "scripts/update_extlibs.py",
+        "script_parameters": [],
         "working_dir": "."
     }
 ]

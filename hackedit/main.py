@@ -16,7 +16,7 @@ if not EXTLIBS_PATH:
 sys.path.insert(0, EXTLIBS_PATH)
 
 from hackedit import __version__                 # noqa
-from hackedit.api.gettext import translation     # noqa
+from hackedit.api.gettext import get_translation     # noqa
 from hackedit.app import argparser, logger       # noqa
 import faulthandler                              # noqa
 
@@ -66,7 +66,7 @@ def main():
     qapp.setApplicationName('HackEdit')
     qapp.setApplicationVersion(__version__)
 
-    translation()
+    get_translation()
 
     # setup logger
     from hackedit.app import settings
@@ -110,7 +110,7 @@ def main():
         splash.raise_()
         qapp.processEvents()
 
-        splash.showMessage('Loading application module',
+        splash.showMessage(_('Loading application module'),
                            QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                            QtCore.Qt.white)
         qapp.processEvents()
