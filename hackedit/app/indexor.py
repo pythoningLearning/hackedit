@@ -121,7 +121,7 @@ class FileIndexor:
                     self._plugins),
                 cancellable=False)
 
-    def _index_document(self, path, _):
+    def _index_document(self, path, __):
         """
         Indexates symbols found in a given document.
         """
