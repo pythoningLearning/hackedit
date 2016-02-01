@@ -21,10 +21,15 @@ def get_available_locales():
     ret_val = set()
     ret_val.add('default')
     locale_dir = os.path.join(sys.prefix, 'share', 'locale')
-    for d in os.listdir(locale_dir):
-        mo_path = os.path.join(locale_dir, d, 'LC_MESSAGES', 'hackedit.mo')
-        if os.path.exists(mo_path):
-            ret_val.add(d)
+    try:
+        locales = os.listdir(locale_dir)
+    except OSError:
+        pass
+    else:
+        for d in locales:
+            mo_path = os.path.join(locale_dir, d, 'LC_MESSAGES', 'hackedit.mo')
+            if os.path.exists(mo_path):
+                ret_val.add(d)
     return ret_val
 
 
