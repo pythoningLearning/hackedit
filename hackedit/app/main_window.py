@@ -975,24 +975,24 @@ class MainWindow(QtWidgets.QMainWindow):
     def _apply_shortcuts(self):
         # File
         self._ui.action_new.setShortcut(shortcuts.get(
-            _('New'), 'Ctrl+N'))
+            'New', _('New'), 'Ctrl+N'))
         self._ui.action_open.setShortcut(shortcuts.get(
-            _('Open directory'), 'Ctrl+O'))
+            'Open directory', _('Open directory'), 'Ctrl+O'))
         self._ui.action_save.setShortcut(shortcuts.get(
-            _('Save'), 'Ctrl+S'))
+            'Save', _('Save'), 'Ctrl+S'))
         self._ui.action_save_as.setShortcut(shortcuts.get(
-            _('Save as'), 'Ctrl+Shift+S'))
+            'Save as', _('Save as'), 'Ctrl+Shift+S'))
         self._ui.action_save_all.setShortcut(shortcuts.get(
-            _('Save all'), 'Ctrl+Alt+S'))
+            'Save all', _('Save all'), 'Ctrl+Alt+S'))
         self._ui.action_open_file.setShortcut(shortcuts.get(
-            _('Open file'), 'Ctrl+Shift+O'))
+            'Open file', _('Open file'), 'Ctrl+Shift+O'))
         self._ui.action_close.setShortcut(shortcuts.get(
-            _('Close window'), 'Ctrl+Shift+Q'))
+            'Close window', _('Close window'), 'Ctrl+Shift+Q'))
         self._ui.action_quit.setShortcut(shortcuts.get(
-            _('Quit'), 'Ctrl+Q'))
+            'Quit', _('Quit'), 'Ctrl+Q'))
         # Edit
         self._ui.action_preferences.setShortcut(shortcuts.get(
-            _('Preferences'), 'Ctrl+,'))
+            'Preferences', _('Preferences'), 'Ctrl+,'))
 
         for editor in self.tab_widget.widgets(True):
             if not isinstance(editor, CodeEdit):
@@ -1001,53 +1001,55 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # View
         self._ui.a_fullscreen.setShortcut(shortcuts.get(
-            _('Toggle fullscreen'), 'Ctrl+F11'))
+            'Toggle fullscreen', _('Toggle fullscreen'), 'Ctrl+F11'))
         self._ui.a_menu.setShortcut(shortcuts.get(
-            _('Toggle menu'), 'Ctrl+M'))
+            'Toggle menu', _('Toggle menu'), 'Ctrl+M'))
         self._ui.a_toolbars.setShortcut(shortcuts.get(
-            _('Toggle toolbars'), 'Ctrl+Shift+T'))
+            'Toggle toolbars', _('Toggle toolbars'), 'Ctrl+Shift+T'))
 
     def _apply_editor_shortcuts(self, editor):
         editor.action_undo.setShortcut(shortcuts.get(
-            _('Undo'), 'Ctrl+Z'))
+            'Undo', _('Undo'), 'Ctrl+Z'))
         editor.action_redo.setShortcut(shortcuts.get(
-            _('Redo'), 'Ctrl+Y'))
+            'Redo', _('Redo'), 'Ctrl+Y'))
         editor.action_copy.setShortcut(shortcuts.get(
-            _('Copy'), 'Ctrl+C'))
+            'Copy', _('Copy'), 'Ctrl+C'))
         editor.action_cut.setShortcut(shortcuts.get(
-            _('Cut'), 'Ctrl+X'))
+            'Cut', _('Cut'), 'Ctrl+X'))
         editor.action_paste.setShortcut(shortcuts.get(
-            _('Paste'), 'Ctrl+V'))
+            'Paste', _('Paste'), 'Ctrl+V'))
         editor.action_duplicate_line.setShortcut(shortcuts.get(
-            _('Duplicate line'), 'Ctrl+D'))
+            'Duplicate line', _('Duplicate line'), 'Ctrl+D'))
         editor.action_goto_line.setShortcut(shortcuts.get(
-            _('Goto line'), 'Ctrl+G'))
+            'Goto line', _('Goto line'), 'Ctrl+G'))
         try:
             p = editor.panels.get('SearchAndReplacePanel')
         except KeyError:
             pass
         else:
             p.actionSearch.setShortcut(shortcuts.get(
-                _('Find'), 'Ctrl+F'))
+                'Find', _('Find'), 'Ctrl+F'))
             p.actionActionSearchAndReplace.setShortcut(
-                shortcuts.get(_('Replace'), 'Ctrl+H'))
+                shortcuts.get('Replace', _('Replace'), 'Ctrl+H'))
             p.actionFindNext.setShortcut(shortcuts.get(
-                _('Find next'), 'F3'))
+                'Find next', _('Find next'), 'F3'))
             p.actionFindPrevious.setShortcut(shortcuts.get(
-                _('Find previous'), 'Shift+F3'))
+                'Find previous', _('Find previous'), 'Shift+F3'))
         try:
             p = editor.panels.get('FoldingPanel')
         except KeyError:
             pass
         else:
             p.action_collapse.setShortcut(shortcuts.get(
-                _('Folding: collapse'), 'Shift+-'))
+                'Folding: collapse', _('Folding: collapse'), 'Shift+-'))
             p.action_expand.setShortcut(shortcuts.get(
-                _('Folding: expand'), 'Shift++'))
+                'Folding: expand', _('Folding: expand'), 'Shift++'))
             p.action_collapse_all.setShortcut(shortcuts.get(
-                _('Folding: collapse all'), 'Ctrl+Shift+-'))
+                'Folding: collapse all', _('Folding: collapse all'),
+                'Ctrl+Shift+-'))
             p.action_expand_all.setShortcut(shortcuts.get(
-                _('Folding: expand all'), 'Ctrl+Shift++'))
+                'Folding: expand all', _('Folding: expand all'),
+                'Ctrl+Shift++'))
 
         try:
             m = editor.modes.get('ExtendedSelectionMode')
@@ -1055,13 +1057,14 @@ class MainWindow(QtWidgets.QMainWindow):
             pass
         else:
             m.action_select_word.setShortcut(shortcuts.get(
-                _('Select word'), 'Ctrl+W'))
+                'Select word', _('Select word'), 'Ctrl+W'))
             m.action_select_extended_word.setShortcut(shortcuts.get(
-                _('Select extended word'), 'Ctrl+Shift+W'))
+                'Select extended word', _('Select extended word'),
+                'Ctrl+Shift+W'))
             m.action_select_matched.setShortcut(shortcuts.get(
-                _('Matched select'), 'Ctrl+E'))
+                'Matched select', _('Matched select'), 'Ctrl+E'))
             m.action_select_line.setShortcut(shortcuts.get(
-                _('Select line'), 'Ctrl+Shift+L'))
+                'Select line', _('Select line'), 'Ctrl+Shift+L'))
 
         try:
             m = editor.modes.get('CaseConverterMode')
@@ -1069,9 +1072,10 @@ class MainWindow(QtWidgets.QMainWindow):
             pass
         else:
             m.action_to_lower.setShortcut(shortcuts.get(
-                _('Convert to lower case'), 'Ctrl+U'))
+                'Convert to lower case', _('Convert to lower case'), 'Ctrl+U'))
             m.action_to_upper.setShortcut(shortcuts.get(
-                _('Convert to UPPER CASE'), 'Ctrl+Shift+U'))
+                'Convert to UPPER CASE', _('Convert to UPPER CASE'),
+                'Ctrl+Shift+U'))
 
     def _on_tab_detached(self, _, tab):
         self._apply_editor_preferences(tab)

@@ -359,7 +359,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         self._action_run = self._mnu.addAction('Run')
         window.get_main_window().addAction(self._action_run)
         self._action_run.triggered.connect(self.run)
-        self._action_run.setShortcut(shortcuts.get(_('Run'), 'F9'))
+        self._action_run.setShortcut(shortcuts.get(
+            'Run', _('Run'), 'F9'))
         self._action_run.setIcon(special_icons.run_icon())
         self._action_configure = self._mnu.addAction(_('Configure'))
         self._action_configure.setMenuRole(self._action_configure.NoRole)
@@ -369,7 +370,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         self._separator = self._mnu.addSeparator()
 
     def apply_preferences(self):
-        self._action_run.setShortcut(shortcuts.get(_('Run'), 'F9'))
+        self._action_run.setShortcut(shortcuts.get(
+            'Run', _('Run'), 'F9'))
 
     def _setup_combo_box(self):
         # add a combo box to choose the run configuration to use

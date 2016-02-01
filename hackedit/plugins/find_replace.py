@@ -36,7 +36,7 @@ class FindReplace(plugins.WorkspacePlugin):
         self.afind.setToolTip(_('Find in path'))
         self.afind.setIcon(QtGui.QIcon.fromTheme('edit-find'))
         self.afind.setShortcut(shortcuts.get(
-            _('Find in path'), 'Ctrl+Shift+F'))
+            'Find in path', _('Find in path'), 'Ctrl+Shift+F'))
         self.afind.triggered.connect(self._on_find_triggered)
         mnu_edit.insertAction(action_before, self.afind)
 
@@ -46,7 +46,7 @@ class FindReplace(plugins.WorkspacePlugin):
         self.areplace.setText(_('Replace in path'))
         self.areplace.setToolTip(_('Replace in path'))
         self.areplace.setShortcut(shortcuts.get(
-            _('Replace in path'), 'Ctrl+Shift+H'))
+            'Replace in path', _('Replace in path'), 'Ctrl+Shift+H'))
         self.areplace.triggered.connect(self._on_replace_triggered)
         mnu_edit.insertAction(action_before, self.areplace)
 
@@ -69,9 +69,9 @@ class FindReplace(plugins.WorkspacePlugin):
 
     def apply_preferences(self):
         self.areplace.setShortcut(shortcuts.get(
-            _('Replace in path'), 'Ctrl+Shift+H'))
+            'Replace in path', _('Replace in path'), 'Ctrl+Shift+H'))
         self.afind.setShortcut(shortcuts.get(
-            _('Find in path'), 'Ctrl+Shift+F'))
+            'Find in path', _('Find in path'), 'Ctrl+Shift+F'))
 
     def _create_dock(self):
         self._find_widget = QtWidgets.QWidget()

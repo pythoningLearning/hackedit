@@ -206,13 +206,14 @@ class ProjectExplorer(QtCore.QObject):
             _('Show in %s') % FileSystemContextMenu.get_file_explorer_name())
         self._update_workspaces_menu()
         self.action_goto_anything.setShortcut(shortcuts.get(
-            _('Goto anything'), 'Ctrl+P'))
+            'Goto anything', _('Goto anything'), 'Ctrl+P'))
         self.action_goto_symbol.setShortcut(shortcuts.get(
-            _('Goto symbol'), 'Ctrl+R'))
+            'Goto symbol', _('Goto symbol'), 'Ctrl+R'))
         self.action_goto_symbol_in_project.setShortcut(shortcuts.get(
-            _('Goto symbol in project'), 'Ctrl+Shift+R'))
+            'Goto symbol in project', _('Goto symbol in project'),
+            'Ctrl+Shift+R'))
         self.action_goto_line.setShortcut(shortcuts.get(
-            _('Goto line'), 'Ctrl+G'))
+            'Goto line', _('Goto line'), 'Ctrl+G'))
 
     def _on_file_list_available(self, status):
         self._task_running = False
@@ -284,7 +285,7 @@ class ProjectExplorer(QtCore.QObject):
         menu = api.window.get_menu(_('&Goto'))
         self.action_goto_anything = menu.addAction(_('Goto anything...'))
         self.action_goto_anything.setShortcut(shortcuts.get(
-            _('Goto anything'), 'Ctrl+P'))
+            'Goto anything', _('Goto anything'), 'Ctrl+P'))
         self._window.addAction(self.action_goto_anything)
         self.action_goto_anything.triggered.connect(self._goto_anything)
 
@@ -292,14 +293,15 @@ class ProjectExplorer(QtCore.QObject):
 
         self.action_goto_symbol = menu.addAction(_('Goto symbol...'))
         self.action_goto_symbol.setShortcut(shortcuts.get(
-            _('Goto symbol'), 'Ctrl+R'))
+            'Goto symbol', _('Goto symbol'), 'Ctrl+R'))
         self._window.addAction(self.action_goto_symbol)
         self.action_goto_symbol.triggered.connect(self._goto_symbol)
 
         self.action_goto_symbol_in_project = menu.addAction(
             _('Goto symbol in project...'))
         self.action_goto_symbol_in_project.setShortcut(shortcuts.get(
-            _('Goto symbol in project'), 'Ctrl+Shift+R'))
+            'Goto symbol in project', _('Goto symbol in project'),
+            'Ctrl+Shift+R'))
         self._window.addAction(self.action_goto_symbol_in_project)
         self.action_goto_symbol_in_project.triggered.connect(
             self._goto_symbol_in_project)
@@ -308,7 +310,7 @@ class ProjectExplorer(QtCore.QObject):
 
         self.action_goto_line = menu.addAction(_('Goto line'))
         self.action_goto_line.setShortcut(shortcuts.get(
-            _('Goto line'), 'Ctrl+G'))
+            'Goto line', _('Goto line'), 'Ctrl+G'))
         self._window.addAction(self.action_goto_line)
         self.action_goto_line.triggered.connect(self._goto_line)
 
