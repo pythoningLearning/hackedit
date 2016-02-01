@@ -339,6 +339,7 @@ class MainWindow(QtWidgets.QMainWindow):
         except Exception as e:
             tab = None
             tb = traceback.format_exc()
+            _logger().exception('failed to open file')
             self.notifications.add(ExceptionEvent(
                 _('Failed to open file: %s') % path,
                 _('An unhandled exception occured while opening file: %r') % e,

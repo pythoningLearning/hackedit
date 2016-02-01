@@ -105,7 +105,7 @@ class _FileLoader:
         self.infos = infos
         self.path = ''
 
-    def open(self, path, **_):
+    def open(self, path, **__):
         def sizeof_fmt(num, suffix='B'):
             """
             Returns human readable size
@@ -165,7 +165,7 @@ class _ImageViewer(QtWidgets.QWidget):
     dirty_changed = QtCore.pyqtSignal(bool)
     dirty = False
 
-    def __init__(self, parent=None, **_):
+    def __init__(self, parent=None, **__):
         super().__init__(parent)
         self.title = ''
         # Setup viewer
