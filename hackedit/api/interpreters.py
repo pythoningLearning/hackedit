@@ -661,9 +661,8 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         combo = self._ui.combo_prj_interpreter
         interpreter = self.interpreter_manager.get_project_interpreter(
             self._current_project)
-        combo.blockSignals(True)
-        combo.setCurrentText(interpreter)
-        combo.blockSignals(False)
+        with utils.block_signals(combo):
+            combo.setCurrentText(interpreter)
 
         # environment variables
         self._ui.table_env_vars.clear()

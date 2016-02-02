@@ -383,21 +383,20 @@ class ProjectExplorer(QtCore.QObject):
         if current_index is None:
             current_index = self._combo_projects.currentIndex()
         project_paths = api.project.get_projects()
-        self._combo_projects.blockSignals(True)
-        self._combo_projects.clear()
-        for pth in project_paths:
-            index = self._combo_projects.count()
-            if os.path.ismount(pth):
-                if api.system.WINDOWS and not pth.endswith('\\'):
-                    pth += '\\'
-                name = pth
-            else:
-                name = os.path.split(pth)[1]
-            self._combo_projects.addItem(name)
-            self._combo_projects.setItemIcon(index, FileIconProvider().icon(
-                QtCore.QFileInfo(pth)))
-            self._combo_projects.setItemData(index, pth)
-        self._combo_projects.blockSignals(False)
+        with api.utils.block_signals(self._combo_projects):
+            self._combo_projects.clear()
+            for pth in project_paths:
+                index = self._combo_projects.count()
+                if os.path.ismount(pth):
+                    if api.system.WINDOWS and not pth.endswith('\\'):
+                        pth += '\\'
+                    name = pth
+                else:
+                    name = os.path.split(pth)[1]
+                self._combo_projects.addItem(name)
+                self._combo_projects.setItemIcon(
+                    index, FileIconProvider().icon(QtCore.QFileInfo(pth)))
+                self._combo_projects.setItemData(index, pth)
         self._combo_projects.setCurrentIndex(current_index)
 
     def _setup_filesystem_treeview(self):

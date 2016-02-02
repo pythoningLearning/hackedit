@@ -80,10 +80,10 @@ class DocumentOutline(plugins.WorkspacePlugin):
         self.bt_lock.setChecked(not sync)
 
     def _on_sync_toggled(self, toggled):
-        self.bt_lock.blockSignals(True)
-        self.bt_lock.setIcon(api.special_icons.object_unlocked() if toggled
-                             else api.special_icons.object_locked())
-        self.bt_lock.blockSignals(False)
-        self._outline.sync_with_editor = not toggled
-        self.bt_lock.setToolTip(
-            _('Unlock view') if toggled else _('Lock view'))
+        with api.utils.block_signals(self.bt_lock):
+            self.bt_lock.setIcon(
+                api.special_icons.object_unlocked() if toggled else
+                api.special_icons.object_locked())
+            self._outline.sync_with_editor = not toggled
+            self.bt_lock.setToolTip(
+                _('Unlock view') if toggled else _('Lock view'))
