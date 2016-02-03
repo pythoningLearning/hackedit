@@ -91,7 +91,7 @@
             </item>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QCheckBox" name="cb_system_tray_icon">
             <property name="toolTip">
              <string>Show/Hide system tray icon (needed to display notifications on Windows and OSX).</string>
@@ -101,7 +101,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QCheckBox" name="cb_widescreen">
             <property name="toolTip">
              <string>Use a widescreen layout for the dock widgets (lateral panels will take the whole height of the window)</string>
@@ -122,6 +122,20 @@
            <widget class="QComboBox" name="combo_icon_themes">
             <property name="toolTip">
              <string>Select the icon theme.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lbl_lang">
+            <property name="text">
+             <string>Language:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="combo_lang">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the language used by the application. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You'll need to restart the application for the change to be applied.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>

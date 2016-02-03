@@ -47,11 +47,8 @@ logger.info("Executing HackEdit from source checkout")
 # ------ patching sys.path
 DEVPATH = osp.dirname(osp.abspath(__file__))
 sys.path.insert(0, DEVPATH)
-ZIP_PATH = osp.normpath(osp.join(DEVPATH, 'data/share/extlibs.zip'))
-os.environ['HACKEDIT_LIBS_PATH'] = ZIP_PATH
-sys.path.insert(0, ZIP_PATH)
 
-logger.info("01. Patched sys.path with %r", [DEVPATH, ZIP_PATH])
+logger.info("01. Patched sys.path with %r", DEVPATH)
 
 # ------ check if python setup.py develop has been executed
 if len(glob.glob('*.egg-info')) == 0:

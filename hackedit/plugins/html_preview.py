@@ -12,7 +12,7 @@ class HtmlPreview(api.plugins.WorkspacePlugin):
     def activate(self):
         self.preview = HtmlPreviewWidget()
         self._dock = api.window.add_dock_widget(
-            self.preview, 'Preview', icon=QtGui.QIcon.fromTheme(
+            self.preview, _('HTML Preview'), icon=QtGui.QIcon.fromTheme(
                 'text-html'), area=QtCore.Qt.RightDockWidgetArea)
         api.signals.connect_slot(api.signals.CURRENT_EDITOR_CHANGED,
                                  self.preview.set_editor)

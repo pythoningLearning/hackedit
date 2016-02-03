@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_editor_colors.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_editor_colors.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -80,17 +80,18 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.groupBox.setTitle(_translate("Form", "Font"))
-        self.label.setText(_translate("Form", "Family:"))
-        self.fontComboBox.setToolTip(_translate("Form", "The editor font"))
-        self.label_3.setText(_translate("Form", "Font size:"))
-        self.spinbox_font_size.setToolTip(_translate("Form", "Default editor font size"))
-        self.groupBox_2.setTitle(_translate("Form", "Colors"))
-        self.label_4.setText(_translate("Form", "Color scheme:"))
-        self.combo_color_schemes.setToolTip(_translate("Form", "Available editor color schemes"))
-        self.groupBox_3.setTitle(_translate("Form", "Preview"))
-        self.edit_preview.setToolTip(_translate("Form", "Color scheme/Font preview"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Form.setWindowTitle(_("Form"))
+        self.groupBox.setTitle(_("Font"))
+        self.label.setText(_("Family:"))
+        self.fontComboBox.setToolTip(_("The editor font"))
+        self.label_3.setText(_("Font size:"))
+        self.spinbox_font_size.setToolTip(_("Default editor font size"))
+        self.groupBox_2.setTitle(_("Colors"))
+        self.label_4.setText(_("Color scheme:"))
+        self.combo_color_schemes.setToolTip(_("Available editor color schemes"))
+        self.groupBox_3.setTitle(_("Preview"))
+        self.edit_preview.setToolTip(_("Color scheme/Font preview"))
 
 from pyqode.core.api import CodeEdit

@@ -21,12 +21,12 @@ class Templates(PreferencePage):
 
     def __init__(self):
         icon = QtGui.QIcon.fromTheme('folder-templates')
-        super().__init__('Templates', icon=icon)
+        super().__init__(_('Templates'), icon=icon)
         self.ui = settings_page_templates_ui.Ui_Form()
         self.ui.setupUi(self)
         self.ui.lbl_boss_version.setText(
-            '<i>Powered by <a href="https://github.com/datafolklabs/boss">'
-            'BOSS</a> (v%s)</i>' % boss.version())
+            _('<i>Powered by <a href="https://github.com/datafolklabs/boss">'
+              'BOSS</a> (v%s)</i>') % boss.version())
         font = self.ui.lbl_boss_version.font()
         font.setPointSize(8)
         self.ui.lbl_boss_version.setFont(font)
@@ -112,8 +112,8 @@ class Templates(PreferencePage):
     def rm_source(self):
         source = self.ui.list_sources.currentItem().text()
         answer = QtWidgets.QMessageBox.question(
-            self, 'Remove source', 'Are you sure you want to remove the '
-            'source %r?' % source)
+            self, _('Remove source'), _('Are you sure you want to remove the '
+                                        'source %r?') % source)
         if answer == QtWidgets.QMessageBox.Yes:
             QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
             boss.rm_source(source)

@@ -33,15 +33,15 @@ class DlgPreferences(QtWidgets.QDialog):
         self.restore_state()
         btns = self._ui.buttons
         btns.button(btns.Reset).setToolTip(
-            'Reset changes made to the current page.')
+            _('Reset changes made to the current page.'))
         btns.button(btns.RestoreDefaults).setToolTip(
-            'Restore factory defaults for the current page.')
+            _('Restore factory defaults for the current page.'))
         btns.button(btns.Apply).setToolTip(
-            'Apply changes but keep dialog open.')
+            _('Apply changes but keep dialog open.'))
         btns.button(btns.Ok).setToolTip(
-            'Apply changes and close dialog.')
+            _('Apply changes and close dialog.'))
         btns.button(btns.Cancel).setToolTip(
-            'Close dialog and cancel any changes.')
+            _('Close dialog and cancel any changes.'))
         self._ui.pages.setContentsMargins(0, 0, 0, 0)
 
     def closeEvent(self, event):
@@ -175,7 +175,7 @@ border-radius:3px;''' % (
         for p in self._app.plugin_manager.editor_plugins:
             p = p.get_specific_preferences_page()
             if p:
-                p.category = 'Editor'
+                p.category = _('Editor')
                 self._add_page(p)
 
     def _connect_slots(self):

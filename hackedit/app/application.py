@@ -52,35 +52,46 @@ class Application(QtCore.QObject):
                         msg, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                         QtCore.Qt.white)
                     qapp.processEvents()
+
         self._closed = False
         self._args = args
         self._qapp = qapp
         self._splash = splash
         super().__init__()
         _shared._APP = self
-        environ.apply()
-        shortcuts.load()
-        show_msg_on_splash('Setting up log file...')
-        show_msg_on_splash('Setting up except hook...')
+        self._editor_windows = []
+        show_msg_on_splash(_('Setting up except hook...'))
         self._report_exception_requested.connect(self._report_exception)
         self._old_except_hook = sys.excepthook
         sys.excepthook = self._except_hook
-        self._editor_windows = []
 
-        show_msg_on_splash('Loading fonts...')
+        show_msg_on_splash(_('Loading translations...'))
+        _logger().info('available locales: %r',
+                       api.gettext.get_available_locales())
+
+        show_msg_on_splash(_('Loading environemnt...'))
+        environ.apply()
+
+        show_msg_on_splash(_('Loading shortcuts...'))
+        shortcuts.load()
+
+        show_msg_on_splash(_('Loading font: Hack-Bold.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-Bold.ttf')
+        show_msg_on_splash(_('Loading font: Hack-BoldItalic.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-BoldItalic.ttf')
+        show_msg_on_splash(_('Loading font: Hack-Italic.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-Italic.ttf')
+        show_msg_on_splash(_('Loading font: Hack-Regular.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
             ':/fonts/Hack-Regular.ttf')
 
-        show_msg_on_splash('Setting up mimetypes...')
+        show_msg_on_splash(_('Setting up mimetypes...'))
         mime_types.load()
 
-        show_msg_on_splash('Setting up user interface...')
+        show_msg_on_splash(_('Setting up user interface...'))
         self._qapp.setWindowIcon(QtGui.QIcon.fromTheme(
             'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self._qapp.lastWindowClosed.connect(self.quit)
@@ -88,17 +99,17 @@ class Application(QtCore.QObject):
         self._setup_tray_icon()
         self.apply_preferences()
 
-        show_msg_on_splash('Loading plugins...')
+        show_msg_on_splash(_('Loading plugins...'))
         self.plugin_manager = PluginManager()
 
-        show_msg_on_splash('Setting up templates...')
+        show_msg_on_splash(_('Setting up templates...'))
         self.setup_templates()
 
-        show_msg_on_splash('Loading recent files...')
+        show_msg_on_splash(_('Loading recent files...'))
         self._recents = RecentFilesManager(
             qapp.organizationName(), qapp.applicationName())
 
-        show_msg_on_splash('Setting up welcome window...')
+        show_msg_on_splash(_('Setting up welcome window...'))
         self._welcome_window = WelcomeWindow(self)
         self._last_window = self._welcome_window
 
@@ -266,14 +277,15 @@ class Application(QtCore.QObject):
         self.tray_icon.messageClicked.connect(self._restore_last_msg_window)
         self.tray_icon.activated.connect(self._restore_last_active_window)
         tray_icon_menu = QtWidgets.QMenu(None)
-        self.tray_icon_menu_windows = tray_icon_menu.addMenu('Restore window')
+        self.tray_icon_menu_windows = tray_icon_menu.addMenu(
+            _('Restore window'))
         self.tray_icon_menu_windows.setEnabled(False)
         self.tray_icon_menu_windows.setIcon(QtGui.QIcon.fromTheme(
             'view-restore'))
         tray_icon_menu.addSeparator()
         if not system.PLASMA_DESKTOP:
             # plasma desktop already adds a "quit" action automatically
-            action = tray_icon_menu.addAction('Quit')
+            action = tray_icon_menu.addAction(_('Quit'))
             action.setIcon(QtGui.QIcon.fromTheme('application-exit'))
             action.triggered.connect(self.quit)
         self.tray_icon.setContextMenu(tray_icon_menu)
@@ -307,10 +319,10 @@ class Application(QtCore.QObject):
             except Exception as e:
                 _logger().exception('Plugin activattion failed')
                 event = api.events.ExceptionEvent(
-                    '%r plugin activation failed' % plugin,
-                    'Failed to active plugin: %r. '
-                    'Either the plugin is missing or the plugin failed to '
-                    'load...' % plugin, e)
+                    _('%r plugin activation failed') % plugin,
+                    _('Failed to active plugin: %r. '
+                      'Either the plugin is missing or the plugin failed to '
+                      'load...') % plugin, e)
                 event.level = api.events.WARNING
                 win.notifications.add(event, force_show=True)
             else:
@@ -518,16 +530,16 @@ class Application(QtCore.QObject):
                     raise AttributeError
             except AttributeError:
                 msg_box = QtWidgets.QMessageBox()
-                msg_box.setWindowTitle('Unhandled exception')
-                msg_box.setText('An unhandled exception has occured...')
+                msg_box.setWindowTitle(_('Unhandled exception'))
+                msg_box.setText(_('An unhandled exception has occured...'))
                 msg_box.setInformativeText(
-                    'Would you like to report the bug to the developer?')
+                    _('Would you like to report the bug to the developer?'))
                 msg_box.setIcon(msg_box.Critical)
                 msg_box.setDetailedText(tb)
                 msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok |
                                            QtWidgets.QMessageBox.Cancel)
-                msg_box.button(msg_box.Ok).setText('Report')
-                msg_box.button(msg_box.Cancel).setText('Close')
+                msg_box.button(msg_box.Ok).setText(_('Report'))
+                msg_box.button(msg_box.Cancel).setText(_('Close'))
                 if msg_box.exec_() == msg_box.Ok:
                     common.report_bug(
                         None, title=title,
@@ -536,12 +548,12 @@ class Application(QtCore.QObject):
                         '...\n\n## Traceback\n\n```\n%s\n```' % tb)
             else:
                 action = QtWidgets.QAction(None)
-                action.setText('Restart HackEdit')
+                action.setText(_('Restart HackEdit'))
                 action.triggered.connect(self.restart)
                 ev = api.events.ExceptionEvent(
-                    title, 'An unhandled exception has occured: %r\n\n'
-                    'Please report!' % exc, exc, tb=tb,
-                    custom_actions=[action])
+                    title, _('An unhandled exception has occured: %r\n\n'
+                             'Please report!') % exc,
+                    exc, tb=tb, custom_actions=[action])
                 w.notifications.add(ev, False, True)
         except Exception:
             _logger().exception('exception in excepthook')

@@ -112,3 +112,30 @@ def editor_font_size():
     Returns the editor font chose by the user.
     """
     return settings.editor_font_size()
+
+
+class block_signals:
+    """
+    Context manager that calls blockSignals on the QObject passed in
+    parameters.
+
+    Usage::
+
+        with block_signals(qobject):
+            pass  # do some stuff
+
+    This is equivalent to::
+
+        qobject.blockSignals(True)
+        pass  # do some stuff
+        qobject.blockSignals(False)
+
+    """
+    def __init__(self, qobject):
+        self.qobject = qobject
+
+    def __enter__(self):
+        self.qobject.blockSignals(True)
+
+    def __exit__(self, type, value, traceback):
+        self.qobject.blockSignals(False)

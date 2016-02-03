@@ -4,7 +4,7 @@ import shlex
 from PyQt5 import QtGui, QtWidgets
 from pyqode.core.widgets import FileSystemContextMenu
 
-from hackedit.api import system
+from hackedit.api import system, gettext
 from hackedit.api.widgets import PreferencePage
 from hackedit.app import settings, environ, icons
 from hackedit.app.forms import settings_page_environment_ui
@@ -34,7 +34,7 @@ class Environment(PreferencePage):
     color scheme, font,...)
     """
     def __init__(self):
-        super().__init__('Environment', icon=QtGui.QIcon.fromTheme(
+        super().__init__(_('Environment'), icon=QtGui.QIcon.fromTheme(
             'applications-system'))
         self.ui = settings_page_environment_ui.Ui_Form()
         self.ui.setupUi(self)
@@ -55,7 +55,20 @@ class Environment(PreferencePage):
             self._check_cmd)
         self.ui.edit_browser_command.textChanged.connect(self._check_cmd)
 
-    def _check_cmd(self, *_, sender=None):
+        for lang_code in sorted(gettext.get_available_locales()):
+            if lang_code == 'default':
+                self.ui.combo_lang.addItem(_('default'), lang_code)
+                continue
+            try:
+                # try to get lang display name with babel (if installed)
+                from babel import Locale
+                display = Locale(lang_code).display_name
+            except ImportError:
+                # babel not installed (optional dependency)
+                display = lang_code
+            self.ui.combo_lang.addItem(display, lang_code)
+
+    def _check_cmd(self, *__, sender=None):
         if sender is None:
             sender = self.sender()
         try:
@@ -65,7 +78,7 @@ class Environment(PreferencePage):
         if system.which(pgm) is None:
             sender.setStyleSheet(
                 'QLineEdit{background-color: #DD8080;color: white;}')
-            sender.setToolTip('%s not found' % pgm)
+            sender.setToolTip(_('%s: command not found') % pgm)
         else:
             sender.setStyleSheet('')
             sender.setToolTip('')
@@ -121,6 +134,13 @@ class Environment(PreferencePage):
             vitem.setText(v)
             self.ui.table.setItem(i, 1, vitem)
         self.ui.table.resizeColumnsToContents()
+
+        current_code = gettext.get_locale()
+        for i in range(self.ui.combo_lang.count()):
+            code = self.ui.combo_lang.itemData(i)
+            if code == current_code:
+                self.ui.combo_lang.setCurrentIndex(i)
+                break
         self._reset_flg = False
 
     def restore_defaults(self):
@@ -142,6 +162,7 @@ class Environment(PreferencePage):
         settings.set_use_default_browser(True)
         settings.set_custom_browser_command('')
         settings.set_show_tray_icon(True)
+        gettext.set_locale('default')
         # environment variables
         environ.restore()
 
@@ -162,6 +183,8 @@ class Environment(PreferencePage):
             self.ui.cb_use_default_browser.isChecked())
         settings.set_custom_browser_command(
             self.ui.edit_browser_command.text())
+        code = self.ui.combo_lang.currentData()
+        gettext.set_locale(code)
         # environment variables
         env = {}
         for i in range(self.ui.table.rowCount()):
@@ -182,8 +205,8 @@ class Environment(PreferencePage):
             return
         # change color scheme
         a = QtWidgets.QMessageBox.question(
-            self, 'Change color scheme?',
-            'Would you like to change the color scheme as well?')
+            self, _('Change color scheme?'),
+            _('Would you like to change the color scheme as well?'))
         dark = bool(self.ui.combo_theme.currentIndex())
         if a == QtWidgets.QMessageBox.Yes:
             scheme = 'crepuscule' if dark else 'aube'
@@ -194,8 +217,8 @@ class Environment(PreferencePage):
         # change icon theme (on Windows/OSX only).
         if not system.LINUX:
             a = QtWidgets.QMessageBox.question(
-                self, 'Change icon theme?',
-                'Would you like to change the icon theme as well?')
+                self, _('Change icon theme?'),
+                _('Would you like to change the icon theme as well?'))
             if a == QtWidgets.QMessageBox.Yes:
                 theme = 'Breeze Dark' if dark else 'Breeze'
                 self.ui.combo_icon_themes.setCurrentText(theme)

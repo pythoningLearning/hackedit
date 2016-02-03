@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[hackedit.hackedit]
+file_filter = data/locale/<lang>/LC_MESSAGES/hackedit.po
+source_file = data/locale/hackedit.pot
+source_lang = en
+type = PO
+

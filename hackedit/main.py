@@ -8,32 +8,24 @@ import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from hackedit import __version__
-from hackedit.app import argparser, logger
+import hackedit
+EXTLIBS_PATH = os.environ.get('HACKEDIT_EXTLIBS_PATH', None)
+if not EXTLIBS_PATH:
+    EXTLIBS_PATH = os.path.join(os.path.dirname(hackedit.__file__), 'extlibs')
+    os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
+sys.path.insert(0, EXTLIBS_PATH)
+
+from hackedit import __version__                 # noqa
+from hackedit.api.gettext import get_translation     # noqa
+from hackedit.app import argparser, logger       # noqa
+import faulthandler                              # noqa
 
 
-import faulthandler
 try:
-	faulthandler.enable()
+    faulthandler.enable()
 except RuntimeError:
-	# no stderr, happens on windows with the native launcher
-	pass
-
-
-ZIP_PATH = os.environ.get('HACKEDIT_LIBS_PATH', None)
-if not ZIP_PATH:
-    # make sure external libs can be imported even if not installed.
-    BASE = os.path.join(sys.prefix, 'share/hackedit/')
-    if not os.path.exists(BASE):
-        BASE = os.path.join(sys.prefix, 'local/share/hackedit/')
-    if not os.path.exists(BASE):
-        BASE = '/usr/local/share/hackedit/'
-    ZIP_PATH = os.path.join(BASE, 'extlibs.zip')
-    os.environ['HACKEDIT_LIBS_PATH'] = ZIP_PATH
-
-# append insead of prepend to allow user to
-# install another version if they want to...
-sys.path.append(ZIP_PATH)
+    # no stderr, happens on windows with the native launcher
+    pass
 
 
 def main():
@@ -73,6 +65,8 @@ def main():
     qapp.setApplicationDisplayName('HackEdit')
     qapp.setApplicationName('HackEdit')
     qapp.setApplicationVersion(__version__)
+
+    get_translation()
 
     # setup logger
     from hackedit.app import settings
@@ -116,7 +110,7 @@ def main():
         splash.raise_()
         qapp.processEvents()
 
-        splash.showMessage('Loading application module',
+        splash.showMessage(_('Loading application module'),
                            QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                            QtCore.Qt.white)
         qapp.processEvents()

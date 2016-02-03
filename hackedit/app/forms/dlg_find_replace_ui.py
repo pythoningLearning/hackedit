@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_find_replace.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_find_replace.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -124,25 +124,26 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.combo_projects, self.edit_pattern)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "Text to find:   "))
-        self.edit_find.setToolTip(_translate("Dialog", "Text to find"))
-        self.label_replace.setText(_translate("Dialog", "Replace with:"))
-        self.edit_replace.setToolTip(_translate("Dialog", "Replacement text"))
-        self.groupBox.setTitle(_translate("Dialog", "Options"))
-        self.checkbox_case_sensitive.setToolTip(_translate("Dialog", "Case sensitive search"))
-        self.checkbox_case_sensitive.setText(_translate("Dialog", "Case sensitive"))
-        self.checkbox_whole_words.setToolTip(_translate("Dialog", "Search whole words only (may be faster)"))
-        self.checkbox_whole_words.setText(_translate("Dialog", "Whole words only"))
-        self.checkbox_regexp.setToolTip(_translate("Dialog", "Use a regular expression"))
-        self.checkbox_regexp.setText(_translate("Dialog", "Regular expression"))
-        self.scopes.setTitle(_translate("Dialog", "Scope"))
-        self.radio_all_projects.setToolTip(_translate("Dialog", "Search in all open projects"))
-        self.radio_all_projects.setText(_translate("Dialog", "A&ll projects"))
-        self.radio_project.setToolTip(_translate("Dialog", "Search in the specified project"))
-        self.radio_project.setText(_translate("Dialog", "Specific pro&ject"))
-        self.combo_projects.setToolTip(_translate("Dialog", "The project to search in"))
-        self.label_3.setText(_translate("Dialog", "File patterns:     "))
-        self.edit_pattern.setToolTip(_translate("Dialog", "<html><head/><body><p>Match pattern. Files that don\'t match any pattern will get excluded from search.</p><p><br/></p><p>Use \';\' to separate patterns</p></body></html>"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Dialog.setWindowTitle(_("Dialog"))
+        self.label.setText(_("Text to find:   "))
+        self.edit_find.setToolTip(_("Text to find"))
+        self.label_replace.setText(_("Replace with:"))
+        self.edit_replace.setToolTip(_("Replacement text"))
+        self.groupBox.setTitle(_("Options"))
+        self.checkbox_case_sensitive.setToolTip(_("Case sensitive search"))
+        self.checkbox_case_sensitive.setText(_("Case sensitive"))
+        self.checkbox_whole_words.setToolTip(_("Search whole words only (may be faster)"))
+        self.checkbox_whole_words.setText(_("Whole words only"))
+        self.checkbox_regexp.setToolTip(_("Use a regular expression"))
+        self.checkbox_regexp.setText(_("Regular expression"))
+        self.scopes.setTitle(_("Scope"))
+        self.radio_all_projects.setToolTip(_("Search in all open projects"))
+        self.radio_all_projects.setText(_("A&ll projects"))
+        self.radio_project.setToolTip(_("Search in the specified project"))
+        self.radio_project.setText(_("Specific pro&ject"))
+        self.combo_projects.setToolTip(_("The project to search in"))
+        self.label_3.setText(_("File patterns:     "))
+        self.edit_pattern.setToolTip(_("<html><head/><body><p>Match pattern. Files that don\'t match any pattern will get excluded from search.</p><p><br/></p><p>Use \';\' to separate patterns</p></body></html>"))
 

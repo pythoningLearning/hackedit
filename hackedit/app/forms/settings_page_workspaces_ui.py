@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_workspaces.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_workspaces.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -132,25 +132,26 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.groupBox.setTitle(_translate("Form", "Workspaces"))
-        self.bt_add_workspace.setToolTip(_translate("Form", "Add a new empty workspace"))
-        self.bt_add_workspace.setText(_translate("Form", "..."))
-        self.bt_remove_workspace.setToolTip(_translate("Form", "Delete selected workspace"))
-        self.bt_remove_workspace.setText(_translate("Form", "..."))
-        self.bt_copy_workspace.setToolTip(_translate("Form", "Copy the selected workspace"))
-        self.list_workspaces.setToolTip(_translate("Form", "The list of available workspaces."))
-        self.group_properties.setTitle(_translate("Form", "Properties"))
-        self.label_read_only.setText(_translate("Form", "<html><head/><body><p align=\"center\">This workspace is read-only. You must clone it if you want to modify it...</p></body></html>"))
-        self.label.setText(_translate("Form", "Name:"))
-        self.edit_name.setToolTip(_translate("Form", "Name of the workspace"))
-        self.label_2.setText(_translate("Form", "Description:"))
-        self.edit_description.setToolTip(_translate("Form", "Description of the workspace"))
-        self.groupBox_4.setTitle(_translate("Form", "Available"))
-        self.list_available_plugins.setToolTip(_translate("Form", "List of available workspaces"))
-        self.bt_add_plugin.setToolTip(_translate("Form", "Add the selected plugin to the workspace"))
-        self.bt_rm_plugin.setToolTip(_translate("Form", "Remove the selected plugin from workspace"))
-        self.groupBox_5.setTitle(_translate("Form", "Used"))
-        self.list_used_plugins.setToolTip(_translate("Form", "List of plugins used by the workspace"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Form.setWindowTitle(_("Form"))
+        self.groupBox.setTitle(_("Workspaces"))
+        self.bt_add_workspace.setToolTip(_("Add a new empty workspace"))
+        self.bt_add_workspace.setText(_("..."))
+        self.bt_remove_workspace.setToolTip(_("Delete selected workspace"))
+        self.bt_remove_workspace.setText(_("..."))
+        self.bt_copy_workspace.setToolTip(_("Copy the selected workspace"))
+        self.list_workspaces.setToolTip(_("The list of available workspaces."))
+        self.group_properties.setTitle(_("Properties"))
+        self.label_read_only.setText(_("<html><head/><body><p align=\"center\">This workspace is read-only. You must clone it if you want to modify it...</p></body></html>"))
+        self.label.setText(_("Name:"))
+        self.edit_name.setToolTip(_("Name of the workspace"))
+        self.label_2.setText(_("Description:"))
+        self.edit_description.setToolTip(_("Description of the workspace"))
+        self.groupBox_4.setTitle(_("Available"))
+        self.list_available_plugins.setToolTip(_("List of available workspaces"))
+        self.bt_add_plugin.setToolTip(_("Add the selected plugin to the workspace"))
+        self.bt_rm_plugin.setToolTip(_("Remove the selected plugin from workspace"))
+        self.groupBox_5.setTitle(_("Used"))
+        self.list_used_plugins.setToolTip(_("List of plugins used by the workspace"))
 

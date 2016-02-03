@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/work/hackedit/data/forms/dlg_add_boss_source.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_add_boss_source.ui'
 #
-# Created by: PyQt5 UI code generator 5.5
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -41,10 +41,11 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Add source"))
-        self.label.setText(_translate("Dialog", "Label:"))
-        self.edit_label.setToolTip(_translate("Dialog", "Give a meaningfull name to this source so that you can recognize it."))
-        self.label_2.setText(_translate("Dialog", "URL"))
-        self.edit_url.setToolTip(_translate("Dialog", "<html><head/><body><p>URL of the template repository. </p><p><br/></p><p>Boss supports both local and remote (git) template repositories.</p></body></html>"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Dialog.setWindowTitle(_("Add source"))
+        self.label.setText(_("Label:"))
+        self.edit_label.setToolTip(_("Give a meaningfull name to this source so that you can recognize it."))
+        self.label_2.setText(_("URL"))
+        self.edit_url.setToolTip(_("<html><head/><body><p>URL of the template repository. </p><p><br/></p><p>Boss supports both local and remote (git) template repositories.</p></body></html>"))
 

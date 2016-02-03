@@ -8,7 +8,7 @@ import json
 from PyQt5 import QtCore
 
 
-def get(name, default):
+def get(name, text, default):
     """
     Gets a shortcut for the given action name, if the name does not exists
     in the shortcuts map, default is used instead.
@@ -16,10 +16,13 @@ def get(name, default):
     The shortcut map is stored in QSettings and can be edited thought the
     application preferences (Environmnent > Shortcuts).
 
-    :param name: Name of the action
+    :param name: Name of the action (non-translatable as it used to identify
+                 the action)
+    :param text: translatable text of the action
     :param default: Default shortcut value, will be used if the shortcut cannot
                     be found in the map.
-    :return: shortcut string
+
+    :returns: shortcut string
     """
     global _MAP
     try:
@@ -29,11 +32,13 @@ def get(name, default):
     if not sh:
         sh = default
     if default is not None:
-        _MAP[name] = [sh, default]
+        _MAP[name] = [sh, default, text]
+    # update action text (translation)
+    _MAP[name][_INDEX_TEXT] = text
     return sh
 
 
-def update(name, shortcut):
+def update(name, text, shortcut):
     """
     Updates the shortcut of a given action name.
 
@@ -42,9 +47,11 @@ def update(name, shortcut):
 
     :param name: name of the action to update
     :param value: new shortcut
+    :param text: text of the action (translatable)
     """
     global _MAP
     _MAP[name][_INDEX_VALUE] = shortcut
+    _MAP[name][_INDEX_TEXT] = text
 
 
 def get_all_names():
@@ -56,6 +63,11 @@ def get_all_names():
     """
     global _MAP
     return sorted(_MAP.keys())
+
+
+def get_all_texts():
+    global _MAP
+    return sorted([v[_INDEX_TEXT] for v in _MAP.values()])
 
 
 def restore_defaults():
@@ -100,11 +112,19 @@ _MAP = None
 _INDEX_VALUE = 0
 #: Index of the default value
 _INDEX_DEFAULT = 1
+#: Index text
+_INDEX_TEXT = 2
 
 
 def _get_map():
     string = QtCore.QSettings().value('env/shortcuts', '{}')
-    return json.loads(string)
+    data = json.loads(string)
+    if data:
+        try:
+            k, (name, sh, text) = list(data.items())[0]
+        except ValueError:
+            data = {}  # old format used
+    return data
 
 
 def _set_map(shortcuts_map):

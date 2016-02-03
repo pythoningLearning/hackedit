@@ -204,8 +204,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
             # tab.
             name = self.interpreter_manager.name
             ev = events.Event(
-                'No interpreter found',
-                '%s: no interpreter found' % name.capitalize(),
+                _('No interpreter found'),
+                _('%s: no interpreter found') % name.capitalize(),
                 level=events.WARNING)
             events.post(ev)
 
@@ -275,7 +275,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
             pgm, args = tokens[0], tokens[1:]
             QtCore.QProcess.startDetached(pgm, args, cwd)
             events.post(
-                events.Event('Program running in external terminal', cmd),
+                events.Event(_('Program running in external terminal'), cmd),
                 force_show=True)
 
     def configure(self):
@@ -359,9 +359,10 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         self._action_run = self._mnu.addAction('Run')
         window.get_main_window().addAction(self._action_run)
         self._action_run.triggered.connect(self.run)
-        self._action_run.setShortcut(shortcuts.get('Run', 'F9'))
+        self._action_run.setShortcut(shortcuts.get(
+            'Run', _('Run'), 'F9'))
         self._action_run.setIcon(special_icons.run_icon())
-        self._action_configure = self._mnu.addAction('Configure')
+        self._action_configure = self._mnu.addAction(_('Configure'))
         self._action_configure.setMenuRole(self._action_configure.NoRole)
         self._action_configure.triggered.connect(self.configure)
         window.get_main_window().addAction(self._action_configure)
@@ -369,12 +370,13 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         self._separator = self._mnu.addSeparator()
 
     def apply_preferences(self):
-        self._action_run.setShortcut(shortcuts.get('Run', 'F9'))
+        self._action_run.setShortcut(shortcuts.get(
+            'Run', _('Run'), 'F9'))
 
     def _setup_combo_box(self):
         # add a combo box to choose the run configuration to use
         # in project mode.
-        self._mnu_configs = QtWidgets.QMenu('Configurations', self._mnu)
+        self._mnu_configs = QtWidgets.QMenu(_('Configurations'), self._mnu)
         self._mnu.insertMenu(self._separator, self._mnu_configs)
         self._mnu_configs.menuAction().setMenuRole(QtWidgets.QAction.NoRole)
         self._configs_group = QtWidgets.QActionGroup(self._mnu_configs)
@@ -416,7 +418,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
     def _create_dock(self):
         self._run_widget = widgets.RunWidget(self._window)
         self._dock_run = window.add_dock_widget(
-            self._run_widget, 'Run', special_icons.run_icon(),
+            self._run_widget, _('Run'), special_icons.run_icon(),
             QtCore.Qt.BottomDockWidgetArea)
         self._run_widget.last_tab_closed.connect(self._remove_dock)
 
@@ -505,7 +507,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
     def _setup_ui(self):
         self._ui = dlg_script_run_config_ui.Ui_Dialog()
         self._ui.setupUi(self)
-        self.setWindowTitle('Setup project run configurations')
+        self.setWindowTitle(_('Setup project run configurations'))
 
     def _show_project_configs(self, path):
         if self._current_project:
@@ -620,8 +622,8 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         if not folder or not os.path.exists(folder):
             folder = current_path
         path, ffilter = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Choose %s script' % self.interpreter_manager.name,
-            folder, '%s files (%s)' % (
+            self, _('Choose %s script') % self.interpreter_manager.name,
+            folder, _('%s files (%s)') % (
                 self.interpreter_manager.name.capitalize(),
                 ' '.join(self.interpreter_manager.extensions)))
         if path:
@@ -636,7 +638,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         if not folder or not os.path.exists(folder):
             folder = current_path
         path = QtWidgets.QFileDialog.getExistingDirectory(
-            self, 'Choose the working directory', folder)
+            self, _('Choose the working directory'), folder)
         if path:
             self._ui.edit_working_dir.setText(os.path.normpath(path))
 
@@ -659,9 +661,8 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         combo = self._ui.combo_prj_interpreter
         interpreter = self.interpreter_manager.get_project_interpreter(
             self._current_project)
-        combo.blockSignals(True)
-        combo.setCurrentText(interpreter)
-        combo.blockSignals(False)
+        with utils.block_signals(combo):
+            combo.setCurrentText(interpreter)
 
         # environment variables
         self._ui.table_env_vars.clear()

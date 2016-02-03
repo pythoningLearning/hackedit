@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/event_widget.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/event_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -86,11 +86,12 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.lbl_time.setText(_translate("Form", "09:03:30"))
-        self.lbl_title.setText(_translate("Form", "Title"))
-        self.lbl_description.setText(_translate("Form", "Description"))
-        self.toolButton.setToolTip(_translate("Form", "Close this notification"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Form.setWindowTitle(_("Form"))
+        self.lbl_time.setText(_("09:03:30"))
+        self.lbl_title.setText(_("Title"))
+        self.lbl_description.setText(_("Description"))
+        self.toolButton.setToolTip(_("Close this notification"))
 
 from . import hackedit_rc

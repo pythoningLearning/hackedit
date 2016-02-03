@@ -41,7 +41,7 @@ if __name__ == '__main__':
             print('append path %s to sys.path' % path)
             sys.path.append(path)
 
-    sys.path.append(os.environ['HACKEDIT_LIBS_PATH'])
+    sys.path.append(os.environ['HACKEDIT_EXTLIBS_PATH'])
 
     from pyqode.core import backend
 

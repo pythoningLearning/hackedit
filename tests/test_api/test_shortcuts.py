@@ -9,37 +9,49 @@ def setup_function(function):
 
 
 def test_get_shortcut():
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
 
 
 def test_update_shortcut():
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
-    shortcuts.update('My action', 'Ctrl+Backspace')
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
+    shortcuts.update('My action', 'My action', 'Ctrl+Backspace')
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
 
 
 def test_load_save():
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
-    shortcuts.update('My action', 'Ctrl+Backspace')
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
+    shortcuts.update('My action', 'My action', 'Ctrl+Backspace')
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
     shortcuts.load()
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
-    shortcuts.update('My action', 'Ctrl+Backspace')
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
+    shortcuts.update('My action', 'My action', 'Ctrl+Backspace')
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
     shortcuts.save()
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
 
 
 def test_get_all_names():
     assert len(shortcuts.get_all_names()) == 0
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
-    assert shortcuts.get('My action2', 'Ctrl+Alt+Return') == 'Ctrl+Alt+Return'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
+    assert shortcuts.get('My action2', 'My action',
+                         'Ctrl+Alt+Return') == 'Ctrl+Alt+Return'
     assert len(shortcuts.get_all_names()) == 2
 
 
 def test_restore_defaults():
-    shortcuts.get('My action', 'Ctrl+Alt+Delete')
-    shortcuts.update('My action', 'Ctrl+Backspace')
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
+    shortcuts.get('My action', 'My action', 'Ctrl+Alt+Delete')
+    shortcuts.update('My action', 'My action', 'Ctrl+Backspace')
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Backspace'
     shortcuts.restore_defaults()
-    assert shortcuts.get('My action', 'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'
+    assert shortcuts.get('My action', 'My action',
+                         'Ctrl+Alt+Delete') == 'Ctrl+Alt+Delete'

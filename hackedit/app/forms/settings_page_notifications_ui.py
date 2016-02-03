@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_notifications.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_notifications.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -70,22 +70,23 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        Form.setToolTip(_translate("Form", "Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))
-        self.cb_allow_system_tray.setToolTip(_translate("Form", "If checked, the IDE notifications will be shown through the system tray icon (or libnotify on GNU/Linux)."))
-        self.cb_allow_system_tray.setText(_translate("Form", "Show notification in system tray"))
-        self.groupBox.setTitle(_translate("Form", "Open pane automatically for"))
-        self.cb_info.setToolTip(_translate("Form", "General purpose information messages"))
-        self.cb_info.setText(_translate("Form", "Information messages"))
-        self.cb_warning.setToolTip(_translate("Form", "User warnings"))
-        self.cb_warning.setText(_translate("Form", "Warning messages"))
-        self.cb_errors.setToolTip(_translate("Form", "Internal errors,..."))
-        self.cb_errors.setText(_translate("Form", "Error messages"))
-        self.groupBox_2.setTitle(_translate("Form", "Blacklist"))
-        self.blacklist.setToolTip(_translate("Form", "The list of ignored notifications"))
-        self.bt_rm.setToolTip(_translate("Form", "Remove the select notification from the blacklist."))
-        self.bt_rm.setText(_translate("Form", "..."))
-        self.bt_clear.setToolTip(_translate("Form", "Clear tjhe blacklist"))
-        self.bt_clear.setText(_translate("Form", "..."))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Form.setWindowTitle(_("Form"))
+        Form.setToolTip(_("Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))
+        self.cb_allow_system_tray.setToolTip(_("If checked, the IDE notifications will be shown through the system tray icon (or libnotify on GNU/Linux)."))
+        self.cb_allow_system_tray.setText(_("Show notification in system tray"))
+        self.groupBox.setTitle(_("Open pane automatically for"))
+        self.cb_info.setToolTip(_("General purpose information messages"))
+        self.cb_info.setText(_("Information messages"))
+        self.cb_warning.setToolTip(_("User warnings"))
+        self.cb_warning.setText(_("Warning messages"))
+        self.cb_errors.setToolTip(_("Internal errors,..."))
+        self.cb_errors.setText(_("Error messages"))
+        self.groupBox_2.setTitle(_("Blacklist"))
+        self.blacklist.setToolTip(_("The list of ignored notifications"))
+        self.bt_rm.setToolTip(_("Remove the select notification from the blacklist."))
+        self.bt_rm.setText(_("..."))
+        self.bt_clear.setToolTip(_("Clear tjhe blacklist"))
+        self.bt_clear.setText(_("..."))
 

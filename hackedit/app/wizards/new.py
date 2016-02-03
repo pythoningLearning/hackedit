@@ -21,8 +21,8 @@ class WizardNew(QtWidgets.QWizard):
         self.ui = wizard_new_ui.Ui_Wizard()
         self.ui.setupUi(self)
         self.ui.lbl_boss_version.setText(
-            '<i>Powered by <a href="https://github.com/datafolklabs/boss">'
-            'BOSS</a> (v%s)</i>' % boss.version())
+            _('<i>Powered by <a href="https://github.com/datafolklabs/boss">'
+              'BOSS</a> (v%s)</i>') % boss.version())
         font = self.ui.lbl_boss_version.font()
         font.setPointSize(8)
         self.ui.lbl_boss_version.setFont(font)
@@ -133,11 +133,11 @@ class WizardNew(QtWidgets.QWizard):
         message = ''
         if os.path.isdir(path):
             if not self.single_file and os.listdir(path):
-                message = 'Directory is not empty'
+                message = _('Directory is not empty')
             else:
                 ok = True
         elif os.path.exists(path):
-            message = 'Path does is not a directory'
+            message = _('Path does is not a directory')
         else:
             ok = True
         self.ui.lbl_prj_location_error.setHidden(ok)

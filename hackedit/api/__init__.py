@@ -33,6 +33,7 @@ the coverage as high as possible.
 """
 from . import editor
 from . import events
+from . import gettext
 from . import interpreters
 from . import plugins
 from . import project
@@ -50,6 +51,7 @@ from . import window
 __all__ = [
     'editor',
     'events',
+    'gettext',
     'interpreters',
     'plugins',
     'project',

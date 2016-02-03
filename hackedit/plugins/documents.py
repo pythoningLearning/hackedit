@@ -12,7 +12,7 @@ class OpenDocuments(api.plugins.WorkspacePlugin):
     def activate(self):
         self.list = QtWidgets.QListWidget()
         api.window.add_dock_widget(
-            self.list, 'Documents',
+            self.list, _('Documents'),
             icon=api.widgets.FileIconProvider.mimetype_icon('file.txt'),
             area=QtCore.Qt.LeftDockWidgetArea)
         api.signals.connect_slot(

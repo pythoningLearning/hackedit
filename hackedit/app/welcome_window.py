@@ -27,11 +27,11 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         self.setFixedSize(QtCore.QSize(865, 600))
         self.setWindowIcon(QtGui.QIcon.fromTheme(
             'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
-        self.setWindowTitle('Welcome')
+        self.setWindowTitle(_('Welcome'))
         self._app.get_recent_files_manager().updated.connect(
             self.update_recents)
         self.update_recents()
-        self._ui.label_version.setText('Version %s' % __version__)
+        self._ui.label_version.setText(_('Version %s') % __version__)
         self._ui.list_recents.remove_current_requested.connect(
             self.on_list_recents_remove_current_requested)
         self._ui.list_recents.clear_requested.connect(
@@ -42,13 +42,13 @@ class WelcomeWindow(QtWidgets.QMainWindow):
 
         self._ui.bt_configure.clicked.connect(self._edit_preferences)
 
-        a = QtWidgets.QAction('Help', self)
-        a.setToolTip('Get some help')
+        a = QtWidgets.QAction(_('Help'), self)
+        a.setToolTip(_('Get some help'))
         a.setIcon(QtGui.QIcon.fromTheme('system-help'))
         self._ui.bt_help.addAction(a)
 
-        a = QtWidgets.QAction('About', self)
-        a.setToolTip('About HackEdit')
+        a = QtWidgets.QAction(_('About'), self)
+        a.setToolTip(_('About HackEdit'))
         a.setIcon(QtGui.QIcon.fromTheme('help-about'))
         a.triggered.connect(self._show_about)
         self._ui.bt_help.addAction(a)
@@ -57,9 +57,9 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         sep.setSeparator(True)
         self._ui.bt_help.addAction(sep)
 
-        a = QtWidgets.QAction('Report bug', self)
+        a = QtWidgets.QAction(_('Report bug'), self)
         a.setIcon(QtGui.QIcon.fromTheme('tools-report-bug'))
-        a.setToolTip('Report a bug')
+        a.setToolTip(_('Report a bug'))
         a.triggered.connect(self._report_bug)
         self._ui.bt_help.addAction(a)
 
@@ -67,8 +67,8 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         sep.setSeparator(True)
         self._ui.bt_help.addAction(sep)
 
-        a = QtWidgets.QAction('Check for update', self)
-        a.setToolTip('Check for update')
+        a = QtWidgets.QAction(_('Check for update'), self)
+        a.setToolTip(_('Check for update'))
         a.setIcon(QtGui.QIcon.fromTheme('system-software-update'))
         a.triggered.connect(self._check_for_update)
         self._ui.bt_help.addAction(a)

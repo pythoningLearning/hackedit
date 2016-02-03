@@ -42,7 +42,7 @@ class LocatorWidget(QtWidgets.QFrame):
         self.ui = locator_ui.Ui_Frame()
         self.ui.setupUi(self)
         self.ui.lineEdit.textChanged.connect(self.request_search)
-        self.ui.lineEdit.prompt_text = 'Type to locate...'
+        self.ui.lineEdit.prompt_text = _('Type to locate...')
         self.ui.lineEdit.installEventFilter(self)
         self.ui.treeWidget.installEventFilter(self)
         self.ui.treeWidget.setItemDelegate(HTMLDelegate())
@@ -298,7 +298,7 @@ class LocatorWidget(QtWidgets.QFrame):
             return -1
 
     def _show_help(self):
-        help_text = '''<p>Use <i>Goto</i> to navigate your project’s files
+        help_text = _('''<p>Use <i>Goto</i> to navigate your project’s files
 swiftly.</p>
 
 <p>Use the <i>arrow keys</i> to navigate into the list and press <i>ENTER</i>
@@ -313,9 +313,9 @@ to open the selected entry. Press <i>ESCAPE</i> to close the popup window.<p>
 </ul>
 
 </p>
-'''
+''')
         QtWidgets.QMessageBox.information(
-            self, 'Goto: help', help_text)
+            self, _('Goto: help'), help_text)
         self.show()
 
     def _on_current_item_changed(self, item):

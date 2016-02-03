@@ -75,7 +75,7 @@ class Event(QtCore.QObject):
         #: time string, automatically set when the event got instanciated
         self.time_str = datetime.datetime.now().strftime('%H:%M:%S')
         self.action_blacklist = QtWidgets.QAction(None)
-        self.action_blacklist.setText("Don't show again")
+        self.action_blacklist.setText(_("Don't show again"))
         self.action_blacklist.setObjectName('actionDontShowAgain')
         self.action_blacklist.triggered.connect(self._blacklist_event)
 
@@ -99,9 +99,9 @@ class ExceptionEvent(Event):
             tb = traceback.format_exc()
         self.traceback = tb
         self.exc = exception
-        self.action_details = QtWidgets.QAction('Details', None)
+        self.action_details = QtWidgets.QAction(_('Details'), None)
         self.action_details.triggered.connect(self.show_details)
-        self.action_report = QtWidgets.QAction('Report', None)
+        self.action_report = QtWidgets.QAction(_('Report'), None)
         self.action_report.triggered.connect(self.report_bug)
         actions = [self.action_details, self.action_report] + custom_actions
         super().__init__(
@@ -109,8 +109,8 @@ class ExceptionEvent(Event):
 
     def show_details(self):
         QtWidgets.QMessageBox.warning(
-            self.window, 'Details',
-            'Exception details:\n\n %s' % self.traceback)
+            self.window, _('Details'),
+            _('Exception details:\n\n %s') % self.traceback)
 
     def report_bug(self):
         from hackedit.app import common

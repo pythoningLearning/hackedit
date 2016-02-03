@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/HackEdit/hackedit/data/forms/settings_page_shortcuts.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_shortcuts.ui'
 #
-# Created by: PyQt5 UI code generator 5.4.2
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -35,13 +35,14 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.edit_filter.setToolTip(_translate("Form", "Filter actions by name or by shortcut"))
-        self.table.setToolTip(_translate("Form", "The list of application shortcuts"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Form.setWindowTitle(_("Form"))
+        self.edit_filter.setToolTip(_("Filter actions by name or by shortcut"))
+        self.table.setToolTip(_("The list of application shortcuts"))
         item = self.table.horizontalHeaderItem(0)
-        item.setText(_translate("Form", "Action"))
+        item.setText(_("Action"))
         item = self.table.horizontalHeaderItem(1)
-        item.setText(_translate("Form", "Shortcut"))
+        item.setText(_("Shortcut"))
 
 from pyqode.core.widgets import PromptLineEdit

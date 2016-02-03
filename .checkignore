@@ -5,3 +5,4 @@ docs/*
 data/*
 conftest.py
 bootstrap.pyw
+hackedit/extlibs/*

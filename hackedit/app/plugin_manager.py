@@ -94,9 +94,9 @@ class PluginManager:
                 name = str(entrypoint).split('=')[0].strip()
                 if win:
                     event = LoadPluginFailedEvent(
-                        '%r load failed' % name,
-                        'Failed to load plugin %r because of the following '
-                        'error: %r' % (name, str(e)), e)
+                        _('%r load failed') % name,
+                        _('Failed to load plugin %r because of the following '
+                          'error: %r') % (name, str(e)), e)
                     win.notifications.add(event, force_show=True)
                 else:
                     _logger().exception('Failed to load workspace plugin')

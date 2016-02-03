@@ -36,6 +36,20 @@ try:
 except ImportError:
     build_ui = None
 
+# Babel commands for internationalisation and localisation
+try:
+    from babel.messages import frontend as babel
+except ImportError:
+    compile_catalog = None
+    extract_messages = None
+    init_catalog = None
+    update_catalog = None
+else:
+    compile_catalog = babel.compile_catalog
+    extract_messages = babel.extract_messages
+    init_catalog = babel.init_catalog
+    update_catalog = babel.update_catalog
+
 
 # Get long description
 with open('README.rst', 'r') as readme:
@@ -44,7 +58,21 @@ with open('README.rst', 'r') as readme:
 
 # Get data files
 # zip contains 3rd party libraries
-data_files = [('share/hackedit', ['data/share/extlibs.zip'])]
+data_files = []
+# translations
+translations = [
+    ('share/locale/%s' % x[0].replace('data/locale/', ''),
+     list(map(lambda y: x[0]+'/'+y, x[2])))
+    for x in os.walk('data/locale/')
+]
+for dst, srclist in translations:
+    checked_srclist = []
+    for src in srclist:
+        if src.endswith('.mo'):
+            checked_srclist.append(src)
+    if checked_srclist:
+        data_files.append((dst, checked_srclist))
+
 # platform specific files
 if 'linux' in sys.platform.lower():
     # install launcher on linux
@@ -114,9 +142,18 @@ setup(
             'aube = hackedit.styles.aube:AubeStyle',
             'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
             'ark-dark = hackedit.styles.arkdark:ArkDarkStyle'
-        ]
+        ],
+        'pyqt_distutils_hooks': [
+            'hackedit_gettext = hackedit.api.gettext:hackedit_gettext_hook']
     },
-    cmdclass={'test': pytest, 'build_ui': build_ui},
+    cmdclass={
+        'test': pytest,
+        'build_ui': build_ui,
+        'compile_catalog': compile_catalog,
+        'extract_messages': extract_messages,
+        'init_catalog': init_catalog,
+        'update_catalog': update_catalog
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: X11 Applications :: Qt',

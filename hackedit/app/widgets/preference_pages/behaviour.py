@@ -11,9 +11,9 @@ class Behaviour(PreferencePage):
     Preference page for the application behaviours settings
     """
     def __init__(self):
-        super().__init__('Behaviour',
+        super().__init__(_('Behaviour'),
                          icon=QtGui.QIcon.fromTheme('preferences-system'),
-                         category='Environment')
+                         category=_('Environment'))
         self.ui = settings_page_behaviour_ui.Ui_Form()
         self.ui.setupUi(self)
 

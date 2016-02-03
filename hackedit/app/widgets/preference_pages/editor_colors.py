@@ -32,7 +32,7 @@ class EditorColors(PreferencePage):
     def __init__(self):
         icon = QtGui.QIcon.fromTheme('preferences-desktop-font')
         super().__init__(
-            'Font & Colors', icon=icon, category='Editor')
+            _('Font & Colors'), icon=icon, category=_('Editor'))
         self.ui = settings_page_editor_colors_ui.Ui_Form()
         self.ui.setupUi(self)
         self.ui.edit_preview.modes.append(modes.CaretLineHighlighterMode())

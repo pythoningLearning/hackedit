@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_preferences.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_preferences.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -70,10 +70,11 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Preferences"))
-        self.categories.setToolTip(_translate("Dialog", "Categories"))
-        self.categories.headerItem().setText(0, _translate("Dialog", "item"))
-        self.label_title.setText(_translate("Dialog", "Page title"))
-        self.buttons.setToolTip(_translate("Dialog", "<html><head/><body><p>Ok: Apply settings and quit the dialog</p><p>Cancel: Quit the dialog without applying the settings</p><p>Reset: reset the value of the changed settings of the current page (cancel any changes you\'ve made)</p><p>Restore defaults: restore the initial default values of the current page</p></body></html>"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Dialog.setWindowTitle(_("Preferences"))
+        self.categories.setToolTip(_("Categories"))
+        self.categories.headerItem().setText(0, _("item"))
+        self.label_title.setText(_("Page title"))
+        self.buttons.setToolTip(_("<html><head/><body><p>Ok: Apply settings and quit the dialog</p><p>Cancel: Quit the dialog without applying the settings</p><p>Reset: reset the value of the changed settings of the current page (cancel any changes you\'ve made)</p><p>Restore defaults: restore the initial default values of the current page</p></body></html>"))
 

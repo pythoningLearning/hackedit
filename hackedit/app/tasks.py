@@ -19,7 +19,7 @@ class TaskExceptionEvent(events.ExceptionEvent):
         self.traceback = tb
         self.name = task.name
         super().__init__(
-            'Task <%s> failed' % task.name, desc, exception, tb=self.traceback)
+            _('Task <%s> failed') % task.name, desc, exception, tb=self.traceback)
 
 
 class SubprocessTaskHandle:
@@ -328,7 +328,7 @@ class TaskListPopup(QtWidgets.QDialog):
     """
     def __init__(self, parent, task_manager):
         super().__init__(parent)
-        self.setWindowTitle('Background tasks')
+        self.setWindowTitle(_('Background tasks'))
         self.setContentsMargins(0, 0, 0, 0)
         layout = QtWidgets.QHBoxLayout()
         self.scroll_area = QtWidgets.QScrollArea()
@@ -388,7 +388,7 @@ class TaskManagerWidget(QtWidgets.QWidget):
             self.hide()
             self.label.clear()
         elif count > 1:
-            self.label.setText('%d process running' % count)
+            self.label.setText(_('%d process running') % count)
         else:
             self.label.setText(self.task_manager.running_tasks[0].name)
 

@@ -197,21 +197,21 @@ class DockWidgetsManager(QtCore.QObject):
         self._window = main_window
         bar = DockWidgetSideBar(main_window)
         bar.setObjectName('dockManagerLeft')
-        bar.setWindowTitle('Dock manager left')
+        bar.setWindowTitle(_('Dock manager left'))
         main_window.addToolBar(QtCore.Qt.LeftToolBarArea, bar)
         bar.area = QtCore.Qt.LeftDockWidgetArea
         self._managers[bar.area] = bar
 
         bar = DockWidgetSideBar(main_window)
         bar.setObjectName('dockManagerRight')
-        bar.setWindowTitle('Dock manager right')
+        bar.setWindowTitle(_('Dock manager right'))
         main_window.addToolBar(QtCore.Qt.RightToolBarArea, bar)
         bar.area = QtCore.Qt.RightToolBarArea
         self._managers[bar.area] = bar
 
         bar = DockWidgetSideBar(main_window)
         bar.setObjectName('dockManagerBottom')
-        bar.setWindowTitle('Dock manager bottom')
+        bar.setWindowTitle(_('Dock manager bottom'))
         main_window.addToolBar(QtCore.Qt.BottomToolBarArea, bar)
         bar.area = QtCore.Qt.BottomDockWidgetArea
         empty = QtWidgets.QWidget()

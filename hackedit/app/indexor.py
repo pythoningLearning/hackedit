@@ -115,20 +115,20 @@ class FileIndexor:
         if self._pending_task is None:
             self._task_running = True
             self._pending_task = api.tasks.start(
-                'Indexing project symbols', index_project_files,
+                _('Indexing project symbols'), index_project_files,
                 self._on_task_finished, args=(
                     api.editor.get_all_paths(), api.project.get_root_project(),
                     self._plugins),
                 cancellable=False)
 
-    def _index_document(self, path, _):
+    def _index_document(self, path, __):
         """
         Indexates symbols found in a given document.
         """
         if self._pending_task is None:
             self._task_running = True
             self._pending_task = api.tasks.start(
-                'Indexing file symbols',
+                _('Indexing file symbols'),
                 index_document, self._on_task_finished,
                 args=(api.project.get_root_project(), path, self._plugins),
                 cancellable=False)

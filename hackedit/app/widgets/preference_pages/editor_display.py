@@ -16,7 +16,7 @@ class EditorDisplay(PreferencePage):
         else:
             icon = QtGui.QIcon.fromTheme('preferences-other')
         super().__init__(
-            'Display', icon=icon, category='Editor')
+            _('Display'), icon=icon, category=_('Editor'))
         self.ui = settings_page_editor_display_ui.Ui_Form()
         self.ui.setupUi(self)
         self.ui.cb_margin.toggled.connect(self.ui.spin_margin_pos.setEnabled)

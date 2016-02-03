@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_mimetypes.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_mimetypes.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -73,26 +73,27 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.groupBox.setTitle(_translate("Form", "Recognized mimetypes"))
-        self.table_mimes.setToolTip(_translate("Form", "The list of mimetypes and their handler"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Form.setWindowTitle(_("Form"))
+        self.groupBox.setTitle(_("Recognized mimetypes"))
+        self.table_mimes.setToolTip(_("The list of mimetypes and their handler"))
         item = self.table_mimes.verticalHeaderItem(0)
-        item.setText(_translate("Form", "0"))
+        item.setText(_("0"))
         item = self.table_mimes.horizontalHeaderItem(0)
-        item.setText(_translate("Form", "Mimetype"))
+        item.setText(_("Mimetype"))
         item = self.table_mimes.horizontalHeaderItem(1)
-        item.setText(_translate("Form", "Handler"))
+        item.setText(_("Handler"))
         __sortingEnabled = self.table_mimes.isSortingEnabled()
         self.table_mimes.setSortingEnabled(False)
         item = self.table_mimes.item(0, 0)
-        item.setText(_translate("Form", "text/x-python"))
+        item.setText(_("text/x-python"))
         item = self.table_mimes.item(0, 1)
-        item.setText(_translate("Form", "PyCodeEdit"))
+        item.setText(_("PyCodeEdit"))
         self.table_mimes.setSortingEnabled(__sortingEnabled)
-        self.label.setText(_translate("Form", "Patterns:"))
-        self.edit_mime_extensions.setToolTip(_translate("Form", "Mimetype patterns (separated by ;)"))
-        self.groupBox_2.setTitle(_translate("Form", "Ignored files and directories"))
-        self.edit_ignored.setToolTip(_translate("Form", "<html><head/><body><p>The list of ignore patterns (each pattern must be separated by a semi-colon ;)</p></body></html>"))
+        self.label.setText(_("Patterns:"))
+        self.edit_mime_extensions.setToolTip(_("Mimetype patterns (separated by ;)"))
+        self.groupBox_2.setTitle(_("Ignored files and directories"))
+        self.edit_ignored.setToolTip(_("<html><head/><body><p>The list of ignore patterns (each pattern must be separated by a semi-colon ;)</p></body></html>"))
 
 from pyqode.core.widgets import PromptLineEdit

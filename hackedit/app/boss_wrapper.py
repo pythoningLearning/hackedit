@@ -226,7 +226,7 @@ def qt_input_handler(question, default=''):
     answer = ''
     while not answer:
         answer, _ = QtWidgets.QInputDialog.getText(
-            QtWidgets.qApp.activeWindow(), 'Create from template', question)
+            QtWidgets.qApp.activeWindow(), _('Create from template'), question)
         answer = answer.strip()
     return answer
 

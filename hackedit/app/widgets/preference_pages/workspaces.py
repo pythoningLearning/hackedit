@@ -19,7 +19,7 @@ class Workspaces(PreferencePage):
             self.icon = QtGui.QIcon.fromTheme('preferences-system-windows')
         else:
             self.icon = QtGui.QIcon.fromTheme('applications-interfacedesign')
-        super().__init__('Workspaces', icon=self.icon)
+        super().__init__(_('Workspaces'), icon=self.icon)
         self.ui = settings_page_workspaces_ui.Ui_Form()
         self.ui.setupUi(self)
         self.ui.list_workspaces.currentRowChanged.connect(
@@ -76,8 +76,8 @@ class Workspaces(PreferencePage):
     def _rm_workspace(self):
         w = self._get_current_workspace()
         a = QtWidgets.QMessageBox.question(
-            self, 'Confirm delete workspace',
-            'Are you sure you want to remove workspace %r?' % w['name'])
+            self, _('Confirm delete workspace'),
+            _('Are you sure you want to remove workspace %r?') % w['name'])
         if a == QtWidgets.QMessageBox.Yes:
             os.remove(w['path'])
             self.reset()
@@ -189,17 +189,17 @@ class Workspaces(PreferencePage):
         ok = False
         while not ok:
             name, status = QtWidgets.QInputDialog.getText(
-                self, 'Add workspace', 'Workspace name:',
+                self, _('Add workspace'), _('Workspace name:'),
                 QtWidgets.QLineEdit.Normal, name)
             if status:
                 path = os.path.join(
                     system.get_user_workspaces_dir(), name.lower() + '.json')
                 if os.path.exists(path):
                     QtWidgets.QMessageBox.warning(
-                        self, 'Cannot create workspace',
-                        'Cannot create workspace %s, a workspace with the '
-                        'same name already exists.\n'
-                        'Please choose another name!' % name)
+                        self, _('Cannot create workspace'),
+                        _('Cannot create workspace %s, a workspace with the '
+                          'same name already exists.\n'
+                          'Please choose another name!') % name)
                 else:
                     ok = True
             else:
