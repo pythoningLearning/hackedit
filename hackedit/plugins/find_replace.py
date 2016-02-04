@@ -126,9 +126,10 @@ class FindReplace(plugins.WorkspacePlugin):
 
     def _remove_dock(self):
         if self._dock is not None:
-            self._dock.hide()
-            self._dock.button.hide()
-            self._dock.button.action.setVisible(False)
+            window.remove_dock_widget(self._dock)
+            self._dock.close()
+            self._dock.deleteLater()
+            self._dock = None
 
     def _on_item_activated(self, item, _):
         assert isinstance(item, QtWidgets.QTreeWidgetItem)

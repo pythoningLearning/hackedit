@@ -588,8 +588,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._dock_widgets.append(dock)
 
     def removeDockWidget(self, dock):
+        if dock is None:
+            return
         super().removeDockWidget(dock)
         self._dock_manager.remove_dock_widget(dock)
+        self._dock_widgets.remove(dock)
 
     def addToolBar(self, *args):
         for arg in args:
