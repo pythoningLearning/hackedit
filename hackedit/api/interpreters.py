@@ -760,7 +760,7 @@ def load_configs(path):
     """
     # add a menu with the existing configurations.
     base_path = path
-    path = os.path.join(base_path, project.FOLDER, 'run.json')
+    path = os.path.join(base_path, project.FOLDER, 'project.json')
     try:
         with open(path) as f:
             configs = json.load(f)
@@ -792,7 +792,7 @@ def save_configs(path, configs):
     except ValueError:
         # invalid config
         pass
-    path = os.path.join(base_path, project.FOLDER, 'run.json')
+    path = os.path.join(base_path, project.FOLDER, 'project.json')
     with open(path, 'w') as f:
         json.dump(configs, f, indent=4, sort_keys=True)
 
