@@ -291,9 +291,14 @@ class Application(QtCore.QObject):
         self.tray_icon.setContextMenu(tray_icon_menu)
 
     def _on_current_window_changed(self, _):
-        w = self._qapp.activeWindow()
-        if isinstance(w, MainWindow):
-            self._last_window = w
+        if self._qapp is None:
+            # last window closed (qapp is none when all windows have been
+            # closed)
+            self._last_window = None
+        else:
+            w = self._qapp.activeWindow()
+            if isinstance(w, MainWindow):
+                self._last_window = w
 
     def _restore_last_msg_window(self):
         try:
