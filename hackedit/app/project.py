@@ -221,8 +221,8 @@ class ProjectExplorer(QtCore.QObject):
             # too much file indexed, display a warning to let the user know
             # he should ignore some unwanted directories.
             event = api.events.Event(
-                _('Project directory contains too much files for indexing...',
-                  'You might want to mark the directories that contains '
+                _('Project directory contains too much files for indexing...'),
+                _('You might want to mark the directories that contains '
                   'non-project files as ignored (<i>Project View -> Right '
                   'click on a directory -> Mark as ignored</i>)'),
                 level=api.events.WARNING)
