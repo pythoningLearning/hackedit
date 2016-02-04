@@ -225,7 +225,7 @@ def clean(path):
 def qt_input_handler(question, default=''):
     answer = ''
     while not answer:
-        answer, _ = QtWidgets.QInputDialog.getText(
+        answer, _filter = QtWidgets.QInputDialog.getText(
             QtWidgets.qApp.activeWindow(), _('Create from template'), question)
         answer = answer.strip()
     return answer

@@ -904,7 +904,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         Opens a file.
         """
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(
+        path, _filter = QtWidgets.QFileDialog.getOpenFileName(
             self, _('Open file'), settings.last_open_dir())
         if path:
             settings.set_last_open_dir(os.path.dirname(path))
