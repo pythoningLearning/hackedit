@@ -124,7 +124,9 @@ setup(
         ],
         # Plugin entry-points
         'hackedit.plugins.editors': [
-            'ImageViewer = hackedit.plugins.image_viewer:ImageViewer'
+            'ImageViewer = hackedit.plugins.image_viewer:ImageViewer',
+            'RstCodeEditPlugin = hackedit.plugins.editors:RstCodeEditPlugin',
+            'JSONCodeEditPlugin = hackedit.plugins.editors:JSONCodeEditPlugin'
         ],
         'hackedit.plugins.file_icon_providers': [],
         'hackedit.plugins.workspace_plugins': [
@@ -142,10 +144,6 @@ setup(
             'aube = hackedit.styles.aube:AubeStyle',
             'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
             'ark-dark = hackedit.styles.arkdark:ArkDarkStyle'
-        ],
-        'hackedit.plugins.editors': [
-            'RstCodeEditPlugin = hackedit.plugins.editors:RstCodeEditPlugin',
-            'JSONCodeEditPlugin = hackedit.plugins.editors:JSONCodeEditPlugin',
         ],
         'pyqt_distutils_hooks': [
             'hackedit_gettext = hackedit.api.gettext:hackedit_gettext_hook']
