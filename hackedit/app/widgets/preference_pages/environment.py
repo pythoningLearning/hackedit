@@ -184,6 +184,12 @@ class Environment(PreferencePage):
         settings.set_custom_browser_command(
             self.ui.edit_browser_command.text())
         code = self.ui.combo_lang.currentData()
+        if code != gettext.get_locale():
+            QtWidgets.QMessageBox.information(
+                self, _('Language changed'),
+                _('You need to restart HackEdit for the new language to be '
+                  'applied.'))
+
         gettext.set_locale(code)
         # environment variables
         env = {}
