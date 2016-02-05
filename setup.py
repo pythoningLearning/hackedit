@@ -143,6 +143,10 @@ setup(
             'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
             'ark-dark = hackedit.styles.arkdark:ArkDarkStyle'
         ],
+        'hackedit.plugins.editors': [
+            'RstCodeEditPlugin = hackedit.plugins.editors:RstCodeEditPlugin',
+            'JSONCodeEditPlugin = hackedit.plugins.editors:JSONCodeEditPlugin',
+        ],
         'pyqt_distutils_hooks': [
             'hackedit_gettext = hackedit.api.gettext:hackedit_gettext_hook']
     },
