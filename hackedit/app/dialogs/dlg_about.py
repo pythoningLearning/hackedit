@@ -29,8 +29,11 @@ class DlgAbout(QtWidgets.QDialog):
         self.ui.lbl_version.setText(self.ui.lbl_version.text() % __version__)
 
         # Load log file content
-        with open(logger.get_path()) as f:
-            log_content = f.read()
+        try:
+            with open(logger.get_path()) as f:
+                log_content = f.read()
+        except FileNotFoundError:
+            log_content = ''
         self.ui.edit_log.setPlainText(log_content)
         tc = self.ui.edit_log.textCursor()
         tc.movePosition(tc.End)
