@@ -3,7 +3,7 @@ import sys
 import time
 
 import pytest
-from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
+from PyQt5 import QtCore, QtGui, QtTest
 from pyqode.core.widgets import InteractiveConsole
 
 from hackedit.api import widgets

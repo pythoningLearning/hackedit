@@ -1,7 +1,3 @@
-import time
-
-from PyQt5 import QtCore, QtWidgets
-
 from .test_window import win, FILE1, FILE2
 from hackedit.api import editor
 

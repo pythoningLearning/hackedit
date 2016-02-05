@@ -1,5 +1,4 @@
 import re
-from difflib import SequenceMatcher
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.api import DelayJobRunner, TextHelper, utils

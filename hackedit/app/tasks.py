@@ -19,7 +19,8 @@ class TaskExceptionEvent(events.ExceptionEvent):
         self.traceback = tb
         self.name = task.name
         super().__init__(
-            _('Task <%s> failed') % task.name, desc, exception, tb=self.traceback)
+            _('Task <%s> failed') % task.name, desc, exception,
+            tb=self.traceback)
 
 
 class SubprocessTaskHandle:

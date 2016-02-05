@@ -19,7 +19,6 @@ from pyqode.core.api import TextHelper, ColorScheme, CodeEdit
 from pyqode.core.widgets import EncodingsContextMenu, MenuRecentFiles
 from pyqode.core.widgets import GenericCodeEdit, TextCodeEdit
 
-from hackedit import __version__
 from hackedit.app import settings
 from hackedit.app.project import ProjectExplorer
 from hackedit.api import system, shortcuts

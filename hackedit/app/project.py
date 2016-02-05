@@ -16,7 +16,7 @@ from pyqode.core.widgets import FileSystemTreeView, FileSystemContextMenu, \
     FileSystemHelper
 
 from hackedit import api
-from hackedit.api import plugins, shortcuts, utils
+from hackedit.api import shortcuts, utils
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import FileIconProvider
 from hackedit.app import settings, boss_wrapper as boss, common

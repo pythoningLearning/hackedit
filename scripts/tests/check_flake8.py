@@ -11,4 +11,4 @@ import os
 import sys
 
 
-os.system('%s setup.py test -a "--pep8 -m pep8"' % sys.executable)
+os.system('%s setup.py test -a "--flake8 -m flake8"' % sys.executable)

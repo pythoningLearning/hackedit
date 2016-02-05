@@ -28,3 +28,4 @@ pytest
 pytest-qt
 pytest-cov
 pytest-pep8
+pytest-flake8

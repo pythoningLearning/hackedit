@@ -3,7 +3,7 @@ This module contains a dock manager widget and all the classes needed to make
 it work.
 
 """
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from pyqode.core.api.utils import _logger
 
 

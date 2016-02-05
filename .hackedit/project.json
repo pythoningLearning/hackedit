@@ -48,7 +48,7 @@
         "environment": {},
         "interpreter_options": [],
         "name": "tests/check_api_coverage",
-        "run_in_external_terminal": true,
+        "run_in_external_terminal": false,
         "script": "scripts/tests/check_api_coverage.py",
         "script_parameters": [],
         "working_dir": "."
@@ -57,7 +57,7 @@
         "environment": {},
         "interpreter_options": [],
         "name": "tests/check_coverage",
-        "run_in_external_terminal": true,
+        "run_in_external_terminal": false,
         "script": "scripts/tests/check_coverage.py",
         "script_parameters": [],
         "working_dir": "."
@@ -65,9 +65,9 @@
     {
         "environment": {},
         "interpreter_options": [],
-        "name": "tests/check_pep8",
-        "run_in_external_terminal": true,
-        "script": "scripts/tests/check_pep8.py",
+        "name": "tests/check_flake8",
+        "run_in_external_terminal": false,
+        "script": "scripts/tests/check_flake8.py",
         "script_parameters": [],
         "working_dir": "."
     },
@@ -75,7 +75,7 @@
         "environment": {},
         "interpreter_options": [],
         "name": "tests/runtests",
-        "run_in_external_terminal": true,
+        "run_in_external_terminal": false,
         "script": "scripts/tests/runtests.py",
         "script_parameters": [],
         "working_dir": "."

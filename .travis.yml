@@ -18,11 +18,11 @@ before_install:
 install:
  - sudo apt-get update
  - sudo apt-get install -y -qq python3-pyqt5 python3-pyqt5.qtsvg gnome-icon-theme-full --fix-missing
- - pip install pytest pytest-qt pytest-cov coveralls --use-wheel
+ - pip install pytest pytest-qt pytest-cov coveralls pytest-flake8 --use-wheel
 
 script:
  - pip install -e .
- - catchsegv py.test --cov hackedit
+ - catchsegv py.test --cov hackedit/api --flake8
 
 after_success:
  - coveralls
