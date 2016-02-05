@@ -365,7 +365,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 mode.auto_reload = True
             if line is not None:
                 QtWidgets.qApp.processEvents()
-                TextHelper(tab).goto_line(line, column)
+                try:
+                    TextHelper(tab).goto_line(line, column)
+                except AttributeError:
+                    _logger().debug('failed to go to line %d in %r' % (
+                        line, tab.file.path))
         return tab
 
     def add_statusbar_widget(self, widget, with_separator=True, first=False):

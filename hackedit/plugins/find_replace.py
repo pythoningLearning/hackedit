@@ -147,12 +147,17 @@ class FindReplace(plugins.WorkspacePlugin):
                 return
             # select text
             helper = TextHelper(e)
-            cursor = helper.select_lines(start=l, end=l)
-            assert isinstance(cursor, QtGui.QTextCursor)
-            cursor.movePosition(cursor.StartOfBlock)
-            cursor.movePosition(cursor.Right, cursor.MoveAnchor, start)
-            cursor.movePosition(cursor.Right, cursor.KeepAnchor, lenght)
-            e.setTextCursor(cursor)
+            try:
+                cursor = helper.select_lines(start=l, end=l)
+            except AttributeError:
+                _logger().debug('failed to select occurent line in editor, not'
+                                ' a subclass of QPlainTextEdit')
+            else:
+                assert isinstance(cursor, QtGui.QTextCursor)
+                cursor.movePosition(cursor.StartOfBlock)
+                cursor.movePosition(cursor.Right, cursor.MoveAnchor, start)
+                cursor.movePosition(cursor.Right, cursor.KeepAnchor, lenght)
+                e.setTextCursor(cursor)
 
     def _on_find_triggered(self):
         text = ''
