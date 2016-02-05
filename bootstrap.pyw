@@ -66,7 +66,8 @@ except ImportError:
 else:
     logger.info('02. Imported PyQt5')
     logger.info('    [Qt %s, PyQt5 %s]' % (QT_VERSION_STR, PYQT_VERSION_STR))
-    if 'linux' not in sys.platform.lower():
+    icons_path = os.path.join(sys.prefix, 'share', 'hackedit', 'icons')
+    if 'linux' not in sys.platform.lower() and not os.path.exists(icons_path):
         paths = QIcon.themeSearchPaths()
         paths.append('data/resources/icons')
         QIcon.setThemeSearchPaths(paths)
