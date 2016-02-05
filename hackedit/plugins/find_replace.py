@@ -157,7 +157,10 @@ class FindReplace(plugins.WorkspacePlugin):
     def _on_find_triggered(self):
         text = ''
         if editor.get_current_editor() is not None:
-            text = TextHelper(editor.get_current_editor()).selected_text()
+            try:
+                text = TextHelper(editor.get_current_editor()).selected_text()
+            except AttributeError:
+                text = ''
         search_settings = _DlgFindReplace.find(self._window, text_to_find=text)
         if search_settings is not None:
             self._remove_dock()
