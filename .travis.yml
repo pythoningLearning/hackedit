@@ -22,7 +22,7 @@ install:
 
 script:
  - pip install -e .
- - catchsegv py.test --cov hackedit/api --flake8
+ - catchsegv py.test --cov hackedit --flake8
 
 after_success:
  - coveralls
