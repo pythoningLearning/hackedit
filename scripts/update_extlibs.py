@@ -38,6 +38,7 @@ import boss
 import cement
 import qdarkstyle
 import qcrash
+import keyring
 
 
 BUILD = os.path.abspath('hackedit/extlibs')
@@ -93,5 +94,5 @@ finally:
     embed_packages([
         future, pygments, qdarkstyle, jedi, pep8, pyflakes, boss, cement,
         pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol, pyqode.rst,
-        pyqode.json, restructuredtext_lint, qcrash
+        pyqode.json, restructuredtext_lint, qcrash, keyring
     ])
