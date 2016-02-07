@@ -3,6 +3,10 @@ Provides some functions to retrieve various version informations.
 """
 import logging
 import subprocess
+import platform
+import sys
+
+from PyQt5 import QtCore
 
 from hackedit import __version__
 
@@ -70,3 +74,14 @@ def get_versions():
         'system': platform.platform() + distro,
         'pyqode.core': corev
     }
+
+
+def get_system_infos():
+    return '\n'.join([
+        'Operating System: %s' % get_versions()['system'],
+        'HackEdit: %s' % __version__,
+        'Python: %s (%dbits)' % (
+            platform.python_version(), 64 if sys.maxsize > 2**32 else 32),
+        'Qt: %s' % QtCore.QT_VERSION_STR,
+        'PyQt: %s' % QtCore.PYQT_VERSION_STR,
+    ])

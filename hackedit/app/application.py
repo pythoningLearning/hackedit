@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import traceback
+import qcrash.api as qcrash
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.widgets import RecentFilesManager, FileSystemContextMenu
@@ -15,7 +16,7 @@ from hackedit.api import system, shortcuts, _shared
 from hackedit.api.project import load_user_config, load_workspace, \
     save_workspace
 from hackedit.app import common, environ, mime_types, icons, boss_wrapper, \
-    settings
+    settings, versions, logger
 from hackedit.app.dialogs.open_path import DlgOpen
 from hackedit.app.dialogs.workspace import DlgSelectWorkspace
 from hackedit.app.main_window import MainWindow
@@ -26,6 +27,11 @@ from hackedit.app.workspaces import WorkspaceManager
 
 def _logger():
     return logging.getLogger(__name__)
+
+
+QCRASH_GH_OWNER = 'ColinDuquesnoy'
+QCRASH_GH_REPO = 'TestBugReport'
+QCRASH_EMAIL = 'colin.duquesnoy@gmail.com'
 
 
 class Application(QtCore.QObject):
@@ -61,9 +67,7 @@ class Application(QtCore.QObject):
         _shared._APP = self
         self._editor_windows = []
         show_msg_on_splash(_('Setting up except hook...'))
-        self._report_exception_requested.connect(self._report_exception)
-        self._old_except_hook = sys.excepthook
-        sys.excepthook = self._except_hook
+        self._setup_except_hook()
 
         show_msg_on_splash(_('Loading translations...'))
         _logger().info('available locales: %r',
@@ -271,6 +275,16 @@ class Application(QtCore.QObject):
     # -------------------------------------------------------------------------
     # Private API (+ overridden methods)
     # -------------------------------------------------------------------------
+    def _setup_except_hook(self):
+        qcrash.get_system_information = versions.get_system_infos
+        qcrash.get_application_log = _get_log
+        qcrash.install_backend(
+            qcrash.backends.GithubBackend(QCRASH_GH_OWNER, QCRASH_GH_REPO),
+            qcrash.backends.EmailBackend(QCRASH_EMAIL, 'HackEdit'))
+        qcrash.set_qsettings(QtCore.QSettings())
+
+        qcrash.install_except_hook(except_hook=self._report_exception)
+
     def _setup_tray_icon(self):
         self.tray_icon = QtWidgets.QSystemTrayIcon(self._qapp)
         self.tray_icon.setIcon(self._qapp.windowIcon())
@@ -526,7 +540,6 @@ class Application(QtCore.QObject):
 
     def _report_exception(self, exc, tb):
         try:
-            _logger().critical('unhandled exception:\n%s', tb)
             title = '[Unhandled exception]  %s: %s' % (
                 exc.__class__.__name__, str(exc))
             try:
@@ -547,10 +560,7 @@ class Application(QtCore.QObject):
                 msg_box.button(msg_box.Cancel).setText(_('Close'))
                 if msg_box.exec_() == msg_box.Ok:
                     common.report_bug(
-                        None, title=title,
-                        description='## Steps to reproduce\n\nPLEASE DESCRIBE '
-                        'THE CONTEXT OF THIS ISSUE AND THE STEPS TO REPRODUCE'
-                        '...\n\n## Traceback\n\n```\n%s\n```' % tb)
+                        None, title=title, traceback=tb)
             else:
                 action = QtWidgets.QAction(None)
                 action.setText(_('Restart HackEdit'))
@@ -562,6 +572,14 @@ class Application(QtCore.QObject):
                 w.notifications.add(ev, False, True)
         except Exception:
             _logger().exception('exception in excepthook')
+
+
+def _get_log():
+    try:
+        with open(logger.get_path(), 'r') as f:
+            return f.read()
+    except OSError:
+        return ''
 
 
 # monkeypatch needed to use our pygments style plugins when pygments has
