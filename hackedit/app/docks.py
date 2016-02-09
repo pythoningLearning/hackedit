@@ -100,8 +100,8 @@ QPushButton:hover {
 }"""
 
     def _setup_stylesheet(self):
-        self.color = self.palette().highlight().color()
-        self.text_color = self.palette().highlightedText().color()
+        self.color = QtWidgets.qApp.palette().highlight().color()
+        self.text_color = QtWidgets.qApp.palette().highlightedText().color()
         self.color_hover = self.palette().highlight().color()
         self.setStyleSheet(self.qss % (
             self.color.name(), self.text_color.name(),

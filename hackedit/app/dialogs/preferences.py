@@ -17,8 +17,17 @@ class DlgPreferences(QtWidgets.QDialog):
 
     closed = QtCore.pyqtSignal()
 
+    color_highlight_background = None
+    color_highlight_text = None
+
     def __init__(self, parent, app):
         super().__init__(parent)
+        if DlgPreferences.color_highlight_background is None:
+            DlgPreferences.color_highlight_background = \
+                self.palette().color(QtGui.QPalette.Highlight).name()
+        if DlgPreferences.color_highlight_text is None:
+            DlgPreferences.color_highlight_text = self.palette().color(
+                QtGui.QPalette.HighlightedText).name()
         self._app = app
         self._ui = dlg_preferences_ui.Ui_Dialog()
         self._ui.setupUi(self)
@@ -97,10 +106,8 @@ class DlgPreferences(QtWidgets.QDialog):
         self._ui.label_title.setStyleSheet('''background-color: %s;
 color: %s;
 padding: 10px;
-border-radius:3px;''' % (
-            self.parent().palette().color(QtGui.QPalette.Highlight).name(),
-            self.parent().palette().color(
-                QtGui.QPalette.HighlightedText).name()))
+border-radius:3px;''' % (DlgPreferences.color_highlight_background,
+                         DlgPreferences.color_highlight_text))
         self._ui.pages.setCurrentIndex(index)
         w = self._ui.pages.currentWidget()
         buttons = self._ui.buttons
