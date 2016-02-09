@@ -29,8 +29,8 @@ def _logger():
     return logging.getLogger(__name__)
 
 
-QCRASH_GH_OWNER = 'ColinDuquesnoy'
-QCRASH_GH_REPO = 'TestBugReport'
+QCRASH_GH_OWNER = 'HackEdit'
+QCRASH_GH_REPO = 'HackEdit'
 QCRASH_EMAIL = 'colin.duquesnoy@gmail.com'
 
 
