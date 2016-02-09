@@ -57,9 +57,9 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         sep.setSeparator(True)
         self._ui.bt_help.addAction(sep)
 
-        a = QtWidgets.QAction(_('Report bug'), self)
+        a = QtWidgets.QAction(_('Report an issue...'), self)
         a.setIcon(QtGui.QIcon.fromTheme('tools-report-bug'))
-        a.setToolTip(_('Report a bug'))
+        a.setToolTip(_('Create an issue (report a bug/enhancement)'))
         a.triggered.connect(self._report_bug)
         self._ui.bt_help.addAction(a)
 

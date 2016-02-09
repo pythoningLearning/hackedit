@@ -5,12 +5,12 @@ tray.
 """
 import os
 
+import qcrash.api as qcrash
 from PyQt5 import QtWidgets
 
 from hackedit.app import boss_wrapper as boss, settings
 from hackedit.app.dialogs.dlg_about import DlgAbout
 from hackedit.app.dialogs.preferences import DlgPreferences
-from hackedit.app.dialogs.report_bug import DlgReportBug
 from hackedit.app.wizards.new import WizardNew
 
 
@@ -75,9 +75,10 @@ def open_folder(window, app):
         app.open_path(path, sender=window)
 
 
-def report_bug(window, title='', description=''):
-    return DlgReportBug.report_bug(window, title=title,
-                                   description=description)
+def report_bug(window, title='', traceback=None):
+    qcrash.show_report_dialog(
+        issue_title=title, traceback=traceback, parent=window)
+    return True
 
 
 def edit_preferences(window, app):
