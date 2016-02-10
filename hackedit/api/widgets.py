@@ -265,8 +265,7 @@ class RunWidget(QtWidgets.QWidget):
         """
         if name is None:
             name = QtCore.QFileInfo(pgm).completeBaseName()
-        identifier = '-'.join([pgm] + args)
-        tab = self._find_free_tab(klass, identifier)
+        tab = self._find_free_tab(klass, pgm)
         if tab is None:
             try:
                 tab = klass()
@@ -285,7 +284,7 @@ class RunWidget(QtWidgets.QWidget):
         tab.env = env
         tab.start_process(pgm, args, cwd, env)
         tab.process_finished.connect(self._on_process_finished)
-        tab.identifier = identifier
+        tab.identifier = pgm
         self.ui.bt_run.setIcon(self.icon_stop)
         self.ui.bt_run.setEnabled(True)
         self.ui.bt_pin.setEnabled(True)
@@ -387,6 +386,7 @@ class RunWidget(QtWidgets.QWidget):
         :param klass: requested tab class
         :return: QWidget or None
         """
+        print(klass, identifier)
         for tab in self._tabs:
             if (not tab.is_running and not tab.pinned and
                     type(tab) == klass and tab.identifier == identifier):
