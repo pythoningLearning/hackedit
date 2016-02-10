@@ -216,6 +216,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.open_folder(pth)
             self._save_linked_paths(linked_paths)
         self.on_current_tab_changed(None)
+        hackedit_path = os.path.join(path, '.hackedit')
+        try:
+            os.makedirs(hackedit_path)
+        except FileExistsError:
+            pass
 
     def get_menu(self, menu_name):
         """
@@ -829,9 +834,15 @@ class MainWindow(QtWidgets.QMainWindow):
     def _get_linked_paths(self):
         data = load_user_config(self.projects[0])
         try:
-            return data['linked_paths']
+            linked_paths = data['linked_paths']
         except KeyError:
             return []
+        else:
+            ret_val = []
+            for p in linked_paths:
+                if os.path.exists(p):
+                    ret_val.append(p)
+            return ret_val
 
     def _save_linked_paths(self, linked_paths):
         data = load_user_config(self.projects[0])
