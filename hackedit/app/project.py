@@ -551,7 +551,7 @@ class ProjectExplorer(QtCore.QObject):
             return
         try:
             active_path = data['active_project']
-            if active_path is None:
+            if active_path is None or not os.path.exists(active_path):
                 raise KeyError('active_project')
         except KeyError:
             active_path = paths[0]
