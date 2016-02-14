@@ -98,7 +98,8 @@ def scandir(directory, ignore_patterns, total):
                     results, total = scandir(full_path, ignore_patterns, total)
                     files += results
                 except PermissionError:
-                    pass
+                    _logger().warn('failed to scan directory %r, permission '
+                                   'error', full_path)
             time.sleep(0)
     return files, total
 
@@ -111,7 +112,8 @@ def scan_project_directories(_, directories, ignore_patterns, root_proj):
             results, total = scandir(directory, ignore_patterns, total)
             files += results
         except PermissionError:
-            pass
+            _logger().warn('failed to scan directory %r, permission '
+                           'error', directory)
     files = sorted(files)
     cache = api.project.load_user_cache(root_proj)
     cache['project_files'] = files
@@ -161,7 +163,7 @@ class ProjectExplorer(QtCore.QObject):
         try:
             patterns += usd['ignored_patterns']
         except KeyError:
-            pass
+            _logger().debug('no ignored patterns found in user config')
         return patterns
 
     def _run_update_projects_model_thread(self):
@@ -189,7 +191,8 @@ class ProjectExplorer(QtCore.QObject):
         try:
             save_user_config(paths[0], data)
         except PermissionError:
-            pass
+            _logger().warn('failed to save user config to %r, '
+                           'permission error', paths[0])
         self.window = None
         self._locator.window = None
         self._locator = None
@@ -608,7 +611,8 @@ class ProjectExplorer(QtCore.QObject):
         try:
             linked_paths.remove(path)
         except ValueError:
-            pass
+            _logger().warn('failed to remove linked path %r, path not in list',
+                           path)
         finally:
             data['linked_paths'] = linked_paths
             save_user_config(initial_path, data)

@@ -186,7 +186,8 @@ class Task(QtCore.QObject):
             message = obj['message']
             progress = obj['progress']
         except KeyError:
-            pass
+            _logger().warn('invalid message: %r, "message" and "progress" '
+                           'keys not found...', obj)
         else:
             self.progress_updated.emit(message, progress)
 
@@ -239,7 +240,8 @@ class TaskManager(QtCore.QObject):
         try:
             self._running_tasks.remove(task)
         except ValueError:
-            pass
+            _logger().debug('failed to remove task %r from _running_tasks',
+                            task)
         self.task_finished.emit(task)
         self.task_count_changed.emit(len(self._running_tasks))
         task.cleanup()

@@ -94,7 +94,7 @@ def main():
         try:
             from IPython.qt.inprocess import QtInProcessKernelManager
         except ImportError:
-            pass
+            _logger().debug('ipython not installed')
         else:
             _kernel_manager = QtInProcessKernelManager()
             _kernel_manager.start_kernel()
