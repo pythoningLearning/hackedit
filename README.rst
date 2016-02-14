@@ -21,6 +21,10 @@
 .. image:: https://coveralls.io/repos/HackEdit/hackedit/badge.svg?branch=master&service=github
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
   :alt: API Coverage
+  
+.. image:: https://www.quantifiedcode.com/api/v1/project/a24d2603c5914cd389686da2799ac4da/badge.svg
+  :target: https://www.quantifiedcode.com/app/project/a24d2603c5914cd389686da2799ac4da
+  :alt: Code issues
 
 |
 
