@@ -287,7 +287,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         except AttributeError:
             active = ''
         _DlgScriptRunConfiguration.edit_configurations(
-            self._window, self.interpreter_manager, active)
+            self.window, self.interpreter_manager, active)
         self.refresh()
         self._mnu_configs.setEnabled(len(self._mnu_configs.actions()))
         enabled = self.get_active_config() is not None
@@ -416,7 +416,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         editor.open_file(path, line=line)
 
     def _create_dock(self):
-        self._run_widget = widgets.RunWidget(self._window)
+        self._run_widget = widgets.RunWidget(self.window)
         self._dock_run = window.add_dock_widget(
             self._run_widget, _('Run'), special_icons.run_icon(),
             QtCore.Qt.BottomDockWidgetArea)
@@ -452,13 +452,13 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         dlg = cls(window, interpreter_manager, active_config_name)
         ret_val = None
         if dlg.exec_() == dlg.Accepted:
-            dlg._update_current_config()
-            for path in dlg._configs.keys():
-                save_configs(path, dlg._configs[path])
-            if dlg._current_config:
+            dlg.update_current_config()
+            for path in dlg.configs.keys():
+                save_configs(path, dlg.configs[path])
+            if dlg.current_config:
                 # save active config in current project
                 save_active_config(
-                    window.projects[0], dlg._current_config['name'])
+                    window.projects[0], dlg.current_config['name'])
 
         return ret_val
 
@@ -466,16 +466,16 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         super().__init__(window)
         self.interpreter_manager = interpreter_manager
         self._active_config_name = active_config_name
-        self._window = window
+        self.window = window
         self._current_project = None
-        self._current_config = None
-        self._configs = {}
+        self.current_config = None
+        self.configs = {}
         self._setup_ui()
         self._load_interpreters()
         self._load_configs()
         self._connect_slots()
-        for path in self._configs.keys():
-            for i, cfg in enumerate(self._configs[path]):
+        for path in self.configs.keys():
+            for i, cfg in enumerate(self.configs[path]):
                 if cfg['name'] == self._active_config_name:
                     self._show_project_configs(path)
                     self._on_config_changed(i)
@@ -511,20 +511,20 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
 
     def _show_project_configs(self, path):
         if self._current_project:
-            self._update_current_config()
+            self.update_current_config()
         self._ui.list_configs.clear()
         self._current_project = path
-        active = get_active_config_name(path, self._configs[path])
+        active = get_active_config_name(path, self.configs[path])
         # find active config row
         active_row = 0
-        for i, cfg in enumerate(self._configs[path]):
+        for i, cfg in enumerate(self.configs[path]):
             icon = widgets.FileIconProvider().icon(
                 self.interpreter_manager.extensions[0].replace('*', ''))
             self._ui.list_configs.addItem(cfg['name'])
             self._ui.list_configs.item(i).setIcon(icon)
             if cfg['name'] == active:
                 active_row = i
-        if len(self._configs[path]):
+        if len(self.configs[path]):
             self._ui.list_configs.setCurrentRow(active_row)
             self._ui.group_settings.setDisabled(False)
         else:
@@ -552,8 +552,8 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
             self._ui.cb_project.addItem(npath)
             self._ui.cb_project.setItemIcon(
                 i, QtGui.QIcon.fromTheme('folder'))
-            self._configs[npath] = load_configs(npath)
-            for cfg in self._configs[npath]:
+            self.configs[npath] = load_configs(npath)
+            for cfg in self.configs[npath]:
                 if cfg['name'] == self._active_config_name:
                     current_index = self._ui.cb_project.count() - 1
         self._ui.cb_project.setCurrentIndex(current_index)
@@ -579,42 +579,42 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         return env_vars
 
     def _on_config_changed(self, row):
-        self._change_config(self._configs[self._current_project][row])
+        self._change_config(self.configs[self._current_project][row])
 
     def _update_name_in_list(self, new_name):
         for i in range(self._ui.list_configs.count()):
             if self._ui.list_configs.item(i).text() == \
-                    self._current_config['name']:
-                self._current_config['name'] = new_name
+                    self.current_config['name']:
+                self.current_config['name'] = new_name
                 self._ui.list_configs.item(i).setText(new_name)
 
     def _rm_cfg(self):
-        cfg = self._current_config
-        self._current_config = None
+        cfg = self.current_config
+        self.current_config = None
         for i in range(self._ui.list_configs.count()):
             if self._ui.list_configs.item(i).text() == cfg['name']:
                 self._ui.list_configs.takeItem(i)
                 break
         try:
-            self._configs[self._current_project].remove(cfg)
+            self.configs[self._current_project].remove(cfg)
         except ValueError:
             pass
         self._ui.group_settings.setDisabled(
-            len(self._configs[self._current_project]) == 0)
+            len(self.configs[self._current_project]) == 0)
 
     def _add_cfg(self):
         cpt = 0
-        for config in self._configs[self._current_project]:
+        for config in self.configs[self._current_project]:
             if 'Unnamed' in config['name']:
                 cpt += 1
         config = create_default_config(self._current_project)
         if cpt:
             config['name'] = 'Unnamed (%d)' % cpt
         self._ui.list_configs.addItem(config['name'])
-        self._configs[self._current_project].append(config)
+        self.configs[self._current_project].append(config)
         self._change_config(config)
         self._ui.group_settings.setDisabled(len(
-            self._configs[self._current_project]) == 0)
+            self.configs[self._current_project]) == 0)
 
     def _pick_script(self):
         current_path = self._current_project
@@ -691,32 +691,32 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
                 break
 
     def _change_config(self, config):
-        if self._current_config is not None:
-            self._update_current_config()
-        self._current_config = config
+        if self.current_config is not None:
+            self.update_current_config()
+        self.current_config = config
         self._display_config(config)
 
-    def _update_current_config(self):
-        if self._current_config is None:
+    def update_current_config(self):
+        if self.current_config is None:
             # no config added yet
             return
-        self._current_config['name'] = self._ui.edit_name.text()
+        self.current_config['name'] = self._ui.edit_name.text()
         opts = self._ui.edit_intepreter_options.text().strip()
         if not opts:
             opts = []
         else:
             opts = shlex.split(opts, posix=False)
-        self._current_config['interpreter_options'] = opts
-        self._current_config['script'] = self._ui.edit_script.text()
+        self.current_config['interpreter_options'] = opts
+        self.current_config['script'] = self._ui.edit_script.text()
         args = self._ui.edit_script_args.text().strip()
         if not args:
             args = []
         else:
             args = shlex.split(args, posix=False)
-        self._current_config['script_parameters'] = args
-        self._current_config['working_dir'] = self._ui.edit_working_dir.text()
-        self._current_config['environment'] = self._get_env_vars()
-        self._current_config['run_in_external_terminal'] = \
+        self.current_config['script_parameters'] = args
+        self.current_config['working_dir'] = self._ui.edit_working_dir.text()
+        self.current_config['environment'] = self._get_env_vars()
+        self.current_config['run_in_external_terminal'] = \
             self._ui.cb_run_in_external_terminal.isChecked()
 
 

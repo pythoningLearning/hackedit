@@ -99,7 +99,7 @@ QPushButton:hover {
     outline: none;
 }"""
 
-    def _setup_stylesheet(self):
+    def setup_stylesheet(self):
         self.color = QtWidgets.qApp.palette().highlight().color()
         self.text_color = QtWidgets.qApp.palette().highlightedText().color()
         self.color_hover = self.palette().highlight().color()
@@ -112,13 +112,13 @@ QPushButton:hover {
         # if a stylesheet has been applied, then the palette color won't be
         # set before the control has returned to the main loop, so we just
         # set the stylesheet on the next loop
-        QtCore.QTimer.singleShot(1, self._setup_stylesheet)
+        QtCore.QTimer.singleShot(1, self.setup_stylesheet)
         self._insert_widget_action = None
         self.area = None
         self.setMovable(False)
         self.setFloatable(False)
         self._actions = {}
-        self._dock_widgets = []
+        self.dock_widgets = []
         self.hide()
 
     def add_dock_widget(self, dock_widget, area, special=False):
@@ -144,7 +144,7 @@ QPushButton:hover {
                 action = self.insertWidget(self.empty_action, bt)
         else:
             action = self.addWidget(bt)
-        self._dock_widgets.append(dock_widget)
+        self.dock_widgets.append(dock_widget)
         self._actions[dock_widget] = action
         assert isinstance(dock_widget, QtWidgets.QDockWidget)
         dock_widget.visibilityChanged.connect(self._on_dock_visiblity_changed)
@@ -158,10 +158,10 @@ QPushButton:hover {
             self._actions.pop(dock_widget)
             dock_widget.visibilityChanged.disconnect(
                 self._on_dock_visiblity_changed)
-            self._dock_widgets.remove(dock_widget)
+            self.dock_widgets.remove(dock_widget)
         except (KeyError, ValueError, RuntimeError):
             pass
-        if len(self._dock_widgets) == 0:
+        if len(self.dock_widgets) == 0:
             self.hide()
         else:
             self.show()
@@ -169,7 +169,7 @@ QPushButton:hover {
     def _on_dock_visiblity_changed(self, visible):
         pass
         if visible and self.area == QtCore.Qt.BottomToolBarArea:
-            for dw in self._dock_widgets:
+            for dw in self.dock_widgets:
                 if dw != self.sender():
                     dw.hide()
 
@@ -194,7 +194,7 @@ class DockWidgetsManager(QtCore.QObject):
     def __init__(self, main_window):
         super().__init__()
         self._managers = {}
-        self._window = main_window
+        self.window = main_window
         bar = DockWidgetSideBar(main_window)
         bar.setObjectName('dockManagerLeft')
         bar.setWindowTitle(_('Dock manager left'))
@@ -263,9 +263,9 @@ class DockWidgetsManager(QtCore.QObject):
     def dock_widgets(self):
         ret_val = []
         for manager in self._managers.values():
-            ret_val += manager._dock_widgets
+            ret_val += manager.dock_widgets
         return ret_val
 
     def update_style(self):
         for bar in self._managers.values():
-            bar._setup_stylesheet()
+            bar.setup_stylesheet()

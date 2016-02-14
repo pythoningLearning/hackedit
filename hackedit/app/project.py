@@ -134,19 +134,19 @@ class ProjectExplorer(QtCore.QObject):
 
     def __init__(self, window):
         super().__init__()
-        self._window = window
-        self._locator = LocatorWidget(self._window)
+        self.window = window
+        self._locator = LocatorWidget(self.window)
         self._locator.activated.connect(self._on_locator_activated)
         self._locator.cancelled.connect(self._on_locator_cancelled)
-        self._widget = QtWidgets.QWidget(self._window)
+        self._widget = QtWidgets.QWidget(self.window)
         self._job_runner = DelayJobRunner()
         self._cached_files = []
         self._task_running = False
         self._widget.installEventFilter(self)
         self._setup_filesystem_treeview()
-        self._setup_prj_selector_widget(self._window)
+        self._setup_prj_selector_widget(self.window)
         self._setup_dock_widget()
-        self._setup_tab_bar_context_menu(self._window)
+        self._setup_tab_bar_context_menu(self.window)
         self._setup_locator()
         self._setup_project_menu()
         api.signals.connect_slot(api.signals.CURRENT_EDITOR_CHANGED,
@@ -189,19 +189,19 @@ class ProjectExplorer(QtCore.QObject):
             save_user_config(paths[0], data)
         except PermissionError:
             pass
-        self._window = None
-        self._locator._window = None
+        self.window = None
+        self._locator.window = None
         self._locator = None
 
     def apply_preferences(self):
         new_patterns = ';'.join(utils.get_ignored_patterns())
         if self._last_ignore_patterns != new_patterns:
             self._last_ignore_patterns = new_patterns
-            self._fs.clear_ignore_patterns()
-            self._fs.add_ignore_patterns(self._get_ignored_patterns())
-            self._fs.set_root_path(api.project.get_current_project())
+            self.view.clear_ignore_patterns()
+            self.view.add_ignore_patterns(self._get_ignored_patterns())
+            self.view.set_root_path(api.project.get_current_project())
         self._run_update_projects_model_thread()
-        self._fs.context_menu.update_show_in_explorer_action()
+        self.view.context_menu.update_show_in_explorer_action()
         self._tab_bar_action_show_in_explorer.setText(
             _('Show in %s') % FileSystemContextMenu.get_file_explorer_name())
         self._update_workspaces_menu()
@@ -228,7 +228,7 @@ class ProjectExplorer(QtCore.QObject):
                   'click on a directory -> Mark as ignored</i>)'),
                 level=api.events.WARNING)
             api.events.post(event)
-        self._window.project_files_available.emit()
+        self.window.project_files_available.emit()
         _logger().debug('project model updated')
 
     def _setup_tab_bar_context_menu(self, window):
@@ -243,7 +243,7 @@ class ProjectExplorer(QtCore.QObject):
     def _setup_dock_widget(self):
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self._widget_active_projects)
-        layout.addWidget(self._fs)
+        layout.addWidget(self.view)
         layout.setContentsMargins(3, 3, 3, 3)
         self._widget.setLayout(layout)
         dock = api.window.add_dock_widget(
@@ -266,7 +266,7 @@ class ProjectExplorer(QtCore.QObject):
         for w in WorkspaceManager().get_names():
             a = QtWidgets.QAction(w, self.workspaces_menu)
             a.setCheckable(True)
-            a.setChecked(w == self._window.workspace['name'])
+            a.setChecked(w == self.window.workspace['name'])
             a.setIcon(icon)
             ag.addAction(a)
             self.workspaces_menu.addAction(a)
@@ -275,10 +275,10 @@ class ProjectExplorer(QtCore.QObject):
     @QtCore.pyqtSlot(QtWidgets.QAction)
     def _on_workspace_action_clicked(self, action):
         prj = api.project.get_root_project()
-        open_path = self._window._app.open_path
+        open_path = self.window.app.open_path
         api.project.save_workspace(prj, action.text().replace('&', ''))
-        self._window._save_state(*self._window._get_session_info())
-        window = self._window
+        self.window.save_state(*self.window.get_session_info())
+        window = self.window
         open_path(prj, force=True)
         QtCore.QTimer.singleShot(1, window.close)
 
@@ -287,7 +287,7 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_anything = menu.addAction(_('Goto anything...'))
         self.action_goto_anything.setShortcut(shortcuts.get(
             'Goto anything', _('Goto anything'), 'Ctrl+P'))
-        self._window.addAction(self.action_goto_anything)
+        self.window.addAction(self.action_goto_anything)
         self.action_goto_anything.triggered.connect(self._goto_anything)
 
         menu.addSeparator()
@@ -295,7 +295,7 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_symbol = menu.addAction(_('Goto symbol...'))
         self.action_goto_symbol.setShortcut(shortcuts.get(
             'Goto symbol', _('Goto symbol'), 'Ctrl+R'))
-        self._window.addAction(self.action_goto_symbol)
+        self.window.addAction(self.action_goto_symbol)
         self.action_goto_symbol.triggered.connect(self._goto_symbol)
 
         self.action_goto_symbol_in_project = menu.addAction(
@@ -303,7 +303,7 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_symbol_in_project.setShortcut(shortcuts.get(
             'Goto symbol in project', _('Goto symbol in project'),
             'Ctrl+Shift+R'))
-        self._window.addAction(self.action_goto_symbol_in_project)
+        self.window.addAction(self.action_goto_symbol_in_project)
         self.action_goto_symbol_in_project.triggered.connect(
             self._goto_symbol_in_project)
 
@@ -312,7 +312,7 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_line = menu.addAction(_('Goto line'))
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', _('Goto line'), 'Ctrl+G'))
-        self._window.addAction(self.action_goto_line)
+        self.window.addAction(self.action_goto_line)
         self.action_goto_line.triggered.connect(self._goto_line)
 
     def _goto_anything(self):
@@ -338,7 +338,7 @@ class ProjectExplorer(QtCore.QObject):
     def _show_locator(self):
         widget = api.editor.get_current_editor()
         if widget is None:
-            widget = self._window._ui.stackedWidget
+            widget = self.window.centralWidget()
         parent_pos = widget.pos()
         parent_size = widget.size()
         w = parent_size.width() * 0.8
@@ -401,16 +401,16 @@ class ProjectExplorer(QtCore.QObject):
         self._combo_projects.setCurrentIndex(current_index)
 
     def _setup_filesystem_treeview(self):
-        self._fs = FileSystemTreeView(self._widget)
-        self._fs.setMinimumWidth(200)
+        self.view = FileSystemTreeView(self._widget)
+        self.view.setMinimumWidth(200)
         self._last_ignore_patterns = ';'.join(utils.get_ignored_patterns())
-        self._fs.add_ignore_patterns(self._get_ignored_patterns())
-        self._fs.file_created.connect(self._on_file_created)
-        self._fs.file_deleted.connect(self._on_file_deleted)
-        self._fs.file_renamed.connect(self._on_file_renamed)
-        self._fs.set_icon_provider(FileIconProvider())
+        self.view.add_ignore_patterns(self._get_ignored_patterns())
+        self.view.file_created.connect(self._on_file_created)
+        self.view.file_deleted.connect(self._on_file_deleted)
+        self.view.file_renamed.connect(self._on_file_renamed)
+        self.view.set_icon_provider(FileIconProvider())
         context_menu = FileSystemContextMenu()
-        self._fs.set_context_menu(context_menu)
+        self.view.set_context_menu(context_menu)
         self.templates_menu = context_menu.menu_new.addSeparator()
         self.templates_menu = context_menu.menu_new.addMenu(
             _('Templates'))
@@ -418,35 +418,35 @@ class ProjectExplorer(QtCore.QObject):
             'folder-templates'))
         self._update_templates_menu()
 
-        self._fs.activated.connect(self._on_file_activated)
+        self.view.activated.connect(self._on_file_activated)
 
         self.action_mark_as_ignored = QtWidgets.QAction(
-            _('Mark as ignored'), self._fs)
+            _('Mark as ignored'), self.view)
         self.action_mark_as_ignored.triggered.connect(
             self._on_mark_as_ignored)
         self.action_mark_as_ignored.setIcon(QtGui.QIcon.fromTheme(
             'emblem-unreadable'))
-        self._fs.context_menu.insertAction(
-            self._fs.context_menu.action_show_in_explorer,
+        self.view.context_menu.insertAction(
+            self.view.context_menu.action_show_in_explorer,
             self.action_mark_as_ignored)
-        self._fs.context_menu.insertSeparator(
-            self._fs.context_menu.action_show_in_explorer)
+        self.view.context_menu.insertSeparator(
+            self.view.context_menu.action_show_in_explorer)
 
         self.action_show_in_terminal = QtWidgets.QAction(
             QtGui.QIcon.fromTheme('utilities-terminal'),
-            _('Open in terminal'), self._fs)
+            _('Open in terminal'), self.view)
         self.action_show_in_terminal.triggered.connect(
             self._on_show_in_terminal_triggered)
-        self._fs.context_menu.addAction(self.action_show_in_terminal)
+        self.view.context_menu.addAction(self.action_show_in_terminal)
 
         self.action_open_in_browser = QtWidgets.QAction(
             QtGui.QIcon.fromTheme('applications-internet'),
-            _('Open in web browser'), self._fs)
+            _('Open in web browser'), self.view)
         self.action_open_in_browser.triggered.connect(
             self._on_action_open_in_browser_triggered)
-        self._fs.context_menu.addAction(self.action_open_in_browser)
+        self.view.context_menu.addAction(self.action_open_in_browser)
 
-        self._fs.about_to_show_context_menu.connect(
+        self.view.about_to_show_context_menu.connect(
             self._on_about_to_show_context_menu)
 
     def _update_templates_menu(self):
@@ -473,7 +473,7 @@ class ProjectExplorer(QtCore.QObject):
             menu.menuAction().setVisible(len(menu.actions()) > 0)
 
     def _on_mark_as_ignored(self):
-        path = FileSystemHelper(self._fs).get_current_path()
+        path = FileSystemHelper(self.view).get_current_path()
         prj = api.project.get_root_project()
         usd = api.project.load_user_config(prj)
         try:
@@ -482,26 +482,26 @@ class ProjectExplorer(QtCore.QObject):
             patterns = []
         finally:
             name = os.path.split(path)[1]
-            pattern = DlgIgnore.get_ignore_pattern(self._window, name)
+            pattern = DlgIgnore.get_ignore_pattern(self.window, name)
             if pattern:
                 patterns.append(pattern)
                 usd['ignored_patterns'] = patterns
                 api.project.save_user_config(prj, usd)
-                self._fs.clear_ignore_patterns()
-                self._fs.add_ignore_patterns(self._get_ignored_patterns())
+                self.view.clear_ignore_patterns()
+                self.view.add_ignore_patterns(self._get_ignored_patterns())
                 # force reload
-                self._fs.set_root_path(api.project.get_current_project())
+                self.view.set_root_path(api.project.get_current_project())
                 # update the list of project files, this should trigger an
                 # indexation.
                 self._run_update_projects_model_thread()
-                self._window.indexor.force_stop()
+                self.window.indexor.force_stop()
 
     def _on_about_to_show_context_menu(self, path):
         is_html = mimetypes.guess_type(path)[0] == 'text/html'
         self.action_open_in_browser.setVisible(is_html)
 
     def _on_action_open_in_browser_triggered(self):
-        path = FileSystemHelper(self._fs).get_current_path()
+        path = FileSystemHelper(self.view).get_current_path()
         if settings.use_default_browser():
             webbrowser.open_new_tab(path)
         else:
@@ -509,7 +509,7 @@ class ProjectExplorer(QtCore.QObject):
             subprocess.Popen(cmd)
 
     def _on_show_in_terminal_triggered(self):
-        path = FileSystemHelper(self._fs).get_current_path()
+        path = FileSystemHelper(self.view).get_current_path()
         if os.path.isfile(path):
             path = os.path.dirname(path)
         cmd = utils.get_cmd_open_folder_in_terminal() % path
@@ -521,11 +521,11 @@ class ProjectExplorer(QtCore.QObject):
 
     def _add_file_from_template(self):
         source, template = self.sender().data()
-        path = FileSystemHelper(self._fs).get_current_path()
+        path = FileSystemHelper(self.view).get_current_path()
         if os.path.isfile(path):
             path = os.path.dirname(path)
         common.create_new_from_template(source, template, path, True,
-                                        self._window, self._window._app)
+                                        self.window, self.window.app)
 
     def _on_show_in_explorer_triggered(self):
         path = api.window.get_tab_under_context_menu().file.path
@@ -533,21 +533,21 @@ class ProjectExplorer(QtCore.QObject):
             path, api.window.get_main_window())
 
     def _on_file_activated(self, index):
-        path = self._fs.filePath(index)
+        path = self.view.filePath(index)
         if path and os.path.isfile(path):
             _logger().debug('showing editor for %r', path)
             api.editor.open_file(path)
 
     def _on_current_editor_changed(self, tab):
         if tab is not None:
-            self._fs.select_path(tab.file.path)
+            self.view.select_path(tab.file.path)
         self.action_goto_line.setEnabled(tab is not None)
         self.action_goto_symbol.setEnabled(tab is not None)
 
     def _on_current_proj_changed(self, new_path):
         if api.project.get_current_project() != new_path:
-            self._window._current_folder = new_path
-            self._fs.set_root_path(new_path)
+            self.window.current_project = new_path
+            self.view.set_root_path(new_path)
 
     def _set_active_project(self):
         paths = api.project.get_projects()
@@ -564,11 +564,11 @@ class ProjectExplorer(QtCore.QObject):
         for i in range(self._combo_projects.count()):
             if self._combo_projects.itemData(i) == active_path:
                 self._combo_projects.setCurrentIndex(i)
-                self._fs.set_root_path(active_path)
+                self.view.set_root_path(active_path)
                 break
         else:
-            self._fs.set_root_path(active_path)
-        self._window._current_folder = active_path
+            self.view.set_root_path(active_path)
+        self.window.current_project = active_path
 
     def _on_path_added(self, path):
         if os.path.isfile(path):
@@ -585,18 +585,19 @@ class ProjectExplorer(QtCore.QObject):
     def _on_current_index_changed(self, index):
         new_path = self._combo_projects.itemData(index)
         if new_path:
-            self._window.current_project_changed.emit(new_path)
+            self.window.current_project_changed.emit(new_path)
 
     def _refresh(self):
-        self._fs.set_root_path('/')
-        self._fs.set_root_path(api.project.get_current_project())
+        self.view.set_root_path('/')
+        self.view.set_root_path(api.project.get_current_project())
         self._run_update_projects_model_thread()
 
     def _remove_current_project(self):
         path = self._combo_projects.itemData(
             self._combo_projects.currentIndex())
         self._combo_projects.removeItem(self._combo_projects.currentIndex())
-        self._window._folders.remove(path)
+
+        self.window.remove_folder(path)
         initial_path = api.project.get_projects()[0]
         data = load_user_config(initial_path)
         try:
@@ -617,11 +618,11 @@ class ProjectExplorer(QtCore.QObject):
         self._run_update_projects_model_thread()
 
     def _on_file_renamed(self, old_path, new_path):
-        self._window.tab_widget.rename_document(old_path, new_path)
+        self.window.tab_widget.rename_document(old_path, new_path)
         self._run_update_projects_model_thread()
 
     def _on_file_deleted(self, path):
-        self._window.tab_widget.close_document(path)
+        self.window.tab_widget.close_document(path)
         self._job_runner.request_job(self._run_update_projects_model_thread)
 
     def _on_locator_activated(self, path, line):

@@ -28,7 +28,7 @@ class DlgPreferences(QtWidgets.QDialog):
         if DlgPreferences.color_highlight_text is None:
             DlgPreferences.color_highlight_text = self.palette().color(
                 QtGui.QPalette.HighlightedText).name()
-        self._app = app
+        self.app = app
         self._ui = dlg_preferences_ui.Ui_Dialog()
         self._ui.setupUi(self)
         self._connect_slots()
@@ -135,7 +135,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
             for i in range(self._ui.pages.count()):
                 page = self._ui.pages.widget(i)
                 page.save()
-            self._app.apply_preferences()
+            self.app.apply_preferences()
             for i in range(self._ui.pages.count()):
                 page = self._ui.pages.widget(i)
                 page.reset()
@@ -166,12 +166,12 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
 
     def _setup_plugin_pages(self):
         pages = []
-        for p in self._app.plugin_manager.preferences_page_plugins:
+        for p in self.app.plugin_manager.preferences_page_plugins:
             pages.append(p.get_preferences_page())
         for p in sorted(pages, key=lambda x: x.category is not None):
             self._add_page(p)
         pages[:] = []
-        for p in self._app.plugin_manager.workspace_plugins.values():
+        for p in self.app.plugin_manager.workspace_plugins.values():
             page = p.get_preferences_page()
             if page:
                 pages.append(page)
@@ -179,7 +179,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
             self._add_page(p)
 
     def _setup_editor_pages(self):
-        for p in self._app.plugin_manager.editor_plugins:
+        for p in self.app.plugin_manager.editor_plugins:
             p = p.get_specific_preferences_page()
             if p:
                 p.category = _('Editor')
@@ -236,7 +236,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
             parent.addChild(item)
         else:
             self._ui.categories.addTopLevelItem(item)
-        widget.app = self._app
+        widget.app = self.app
         widget.reset()
 
     def keyPressEvent(self, ev):

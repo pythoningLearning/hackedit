@@ -55,17 +55,17 @@ class Process(QtCore.QObject):
         return self._process.state() != self._process.NotRunning
 
     def start(self):
-        self._port = utils.pick_free_port()
+        self.port = utils.pick_free_port()
         _logger().debug('starting server process: %s',
                         ' '.join([self._interpreter, server.__file__,
-                                  str(self._port)]))
+                                  str(self.port)]))
         self._process = QtCore.QProcess()
         self._process.readyRead.connect(self._on_ready_read)
         self._process.setProcessChannelMode(self._process.MergedChannels)
         self._process.finished.connect(self._on_finished)
         self._process.stateChanged.connect(self._on_state_changed)
         self._process.start(
-            self._interpreter, (server.__file__, str(self._port)))
+            self._interpreter, (server.__file__, str(self.port)))
 
     def _on_ready_read(self):
         output = self._process.readAllStandardOutput().data().decode(
@@ -80,15 +80,15 @@ class Process(QtCore.QObject):
                 msg = {'message': message, 'progress': progress}
                 self.message_available.emit(msg)
             else:
-                _logger().debug('server::localhost:%s> %s', self._port, line)
+                _logger().debug('server::localhost:%s> %s', self.port, line)
 
     def _on_state_changed(self, state):
         if state == self._process.Running:
             # connect to server
-            QtCore.QTimer.singleShot(100, self._connect)
+            QtCore.QTimer.singleShot(100, self.connect)
 
-    def _connect(self):
-        _logger().debug('connecting to server: localhost:%s', self._port)
+    def connect(self):
+        _logger().debug('connecting to server: localhost:%s', self.port)
         if self._socket:
             self._socket.setParent(None)
             self._socket.deleteLater()
@@ -98,7 +98,7 @@ class Process(QtCore.QObject):
         self._socket.error.connect(self._on_socket_error)
         self._socket.readyRead.connect(self._on_socket_ready_read)
         self._socket.connectToHost(QtNetwork.QHostAddress.LocalHost,
-                                   self._port)
+                                   self.port)
 
     def _on_socket_ready_read(self):
         data = utils.read_message(self._socket)
@@ -118,10 +118,10 @@ class Process(QtCore.QObject):
 
     def _on_socket_error(self, error):
         if error == self._socket.ConnectionRefusedError:
-            self._connect()
+            self.connect()
 
     def _on_connected(self):
-        _logger().debug('connected to server: localhost:%s', self._port)
+        _logger().debug('connected to server: localhost:%s', self.port)
         data = {
             'function': self._func,
             'arguments': self._args,
@@ -166,6 +166,6 @@ if __name__ == '__main__':
     win = QtWidgets.QMainWindow()
     win.show()
     p = Process(utils.echo, args=('some', 'args'))
-    p._port = 8086
-    p._connect()
+    p.port = 8086
+    p.connect()
     app.exec_()

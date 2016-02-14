@@ -72,7 +72,9 @@
         "working_dir": "."
     },
     {
-        "environment": {},
+        "environment": {
+            "PYTEST_QT_API": "pyqt5"
+        },
         "interpreter_options": [],
         "name": "tests/runtests",
         "run_in_external_terminal": false,

@@ -17,7 +17,7 @@ class DocumentOutline(plugins.WorkspacePlugin):
 
     def activate(self):
         self._widget = QtWidgets.QWidget()
-        self._outline = OutlineTreeWidget(self._window)
+        self._outline = OutlineTreeWidget(self.window)
         self._outline.setMinimumWidth(200)
         self._outline.sync_with_editor_changed.connect(self._on_sync_changed)
         self._edit_filter = PromptLineEdit(self._widget, 'Filter by name')
@@ -47,7 +47,7 @@ class DocumentOutline(plugins.WorkspacePlugin):
             self._widget, _('Outline'), special_icons.class_icon(),
             QtCore.Qt.RightDockWidgetArea)
         dock.hide()
-        self._window.current_tab_changed.connect(self._on_current_tab_changed)
+        self.window.current_tab_changed.connect(self._on_current_tab_changed)
         self._outline.set_editor(None)
 
     def _on_current_tab_changed(self, tab):

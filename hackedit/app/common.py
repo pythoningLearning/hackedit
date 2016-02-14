@@ -54,7 +54,7 @@ def check_for_update(window, show_up_to_date_msg=True):
     #                     window, 'Check for update',
     #                     'Update completed with sucess, the application '
     #                     'will now restart...')
-    #                 window._app.restart()
+    #                 window.app.restart()
     #             else:
     #                 QtWidgets.QMessageBox.warning(
     #                     window, 'Update failed',

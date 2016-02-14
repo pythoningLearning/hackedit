@@ -8,7 +8,7 @@ from hackedit.app.dialogs.preferences import DlgPreferences
 
 class DlgSelectWorkspace(QtWidgets.QDialog):
     def __init__(self, parent, app):
-        self._app = app
+        self.app = app
         if QtGui.QIcon.hasThemeIcon('preferences-system-windows'):
             self.icon = QtGui.QIcon.fromTheme('preferences-system-windows')
         else:
@@ -48,7 +48,7 @@ class DlgSelectWorkspace(QtWidgets.QDialog):
 
     def _edit_workspaces(self):
         QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
-        dlg = DlgPreferences(self, self._app)
+        dlg = DlgPreferences(self, self.app)
         dlg.goto_page('Workspaces')
         QtWidgets.qApp.restoreOverrideCursor()
         if dlg.exec_() == dlg.Accepted:

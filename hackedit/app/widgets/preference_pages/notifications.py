@@ -39,7 +39,7 @@ class Notifications(PreferencePage):
         self.ui.cb_warning.setChecked(
             settings.auto_open_warning_notification())
         self.ui.cb_errors.setChecked(settings.auto_open_error_notification())
-        self.ui.blacklist.addItems(events._get_blacklist())
+        self.ui.blacklist.addItems(events.get_blacklist())
         self.update_buttons()
 
     def restore_defaults(self):

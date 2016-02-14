@@ -67,7 +67,7 @@ class _Terminal(QtWidgets.QWidget):
         self._history = _unique(QtCore.QSettings().value(
             'cache/terminal_history', []))
         self._history_index = -1
-        self._window = window
+        self.window = window
         self._ui = terminal_widget_ui.Ui_Form()
         self._ui.setupUi(self)
         self._completer = QtWidgets.QCompleter(self._ui.edit_command)
@@ -82,7 +82,7 @@ class _Terminal(QtWidgets.QWidget):
         self._ui.edit_command.installEventFilter(self)
         self._ui.console.installEventFilter(self)
         self._ui.console.process_finished.connect(self._on_process_finished)
-        self._cwd = self._window.current_project
+        self._cwd = self.window.current_project
 
         self.action_edit_history = QtWidgets.QAction(
             _('Edit history'), self._ui.bt_run)
@@ -98,7 +98,7 @@ class _Terminal(QtWidgets.QWidget):
         self._ui.bt_run.addAction(self.action_clear_history)
 
     def close(self):
-        self._window = None
+        self.window = None
 
     def apply_preferences(self):
         cs = api.utils.color_scheme()
@@ -205,7 +205,7 @@ class _Terminal(QtWidgets.QWidget):
         if self._ui.console.hasFocus():
             self._ui.edit_command.setFocus()
         if not self.isVisible() or QtWidgets.qApp.activeWindow() != \
-                self._window:
+                self.window:
             e = api.events.Event(
                 _('Command finished'),
                 _('The command %r finished with exit code %d') % (

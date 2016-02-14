@@ -21,14 +21,14 @@ class WelcomeWindow(QtWidgets.QMainWindow):
     """
     def __init__(self, app):
         super().__init__()
-        self._app = app
+        self.app = app
         self._ui = welcome_window_ui.Ui_MainWindow()
         self._ui.setupUi(self)
         self.setFixedSize(QtCore.QSize(865, 600))
         self.setWindowIcon(QtGui.QIcon.fromTheme(
             'hackedit', QtGui.QIcon(':/icons/hackedit_128.png')))
         self.setWindowTitle(_('Welcome'))
-        self._app.get_recent_files_manager().updated.connect(
+        self.app.get_recent_files_manager().updated.connect(
             self.update_recents)
         self.update_recents()
         self._ui.label_version.setText(_('Version %s') % __version__)
@@ -80,7 +80,7 @@ class WelcomeWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         super().closeEvent(event)
-        self._app = None
+        self.app = None
 
     def showEvent(self, event):
         """ Shows the welcome window centered on the primary screen. """
@@ -95,7 +95,7 @@ class WelcomeWindow(QtWidgets.QMainWindow):
 
     @QtCore.pyqtSlot()
     def _quit(self):
-        self._app.quit(force=True)
+        self.app.quit(force=True)
 
     @QtCore.pyqtSlot(QtWidgets.QListWidgetItem)
     def on_list_recents_itemClicked(self, item):
@@ -105,7 +105,7 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         """
         path = item.data(QtCore.Qt.UserRole)
         _logger().debug('recent item clicked: %r', path)
-        self._app.open_path(path)
+        self.app.open_path(path)
 
     @QtCore.pyqtSlot()
     def on_list_recents_remove_current_requested(self):
@@ -113,23 +113,23 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         filename = self._ui.list_recents.currentItem().data(
             QtCore.Qt.UserRole)
         _logger().debug('remove recent item requested: %r', filename)
-        self._app.get_recent_files_manager().remove(filename)
+        self.app.get_recent_files_manager().remove(filename)
 
     @QtCore.pyqtSlot()
     def on_list_recents_clear_requested(self):
         """ Clears the list of recent files """
         _logger().debug('clear recents requested')
-        self._app.get_recent_files_manager().clear()
+        self.app.get_recent_files_manager().clear()
 
     @QtCore.pyqtSlot()
     def on_bt_new_clicked(self):
-        common.create_new(self._app, self)
+        common.create_new(self.app, self)
 
     @QtCore.pyqtSlot()
     def on_bt_open_clicked(self):
         """ Opens a file """
         _logger().debug('bt_open clicked')
-        common.open_folder(None, self._app)
+        common.open_folder(None, self.app)
 
     @QtCore.pyqtSlot()
     def update_recents(self):
@@ -137,11 +137,11 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         Updates the recent files list.
         """
         _logger().debug('update recent files list')
-        if self._app is None:
+        if self.app is None:
             self.sender().updated.disconnect(self.update_recents)
             return
         self._ui.list_recents.clear()
-        for file in self._app.get_recent_files_manager().get_recent_files():
+        for file in self.app.get_recent_files_manager().get_recent_files():
             item = QtWidgets.QListWidgetItem()
             if os.path.ismount(file):
                 item.setText(file)
@@ -164,7 +164,7 @@ class WelcomeWindow(QtWidgets.QMainWindow):
 
     @QtCore.pyqtSlot()
     def _edit_preferences(self):
-        common.edit_preferences(self, self._app)
+        common.edit_preferences(self, self.app)
 
     @QtCore.pyqtSlot()
     def _check_for_update(self):

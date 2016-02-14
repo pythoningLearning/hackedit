@@ -7,7 +7,7 @@ import inspect
 from PyQt5 import QtWidgets
 
 
-_APP = None
+APP = None
 
 
 def _window():
@@ -29,10 +29,10 @@ def _window():
         return caller
 
     try:
-        w = caller()._window
+        w = caller().window
         if w:
             return w
-        raise AttributeError('None _window')
+        raise AttributeError('window is None')
     except (AttributeError, IndexError):
         # not from a plugin, use active window instead
         w = QtWidgets.qApp.activeWindow()
@@ -41,11 +41,11 @@ def _window():
 
         if not isinstance(w, MainWindow):
             try:
-                w = _APP._editor_windows[0]
+                w = APP._editor_windows[0]
             except IndexError:
                 w = None
             if w is None:
-                w = _APP._last_window
+                w = APP.last_window
         if isinstance(w, MainWindow):
             return w
         return None

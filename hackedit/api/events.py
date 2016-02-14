@@ -125,7 +125,7 @@ def add_to_blacklist(event):
 
     Blacklisted events won't show up in the history.
     """
-    blacklist = _get_blacklist()
+    blacklist = get_blacklist()
     blacklist.append(event.title)
     _set_blacklist(blacklist)
 
@@ -134,7 +134,7 @@ def is_blacklisted(event):
     """
     Blacklisted event don't show up in the event log.
     """
-    return event.title in _get_blacklist()
+    return event.title in get_blacklist()
 
 
 def clear_blacklist():
@@ -150,16 +150,16 @@ def _set_blacklist(blacklist):
 
     :param blacklist: the list of event blacklist to save
     """
-    settings._SETTINGS.setValue(
+    QtCore.QSettings().setValue(
         'env/events_blacklist', json.dumps(list(set(blacklist))))
 
 
-def _get_blacklist():
+def get_blacklist():
     """
     Gets the event blacklist.
     """
     return list(set(json.loads(
-        settings._SETTINGS.value('env/events_blacklist', '[]'))))
+        QtCore.QSettings().value('env/events_blacklist', '[]'))))
 
 
 def post(event, show_balloon=None, force_show=False):

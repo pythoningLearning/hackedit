@@ -37,7 +37,7 @@ class LocatorWidget(QtWidgets.QFrame):
         super().__init__()
         self.icon_provider = widgets.FileIconProvider()
         self._runner = DelayJobRunner(delay=100)
-        self._window = window
+        self.window = window
         self.ui = locator_ui.Ui_Frame()
         self.ui.setupUi(self)
         self.ui.lineEdit.textChanged.connect(self.request_search)
@@ -111,7 +111,7 @@ class LocatorWidget(QtWidgets.QFrame):
             data = self.ui.treeWidget.currentItem().data(
                 0, QtCore.Qt.UserRole)
         else:
-            data = self._window.current_tab.file.path
+            data = self.window.current_tab.file.path
         if isinstance(data, str):
             text = self.ui.lineEdit.text()
             if self.GOTO_LINE_PATTERN.match(text):

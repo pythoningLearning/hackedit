@@ -24,7 +24,7 @@ def open_project(path, sender=None):
     :param path: path to the project to open. If path is a file, dirname is
                  used instead.
     """
-    _window()._app.open_path(path, sender=sender)
+    _window().app.open_path(path, sender=sender)
 
 
 def add_project(path):

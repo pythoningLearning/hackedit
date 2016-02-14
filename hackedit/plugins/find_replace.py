@@ -24,7 +24,7 @@ class FindReplace(plugins.WorkspacePlugin):
         self._dock = None
         self._find_results_widget = None
         self._replace = False
-        action_before = self._window._ui.action_preferences
+        action_before = self.window._ui.action_preferences
         mnu_edit = window.get_menu(_('&Edit'))
         sep = QtWidgets.QAction(mnu_edit)
         sep.setSeparator(True)
@@ -166,7 +166,7 @@ class FindReplace(plugins.WorkspacePlugin):
                 text = TextHelper(editor.get_current_editor()).selected_text()
             except AttributeError:
                 text = ''
-        search_settings = _DlgFindReplace.find(self._window, text_to_find=text)
+        search_settings = _DlgFindReplace.find(self.window, text_to_find=text)
         if search_settings is not None:
             self._remove_dock()
             self._replace = False
@@ -186,7 +186,7 @@ class FindReplace(plugins.WorkspacePlugin):
         if editor.get_current_editor() is not None:
             text = TextHelper(editor.get_current_editor()).selected_text()
         search_settings = _DlgFindReplace.replace(
-            self._window, text_to_find=text)
+            self.window, text_to_find=text)
         if search_settings is not None:
             self._remove_dock()
             self._replace = True
@@ -341,29 +341,29 @@ class _DlgFindReplace(QtWidgets.QDialog):
     def __init__(self, parent, enable_replace, text_to_find):
         super().__init__(parent)
         self.window = parent
-        self._ui = Ui_Dialog()
-        self._ui.setupUi(self)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
         data = _last_search_data()
         if enable_replace:
             self.setWindowTitle(_('Find and replace'))
         else:
             self.setWindowTitle(_('Find'))
-        self._ui.checkbox_case_sensitive.setChecked(data['case_sensitive'])
-        self._ui.checkbox_whole_words.setChecked(data['whole_words_only'])
-        self._ui.checkbox_regexp.setChecked(data['regex'])
-        self._ui.edit_pattern.setText(';'.join(data['patterns']))
-        self._ui.edit_find.setText(text_to_find)
-        self._ui.label_replace.setVisible(enable_replace)
-        self._ui.edit_replace.setVisible(enable_replace)
-        self._ui.buttonBox.button(self._ui.buttonBox.Ok).setText(_('Find'))
-        self._ui.combo_projects.addItems(parent.projects)
-        self._ui.edit_find.selectAll()
+        self.ui.checkbox_case_sensitive.setChecked(data['case_sensitive'])
+        self.ui.checkbox_whole_words.setChecked(data['whole_words_only'])
+        self.ui.checkbox_regexp.setChecked(data['regex'])
+        self.ui.edit_pattern.setText(';'.join(data['patterns']))
+        self.ui.edit_find.setText(text_to_find)
+        self.ui.label_replace.setVisible(enable_replace)
+        self.ui.edit_replace.setVisible(enable_replace)
+        self.ui.buttonBox.button(self.ui.buttonBox.Ok).setText(_('Find'))
+        self.ui.combo_projects.addItems(parent.projects)
+        self.ui.edit_find.selectAll()
 
     def _on_bt_dir_clicked(self):
         path = QtWidgets.QFileDialog.getExistingDirectory(
-            self, _('Choose directory'), self._ui.edit_directory.text())
+            self, _('Choose directory'), self.ui.edit_directory.text())
         if path:
-            self._ui.edit_directory.setText(os.path.normpath(path))
+            self.ui.edit_directory.setText(os.path.normpath(path))
 
     @classmethod
     def find(cls, parent, text_to_find=None):
@@ -377,19 +377,19 @@ class _DlgFindReplace(QtWidgets.QDialog):
             text_to_find = _last_search_term()
         dlg = _DlgFindReplace(parent, False, text_to_find)
         if dlg.exec_() == dlg.Accepted:
-            if dlg._ui.radio_all_projects.isChecked():
+            if dlg.ui.radio_all_projects.isChecked():
                 paths = parent.projects
-            elif dlg._ui.radio_project.isChecked():
-                paths = [dlg._ui.combo_projects.currentText()]
+            elif dlg.ui.radio_project.isChecked():
+                paths = [dlg.ui.combo_projects.currentText()]
             else:
-                paths = [dlg._ui.edit_directory.text()]
-            patterns = dlg._ui.edit_pattern.text().strip().split(';')
+                paths = [dlg.ui.edit_directory.text()]
+            patterns = dlg.ui.edit_pattern.text().strip().split(';')
             search_data = {
-                'find': dlg._ui.edit_find.text(),
-                'replace': dlg._ui.edit_replace.text(),
-                'case_sensitive': dlg._ui.checkbox_case_sensitive.isChecked(),
-                'whole_words_only': dlg._ui.checkbox_whole_words.isChecked(),
-                'regex': dlg._ui.checkbox_regexp.isChecked(),
+                'find': dlg.ui.edit_find.text(),
+                'replace': dlg.ui.edit_replace.text(),
+                'case_sensitive': dlg.ui.checkbox_case_sensitive.isChecked(),
+                'whole_words_only': dlg.ui.checkbox_whole_words.isChecked(),
+                'regex': dlg.ui.checkbox_regexp.isChecked(),
                 'paths': paths,
                 'patterns': [p for p in patterns if p]
             }
@@ -410,19 +410,19 @@ class _DlgFindReplace(QtWidgets.QDialog):
             text_to_find = _last_search_term()
         dlg = _DlgFindReplace(parent, True, text_to_find)
         if dlg.exec_() == dlg.Accepted:
-            if dlg._ui.radio_all_projects.isChecked():
+            if dlg.ui.radio_all_projects.isChecked():
                 paths = parent.projects
-            elif dlg._ui.radio_project.isChecked():
-                paths = [dlg._ui.combo_projects.currentText()]
+            elif dlg.ui.radio_project.isChecked():
+                paths = [dlg.ui.combo_projects.currentText()]
             else:
-                paths = [dlg._ui.edit_directory.text()]
-            patterns = dlg._ui.edit_pattern.text().strip().split(';')
+                paths = [dlg.ui.edit_directory.text()]
+            patterns = dlg.ui.edit_pattern.text().strip().split(';')
             search_data = {
-                'find': dlg._ui.edit_find.text(),
-                'replace': dlg._ui.edit_replace.text(),
-                'case_sensitive': dlg._ui.checkbox_case_sensitive.isChecked(),
-                'whole_words_only': dlg._ui.checkbox_whole_words.isChecked(),
-                'regex': dlg._ui.checkbox_regexp.isChecked(),
+                'find': dlg.ui.edit_find.text(),
+                'replace': dlg.ui.edit_replace.text(),
+                'case_sensitive': dlg.ui.checkbox_case_sensitive.isChecked(),
+                'whole_words_only': dlg.ui.checkbox_whole_words.isChecked(),
+                'regex': dlg.ui.checkbox_regexp.isChecked(),
                 'paths': paths,
                 'patterns': [p for p in patterns if p]
             }

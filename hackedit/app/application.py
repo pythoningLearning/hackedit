@@ -64,7 +64,7 @@ class Application(QtCore.QObject):
         self._qapp = qapp
         self._splash = splash
         super().__init__()
-        _shared._APP = self
+        _shared.APP = self
         self._editor_windows = []
         show_msg_on_splash(_('Setting up except hook...'))
         self._setup_except_hook()
@@ -115,7 +115,7 @@ class Application(QtCore.QObject):
 
         show_msg_on_splash(_('Setting up welcome window...'))
         self._welcome_window = WelcomeWindow(self)
-        self._last_window = self._welcome_window
+        self.last_window = self._welcome_window
 
         show_msg_on_splash('')
 
@@ -308,11 +308,11 @@ class Application(QtCore.QObject):
         if self._qapp is None:
             # last window closed (qapp is none when all windows have been
             # closed)
-            self._last_window = None
+            self.last_window = None
         else:
             w = self._qapp.activeWindow()
             if isinstance(w, MainWindow):
-                self._last_window = w
+                self.last_window = w
 
     def _restore_last_msg_window(self):
         try:
@@ -321,7 +321,7 @@ class Application(QtCore.QObject):
             self._restore_last_active_window()
 
     def _restore_last_active_window(self):
-        api.window.restore(self._last_window)
+        api.window.restore(self.last_window)
 
     def _setup_workspace_plugins(self, win, workspace):
         self.plugin_manager.load_workspace_plugins(win=win)
@@ -515,7 +515,7 @@ class Application(QtCore.QObject):
         _logger().debug('window closed: %r' % window)
         self._update_windows()
         if self._editor_windows:
-            self._last_window = self._editor_windows[0]
+            self.last_window = self._editor_windows[0]
 
     def _set_active_window(self, window):
         _logger().debug('active window set to %r' % window)
@@ -543,7 +543,7 @@ class Application(QtCore.QObject):
             title = '[Unhandled exception]  %s: %s' % (
                 exc.__class__.__name__, str(exc))
             try:
-                w = self._last_window
+                w = self.last_window
                 if w.notifications is None:
                     raise AttributeError
             except AttributeError:

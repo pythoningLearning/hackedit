@@ -141,7 +141,7 @@ class Manager(QtCore.QObject):
     """
     def __init__(self, window):
         super().__init__()
-        self._window = window
+        self.window = window
         # highest level met until now, determine which icon is used
         self._highest_level = api.events.INFO
         #: history of notifications
@@ -157,7 +157,7 @@ class Manager(QtCore.QObject):
         self._update_tool_button()
 
     def close(self):
-        self._window = None
+        self.window = None
 
     def show(self):
         self.dock.show()
@@ -191,7 +191,7 @@ class Manager(QtCore.QObject):
                 tray_icon.showMessage(
                     'HackEdit: %s' % e.title, e.description,
                     MSG_ICONS[e.level])
-        tray_icon.last_window = self._window
+        tray_icon.last_window = self.window
         self._history.add(e)
         if e.level > self._highest_level:
             self._highest_level = e.level

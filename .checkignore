@@ -6,3 +6,4 @@ data/*
 conftest.py
 bootstrap.pyw
 hackedit/extlibs/*
+hackedit/app/boss_wrapper.py

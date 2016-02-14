@@ -101,6 +101,10 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         return self._current_folder
 
+    @current_project.setter
+    def current_project(self, value):
+        self._current_folder = value
+
     @property
     def tab_widget(self):
         """
@@ -120,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._toolbars = []
         self._current_tab = None
         #: Reference to the application instance.
-        self._app = app
+        self.app = app
         #: List of plugins added to the window
         self.plugins = []
         #: Workspace definition
@@ -157,7 +161,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # setup recent files menu
         self._mnu_recents = MenuRecentFiles(
             self._ui.mnu_file,
-            recent_files_manager=self._app.get_recent_files_manager(),
+            recent_files_manager=self.app.get_recent_files_manager(),
             clear_icon=QtGui.QIcon.fromTheme('edit-clear'),
             icon_provider=FileIconProvider())
         self._mnu_recents.setTitle('Recents')
@@ -221,6 +225,12 @@ class MainWindow(QtWidgets.QMainWindow):
             os.makedirs(hackedit_path)
         except FileExistsError:
             pass
+
+    def remove_folder(self, path):
+        try:
+            self._folders.remove(path)
+        except ValueError:
+            _logger().warn('failed to remove folder %r', path)
 
     def get_menu(self, menu_name):
         """
@@ -312,7 +322,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         :return: pyqode.core.widgets.FileSystemTreeView
         """
-        return self.project_explorer._fs
+        return self.project_explorer.view
 
     def open_file(self, path, line=None, column=0):
         """
@@ -350,16 +360,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 e, tb=tb), show_balloon=False)
         else:
             _logger().debug('document opened: %s', path)
-            # remove encodings menu, user can change that through the status
-            # bar
-            try:
-                for mnu in tab._menus:
-                    if mnu.title() == _('Encodings'):
-                        tab.remove_menu(mnu)
-                        break
-                tab.remove_action(tab.action_goto_line)
-            except AttributeError:
-                pass
 
             try:
                 mode = tab.modes.get('FileWatcherMode')
@@ -453,7 +453,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         self._ui.mnu_windows.clear()
         self.window_group = QtWidgets.QActionGroup(self._ui.mnu_windows)
-        open_windows = self._app.get_open_windows()
+        open_windows = self.app.get_open_windows()
         _logger().debug('updating mnu_view: %r', open_windows)
         for w in open_windows:
             a = self._ui.mnu_windows.addAction(w.windowTitle())
@@ -580,7 +580,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.open_file(path)
             else:
                 # open a new window
-                self._app.open_path(path)
+                self.app.open_path(path)
 
     def createPopupMenu(self):
         # prevent the window to create its standard popup. That menu
@@ -614,7 +614,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         if self._ui:
             _logger().debug('close event')
-            if self._app.window_count == 1 and settings.confirm_app_exit():
+            if self.app.window_count == 1 and settings.confirm_app_exit():
                 answer = QtWidgets.QMessageBox.question(
                     self, _('Confirm exit'),
                     _('Are you sure you want to exit HackEdit?'),
@@ -623,32 +623,32 @@ class MainWindow(QtWidgets.QMainWindow):
                 if answer == QtWidgets.QMessageBox.No:
                     event.ignore()
                     return
-            current_index, files = self._get_session_info()
+            current_index, files = self.get_session_info()
             accept = self._close_documents(event)
             event.setAccepted(accept)
             if event.isAccepted():
                 for plugin in self.plugins:
                     try:
                         plugin.close()
-                        plugin._window = None
                     except AttributeError:
                         pass
-                    plugin._window = None
+                    finally:
+                        plugin.window = None
                 self.plugins.clear()
-                self._save_state(current_index, files)
+                self.save_state(current_index, files)
                 self.closed.emit(self)
                 self._ui = None
                 self.task_manager.terminate()
                 self.notifications.close()
                 self.notifications = None
                 self.task_manager_widget.close()
-                self.indexor._window = None
-                self._dock_manager._window = None
+                self.indexor.window = None
+                self._dock_manager.window = None
                 self.project_explorer.close()
 
-                if self._app._last_window == self:
-                    self._app._last_window = None
-                self._app = None
+                if self.app.last_window == self:
+                    self.app.last_window = None
+                self.app = None
 
                 self.setParent(None)
 
@@ -702,7 +702,7 @@ class MainWindow(QtWidgets.QMainWindow):
             mode.match_background = QtGui.QColor('#CCFFCC')
             mode.match_foreground = QtGui.QColor('red')
 
-    def _get_session_info(self):
+    def get_session_info(self):
         widgets = self._ui.tabs.widgets()
         files = []
         current_index = 0
@@ -736,7 +736,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 accept = False
         return accept
 
-    def _save_state(self, current_index, files):
+    def save_state(self, current_index, files):
         if self._docks_to_restore:
             self._restore_children()
         pth = self.projects[0]
@@ -854,7 +854,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _on_window_action_triggered(self, action):
         _logger().debug('window action triggered')
-        self._app.set_active_window(action.data())
+        self.app.set_active_window(action.data())
 
     def _on_last_tab_closed(self):
         _logger().debug('last tab closed')
@@ -862,11 +862,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _on_open_recent_requested(self, path):
         _logger().debug('open recent requested')
-        self._app.open_path(path, sender=self)
+        self.app.open_path(path, sender=self)
 
     # Private slots
     def _on_new_triggered(self):
-        common.create_new(self._app, self, self.current_project)
+        common.create_new(self.app, self, self.current_project)
 
     @QtCore.pyqtSlot(QtWidgets.QWidget)
     def on_current_tab_changed(self, tab):
@@ -880,7 +880,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     a, 'dont_show_in_edit_menu')])
             self._ui.menuActive_editor.addSeparator()
             try:
-                for m in tab._menus:
+                for m in tab.menus():
                     self._ui.menuActive_editor.addMenu(m)
             except AttributeError:
                 # not a code edit
@@ -914,7 +914,7 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot()
     def on_action_open_triggered(self):
         """ Opens a project directory"""
-        common.open_folder(self, self._app)
+        common.open_folder(self, self.app)
 
     @QtCore.pyqtSlot()
     def on_action_open_file_triggered(self):
@@ -977,10 +977,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 tb.hide()
 
     def _edit_preferences(self):
-        DlgPreferences.edit_preferences(self, self._app)
+        DlgPreferences.edit_preferences(self, self.app)
 
     def _apply_editor_plugin_preferences(self, editor):
-        for plugin in self._app.plugin_manager.editor_plugins:
+        for plugin in self.app.plugin_manager.editor_plugins:
             if plugin.get_editor_class() == editor.__class__:
                 try:
                     plugin.apply_specific_preferences(editor)
@@ -1165,7 +1165,7 @@ class MainWindow(QtWidgets.QMainWindow):
             mode.enabled = settings.backspace_unindents()
 
         # those modes are typically subclasses
-        available_modes = editor.modes._modes.keys()
+        available_modes = editor.modes.keys()
         for name in available_modes:
             if 'autocomplete' in name.lower():
                 mode = editor.modes.get(name)

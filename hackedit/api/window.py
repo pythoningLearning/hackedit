@@ -91,7 +91,7 @@ def get_tray_icon():
 
     :rtype: PyQt5.QtWidgets.QSystemTrayIcon
     """
-    return _window()._app.tray_icon
+    return _window().app.tray_icon
 
 
 def get_menu(menu_name):
