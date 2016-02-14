@@ -25,7 +25,6 @@ import logging
 
 from PyQt5 import QtCore, QtWidgets
 
-from hackedit.app import settings
 from ._shared import _window
 
 
