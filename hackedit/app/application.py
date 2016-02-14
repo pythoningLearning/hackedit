@@ -126,7 +126,8 @@ class Application(QtCore.QObject):
                 url = template_provider.get_url()
                 label = template_provider.get_label()
             except TypeError:
-                pass
+                _logger().exception('failed to get url and label from template'
+                                    ' provider plugin...')
             else:
                 if url and label:
                     exists = False
@@ -147,7 +148,8 @@ class Application(QtCore.QObject):
             try:
                 boss_wrapper.sync()
             except Exception:
-                pass
+                _logger().exception('exception while syncing the boss '
+                                    'templates')
             else:
                 settings.set_has_sync_templates_once(True)
 
@@ -237,7 +239,8 @@ class Application(QtCore.QObject):
             try:
                 path = self.get_recent_files_manager().get_recent_files()[0]
             except IndexError:
-                pass
+                _logger().warn('failed to reopen last window, recent files is '
+                               'empty')
             else:
                 if self.open_path(path):
                     nb_window += 1
@@ -257,13 +260,10 @@ class Application(QtCore.QObject):
             self._qapp.setStyleSheet(load_stylesheet_pyqt5())
         else:
             self._qapp.setStyleSheet('')
-        try:
-            if self._args.dev:
-                self._qapp.setStyleSheet(
-                    self._qapp.styleSheet() +
-                    '\nQToolBar{background-color: #80AA80;color: white;}')
-        except AttributeError:
-            pass
+        if self._args.dev:
+            self._qapp.setStyleSheet(
+                self._qapp.styleSheet() +
+                '\nQToolBar{background-color: #80AA80;color: white;}')
         self.tray_icon.setVisible(settings.show_tray_icon())
         mime_types.load()
         icons.init()

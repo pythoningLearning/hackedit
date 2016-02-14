@@ -151,7 +151,7 @@ class Task(QtCore.QObject):
         try:
             self.process.terminate()
         except AttributeError:
-            pass  # already terminated
+            _logger().debug('failed to terminate process, already terminated')
 
     def start(self):
         """

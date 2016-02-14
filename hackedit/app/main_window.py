@@ -224,7 +224,8 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             os.makedirs(hackedit_path)
         except FileExistsError:
-            pass
+            _logger().debug('failed to create .hackedit folder at %r, '
+                            'directory already exits', path)
 
     def remove_folder(self, path):
         try:
@@ -364,7 +365,7 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 mode = tab.modes.get('FileWatcherMode')
             except (KeyError, AttributeError):
-                pass
+                _logger().debug('no file watcher on widget %r', tab)
             else:
                 # enable filewatcher autoreload
                 mode.auto_reload = True
@@ -536,7 +537,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._apply_editor_preferences(editor)
             except AttributeError:
                 # not a CodeEdit
-                pass
+                _logger().debug('failed to apply preferences on editor %r',
+                                editor)
         for plugin in self.plugins:
             plugin.apply_preferences()
         if settings.widescreen_layout():
@@ -631,7 +633,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     try:
                         plugin.close()
                     except AttributeError:
-                        pass
+                        _logger().debug('plugin %r has not attribute close',
+                                        plugin)
                     finally:
                         plugin.window = None
                 self.plugins.clear()
@@ -661,21 +664,22 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             panel = editor.panels.get('FoldingPanel')
         except KeyError:
-            pass
+            _logger().debug('no FoldingPanel on widget %r', editor)
         else:
             if settings.dark_theme():
                 panel.native_look = False
         try:
             mode = editor.modes.get('OccurrencesHighlighterMode')
         except KeyError:
-            pass
+            _logger().debug('no OccurrencesHighlighterMode on widget %r',
+                            editor)
         else:
             mode.background = QtGui.QColor('#344134')
             mode.foregound = None
         try:
             mode = editor.modes.get('SymbolMatcherMode')
         except KeyError:
-            pass
+            _logger().debug('no SymbolMatcherMode on widget %r', editor)
         else:
             mode.match_background = QtGui.QColor('#344134')
             mode.match_foreground = QtGui.QColor('yellow')
@@ -684,20 +688,21 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             panel = editor.panels.get('FoldingPanel')
         except KeyError:
-            pass
+            _logger().debug('no FoldingPanel on widget %r', editor)
         else:
             panel.native_look = True
         try:
             mode = editor.modes.get('OccurrencesHighlighterMode')
         except KeyError:
-            pass
+            _logger().debug('no OccurrencesHighlighterMode on widget %r',
+                            editor)
         else:
             mode.background = QtGui.QColor('#CCFFCC')
             mode.foregound = None
         try:
             mode = editor.modes.get('SymbolMatcherMode')
         except KeyError:
-            pass
+            _logger().debug('no SymbolMatcherMode on widget %r', editor)
         else:
             mode.match_background = QtGui.QColor('#CCFFCC')
             mode.match_foreground = QtGui.QColor('red')
@@ -715,7 +720,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     path = w.file.path
                 except AttributeError:
-                    pass
+                    _logger().debug('widget %r has not attribute file.path', w)
                 else:
                     files.append(path)
                     if path == self._ui.tabs.current_widget().file.path:
@@ -850,7 +855,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             save_user_config(self.projects[0], data)
         except PermissionError:
-            pass
+            _logger().warn('failed to save linked paths, permission error')
 
     def _on_window_action_triggered(self, action):
         _logger().debug('window action triggered')
@@ -884,7 +889,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     self._ui.menuActive_editor.addMenu(m)
             except AttributeError:
                 # not a code edit
-                pass
+                _logger().debug('failed to add editor menus to Edit -> Active '
+                                'editor, not a CodeEdit instance')
             self._ui.stackedWidget.setCurrentIndex(PAGE_EDITOR)
             try:
                 self._update_encoding_label(tab.file.encoding)
@@ -893,14 +899,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     self._update_cursor_label, QtCore.Qt.UniqueConnection)
             except TypeError:
                 # already connected
-                pass
+                _logger().debug('failed to connect to cursorPositionChanged '
+                                'signal, already connected')
             except AttributeError:
                 # not a code editor widget
                 try:
                     self.lbl_encoding.setText('', False)
                     self.lbl_cursor.setText('', False)
                 except AttributeError:
-                    pass
+                    _logger().debug('failed to retrieve cursor information, '
+                                    'not a CodeEdit instance')
         else:
             if self._ui:
                 self._ui.menuActive_editor.clear()
@@ -909,7 +917,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.lbl_encoding.setText('n/a', False)
                     self.lbl_cursor.setText('n/a', False)
                 except AttributeError:
-                    pass
+                    _logger().debug('failed to reset cursor infos labels, '
+                                    'widget deleted (window is closing...)')
 
     @QtCore.pyqtSlot()
     def on_action_open_triggered(self):
@@ -1042,7 +1051,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             p = editor.panels.get('SearchAndReplacePanel')
         except KeyError:
-            pass
+            _logger().debug('no SearchAndReplacePanel on widget %r', editor)
         else:
             p.actionSearch.setShortcut(shortcuts.get(
                 'Find', _('Find'), 'Ctrl+F'))
@@ -1055,7 +1064,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             p = editor.panels.get('FoldingPanel')
         except KeyError:
-            pass
+            _logger().debug('no FoldingPanel on widget %r', editor)
         else:
             p.action_collapse.setShortcut(shortcuts.get(
                 'Folding: collapse', _('Folding: collapse'), 'Shift+-'))
@@ -1071,7 +1080,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             m = editor.modes.get('ExtendedSelectionMode')
         except KeyError:
-            pass
+            _logger().debug('no ExtendedSelectionMode on widget %r', editor)
         else:
             m.action_select_word.setShortcut(shortcuts.get(
                 'Select word', _('Select word'), 'Ctrl+W'))
@@ -1086,7 +1095,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             m = editor.modes.get('CaseConverterMode')
         except KeyError:
-            pass
+            _logger().debug('no CaseConverterMode on widget %r', editor)
         else:
             m.action_to_lower.setShortcut(shortcuts.get(
                 'Convert to lower case', _('Convert to lower case'), 'Ctrl+U'))
@@ -1127,7 +1136,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             mode = editor.modes.get(modes.RightMarginMode)
         except KeyError:
-            pass
+            _logger().debug('no RightMarginMode on widget %r', editor)
         else:
             if 'cobol' not in editor.__class__.__name__.lower():
                 mode.position = settings.margin_position()
@@ -1136,7 +1145,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             mode = editor.modes.get(modes.CodeCompletionMode)
         except KeyError:
-            pass
+            _logger().debug('no CodeCompletionMode on widget %r', editor)
         else:
             mode.filter_mode = settings.cc_filter_mode()
             mode.trigger_length = settings.cc_trigger_len()
@@ -1146,21 +1155,21 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             mode = editor.modes.get(modes.CaretLineHighlighterMode)
         except KeyError:
-            pass
+            _logger().debug('no CaretLineHighlighterMode on widget %r', editor)
         else:
             mode.enabled = settings.highlight_caret_line()
 
         try:
             mode = editor.modes.get(modes.SymbolMatcherMode)
         except KeyError:
-            pass
+            _logger().debug('no SymbolMatcherMode on widget %r', editor)
         else:
             mode.enabled = settings.highlight_parentheses()
 
         try:
             mode = editor.modes.get(modes.SmartBackSpaceMode)
         except KeyError:
-            pass
+            _logger().debug('no SmartBackSpaceMode on widget %r', editor)
         else:
             mode.enabled = settings.backspace_unindents()
 
@@ -1179,28 +1188,28 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             panel = editor.panels.get(panels.LineNumberPanel)
         except KeyError:
-            pass
+            _logger().debug('no LineNumberPanel on widget %r', editor)
         else:
             panel.setVisible(settings.show_line_numbers_panel())
 
         try:
             panel = editor.panels.get(panels.CheckerPanel)
         except KeyError:
-            pass
+            _logger().debug('no CheckerPanel on widget %r', editor)
         else:
             panel.setVisible(settings.show_errors_panel())
 
         try:
             panel = editor.panels.get(panels.GlobalCheckerPanel)
         except KeyError:
-            pass
+            _logger().debug('no GlobalCheckerPanel on widget %r', editor)
         else:
             panel.setVisible(settings.show_global_panel())
 
         try:
             panel = editor.panels.get(panels.FoldingPanel)
         except KeyError:
-            pass
+            _logger().debug('no FoldingPanel on widget %r', editor)
         else:
             panel.highlight_caret_scope = settings.highlight_caret_scope()
             panel.setVisible(settings.show_folding_panel())

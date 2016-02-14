@@ -28,23 +28,29 @@ MSG_ICONS = {
 
 ICON_SIZE = 24
 
+
+def _logger():
+    return logging.getLogger(__name__)
+
+
 Notify = None
-try:
-    import gi
-except ImportError:
-    pass
-else:
+if api.system.LINUX and not api.system.PLASMA_DESKTOP:
     try:
-        gi.require_version('Notify', '0.7')
-    except ValueError:
-        pass
-    finally:
+        import gi
+    except ImportError:
+        _logger().warn('failed to import gi')
+    else:
         try:
-            from gi.repository import Notify
-        except ImportError:
-            pass
-        else:
-            Notify.init("HackEdit")
+            gi.require_version('Notify', '0.7')
+        except ValueError:
+            _logger().warn('failed to require Notify >= 0.7')
+        finally:
+            try:
+                from gi.repository import Notify
+            except ImportError:
+                _logger().warn('failed to import Notify')
+            else:
+                Notify.init("HackEdit")
 
 
 class Widget(QtWidgets.QFrame):
@@ -221,7 +227,3 @@ class Manager(QtCore.QObject):
         self._highest_level = api.events.INFO
         self._update_tool_button()
         self.dock.hide()
-
-
-def _logger():
-    return logging.getLogger(__name__)

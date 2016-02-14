@@ -292,7 +292,8 @@ class FindReplace(plugins.WorkspacePlugin):
             try:
                 self._find_results_widget.itemActivated.emit(next_child, 0)
             except AttributeError:
-                pass
+                _logger().warn('failed to connect to itemActived signal, using'
+                               'old version of PyQt5? (>= 5.5.2)')
         else:
             # no more results
             self._remove_dock()

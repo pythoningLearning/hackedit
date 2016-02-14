@@ -1,3 +1,4 @@
+import logging
 import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -93,7 +94,8 @@ class Templates(PreferencePage):
                         try:
                             icon = meta['icon']
                         except KeyError:
-                            pass
+                            _logger().debug('no icon set for template %s:%s',
+                                            label, templ)
                     if icon.startswith(':') or os.path.exists(icon):
                         icon = QtGui.QIcon(icon)
                     elif icon.startswith('file.'):
@@ -157,3 +159,7 @@ class DlgAddSource(QtWidgets.QDialog):
             return dlg.ui.edit_label.text().strip(), \
                 dlg.ui.edit_url.text().strip()
         return None, None
+
+
+def _logger():
+    return logging.getLogger(__name__)

@@ -4,6 +4,7 @@ This module contains utility function to retrieve common icons.
 Icons are always loaded from an icon theme (the system icon theme on Linux
 and the embedded Breeze theme on Windows and OSX)
 """
+import logging
 import os
 import sys
 
@@ -22,7 +23,7 @@ def icon_themes():
         try:
             dirs = os.listdir(path)
         except OSError:
-            pass
+            _logger().debug('failed to list icons in path %r', path)
         else:
             for d in dirs:
                 pth = os.path.join(path, d)
@@ -54,5 +55,11 @@ def init():
     paths.append(os.path.join(sys.prefix, 'share', 'hackedit', 'icons'))
     paths.append('/usr/local/share/hackedit/icons')
     QIcon.setThemeSearchPaths(list(set(paths)))
+    _logger().debug('icon theme path: %r', paths)
     if name:
         QIcon.setThemeName(name)
+        _logger().debug('icon theme: %s', name)
+
+
+def _logger():
+    return logging.getLogger(__name__)

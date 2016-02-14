@@ -49,7 +49,7 @@ class Process(QtCore.QObject):
         try:
             atexit.unregister(self.terminate)
         except ValueError:
-            pass
+            _logger().warn('failed to unregister atexit callback')
 
     def is_alive(self):
         return self._process.state() != self._process.NotRunning
@@ -110,7 +110,7 @@ class Process(QtCore.QObject):
                 self.result_available.emit(ret_val)
             except TypeError:
                 # c++ instance deleted
-                pass
+                return
         elif 'exception' in data.keys():
             self.errored.emit(data['exception'], data['traceback'])
         else:

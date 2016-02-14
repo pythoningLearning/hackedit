@@ -41,7 +41,9 @@
         "name": "hackedit-dev",
         "run_in_external_terminal": false,
         "script": "scripts/hackedit-dev.pyw",
-        "script_parameters": [],
+        "script_parameters": [
+            "--dev"
+        ],
         "working_dir": "."
     },
     {

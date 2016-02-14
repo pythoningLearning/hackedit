@@ -160,7 +160,7 @@ QPushButton:hover {
                 self._on_dock_visiblity_changed)
             self.dock_widgets.remove(dock_widget)
         except (KeyError, ValueError, RuntimeError):
-            pass
+            _logger().log(1, 'failed to remove dock widget')
         if len(self.dock_widgets) == 0:
             self.hide()
         else:
@@ -245,7 +245,7 @@ class DockWidgetsManager(QtCore.QObject):
             try:
                 manager.remove_dock_widget(dock_widget)
             except KeyError:
-                pass
+                _logger().warn('failed to remove dock widget %r', dock_widget)
 
     def _on_dock_location_changed(self, area):
         dock = self.sender()

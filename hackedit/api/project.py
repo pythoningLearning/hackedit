@@ -2,6 +2,7 @@
 This module contains the API for managing projects.
 """
 import json
+import logging
 import os
 
 from pyqode.core.share import Definition
@@ -96,7 +97,8 @@ def get_project_files(root_project=None):
         from hackedit.api.editor import get_all_paths
         files += get_all_paths()
     except AttributeError:
-        pass
+        _logger().exception(
+            'failed to get all paths for project %r', root_project)
     return sorted(list(set(files)))
 
 
@@ -152,14 +154,15 @@ def save_user_config(project_path, data):
     try:
         os.makedirs(os.path.dirname(path))
     except FileExistsError:
-        pass
+        _logger().debug('failed to created path: %r, already exists',
+                        os.path.dirname(path))
     # write data
     try:
         with open(path, 'w') as f:
             f.write(json.dumps(data, sort_keys=True, indent=4,
                                separators=(',', ': ')))
     except PermissionError:
-        pass
+        _logger().warn('failed to save user config file, permission error')
 
 
 def load_user_cache(project_path):
@@ -191,14 +194,15 @@ def save_user_cache(project_path, data):
     try:
         os.makedirs(os.path.dirname(path))
     except FileExistsError:
-        pass
+        _logger().debug('failed to created path: %r, already exists',
+                        os.path.dirname(path))
     # write data
     try:
         with open(path, 'w') as f:
             f.write(json.dumps(data, sort_keys=True, indent=4,
                                separators=(',', ': ')))
     except PermissionError:
-        pass
+        _logger().warn('failed to save user cache file, permission error')
 
 
 def load_workspace(path):
@@ -224,4 +228,8 @@ def save_workspace(path, workspace_name):
     try:
         save_user_config(path, data)
     except PermissionError:
-        pass
+        _logger().warn('failed to save project workspace, permission error')
+
+
+def _logger():
+    return logging.getLogger(__name__)

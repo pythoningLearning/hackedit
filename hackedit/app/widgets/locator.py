@@ -1,3 +1,4 @@
+import logging
 import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -157,7 +158,7 @@ class LocatorWidget(QtWidgets.QFrame):
                 try:
                     TextHelper(e).goto_line(self._get_requested_line_nbr() - 1)
                 except ValueError:
-                    pass
+                    _logger().debug('failed to go to line on editor %r', e)
 
     @staticmethod
     def flatten(results, level=1):
@@ -572,3 +573,7 @@ def get_search_scores(query, choices, ignore_case, template, valid_only, sort):
         results = sorted(results, key=lambda row: row[-1])
 
     return results
+
+
+def _logger():
+    return logging.getLogger(__name__)

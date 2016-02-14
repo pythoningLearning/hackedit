@@ -2,6 +2,7 @@
 Provides a series of function on top of gettext to retrieve a particular
 translations (used by both the core apps and the plugins).
 """
+import logging
 import re
 import gettext
 import os
@@ -23,8 +24,9 @@ def get_available_locales():
     locale_dir = os.path.join(sys.prefix, 'share', 'locale')
     try:
         locales = os.listdir(locale_dir)
-    except OSError:
-        pass
+    except OSError as e:
+        _logger().warn('failed to list translations files of directory %r: %s',
+                       locale_dir, e)
     else:
         for d in locales:
             mo_path = os.path.join(locale_dir, d, 'LC_MESSAGES', 'hackedit.mo')
@@ -101,3 +103,7 @@ def hackedit_gettext_hook(ui_script_path):
 
     with open(ui_script_path, 'w') as fout:
         fout.write(content)
+
+
+def _logger():
+    return logging.getLogger(__name__)

@@ -1,6 +1,7 @@
 """
 This module implements the wizard used to create new project/files
 """
+import logging
 import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -96,7 +97,8 @@ class WizardNew(QtWidgets.QWizard):
                         try:
                             icon = meta['icon']
                         except KeyError:
-                            pass
+                            _logger().debug('no icon set for template %s:%s',
+                                            label, templ)
                         if cat == 'Project':
                             parent = project_tree_node
                         elif cat == 'File':
@@ -158,3 +160,7 @@ class WizardNew(QtWidgets.QWizard):
             return wizard.label, wizard.template, wizard.path, \
                 wizard.single_file
         return None, None, None, None
+
+
+def _logger():
+    return logging.getLogger(__name__)

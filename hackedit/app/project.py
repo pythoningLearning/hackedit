@@ -83,7 +83,8 @@ def scandir(directory, ignore_patterns, total):
         try:
             path = path.name
         except AttributeError:
-            pass
+            _logger().debug('using the old python api for scanning '
+                            'directories')
         full_path = join(directory, path)
         ignored = ignore_path(full_path, ignore_patterns)
         if not ignored:

@@ -12,6 +12,7 @@ To integrate a new interpreter into hackedit, you just need to:
 See :mod:`hackedit_python.run` for a concrete example.
 
 """
+import logging
 import json
 import os
 import shlex
@@ -97,7 +98,8 @@ class InterpreterManager:
         try:
             locals.remove(path)
         except ValueError:
-            pass
+            _logger().warn('failed to remove intepreter path %r, path not in '
+                           'list', path)
         else:
             self._set_locals(locals)
 
@@ -264,7 +266,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
                     self._on_open_file_requested,
                     type=QtCore.Qt.UniqueConnection)
             except TypeError:
-                pass
+                _logger().debug('open_file_requested signal already connected')
         else:
             # todo run in external terminal.
             cmd = ' '.join([interpreter] + args)
@@ -598,7 +600,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         try:
             self.configs[self._current_project].remove(cfg)
         except ValueError:
-            pass
+            _logger().warn('failed to remove config %r, not in list', cfg)
         self._ui.group_settings.setDisabled(
             len(self.configs[self._current_project]) == 0)
 
@@ -791,7 +793,7 @@ def save_configs(path, configs):
             cfg['working_dir'] = os.path.relpath(cfg['working_dir'], base_path)
     except ValueError:
         # invalid config
-        pass
+        _logger().exception('failed normalise path')
     path = os.path.join(base_path, project.FOLDER, 'project.json')
     with open(path, 'w') as f:
         json.dump(configs, f, indent=4, sort_keys=True)
@@ -821,3 +823,7 @@ def create_default_config(path):
             'interpreter_options': [],
             'environment': {}
         }
+
+
+def _logger():
+    return logging.getLogger(__name__)

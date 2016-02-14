@@ -25,7 +25,7 @@ try:
     faulthandler.enable()
 except RuntimeError:
     # no stderr, happens on windows with the native launcher
-    pass
+    logging.exception('failed to enable faulthandler')
 
 
 def main():

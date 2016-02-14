@@ -191,7 +191,9 @@ class _Terminal(QtWidgets.QWidget):
                                         history_item)
                         self._ui.edit_command.setText(history_item)
                     except IndexError:
-                        pass
+                        _logger().exception('failed to find history item'
+                                            '(index=%d, history=%r)',
+                                            self._history_index, self._history)
         try:
             return super().eventFilter(obj, event)
         except RuntimeError:

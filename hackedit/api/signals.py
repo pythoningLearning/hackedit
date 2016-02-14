@@ -140,7 +140,8 @@ def disconnect_slot(signal, slot):
         getattr(_window(), signal).disconnect(slot)
     except (TypeError, RuntimeError):
         # already disconnected
-        pass
+        __logger().warn('failed to disconnect slot %r from signal %r',
+                        slot, signal)
 
 
 def __logger():
