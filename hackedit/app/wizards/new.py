@@ -30,6 +30,7 @@ class WizardNew(QtWidgets.QWizard):
         self.ui.tree_templates.currentItemChanged.connect(
             self.update_next_btn)
         self.ui.edit_prj_path.textChanged.connect(self.check_path)
+        self.ui.bt_select_prj_path.clicked.connect(self._select_directory)
         self.update_sources()
 
     def update_sources(self):
@@ -143,6 +144,12 @@ class WizardNew(QtWidgets.QWizard):
         self.ui.lbl_prj_location_error.setHidden(ok)
         self.ui.lbl_prj_location_error.setText(message)
         self.is_valid = ok
+
+    def _select_directory(self):
+        path = QtWidgets.QFileDialog.getExistingDirectory(
+            self, 'Select directory', self.ui.edit_prj_path.text())
+        if path:
+            self.ui.edit_prj_path.setText(path)
 
     @classmethod
     def get_parameters(cls, parent=None, current_project=None):
