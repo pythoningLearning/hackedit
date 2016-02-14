@@ -242,10 +242,10 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         script = os.path.abspath(os.path.join(base_path, cfg['script']))
         cwd = os.path.abspath(os.path.join(base_path, cfg['working_dir']))
         args = []
-        if len(cfg['interpreter_options']):
+        if cfg['interpreter_options']:
             args += cfg['interpreter_options']
         args += [script]
-        if len(cfg['script_parameters']):
+        if cfg['script_parameters']:
             args += cfg['script_parameters']
         interpreter = self.interpreter_manager.get_project_interpreter(
             base_path)
@@ -300,7 +300,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         configs = []
         for pth in project.get_projects():
             configs += load_configs(pth)
-        if len(configs):
+        if configs:
             config_name = self._configs_group.checkedAction(
                 ).text().replace('&', '')
             for config in configs:
@@ -341,7 +341,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         self._mnu_configs.setEnabled(True)
         if self._configs_group.checkedAction() is None:
             actions = self._configs_group.actions()
-            if len(actions):
+            if actions:
                 actions[0].setChecked(True)
             else:
                 self._mnu_configs.setEnabled(False)
@@ -526,7 +526,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
             self._ui.list_configs.item(i).setIcon(icon)
             if cfg['name'] == active:
                 active_row = i
-        if len(self.configs[path]):
+        if self.configs[path]:
             self._ui.list_configs.setCurrentRow(active_row)
             self._ui.group_settings.setDisabled(False)
         else:

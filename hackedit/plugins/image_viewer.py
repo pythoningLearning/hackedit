@@ -212,7 +212,7 @@ class _ImageViewer(QtWidgets.QWidget):
         # compatibility with pyqode.core.api.CodeEdit
         return self._viewer.horizontalScrollBar()
 
-    def wheelEvent(self, event):
+    def wheelEvent(self, *args):
         pass
 
     def split(self):

@@ -25,7 +25,7 @@ def _window():
     """
     def caller():
         frame = inspect.stack()[3][0]
-        caller = frame.f_locals.get('self', None)
+        caller = frame.f_locals.get('self')
         return caller
 
     try:

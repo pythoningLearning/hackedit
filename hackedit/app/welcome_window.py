@@ -95,7 +95,7 @@ class WelcomeWindow(QtWidgets.QMainWindow):
 
     @QtCore.pyqtSlot()
     def _quit(self):
-        self.app.quit(force=True)
+        self.app.quit()
 
     @QtCore.pyqtSlot(QtWidgets.QListWidgetItem)
     def on_list_recents_itemClicked(self, item):

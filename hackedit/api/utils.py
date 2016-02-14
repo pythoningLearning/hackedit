@@ -80,7 +80,7 @@ def is_dark_color_scheme(scheme):
 
     :return: True if scheme is a dark color scheme.
     """
-    return settings.is_dark_color_scheme()
+    return settings.is_dark_color_scheme(scheme=scheme)
 
 
 def is_dark_theme():

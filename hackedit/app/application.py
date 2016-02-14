@@ -162,7 +162,7 @@ class Application(QtCore.QObject):
         Restarts the IDE.
         """
         QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        self.quit(force=True)
+        self.quit()
 
     def open_path(self, path, sender=None, force=False):
         """
@@ -192,7 +192,7 @@ class Application(QtCore.QObject):
             ret_val.append(w)
         return ret_val
 
-    def quit(self, force=False):
+    def quit(self):
         """
         Quits the application.
 

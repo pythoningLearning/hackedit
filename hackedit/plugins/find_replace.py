@@ -94,7 +94,6 @@ class FindReplace(plugins.WorkspacePlugin):
             buttons_layout.addWidget(bt)
             # Replace selected
             bt = QtWidgets.QPushButton()
-            bt.setText(_('Replace selected'))
             bt.clicked.connect(self._replace_selected)
             buttons_layout.addWidget(bt)
         # Close
@@ -120,7 +119,7 @@ class FindReplace(plugins.WorkspacePlugin):
         self._find_results_widget.itemActivated.connect(
             self._on_item_activated)
 
-    def _search_again(self, show_progress=True):
+    def _search_again(self):
         self._find_results_widget.clear()
         self._start_search_in_path(self._search_settings)
 

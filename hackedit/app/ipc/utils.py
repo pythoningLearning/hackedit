@@ -34,8 +34,7 @@ def read_message(socket):
     if not hasattr(socket, 'payload'):
         socket.payload = None
     socket.buffer += socket.readAll()
-    if socket.payload is None:
-        if len(socket.buffer) >= 8:
+    if socket.payload is None and len(socket.buffer) >= 8:
             payload = socket.buffer[:8]
             socket.buffer = socket.buffer[8:]
             socket.payload = struct.unpack('Q', payload)[0]

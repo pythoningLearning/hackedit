@@ -9,7 +9,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import hackedit
-EXTLIBS_PATH = os.environ.get('HACKEDIT_EXTLIBS_PATH', None)
+EXTLIBS_PATH = os.environ.get('HACKEDIT_EXTLIBS_PATH')
 if not EXTLIBS_PATH:
     EXTLIBS_PATH = os.path.join(os.path.dirname(hackedit.__file__), 'extlibs')
     os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
@@ -85,7 +85,7 @@ def main():
     try:
         import hackedit_python
     except ImportError:
-        pass
+        _logger().debug('hackedit-python not installed')
     else:
         assert hackedit_python
         # THIS IS A HACK

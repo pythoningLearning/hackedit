@@ -101,10 +101,10 @@ class LocatorWidget(QtWidgets.QFrame):
             if ev.key() in [QtCore.Qt.Key_Tab, QtCore.Qt.Key_Backtab]:
                 # tab should not have any effect
                 return True
-        elif obj == self.ui.treeWidget and ev.type() == QtCore.QEvent.KeyPress:
-            if ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter]:
-                self._activate()
-                return True
+        elif obj == self.ui.treeWidget and ev.type() == QtCore.QEvent.KeyPress\
+                and ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter]:
+            self._activate()
+            return True
         return super().eventFilter(obj, ev)
 
     def _activate(self, *_):
@@ -464,7 +464,7 @@ def get_search_score(query, choice, ignore_case, apply_regex, template):
 
         patterns_text = []
         for i, char in enumerate(text):
-            if char != u' ' and char != sep:
+            if char not in [u' ', sep]:
                 new_char = let
             else:
                 new_char = char

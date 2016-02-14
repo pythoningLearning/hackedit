@@ -514,7 +514,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.notifications.has_warnings():
             self.notifications.show()
 
-        if not len(self._ui.menuTools.actions()):
+        if not self._ui.menuTools.actions():
             self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
 
         return geometry != b''

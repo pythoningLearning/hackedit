@@ -8,3 +8,4 @@ bootstrap.pyw
 hackedit/extlibs/*
 hackedit/api/plugins.py
 hackedit/app/boss_wrapper.py
+.hackedit/config.py

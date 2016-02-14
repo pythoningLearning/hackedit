@@ -17,9 +17,8 @@ def configure_icon(build=False):
     """
     Gets the "configure" icon (for actions like configure project/build,...)
     """
-    if build:
-        if QtGui.QIcon.hasThemeIcon('run-build-configure'):
-            return QtGui.QIcon.fromTheme('run-build-configure')
+    if build and QtGui.QIcon.hasThemeIcon('run-build-configure'):
+        return QtGui.QIcon.fromTheme('run-build-configure')
     if QtGui.QIcon.hasThemeIcon('configure'):
         return QtGui.QIcon.fromTheme('configure')
     else:

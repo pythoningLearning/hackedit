@@ -21,7 +21,7 @@ class VButton(QtWidgets.QPushButton):
     def _on_clicked(self):
         self.clearFocus()
 
-    def paintEvent(self, event):
+    def paintEvent(self, *args):
         painter = QtWidgets.QStylePainter(self)
         if self.area == QtCore.Qt.LeftDockWidgetArea:
             painter.rotate(-90)
@@ -161,7 +161,7 @@ QPushButton:hover {
             self.dock_widgets.remove(dock_widget)
         except (KeyError, ValueError, RuntimeError):
             _logger().log(1, 'failed to remove dock widget')
-        if len(self.dock_widgets) == 0:
+        if self.dock_widgets:
             self.hide()
         else:
             self.show()
