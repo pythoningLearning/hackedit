@@ -77,7 +77,9 @@ def open_folder(window, app):
 
 def report_bug(window, title='', traceback=None):
     qcrash.show_report_dialog(
-        issue_title=title, traceback=traceback, parent=window)
+        issue_title=title, traceback=traceback, parent=window,
+        include_log=traceback is not None,
+        include_sys_info=traceback is not None)
     return True
 
 
