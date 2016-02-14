@@ -23,7 +23,7 @@ def show_about(window):
     DlgAbout.show_about(window)
 
 
-def check_for_update(window, show_up_to_date_msg=True):
+def check_for_update(*args, **kwargs):
     """
     Checks for update.
 

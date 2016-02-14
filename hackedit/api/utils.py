@@ -137,5 +137,5 @@ class block_signals:
     def __enter__(self):
         self.qobject.blockSignals(True)
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, *args, **kwargs):
         self.qobject.blockSignals(False)

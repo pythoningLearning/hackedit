@@ -563,9 +563,8 @@ def get_search_scores(query, choices, ignore_case, template, valid_only, sort):
         else:
             result = (choice, user_data, choice, NO_SCORE)
 
-        if valid_only:
-            if result[-1] != NOT_FOUND_SCORE:
-                results.append(result)
+        if valid_only and result[-1] != NOT_FOUND_SCORE:
+            results.append(result)
         else:
             results.append(result)
 
