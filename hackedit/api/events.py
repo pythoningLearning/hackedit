@@ -51,7 +51,7 @@ class Event(QtCore.QObject):
     def actions(self):
         return [self.action_blacklist] + self.custom_actions
 
-    def __init__(self, title, description, level=INFO, custom_actions=[]):
+    def __init__(self, title, description, level=INFO, custom_actions=None):
         """
         :param title: Title of the event, 80 characters max.
         :param description: Multiline description
@@ -68,7 +68,7 @@ class Event(QtCore.QObject):
         #: Level
         self.level = level
         #: List of custom actions
-        self.custom_actions = custom_actions
+        self.custom_actions = custom_actions or []
         #: reference to the bound IDE window
         self.window = None
         #: time string, automatically set when the event got instanciated
