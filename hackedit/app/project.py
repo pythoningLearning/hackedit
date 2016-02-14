@@ -214,6 +214,7 @@ class ProjectExplorer(QtCore.QObject):
             'Ctrl+Shift+R'))
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', _('Goto line'), 'Ctrl+G'))
+        self._update_templates_menu()
 
     def _on_file_list_available(self, status):
         self._task_running = False
@@ -415,26 +416,8 @@ class ProjectExplorer(QtCore.QObject):
             _('Templates'))
         self.templates_menu.menuAction().setIcon(QtGui.QIcon.fromTheme(
             'folder-templates'))
-        sources = {}
-        for src in boss.sources():
-            lbl = src['label']
-            icon = QtGui.QIcon.fromTheme(
-                'folder' if src['is_local'] else 'folder-remote')
-            menu = self.templates_menu.addMenu(icon, lbl)
-            sources[lbl] = menu
-        for lbl, template, meta in boss.file_templates(include_meta=True):
-            icon = meta['icon']
-            if icon.startswith(':') or os.path.exists(icon):
-                icon = QtGui.QIcon(icon)
-            elif icon.startswith('file.'):
-                icon = FileIconProvider().icon(icon)
-            else:
-                icon = QtGui.QIcon.fromTheme(icon)
-            a = sources[lbl].addAction(icon, meta['name'])
-            a.setData((lbl, template))
-            a.triggered.connect(self._add_file_from_template)
-        for menu in sources.values():
-            menu.menuAction().setVisible(len(menu.actions()) > 0)
+        self._update_templates_menu()
+
         self._fs.activated.connect(self._on_file_activated)
 
         self.action_mark_as_ignored = QtWidgets.QAction(
@@ -465,6 +448,29 @@ class ProjectExplorer(QtCore.QObject):
 
         self._fs.about_to_show_context_menu.connect(
             self._on_about_to_show_context_menu)
+
+    def _update_templates_menu(self):
+        self.templates_menu.clear()
+        sources = {}
+        for src in boss.sources():
+            lbl = src['label']
+            icon = QtGui.QIcon.fromTheme(
+                'folder' if src['is_local'] else 'folder-remote')
+            menu = self.templates_menu.addMenu(icon, lbl)
+            sources[lbl] = menu
+        for lbl, template, meta in boss.file_templates(include_meta=True):
+            icon = meta['icon']
+            if icon.startswith(':') or os.path.exists(icon):
+                icon = QtGui.QIcon(icon)
+            elif icon.startswith('file.'):
+                icon = FileIconProvider().icon(icon)
+            else:
+                icon = QtGui.QIcon.fromTheme(icon)
+            a = sources[lbl].addAction(icon, meta['name'])
+            a.setData((lbl, template))
+            a.triggered.connect(self._add_file_from_template)
+        for menu in sources.values():
+            menu.menuAction().setVisible(len(menu.actions()) > 0)
 
     def _on_mark_as_ignored(self):
         path = FileSystemHelper(self._fs).get_current_path()
