@@ -24,8 +24,8 @@ class FindReplace(plugins.WorkspacePlugin):
         self._dock = None
         self._find_results_widget = None
         self._replace = False
-        action_before = self.window._ui.action_preferences
         mnu_edit = window.get_menu(_('&Edit'))
+        action_before = mnu_edit.actions()[-1]
         sep = QtWidgets.QAction(mnu_edit)
         sep.setSeparator(True)
         mnu_edit.insertAction(action_before, sep)

@@ -126,7 +126,7 @@ def add_to_blacklist(event):
     """
     blacklist = get_blacklist()
     blacklist.append(event.title)
-    _set_blacklist(blacklist)
+    set_blacklist(blacklist)
 
 
 def is_blacklisted(event):
@@ -140,10 +140,10 @@ def clear_blacklist():
     """
     Clears the event blacklist.
     """
-    _set_blacklist([])
+    set_blacklist([])
 
 
-def _set_blacklist(blacklist):
+def set_blacklist(blacklist):
     """
     Saves the event blacklist
 
@@ -173,7 +173,7 @@ def post(event, show_balloon=None, force_show=False):
     """
     # show notifications on the active window
     event.window = _window()
-    if show_balloon is None and not event.window._setup:
+    if show_balloon is None and not event.window.flg_setup:
         show_balloon = not event.window.isVisible()
     _window().notifications.add(event, show_balloon, force_show)
 

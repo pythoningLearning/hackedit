@@ -36,7 +36,7 @@ def win(qtbot):
     settings.set_confirm_app_exit(False)
     if WINDOW is None:
         APP.open_path(PROJ_PATH)
-        WINDOW = APP._editor_windows[-1]
+        WINDOW = APP.editor_windows[-1]
     WINDOW.tab_widget.close_all()
     QtWidgets.qApp.setActiveWindow(WINDOW)
     return WINDOW

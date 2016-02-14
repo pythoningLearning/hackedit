@@ -57,5 +57,5 @@ class Notifications(PreferencePage):
             self.ui.cb_warning.isChecked())
         settings.set_auto_open_error_notification(
             self.ui.cb_errors.isChecked())
-        events._set_blacklist([self.ui.blacklist.item(i).text()
+        events.set_blacklist([self.ui.blacklist.item(i).text()
                                for i in range(self.ui.blacklist.count())])

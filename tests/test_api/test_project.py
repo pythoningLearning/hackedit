@@ -34,7 +34,7 @@ def test_open_proj_new_window(qtbot):
     settings.set_open_mode(settings.OpenMode.NewWindow)
     assert len(project.get_projects()) == 3
     project.open_project(PATH4, sender=w)
-    assert len(w.app._editor_windows) == 2
+    assert len(w.app.editor_windows) == 2
     assert len(project.get_projects()) == 1
 
 

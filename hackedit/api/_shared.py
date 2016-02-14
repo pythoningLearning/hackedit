@@ -41,7 +41,7 @@ def _window():
 
         if not isinstance(w, MainWindow):
             try:
-                w = APP._editor_windows[0]
+                w = APP.editor_windows[0]
             except IndexError:
                 w = None
             if w is None:

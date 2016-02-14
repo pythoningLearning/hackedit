@@ -47,7 +47,7 @@ class Application(QtCore.QObject):
     # -------------------------------------------------------------------------
     @property
     def window_count(self):
-        return len(self._editor_windows)
+        return len(self.editor_windows)
 
     def __init__(self, qapp, splash, args):
         def show_msg_on_splash(msg):
@@ -65,7 +65,7 @@ class Application(QtCore.QObject):
         self._splash = splash
         super().__init__()
         _shared.APP = self
-        self._editor_windows = []
+        self.editor_windows = []
         show_msg_on_splash(_('Setting up except hook...'))
         self._setup_except_hook()
 
@@ -186,7 +186,7 @@ class Application(QtCore.QObject):
         Gets the list of open windows.
         """
         ret_val = []
-        for w in self._editor_windows:
+        for w in self.editor_windows:
             ret_val.append(w)
         return ret_val
 
@@ -269,7 +269,7 @@ class Application(QtCore.QObject):
         icons.init()
         FileSystemContextMenu.set_file_explorer_command(
             settings.file_manager_cmd())
-        for w in self._editor_windows:
+        for w in self.editor_windows:
             w.apply_preferences()
 
     # -------------------------------------------------------------------------
@@ -350,12 +350,12 @@ class Application(QtCore.QObject):
                 win.plugins.append(plugin)
 
     def _update_windows(self):
-        for w in self._editor_windows:
+        for w in self.editor_windows:
             w.update_title()
-        enable = len(self._editor_windows) > 0
+        enable = len(self.editor_windows) > 0
         self.tray_icon_menu_windows.setEnabled(enable)
         self.tray_icon_menu_windows.clear()
-        for w in self._editor_windows:
+        for w in self.editor_windows:
             w.update_mnu_view()
             w.update_mnu_recents()
             title = ' + '.join([os.path.split(p)[1] for p in w.projects])
@@ -364,7 +364,7 @@ class Application(QtCore.QObject):
 
     def _restore_window_from_tray(self):
         action = self.sender()
-        for w in self._editor_windows:
+        for w in self.editor_windows:
             title = ' + '.join([os.path.split(p)[1] for p in w.projects])
             if title == action.text():
                 api.window.restore(w)
@@ -392,7 +392,7 @@ class Application(QtCore.QObject):
         # check if the path is not already open in an existing window
         window = None
         if not force:
-            for w in self._editor_windows:
+            for w in self.editor_windows:
                 if path in w.projects:
                     # already open
                     window = w
@@ -427,7 +427,7 @@ class Application(QtCore.QObject):
                 # Open in new window
                 window = self._add_new_window(path, workspace)
                 # remember workspace for next open
-                window._workspace = workspace
+                window.workspace = workspace
                 # save workspace
                 save_workspace(path, workspace['name'])
             else:
@@ -468,8 +468,8 @@ class Application(QtCore.QObject):
     def _add_new_window(self, path, workspace):
         _logger().debug('creating new window')
         window = MainWindow(self, path=path, workspace=workspace)
-        window._setup = True
-        self._editor_windows.append(window)
+        window.flg_setup = True
+        self.editor_windows.append(window)
         _logger().debug('setting up workspaces plugins')
         self._setup_workspace_plugins(window, workspace)
         _logger().debug('restoring state')
@@ -484,7 +484,7 @@ class Application(QtCore.QObject):
         window.current_project_changed.connect(self._update_windows)
         window.current_tab_changed.connect(self._update_windows)
         window.setup_status_bar()
-        window._setup = False
+        window.flg_setup = False
         return window
 
     def _ask_open_mode(self, path):
@@ -511,16 +511,16 @@ class Application(QtCore.QObject):
         return workspace
 
     def _on_window_closed(self, window):
-        self._editor_windows.remove(window)
+        self.editor_windows.remove(window)
         _logger().debug('window closed: %r' % window)
         self._update_windows()
-        if self._editor_windows:
-            self.last_window = self._editor_windows[0]
+        if self.editor_windows:
+            self.last_window = self.editor_windows[0]
 
     def _set_active_window(self, window):
         _logger().debug('active window set to %r' % window)
         self._qapp.setActiveWindow(window)
-        for w in self._editor_windows:
+        for w in self.editor_windows:
             if w != window:
                 w.update_mnu_view()
 
