@@ -2,7 +2,7 @@
 This module contains a plugin that is able to render the html preview of
 the current editor.
 """
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 from pyqode.core.widgets import HtmlPreviewWidget
 
 from hackedit import api
@@ -19,4 +19,10 @@ class HtmlPreview(api.plugins.WorkspacePlugin):
         self.preview.hide_requested.connect(self._dock.hide)
         self.preview.show_requested.connect(self._dock.show)
         self.preview.set_editor(None)
+
+        if api.utils.is_dark_theme():
+            p = self.preview.palette()
+            p.setColor(QtGui.QPalette.Base, QtCore.Qt.white)
+            self.preview.setPalette(p)
+
         self._dock.hide()
