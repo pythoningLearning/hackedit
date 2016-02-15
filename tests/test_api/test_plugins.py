@@ -11,7 +11,7 @@ class MyWorkspacePlugin(plugins.WorkspacePlugin):
 
 def test_workspace_plugin_interface():
     p = MyWorkspacePlugin(4)
-    p.window == 4
+    p.main_window == 4
     p.get_preferences_page()
     p.apply_preferences()
     p.close()
