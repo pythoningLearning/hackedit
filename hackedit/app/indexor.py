@@ -77,7 +77,7 @@ def index_document(th, prj, path, indexor_plugins):
 
 class FileIndexor:
     def __init__(self, window):
-        self.window = window   # this let us use the hackedit.api functions.
+        self.main_window = window  # this let us use the hackedit.api functions
         self._plugins = []
         self._load_plugins()
         self._pending_task = None

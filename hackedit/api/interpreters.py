@@ -289,7 +289,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         except AttributeError:
             active = ''
         _DlgScriptRunConfiguration.edit_configurations(
-            self.window, self.interpreter_manager, active)
+            self.main_window, self.interpreter_manager, active)
         self.refresh()
         self._mnu_configs.setEnabled(len(self._mnu_configs.actions()))
         enabled = self.get_active_config() is not None
@@ -418,7 +418,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         editor.open_file(path, line=line)
 
     def _create_dock(self):
-        self._run_widget = widgets.RunWidget(self.window)
+        self._run_widget = widgets.RunWidget(self.main_window)
         self._dock_run = window.add_dock_widget(
             self._run_widget, _('Run'), special_icons.run_icon(),
             QtCore.Qt.BottomDockWidgetArea)
@@ -468,7 +468,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
         super().__init__(window)
         self.interpreter_manager = interpreter_manager
         self._active_config_name = active_config_name
-        self.window = window
+        self.main_window = window
         self._current_project = None
         self.current_config = None
         self.configs = {}

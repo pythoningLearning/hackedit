@@ -211,7 +211,7 @@ class TaskManager(QtCore.QObject):
     def __init__(self, window):
         super().__init__()
         self._running_tasks = []
-        self.window = window
+        self.main_window = window
 
     def terminate(self):
         for task in self._running_tasks:
@@ -371,7 +371,7 @@ class TaskManagerWidget(QtWidgets.QWidget):
         layout.addWidget(self.label)
         self.setLayout(layout)
         self.task_manager = TaskManager(window)
-        self.window = window
+        self.main_window = window
         self.task_manager.task_count_changed.connect(
             self._on_task_count_changed)
         self.popup = TaskListPopup(window, self.task_manager)
@@ -380,7 +380,7 @@ class TaskManagerWidget(QtWidgets.QWidget):
 
     def close(self):
         self.popup.setParent(None)
-        self.window = None
+        self.main_window = None
         self.task_manager.window = None
         self.task_manager = None
 

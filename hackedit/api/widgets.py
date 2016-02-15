@@ -224,7 +224,7 @@ class RunWidget(QtWidgets.QWidget):
     def __init__(self, window=None):
         super().__init__()
         self._interactive = True  # set to false when running tests
-        self.window = window
+        self.main_window = window
         self.ui = run_widget_ui.Ui_Form()
         self.ui.setupUi(self)
         self.icon_unlock = special_icons.object_unlocked()
@@ -270,7 +270,7 @@ class RunWidget(QtWidgets.QWidget):
             try:
                 tab = klass()
             except TypeError:
-                tab = klass(self.window)
+                tab = klass(self.main_window)
             tab.pinned = False
             self._tabs.append(tab)
             self.ui.tabWidget.addTab(tab, name)
@@ -327,7 +327,7 @@ class RunWidget(QtWidgets.QWidget):
             self.ui.bt_run.setIcon(self.icon_run)
         else:
             try:
-                self.window.save_all()
+                self.main_window.save_all()
             except AttributeError:
                 pass  # _window is None, e.g. in test suite
             tab.start_process(tab.pgm, tab.args, tab.cwd, tab.env)

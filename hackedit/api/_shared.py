@@ -29,10 +29,10 @@ def _window():
         return caller
 
     try:
-        w = caller().window
+        w = caller().main_window
         if w:
             return w
-        raise AttributeError('window is None')
+        raise AttributeError('main_window is None')
     except (AttributeError, IndexError):
         # not from a plugin, use active window instead
         w = QtWidgets.qApp.activeWindow()

@@ -70,7 +70,7 @@ class Event(QtCore.QObject):
         #: List of custom actions
         self.custom_actions = custom_actions or []
         #: reference to the bound IDE window
-        self.window = None
+        self.main_window = None
         #: time string, automatically set when the event got instanciated
         self.time_str = datetime.datetime.now().strftime('%H:%M:%S')
         self.action_blacklist = QtWidgets.QAction(None)
@@ -108,13 +108,13 @@ class ExceptionEvent(Event):
 
     def show_details(self):
         QtWidgets.QMessageBox.warning(
-            self.window, _('Details'),
+            self.main_window, _('Details'),
             _('Exception details:\n\n %s') % self.traceback)
 
     def report_bug(self):
         from hackedit.app import common
         if common.report_bug(
-                self.window, title=self.title, traceback=self.traceback):
+                self.main_window, title=self.title, traceback=self.traceback):
             self.remove()
 
 

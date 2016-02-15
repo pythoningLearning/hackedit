@@ -161,7 +161,7 @@ QPushButton:hover {
             self.dock_widgets.remove(dock_widget)
         except (KeyError, ValueError, RuntimeError):
             _logger().log(1, 'failed to remove dock widget')
-        if self.dock_widgets:
+        if not self.dock_widgets:
             self.hide()
         else:
             self.show()
@@ -194,7 +194,7 @@ class DockWidgetsManager(QtCore.QObject):
     def __init__(self, main_window):
         super().__init__()
         self._managers = {}
-        self.window = main_window
+        self.main_window = main_window
         bar = DockWidgetSideBar(main_window)
         bar.setObjectName('dockManagerLeft')
         bar.setWindowTitle(_('Dock manager left'))

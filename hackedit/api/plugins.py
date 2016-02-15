@@ -105,7 +105,7 @@ class WorkspacePlugin(QObject):
                        attached to.
         :type window: hackedit.app.gui.main_window.MainWindow
         """
-        self.window = window
+        self.main_window = window
         super().__init__()
 
     def activate(self):
