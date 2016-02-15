@@ -2,7 +2,7 @@
 This module contains a plugin that is able to render the html preview of
 the current editor.
 """
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtCore
 from pyqode.core.widgets import HtmlPreviewWidget
 
 from hackedit import api
