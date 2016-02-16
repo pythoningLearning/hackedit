@@ -15,7 +15,7 @@ PATH4 = os.path.join(os.getcwd(), 'tests', 'data', 'SpamEggsProj3')
 
 def test_open_proj_current_window(qtbot):
     w = win(qtbot)
-    settings.set_open_mode(settings.OpenMode.CurrentWindow)
+    settings.set_open_mode(settings.OpenMode.CURRENT_WINDOW)
     assert len(project.get_projects()) == 1
     project.open_project(PATH2, sender=w)
     assert len(project.get_projects()) == 2
@@ -31,7 +31,7 @@ def test_add_project(qtbot):
 
 def test_open_proj_new_window(qtbot):
     w = win(qtbot)
-    settings.set_open_mode(settings.OpenMode.NewWindow)
+    settings.set_open_mode(settings.OpenMode.NEW_WINDOW)
     assert len(project.get_projects()) == 3
     project.open_project(PATH4, sender=w)
     assert len(w.app.editor_windows) == 2

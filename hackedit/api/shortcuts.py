@@ -66,6 +66,9 @@ def get_all_names():
 
 
 def get_all_texts():
+    """
+    Get all action texts (possibly translated).
+    """
     global _MAP
     return sorted([v[_INDEX_TEXT] for v in _MAP.values()])
 

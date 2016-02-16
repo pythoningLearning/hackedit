@@ -268,11 +268,11 @@ class OpenMode:
     Enumerates the possible open modes
     """
     #: Always open path in a new window (no multiple project support)
-    NewWindow = 0
+    NEW_WINDOW = 0
     #: Always open path in current window (add to open projects)
-    CurrentWindow = 1
+    CURRENT_WINDOW = 1
     #: Always ask what do (default).
-    AskEachTime = 2
+    ASK_EACH_TIME = 2
 
 
 def open_mode():
@@ -280,7 +280,7 @@ def open_mode():
     Gets the path open mode. Default is to always ask.
     """
     return int(_SETTINGS.value(
-        'env/open_mode', OpenMode.AskEachTime))
+        'env/open_mode', OpenMode.ASK_EACH_TIME))
 
 
 def set_open_mode(value):

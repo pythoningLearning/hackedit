@@ -24,7 +24,7 @@ class DlgOpen(QtWidgets.QDialog):
         :return: 0 for open in new window, 1 for open in current and None if
                  the dialog was rejected.
         """
-        if settings.open_mode() == settings.OpenMode.AskEachTime:
+        if settings.open_mode() == settings.OpenMode.ASK_EACH_TIME:
             dlg = cls(parent, path)
             if dlg.exec_() == dlg.Accepted:
                 return 0 if dlg.ui.rb_open_new.isChecked() else 1

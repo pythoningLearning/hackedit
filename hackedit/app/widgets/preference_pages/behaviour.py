@@ -25,9 +25,9 @@ class Behaviour(PreferencePage):
         self.ui.cb_check_for_updates.setChecked(
             settings.automatically_check_for_updates())
         mode = settings.open_mode()
-        if mode == settings.OpenMode.NewWindow:
+        if mode == settings.OpenMode.NEW_WINDOW:
             self.ui.rb_open_proj_in_new.setChecked(True)
-        elif mode == settings.OpenMode.CurrentWindow:
+        elif mode == settings.OpenMode.CURRENT_WINDOW:
             self.ui.rb_open_proj_in_same.setChecked(True)
         else:
             self.ui.rb_open_proj_ask.setChecked(True)
@@ -36,7 +36,7 @@ class Behaviour(PreferencePage):
         settings.set_show_splashscreen(True)
         settings.set_automatically_check_for_updates(
             False if system.LINUX else True)
-        settings.set_open_mode(settings.OpenMode.AskEachTime)
+        settings.set_open_mode(settings.OpenMode.ASK_EACH_TIME)
         settings.set_restore_last_window(False)
         settings.set_confirm_app_exit(True)
         settings.set_restore_session(True)
@@ -44,11 +44,11 @@ class Behaviour(PreferencePage):
     def save(self):
         settings.set_show_splashscreen(self.ui.cb_splashscreen.isChecked())
         if self.ui.rb_open_proj_in_new.isChecked():
-            settings.set_open_mode(settings.OpenMode.NewWindow)
+            settings.set_open_mode(settings.OpenMode.NEW_WINDOW)
         elif self.ui.rb_open_proj_in_same.isChecked():
-            settings.set_open_mode(settings.OpenMode.CurrentWindow)
+            settings.set_open_mode(settings.OpenMode.CURRENT_WINDOW)
         else:
-            settings.set_open_mode(settings.OpenMode.AskEachTime)
+            settings.set_open_mode(settings.OpenMode.ASK_EACH_TIME)
         settings.set_restore_last_window(self.ui.cb_reopen.isChecked())
         settings.set_confirm_app_exit(self.ui.cb_confirm_exit.isChecked())
         settings.set_automatically_check_for_updates(

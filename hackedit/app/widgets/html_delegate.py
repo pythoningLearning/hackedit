@@ -32,11 +32,11 @@ class HTMLDelegate(QtWidgets.QStyledItemDelegate):
 
         ctx = QtGui.QAbstractTextDocumentLayout.PaintContext()
 
-        textRect = style.subElementRect(QtWidgets.QStyle.SE_ItemViewItemText,
-                                        options)
+        text_rect = style.subElementRect(QtWidgets.QStyle.SE_ItemViewItemText,
+                                         options)
         painter.save()
-        painter.translate(textRect.topLeft())
-        painter.setClipRect(textRect.translated(-textRect.topLeft()))
+        painter.translate(text_rect.topLeft())
+        painter.setClipRect(text_rect.translated(-text_rect.topLeft()))
 
         is_dark = dark_theme()
         if option.state & QtWidgets.QStyle.State_Selected or is_dark:

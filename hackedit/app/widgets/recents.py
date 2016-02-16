@@ -24,19 +24,19 @@ class RecentFilesListWidget(QtWidgets.QListWidget):
         Shows the recent files list context menu which allow to remove an item
         from the list or to clear the entire list.
         """
-        actionRemove = QtWidgets.QAction(
+        action_remove = QtWidgets.QAction(
             _('Remove from recent files list'), self)
-        actionRemove.setToolTip(_('Remove path from recent files list'))
-        actionClear = QtWidgets.QAction(
+        action_remove.setToolTip(_('Remove path from recent files list'))
+        action_clear = QtWidgets.QAction(
             _('Clear recent files list'), self)
-        actionClear.setToolTip(
+        action_clear.setToolTip(
             _('Clear the recent files list'))
-        actionRemove.triggered.connect(self.remove_current_requested)
-        actionClear.triggered.connect(self.clear_requested)
-        actionClear.setIcon(QtGui.QIcon.fromTheme('edit-clear'))
+        action_remove.triggered.connect(self.remove_current_requested)
+        action_clear.triggered.connect(self.clear_requested)
+        action_clear.setIcon(QtGui.QIcon.fromTheme('edit-clear'))
         menu = QtWidgets.QMenu()
-        menu.addAction(actionRemove)
-        menu.addAction(actionClear)
+        menu.addAction(action_remove)
+        menu.addAction(action_clear)
         menu.exec_(self.mapToGlobal(pt))
 
     def mousePressEvent(self, e):

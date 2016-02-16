@@ -33,7 +33,8 @@ def _logger():
     return logging.getLogger(__name__)
 
 
-Notify = None
+#: libnotify module
+libnotify = None
 if api.system.LINUX and not api.system.PLASMA_DESKTOP:
     try:
         import gi
@@ -41,16 +42,16 @@ if api.system.LINUX and not api.system.PLASMA_DESKTOP:
         _logger().warn('failed to import gi')
     else:
         try:
-            gi.require_version('Notify', '0.7')
+            gi.require_version('libnotify', '0.7')
         except ValueError:
-            _logger().warn('failed to require Notify >= 0.7')
+            _logger().warn('failed to require libnotify >= 0.7')
         finally:
             try:
-                from gi.repository import Notify
+                from gi.repository import libnotify
             except ImportError:
-                _logger().warn('failed to import Notify')
+                _logger().warn('failed to import libnotify')
             else:
-                Notify.init("HackEdit")
+                libnotify.init("HackEdit")
 
 
 class Widget(QtWidgets.QFrame):
@@ -63,7 +64,6 @@ class Widget(QtWidgets.QFrame):
         """
         :type event: hackedit.api.events.Event
         """
-        global ICONS, ICON_SIZE
         super().__init__()
         self.event = event
         self.setFrameShape(self.StyledPanel)
@@ -113,7 +113,6 @@ class HistoryWidget(QtWidgets.QWidget):
         self.ui.bt_clear.clicked.connect(self._clear)
 
     def add(self, event):
-        global ICONS
         self._events.insert(0, event)
         event.widget = Widget(event)
         event.widget.closed.connect(self._on_widget_closed)
@@ -186,10 +185,10 @@ class Manager(QtCore.QObject):
             e.level, '%s\n%s', e.title, e.description)
         tray_icon = api.window.get_tray_icon()
         if show_balloon and settings.show_notification_in_sytem_tray():
-            if Notify:
+            if libnotify:
                 icons = ICONS.copy()
                 icons[api.events.INFO] = 'hackedit'
-                n = Notify.Notification.new(
+                n = libnotify.Notification.new(
                     'HackEdit: %s' % e.title, e.description,
                     icons[e.level])
                 n.show()
@@ -220,7 +219,6 @@ class Manager(QtCore.QObject):
                 'preferences-desktop-notification'))
 
     def _icon(self, level):
-        global ICONS
         return QtGui.QIcon.fromTheme(ICONS[level])
 
     def _on_content_cleared(self):

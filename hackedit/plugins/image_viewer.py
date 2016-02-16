@@ -52,9 +52,9 @@ class _Viewer(QtWidgets.QScrollArea):
         self.scaleFactor = 1.0
 
     def fit_to_window(self):
-        fitToWindow = self.fitToWindowAct.isChecked()
-        self.setWidgetResizable(fitToWindow)
-        if not fitToWindow:
+        fit_to_window = self.fitToWindowAct.isChecked()
+        self.setWidgetResizable(fit_to_window)
+        if not fit_to_window:
             self.normalSize()
         self.updateActions()
 

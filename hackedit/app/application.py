@@ -412,7 +412,7 @@ class Application(QtCore.QObject):
         if window is None:
             if sender is None or self._has_multiple_projects(path):
                 # from homepage or when project has multiple projects
-                open_mode = settings.OpenMode.NewWindow
+                open_mode = settings.OpenMode.NEW_WINDOW
             else:
                 open_mode = self._ask_open_mode(path)
                 if open_mode is None:
@@ -420,7 +420,7 @@ class Application(QtCore.QObject):
                     return False
 
             # open folder in new/current window
-            if open_mode == settings.OpenMode.NewWindow:
+            if open_mode == settings.OpenMode.NEW_WINDOW:
                 workspace = load_workspace(path)
                 if workspace is None:
                     # ask the user to choose a workspace

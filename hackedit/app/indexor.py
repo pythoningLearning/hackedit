@@ -37,13 +37,13 @@ def index_project_files(th, open_paths, prj, indexor_plugins):
             continue
         th.report_progress(
             'indexing %s' % path_split(file)[1], i/count*100)
-        path, symbols = parse_document(prj, file, indexor_plugins)
+        path, symbols = parse_document(file, indexor_plugins)
         all_symbols += symbols
     api.project.set_project_symbols(prj, all_symbols)
     return
 
 
-def parse_document(prj, path, indexor_plugins):
+def parse_document(path, indexor_plugins):
     mime = mimetypes.guess_type(path)[0]
     for plugin in indexor_plugins:
         if mime in plugin.mimetypes:
@@ -61,7 +61,7 @@ def parse_document(prj, path, indexor_plugins):
 
 def index_document(th, prj, path, indexor_plugins):
     mime_types.load()
-    path, symbols = parse_document(prj, path, indexor_plugins)
+    path, symbols = parse_document(path, indexor_plugins)
     all_symbols = api.project.get_project_symbols(prj)
     # remove all symbols for the specified path
     to_remove = []
@@ -121,7 +121,7 @@ class FileIndexor:
                     self._plugins),
                 cancellable=False)
 
-    def _index_document(self, path, __):
+    def _index_document(self, path, *args, **kwargs):
         """
         Indexates symbols found in a given document.
         """
@@ -133,5 +133,5 @@ class FileIndexor:
                 args=(api.project.get_root_project(), path, self._plugins),
                 cancellable=False)
 
-    def _on_task_finished(self, *_):
+    def _on_task_finished(self, *args):
         self._pending_task = None
