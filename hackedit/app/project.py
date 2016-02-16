@@ -340,9 +340,7 @@ class ProjectExplorer(QtCore.QObject):
         self._show_locator()
 
     def _show_locator(self):
-        widget = api.editor.get_current_editor()
-        if widget is None:
-            widget = self.main_window.centralWidget()
+        widget = self.main_window._ui.stackedWidget
         parent_pos = widget.pos()
         parent_size = widget.size()
         w = parent_size.width() * 0.8
