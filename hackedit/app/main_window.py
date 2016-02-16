@@ -863,7 +863,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _on_window_action_triggered(self, action):
         _logger().debug('window action triggered')
-        self.app.set_active_window(action.data())
+        self.app.active_window = action.data()
 
     def _on_last_tab_closed(self):
         _logger().debug('last tab closed')

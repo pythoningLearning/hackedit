@@ -205,7 +205,15 @@ class Application(QtCore.QObject):
         self._qapp.exit(0)
         self._qapp = None
 
-    def set_active_window(self, window):
+    @property
+    def active_window(self):
+        """
+        Gets/Sets the active editor window
+        """
+        return self._qapp.activeWindow()
+
+    @active_window.setter
+    def active_window(self, window):
         """
         Sets `window` as the active window.
 
