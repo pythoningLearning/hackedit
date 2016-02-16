@@ -21,7 +21,7 @@ def _window():
     This is used to simplify the public API: plugins don't need to pass
     the `window` parameter to the public API functions everytime...
 
-    :rtype: hackedit.app.gui.main_window.MainWindow
+    :rtype: hackedit.app.main_window.MainWindow
     """
     def caller():
         frame = inspect.stack()[3][0]

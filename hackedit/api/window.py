@@ -80,9 +80,18 @@ def get_main_window():
     """
     Gets the bound window.
 
-    :rtype: PyQt5.QtWidgets.QMainWindow
+    :rtype: hackedit.app.main_window.MainWindow
     """
     return _window()
+
+
+def get_main_window_ui():
+    """
+    Gets the user interface object of the main window.
+
+    :rtype: hackedit.app.forms.main_window_ui.Ui_MainWindow
+    """
+    return _window().ui
 
 
 def get_tray_icon():

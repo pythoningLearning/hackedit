@@ -113,6 +113,10 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         return self._ui.tabs
 
+    @property
+    def ui(self):
+        return self._ui
+
     def __init__(self, app, path, workspace):
         """
         :param app: reference to the application instance
