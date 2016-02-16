@@ -367,6 +367,14 @@ class MainWindow(QtWidgets.QMainWindow):
             _logger().debug('document opened: %s', path)
 
             try:
+                tab.remove_action(tab.action_goto_line)
+            except AttributeError:
+                _logger().debug('cannot remove action goto line from editor '
+                                '%r, not a CodeEdit', tab)
+            else:
+                assert isinstance(tab, CodeEdit)
+                tab.add_action(self.project_explorer.action_goto_line)
+            try:
                 mode = tab.modes.get('FileWatcherMode')
             except (KeyError, AttributeError):
                 _logger().debug('no file watcher on widget %r', tab)
@@ -816,7 +824,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _on_label_cursor_clicked(self):
         if self.current_tab:
-            self.current_tab.action_goto_line.triggered.emit()
+            self.project_explorer.action_goto_line.triggered.emit()
 
     def _on_label_encodings_clicked(self):
         if self.current_tab:
