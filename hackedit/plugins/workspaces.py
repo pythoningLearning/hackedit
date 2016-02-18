@@ -4,7 +4,8 @@ This module contains the core builtin workspaces...
 
 
 class EmptyWorkspace:
-    def get_data(self):
+    @staticmethod
+    def get_data():
         return {
             'name': 'Empty',
             'description': 'Empty workspace',
@@ -14,7 +15,8 @@ class EmptyWorkspace:
 
 
 class GenericWorkspace:
-    def get_data(self):
+    @staticmethod
+    def get_data():
         return {
             'name': 'Generic',
             'description': 'Generic default workspace',

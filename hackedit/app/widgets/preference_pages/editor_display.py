@@ -36,7 +36,8 @@ class EditorDisplay(PreferencePage):
         self.ui.cb_caret_line.setChecked(settings.highlight_caret_line())
         self.ui.cb_parentheses.setChecked(settings.highlight_parentheses())
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         settings.set_text_wrapping(False)
         settings.set_right_margin(True)
         settings.set_margin_position(79)

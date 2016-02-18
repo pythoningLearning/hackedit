@@ -38,7 +38,8 @@ class Editor(PreferencePage):
         self.ui.cb_backspace_unindents.setChecked(
             settings.backspace_unindents())
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         settings.set_tab_length(4)
         settings.set_use_spaces_instead_of_tabs(True)
         settings.set_convert_tabs(True)

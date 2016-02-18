@@ -30,14 +30,14 @@ class VButton(QtWidgets.QPushButton):
             painter.rotate(90)
             painter.translate(0, -self.width())
         painter.drawControl(QtWidgets.QStyle.CE_PushButton,
-                            self.getSyleOptions())
+                            self.get_style_options())
 
     def sizeHint(self):
         size = super(VButton, self).sizeHint()
         size.transpose()
         return size
 
-    def getSyleOptions(self):
+    def get_style_options(self):
         options = QtWidgets.QStyleOptionButton()
         options.initFrom(self)
         size = options.rect.size()

@@ -42,10 +42,10 @@ class _Viewer(QtWidgets.QScrollArea):
         self.center_label()
 
     def zoom_in(self):
-        self.scaleImage(1.25)
+        self.scale_image(1.25)
 
     def zoom_out(self):
-        self.scaleImage(0.8)
+        self.scale_image(0.8)
 
     def normal_size(self):
         self.imageLabel.adjustSize()
@@ -58,7 +58,7 @@ class _Viewer(QtWidgets.QScrollArea):
             self.normalSize()
         self.updateActions()
 
-    def scaleImage(self, factor):
+    def scale_image(self, factor):
         self.scaleFactor *= factor
         self.imageLabel.resize(
             self.scaleFactor * self.imageLabel.pixmap().size())

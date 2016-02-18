@@ -60,7 +60,8 @@ class EditorColors(PreferencePage):
         color_scheme = settings.color_scheme()
         self.ui.combo_color_schemes.setCurrentText(color_scheme)
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         settings.set_editor_font('Hack')
         settings.set_editor_font_size(10)
         settings.set_color_scheme('qt')

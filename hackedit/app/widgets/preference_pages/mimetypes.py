@@ -64,7 +64,8 @@ class Mimetypes(PreferencePage):
         self.ui.edit_ignored.setText(';'.join(settings.ignored_patterns()))
         self.ui.table_mimes.selectRow(0)
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         mime_types.reset_custom_extensions()
         settings.set_ignored_patterns(settings.DEFAULT_IGNORE_PATTERNS)
 

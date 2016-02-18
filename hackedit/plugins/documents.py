@@ -43,6 +43,7 @@ class OpenDocuments(api.plugins.WorkspacePlugin):
             self.list.addItem(itm)
         self.list.setCurrentRow(current_index)
 
-    def _on_item_activated(self, item):
+    @staticmethod
+    def _on_item_activated(item):
         path = item.toolTip()
         api.editor.open_file(path)

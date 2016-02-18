@@ -12,7 +12,7 @@ import hackedit
 
 
 # Define a test command that run our test suite using py.test
-class pytest(TestCommand):
+class PyTest(TestCommand):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
 
     def initialize_options(self):
@@ -149,7 +149,7 @@ setup(
             'hackedit_gettext = hackedit.api.gettext:hackedit_gettext_hook']
     },
     cmdclass={
-        'test': pytest,
+        'test': PyTest,
         'build_ui': build_ui,
         'compile_catalog': compile_catalog,
         'extract_messages': extract_messages,

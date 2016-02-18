@@ -10,8 +10,8 @@ class DlgIgnore(QtWidgets.QDialog):
         self.ui.setupUi(self)
         self.ui.edit_pattern.setText('*%s' % os.path.splitext(name)[1])
 
-    @classmethod
-    def get_ignore_pattern(cls, parent, name):
+    @staticmethod
+    def get_ignore_pattern(parent, name):
         dlg = DlgIgnore(parent, name)
         if dlg.exec_() == dlg.Accepted:
             if dlg.ui.rb_explicit.isChecked():

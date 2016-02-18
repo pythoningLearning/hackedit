@@ -75,7 +75,8 @@ class Shortcuts(PreferencePage):
                   'You will need to fix it otherwise both '
                   "shortcus won't work...") % (new_seq_str, name))
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         shortcuts.restore_defaults()
 
     def save(self):
