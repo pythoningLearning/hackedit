@@ -576,7 +576,8 @@ class MainWindow(QtWidgets.QMainWindow):
     # -------------------------------------------------------------------------
     # Private API (+ overridden methods)
     # -------------------------------------------------------------------------
-    def dragEnterEvent(self, event):
+    @staticmethod
+    def dragEnterEvent(event):
         mime = event.mimeData()
         if mime is None or not mime.hasUrls():
             return

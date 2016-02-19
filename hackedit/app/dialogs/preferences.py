@@ -57,8 +57,8 @@ class DlgPreferences(QtWidgets.QDialog):
         super().closeEvent(event)
         self.closed.emit()
 
-    @classmethod
-    def edit_preferences(cls, parent, app):
+    @staticmethod
+    def edit_preferences(parent, app):
         QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
         dlg = DlgPreferences(parent, app)
         dlg.restore_state()

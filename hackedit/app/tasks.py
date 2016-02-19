@@ -27,7 +27,8 @@ class SubprocessTaskHandle:
     """
     Descritbes the interface for a task handler.
     """
-    def report_progress(self, message, progress):
+    @staticmethod
+    def report_progress(message, progress):
         """
         Reports progress updates to the main gui thread.
         :param message: Message associated with the progress update
@@ -232,7 +233,8 @@ class TaskManager(QtCore.QObject):
         self.task_count_changed.emit(len(self._running_tasks))
         return task
 
-    def _post_errored_event(self, task, traceback, exception):
+    @staticmethod
+    def _post_errored_event(task, traceback, exception):
         events.post(TaskExceptionEvent(task, traceback, exception))
 
     def _on_task_finished(self, task):
@@ -248,7 +250,8 @@ class TaskManager(QtCore.QObject):
         task.setParent(None)
         task.deleteLater()
 
-    def _on_task_results_available(self, task, ret_val):
+    @staticmethod
+    def _on_task_results_available(task, ret_val):
         if task.callback:
             task.callback(ret_val)
 
