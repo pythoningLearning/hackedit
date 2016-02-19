@@ -239,7 +239,8 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         widget.app = self.app
         widget.reset()
 
-    def keyPressEvent(self, ev):
+    @staticmethod
+    def keyPressEvent(ev):
         if ev.key() == QtCore.Qt.Key_Enter or \
                 ev.key() == QtCore.Qt.Key_Return:
             return

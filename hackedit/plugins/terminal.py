@@ -251,8 +251,8 @@ class DlgTerminalHistory(QtWidgets.QDialog):
         return [self.ui.listWidget.item(i).text()
                 for i in range(self.ui.listWidget.count())]
 
-    @classmethod
-    def edit_history(cls, parent, history):
+    @staticmethod
+    def edit_history(parent, history):
         dlg = DlgTerminalHistory(parent, history)
         if dlg.exec_() == dlg.Accepted:
             return dlg.get_history()

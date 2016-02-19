@@ -130,7 +130,8 @@ class FindReplace(plugins.WorkspacePlugin):
             self._dock.deleteLater()
             self._dock = None
 
-    def _on_item_activated(self, item, _):
+    @staticmethod
+    def _on_item_activated(item, *args):
         assert isinstance(item, QtWidgets.QTreeWidgetItem)
         data = item.data(0, QtCore.Qt.UserRole)
         try:
@@ -366,8 +367,8 @@ class _DlgFindReplace(QtWidgets.QDialog):
         if path:
             self.ui.edit_directory.setText(os.path.normpath(path))
 
-    @classmethod
-    def find(cls, parent, text_to_find=None):
+    @staticmethod
+    def find(parent, text_to_find=None):
         """
         Shows the dialog for a find operation
         :param parent: parent widget
@@ -399,8 +400,8 @@ class _DlgFindReplace(QtWidgets.QDialog):
         else:
             return None
 
-    @classmethod
-    def replace(cls, parent, text_to_find=None):
+    @staticmethod
+    def replace(parent, text_to_find=None):
         """
         Shows the dialog for a replace operation.
         :param parent: parent widget

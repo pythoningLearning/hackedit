@@ -54,8 +54,8 @@ class DlgSelectWorkspace(QtWidgets.QDialog):
         if dlg.exec_() == dlg.Accepted:
             self._load_workspaces()
 
-    @classmethod
-    def get_workspace(cls, parent, app):
+    @staticmethod
+    def get_workspace(parent, app):
         dlg = DlgSelectWorkspace(parent, app)
         if dlg.exec_() == dlg.Accepted:
             return dlg.ui.list_workspaces.selectedItems()[0].text()

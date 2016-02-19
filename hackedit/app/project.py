@@ -155,7 +155,8 @@ class ProjectExplorer(QtCore.QObject):
         api.signals.connect_slot(api.signals.CURRENT_EDITOR_CHANGED,
                                  self._on_current_editor_changed)
 
-    def _get_ignored_patterns(self):
+    @staticmethod
+    def _get_ignored_patterns():
         patterns = utils.get_ignored_patterns()
         prj_path = api.project.get_root_project()
         # project specific ignore patterns
@@ -177,7 +178,8 @@ class ProjectExplorer(QtCore.QObject):
                                   api.project.get_root_project()),
                             cancellable=False)
 
-    def get_files(self):
+    @staticmethod
+    def get_files():
         """
         Returns the filtered list of files for all open projects.
         """
@@ -529,7 +531,8 @@ class ProjectExplorer(QtCore.QObject):
         common.create_new_from_template(source, template, path, True,
                                         self.main_window, self.main_window.app)
 
-    def _on_show_in_explorer_triggered(self):
+    @staticmethod
+    def _on_show_in_explorer_triggered():
         path = api.window.get_tab_under_context_menu().file.path
         FileSystemContextMenu.show_in_explorer(
             path, api.window.get_main_window())
@@ -628,7 +631,8 @@ class ProjectExplorer(QtCore.QObject):
         self.main_window.tab_widget.close_document(path)
         self._job_runner.request_job(self._run_update_projects_model_thread)
 
-    def _on_locator_activated(self, path, line):
+    @staticmethod
+    def _on_locator_activated(path, line):
         if line == -1:
             line = None
         else:

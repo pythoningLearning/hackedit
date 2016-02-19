@@ -218,7 +218,8 @@ class Manager(QtCore.QObject):
             self.tool_button.setIcon(QtGui.QIcon.fromTheme(
                 'preferences-desktop-notification'))
 
-    def _icon(self, level):
+    @staticmethod
+    def _icon(level):
         return QtGui.QIcon.fromTheme(ICONS[level])
 
     def _on_content_cleared(self):

@@ -67,6 +67,6 @@ class DlgAbout(QtWidgets.QDialog):
         settings.set_log_level(lvl)
         logging.getLogger().setLevel(lvl)
 
-    @classmethod
-    def show_about(cls, parent):
+    @staticmethod
+    def show_about(parent):
         DlgAbout(parent).exec_()

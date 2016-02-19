@@ -242,7 +242,8 @@ class LocatorWidget(QtWidgets.QFrame):
         return self._get_definition_icon(icon)
 
     @utils.memoized
-    def _get_definition_icon(self, icon):
+    @staticmethod
+    def _get_definition_icon(icon):
         if isinstance(icon, tuple):
             icon = QtGui.QIcon.fromTheme(
                 icon[0], QtGui.QIcon(icon[1]))

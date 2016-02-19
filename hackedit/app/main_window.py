@@ -91,7 +91,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         :return: list of str
         """
-        return self._folders
+        return self._open_projects
 
     @property
     def current_project(self):
@@ -126,9 +126,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAcceptDrops(True)
         self._docks_to_restore = []
         self._toolbars = []
+        self._open_projects = []
         self._current_tab = None
         #: Reference to the application instance.
         self.app = app
+        self.app.active_window = self
         #: List of plugins added to the window
         self.plugins = []
         #: Workspace definition
@@ -173,7 +175,6 @@ class MainWindow(QtWidgets.QMainWindow):
             QtGui.QIcon.fromTheme('document-open-recent'))
         self._ui.mnu_file.insertMenu(self._ui.mnu_file.actions()[3],
                                      self._mnu_recents)
-        self._folders = []
         self._current_folder = ''
         self._dock_manager = DockWidgetsManager(self)
         self._connect_slots()
@@ -209,7 +210,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # already open
             return
         _logger().debug('open folder: %r', path)
-        self._folders.append(path)
+        self._open_projects.append(path)
         self.project_added.emit(path)
         self._current_folder = path
         linked_paths = self._get_linked_paths()
@@ -233,7 +234,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def remove_folder(self, path):
         try:
-            self._folders.remove(path)
+            self._open_projects.remove(path)
         except ValueError:
             _logger().warn('failed to remove folder %r', path)
 
@@ -596,7 +597,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 # open a new window
                 self.app.open_path(path)
 
-    def createPopupMenu(self):
+    @staticmethod
+    def createPopupMenu():
         # prevent the window to create its standard popup. That menu
         # is already visible in View->Tools menu.
         return None
@@ -672,7 +674,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.task_manager.count:
             self.task_manager_widget.show()
 
-    def _setup_dark_editor(self, editor):
+    @staticmethod
+    def _setup_dark_editor(editor):
         try:
             panel = editor.panels.get('FoldingPanel')
         except KeyError:
@@ -696,7 +699,8 @@ class MainWindow(QtWidgets.QMainWindow):
             mode.match_background = QtGui.QColor('#344134')
             mode.match_foreground = QtGui.QColor('yellow')
 
-    def _setup_native_editor(self, editor):
+    @staticmethod
+    def _setup_native_editor(editor):
         try:
             panel = editor.panels.get('FoldingPanel')
         except KeyError:
@@ -1045,7 +1049,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui.a_toolbars.setShortcut(shortcuts.get(
             'Toggle toolbars', _('Toggle toolbars'), 'Ctrl+Shift+T'))
 
-    def _apply_editor_shortcuts(self, editor):
+    @staticmethod
+    def _apply_editor_shortcuts(editor):
         editor.action_undo.setShortcut(shortcuts.get(
             'Undo', _('Undo'), 'Ctrl+Z'))
         editor.action_redo.setShortcut(shortcuts.get(

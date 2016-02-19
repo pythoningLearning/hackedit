@@ -32,7 +32,8 @@ class Behaviour(PreferencePage):
         else:
             self.ui.rb_open_proj_ask.setChecked(True)
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         settings.set_show_splashscreen(True)
         settings.set_automatically_check_for_updates(
             False if system.LINUX else True)

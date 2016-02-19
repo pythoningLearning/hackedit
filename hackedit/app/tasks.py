@@ -344,7 +344,8 @@ class TaskListPopup(QtWidgets.QDialog):
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.setWindowFlags(QtCore.Qt.Popup)
 
-    def sizeHint(self):
+    @staticmethod
+    def sizeHint():
         return QtCore.QSize(500, 250)
 
 

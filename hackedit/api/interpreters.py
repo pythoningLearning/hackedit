@@ -121,7 +121,8 @@ class InterpreterManager:
             # use the first interpreter available
             return self.default_interpreter
 
-    def set_project_interpreter(self, project_path, interpreter):
+    @staticmethod
+    def set_project_interpreter(project_path, interpreter):
         """
         Sets the project interpreter.
 
@@ -132,7 +133,8 @@ class InterpreterManager:
         usd['interpreter'] = interpreter
         project.save_user_config(project_path, usd)
 
-    def _detect_system_interpreters(self):
+    @staticmethod
+    def _detect_system_interpreters():
         """
         Detects system interpreters. This method does not do anything, it's up
         to you to implement it
@@ -160,7 +162,8 @@ class InterpreterManager:
         QtCore.QSettings().setValue(
             '%s/local_interpreters' % self.name, list(set(interpreters)))
 
-    def get_interpreter_icon(self):
+    @staticmethod
+    def get_interpreter_icon():
         """
         Returns the icon used for the interpreter.
 
@@ -413,7 +416,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
                 self._configs_combo_box.setCurrentIndex(i)
                 break
 
-    def _on_open_file_requested(self, path, line):
+    @staticmethod
+    def _on_open_file_requested(path, line):
         # open file from traceback
         editor.open_file(path, line=line)
 

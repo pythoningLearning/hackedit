@@ -221,7 +221,8 @@ class Application(QtCore.QObject):
         """
         self._set_active_window(window)
 
-    def get_workspaces(self):
+    @staticmethod
+    def get_workspaces():
         """
         Returns the list of available workspaces names.
 
@@ -378,7 +379,8 @@ class Application(QtCore.QObject):
                 api.window.restore(w)
                 break
 
-    def _has_multiple_projects(self, path):
+    @staticmethod
+    def _has_multiple_projects(path):
         data = load_user_config(path)
         try:
             return len(data['linked_paths'])

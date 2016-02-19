@@ -90,10 +90,10 @@ class _Viewer(QtWidgets.QScrollArea):
         super().wheelEvent(event)
         self.center_label()
 
-    def _adjust_scrollbar(self, scrollBar, factor):
-        scrollBar.setValue(
-            int(factor * scrollBar.value() +
-                ((factor - 1) * scrollBar.pageStep()/2)))
+    @staticmethod
+    def _adjust_scrollbar(scrollBar, factor):
+        scrollBar.setValue(int(factor * scrollBar.value() +
+                           ((factor - 1) * scrollBar.pageStep()/2)))
 
 
 class _FileLoader:

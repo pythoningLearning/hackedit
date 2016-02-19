@@ -42,7 +42,8 @@ class Notifications(PreferencePage):
         self.ui.blacklist.addItems(events.get_blacklist())
         self.update_buttons()
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         settings.set_show_notification_in_sytem_tray(True)
         settings.set_auto_open_info_notification(False)
         settings.set_auto_open_warning_notification(True)

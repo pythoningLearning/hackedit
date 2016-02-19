@@ -153,8 +153,8 @@ class WizardNew(QtWidgets.QWizard):
         if path:
             self.ui.edit_prj_path.setText(path)
 
-    @classmethod
-    def get_parameters(cls, parent=None, current_project=None):
+    @staticmethod
+    def get_parameters(parent=None, current_project=None):
         wizard = WizardNew(parent, current_project)
         if wizard.exec_() == wizard.Accepted:
             return wizard.label, wizard.template, wizard.path, \

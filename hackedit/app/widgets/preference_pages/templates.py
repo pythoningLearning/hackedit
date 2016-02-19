@@ -132,7 +132,8 @@ class Templates(PreferencePage):
     def reset(self):
         self.ui.cb_auto_sync.setChecked(settings.auto_sync_templates())
 
-    def restore_defaults(self):
+    @staticmethod
+    def restore_defaults():
         settings.set_auto_sync_templates(True)
 
     def save(self):
@@ -152,8 +153,8 @@ class DlgAddSource(QtWidgets.QDialog):
         bt.setDisabled(
             not self.ui.edit_label.text() or not self.ui.edit_url.text())
 
-    @classmethod
-    def add_source(cls, parent):
+    @staticmethod
+    def add_source(parent):
         dlg = DlgAddSource(parent)
         if dlg.exec_() == dlg.Accepted:
             return dlg.ui.edit_label.text().strip(), \
