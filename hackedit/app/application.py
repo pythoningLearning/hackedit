@@ -333,30 +333,51 @@ class Application(QtCore.QObject):
         api.window.restore(self.last_window)
 
     def _setup_workspace_plugins(self, win, workspace):
-        self.plugin_manager.load_workspace_plugins(win=win)
         _logger().debug('setting up workspace plugins: %r -> %r',
                         workspace, win)
         win.workspace = workspace
-        for plugin in workspace['plugins']:
+        for plugin_name in workspace['plugins']:
             _logger().debug(
-                    'adding plugin to window: %r -> %r', plugin, win)
+                    'adding plugin to window: %r -> %r', plugin_name, win)
             try:
-                plugin_class = self.plugin_manager.workspace_plugins[plugin]
-                plugin = plugin_class(win)
-                plugin.activate()
-            except Exception as e:
-                _logger().exception('Plugin activattion failed')
-                event = api.events.ExceptionEvent(
-                    _('%r plugin activation failed') % plugin,
-                    _('Failed to active plugin: %r. '
-                      'Either the plugin is missing or the plugin failed to '
-                      'load...') % plugin, e)
-                event.level = api.events.WARNING
+                plugin_class = self.plugin_manager.workspace_plugins[
+                    plugin_name]
+            except KeyError:
+                # plugin not found, why?
+                try:
+                    tb, e = self.plugin_manager.failed_to_load[plugin_name]
+                except KeyError:
+                    # plugin not installed
+                    title = _('Failed to find plugin %r') % plugin_name
+                    desc = _('Plugin not installed?')
+                    event = api.events.Event(
+                        title, desc, level=api.events.WARNING)
+                else:
+                    # plugin found but failed to load
+                    title = _('Failed to load plugin %r') % plugin_name
+                    desc = _('An error has occured during the loading of the '
+                             'plugin...\n\nError=%r') % tb.splitlines()[-1]
+                    event = api.events.PluginLoadErrorEvent(
+                        title, desc, e, tb=tb)
+                    event.level = api.events.WARNING
                 win.notifications.add(event, force_show=True)
             else:
-                _logger().debug(
-                    'plugin added to window: %r -> %r', plugin, win)
-                win.plugins.append(plugin)
+                try:
+                    plugin = plugin_class(win)
+                    plugin.activate()
+                except Exception as e:
+                    # plugin found but failed to load
+                    title = _('Failed to activate plugin %r') % plugin_name
+                    tb = traceback.format_exc()
+                    desc = _('An error has occured during the activation of '
+                             'the plugin...\n\nError=%r') % tb.splitlines()[-1]
+                    event = api.events.PluginLoadErrorEvent(title, desc, e)
+                    event.level = api.events.WARNING
+                    win.notifications.add(event, force_show=True)
+                else:
+                    _logger().debug(
+                        'plugin added to window: %r -> %r', plugin, win)
+                    win.plugins.append(plugin)
 
     def _update_windows(self):
         for w in self.editor_windows:

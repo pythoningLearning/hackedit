@@ -75,11 +75,12 @@ def open_folder(window, app):
         app.open_path(path, sender=window)
 
 
-def report_bug(window, title='', traceback=None):
+def report_bug(window, title='', traceback=None, issue_description=''):
     qcrash.show_report_dialog(
         issue_title=title, traceback=traceback, parent=window,
         include_log=traceback is not None,
-        include_sys_info=traceback is not None)
+        include_sys_info=traceback is not None,
+        issue_description=issue_description)
     return True
 
 

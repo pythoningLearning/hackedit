@@ -3,6 +3,7 @@ This module contains the plugins manager that loads and store the various
 plugins.
 """
 import logging
+import traceback
 
 import pkg_resources
 from pyqode.core.widgets import SplittableCodeEditTabWidget
@@ -24,7 +25,13 @@ class LoadPluginFailedEvent(events.ExceptionEvent):
 
 class PluginManager:
     """
-    Loads and store the various kind of plugins
+    Loads and stores the various kind of plugins.
+
+    Plugins are setuptools entrypoints (see
+    https://pythonhosted.org/setuptools/setuptools.html#dynamic-discovery-of-services-and-plugins).
+
+    The plugin manager is instantiated **once** in
+    :class:`hackedit.app.Application`.
     """
     def __init__(self):
         #: Map of workspace plugin classes
@@ -37,49 +44,16 @@ class PluginManager:
         self.editor_plugins = []
         #: The list of template provider plugins
         self.template_providers = []
-        self.load_template_provider_plugins()
-        self.load_editor_plugins()
-        self.load_preferences_page_plugins()
+        #: the map of plugin which failed to load with their traceback
+        self.failed_to_load = {}
+        self._load_template_provider_plugins()
+        self._load_editor_plugins()
+        self._load_preferences_page_plugins()
+        self._load_workspace_plugins()
         FileIconProvider.load_plugins()
         SplittableCodeEditTabWidget.icon_provider_klass = FileIconProvider
 
-    def load_preferences_page_plugins(self):
-        """
-        Loads preferences pages plugins.
-        """
-        _logger().info('loading preferences pages plugins')
-        entrypoints = list(pkg_resources.iter_entry_points(
-            plugins.PreferencePagePlugin.ENTRYPOINT))
-        for entrypoint in entrypoints:
-            _logger().info('  - loading plugin: %s', entrypoint)
-            try:
-                plugin_class = entrypoint.load()
-            except Exception:
-                _logger().exception('failed to load preferences page plugin')
-            else:
-                self.preferences_page_plugins.append(plugin_class)
-        _logger().debug('preferences page plugins: %r',
-                        self.preferences_page_plugins)
-
-    def load_template_provider_plugins(self):
-        """
-        Loads preferences pages plugins.
-        """
-        _logger().info('loading template provider plugins')
-        entrypoints = list(pkg_resources.iter_entry_points(
-            plugins.TemplateProviderPlugin.ENTRYPOINT))
-        for entrypoint in entrypoints:
-            _logger().info('  - loading plugin: %s', entrypoint)
-            try:
-                plugin_class = entrypoint.load()
-            except Exception:
-                _logger().exception('failed to load template provider plugin')
-            else:
-                self.template_providers.append(plugin_class())
-        _logger().debug('template providers plugins: %r',
-                        self.template_providers)
-
-    def load_workspace_plugins(self, win=None):
+    def _load_workspace_plugins(self):
         """
         Loads workspace plugins (plugins that are tied to a specific worskpace)
         """
@@ -91,21 +65,55 @@ class PluginManager:
             try:
                 plugin_class = entrypoint.load()
             except Exception as e:
+                _logger().exception('Failed to load workspace plugin')
                 name = str(entrypoint).split('=')[0].strip()
-                if win:
-                    event = LoadPluginFailedEvent(
-                        _('%r load failed') % name,
-                        _('Failed to load plugin %r because of the following '
-                          'error: %r') % (name, str(e)), e)
-                    win.notifications.add(event, force_show=True)
-                else:
-                    _logger().exception('Failed to load workspace plugin')
+                self.failed_to_load[name] = traceback.format_exc(), e
             else:
                 self.workspace_plugins[plugin_class.__name__] = plugin_class
         _logger().debug('available workspace plugins: %r',
                         self.workspace_plugins)
 
-    def load_editor_plugins(self):
+    def _load_preferences_page_plugins(self):
+        """
+        Loads preferences pages plugins.
+        """
+        _logger().info('loading preferences pages plugins')
+        entrypoints = list(pkg_resources.iter_entry_points(
+            plugins.PreferencePagePlugin.ENTRYPOINT))
+        for entrypoint in entrypoints:
+            _logger().info('  - loading plugin: %s', entrypoint)
+            try:
+                plugin_class = entrypoint.load()
+            except Exception as e:
+                _logger().exception('failed to load preferences page plugin')
+                name = str(entrypoint).split('=')[0].strip()
+                self.failed_to_load[name] = traceback.format_exc(), e
+            else:
+                self.preferences_page_plugins.append(plugin_class)
+        _logger().debug('preferences page plugins: %r',
+                        self.preferences_page_plugins)
+
+    def _load_template_provider_plugins(self):
+        """
+        Loads preferences pages plugins.
+        """
+        _logger().info('loading template provider plugins')
+        entrypoints = list(pkg_resources.iter_entry_points(
+            plugins.TemplateProviderPlugin.ENTRYPOINT))
+        for entrypoint in entrypoints:
+            _logger().info('  - loading plugin: %s', entrypoint)
+            try:
+                plugin_class = entrypoint.load()
+            except Exception as e:
+                _logger().exception('failed to load template provider plugin')
+                name = str(entrypoint).split('=')[0].strip()
+                self.failed_to_load[name] = traceback.format_exc(), e
+            else:
+                self.template_providers.append(plugin_class())
+        _logger().debug('template providers plugins: %r',
+                        self.template_providers)
+
+    def _load_editor_plugins(self):
         """
         Loads editor plugins.
         """
@@ -116,15 +124,18 @@ class PluginManager:
             _logger().info('  - loading plugin: %s', entrypoint)
             try:
                 plugin_class = entrypoint.load()
-            except Exception:
+            except Exception as e:
                 _logger().exception('Failed to load editor plugin')
+                name = str(entrypoint).split('=')[0].strip()
+                self.failed_to_load[name] = traceback.format_exc(), e
             else:
                 try:
                     klass = plugin_class.get_editor_class()
-                except AttributeError:
+                except AttributeError as e:
                     _logger().exception(
                         'invalid editor plugin: register_editor not '
                         'implemented')
+                    self.failed_to_load[name] = traceback.format_exc(), e
                 else:
                     SplittableCodeEditTabWidget.register_code_edit(klass)
                     self.editor_plugins.append(plugin_class)

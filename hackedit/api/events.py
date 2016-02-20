@@ -118,6 +118,15 @@ class ExceptionEvent(Event):
             self.remove()
 
 
+class PluginLoadErrorEvent(ExceptionEvent):
+    def report_bug(self):
+        from hackedit.app import common
+        if common.report_bug(
+                self.main_window, title=self.title, traceback=self.traceback,
+                issue_description=self.description):
+            self.remove()
+
+
 def add_to_blacklist(event):
     """
     Adds an event to the events blacklist.

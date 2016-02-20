@@ -39,7 +39,6 @@ class Workspaces(PreferencePage):
             self._on_description_changed)
 
     def reset(self):
-        self.app.plugin_manager.load_workspace_plugins()
         self.wm = WorkspaceManager()
         self.ui.list_workspaces.clear()
         for workspace in self.wm.get_names():
