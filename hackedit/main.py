@@ -15,10 +15,10 @@ if not EXTLIBS_PATH:
     os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
 sys.path.insert(0, EXTLIBS_PATH)
 
-from hackedit import __version__                 # noqa
-from hackedit.api.gettext import get_translation     # noqa
-from hackedit.app import argparser, logger       # noqa
-import faulthandler                              # noqa
+from hackedit import __version__                  # noqa
+from hackedit.api.gettext import get_translation  # noqa
+from hackedit.app import argparser, logger        # noqa
+import faulthandler                               # noqa
 
 
 try:

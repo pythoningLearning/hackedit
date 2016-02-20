@@ -386,7 +386,6 @@ class RunWidget(QtWidgets.QWidget):
         :param klass: requested tab class
         :return: QWidget or None
         """
-        print(klass, identifier)
         for tab in self._tabs:
             if (not tab.is_running and not tab.pinned and
                     type(tab) == klass and tab.identifier == identifier):
