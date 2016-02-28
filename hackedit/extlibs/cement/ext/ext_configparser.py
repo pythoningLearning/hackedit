@@ -1,8 +1,43 @@
-"""ConfigParser Framework Extension."""
+"""
+
+The ConfigParser Extension provides configuration handling based on
+the standard :py:class:`ConfigParser`, and is the default configuration
+handler used by Cement.
+
+Requirements
+------------
+
+  * No external dependencies.
+
+
+Configuration
+-------------
+
+This extension does not honor any application configuration settings.
+
+
+Usage
+-----
+
+.. code-block:: python
+
+    from cement.core.foundation import CementApp
+
+    with CementApp() as app:
+        app.run()
+
+        # get a config setting
+        app.config.get('myapp', 'foo')
+
+        # set a config setting
+        app.config.set('myapp', 'foo', 'bar2')
+
+        # etc.
+"""
 
 import os
 import sys
-from ..core import backend, config, handler
+from ..core import backend, config
 from ..utils.misc import minimal_logger
 
 if sys.version_info[0] < 3:
@@ -91,7 +126,7 @@ class ConfigParserConfigHandler(config.CementConfigHandler, RawConfigParser):
 
         :param section: The config section (I.e. [block_section]).
         :returns: List of keys in the `section`.
-        :rtype: list
+        :rtype: ``list``
 
         """
         return self.options(section)
@@ -101,7 +136,7 @@ class ConfigParserConfigHandler(config.CementConfigHandler, RawConfigParser):
         Return a list of configuration sections or [blocks].
 
         :returns: List of sections.
-        :rtype: list
+        :rtype: ``list``
 
         """
         return self.sections()
@@ -113,7 +148,7 @@ class ConfigParserConfigHandler(config.CementConfigHandler, RawConfigParser):
         :param section: The section of the configuration.
          I.e. [block_section]
         :returns: Dictionary reprisentation of the config section.
-        :rtype: dict
+        :rtype: ``dict``
 
         """
         dict_obj = dict()
@@ -132,4 +167,4 @@ class ConfigParserConfigHandler(config.CementConfigHandler, RawConfigParser):
 
 
 def load(app):
-    handler.register(ConfigParserConfigHandler)
+    app.handler.register(ConfigParserConfigHandler)
