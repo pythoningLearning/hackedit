@@ -17,6 +17,7 @@ restructuredtext_lint
 boss
 cement
 qdarkstyle
+qcrash
 
 # required for development
 sphinx
