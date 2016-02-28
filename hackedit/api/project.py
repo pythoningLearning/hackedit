@@ -73,49 +73,73 @@ def get_root_project():
         return None
 
 
-def get_project_files(root_project=None):
+def get_project_files(root_project=None, name_filter=None):
     """
-    Gets the list of relevant project files.
+    Generator that yields the list of project files.
 
-    The list is fildered according to the ignore patterns defined
-    in ``Preferences > Mimetypes``.
-
-    .. note:: The list of project files is initially contains only the list of
-        open files int the main tab widget.
-        Use the signal :attr:`hackedit.api.signals.PROJECT_FILES_AVAILABLE`
-        to know when the list is available.
+    :param root_project: The project to get the files from, if None all open projects
+        will be used.
+    :param name_filter: The name filter to use to filter the project files. If None, the whole list
+        will be generated.
     """
+    from hackedit.app.indexing.db import DbHelper
     if root_project is None:
-        root_project = get_root_project()
-    usd = load_user_cache(root_project)
-    try:
-        files = usd['project_files']
-    except KeyError:
-        files = []
-    try:
-        # make sure to include external files currently opened.
-        from hackedit.api.editor import get_all_paths
-        files += get_all_paths()
-    except AttributeError:
-        _logger().exception(
-            'failed to get all paths for project %r', root_project)
-    return sorted(list(set(files)))
+        projects = get_projects()
+    else:
+        projects = [root_project]
+    for proj in projects:
+        db_path = os.path.join(proj, '.hackedit', 'project.db')
+        try:
+            with DbHelper(db_path) as dbh:
+                if name_filter:
+                    generator = dbh.get_files(name_filter)
+                else:
+                    generator = dbh.get_all_files()
+                for file in generator:
+                    yield file
+        except Exception:
+            _logger().exception('failed to get project files for project: %r', proj)
 
 
-def get_project_symbols(project_path):
+def get_project_symbols(root_project=None, file_path=None, name_filter=None):
     """
     Returns a dict that contains all the project symbols.
 
     Each key in the dict is a file path. Each value is a list of
     :class:`pyqode.core.share.Definition` for the associated file path.
     """
-    usd = load_user_cache(project_path)
-    try:
-        symbols = usd['project_symbols']
-    except KeyError:
-        symbols = {}
-    symbols = [Definition.from_dict(d) for d in symbols]
-    return symbols
+    from hackedit.app.indexing.db import DbHelper, COL_SYMBOL_FILE_ID
+    if root_project is None:
+        projects = get_projects()
+    else:
+        projects = [root_project]
+    for proj in projects:
+        db_path = os.path.join(proj, '.hackedit', 'project.db')
+        try:
+            with DbHelper(db_path) as dbh:
+                if name_filter:
+                    if file_path:
+                        file = dbh.get_file_by_path(file_path)
+                        if file:
+                            generator = dbh.get_file_symbols(file['FILE_ID'], name_filter)
+                        else:
+                            return
+                    else:
+                        generator = dbh.get_symbols(name_filter)
+                else:
+                    if file_path:
+                        file = dbh.get_file_by_path(file_path)
+                        if file:
+                            generator = dbh.get_all_file_symbols(file['FILE_ID'])
+                        else:
+                            return
+                    else:
+                        generator = dbh.get_all_symbols()
+                for symbol in generator:
+                    file = dbh.get_file_by_id(symbol[COL_SYMBOL_FILE_ID])
+                    yield symbol, file
+        except Exception:
+            _logger().exception('failed to get project files for project: %r', proj)
 
 
 def set_project_symbols(project_path, symbols):

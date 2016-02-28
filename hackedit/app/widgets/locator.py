@@ -7,8 +7,10 @@ from pyqode.core.share import Definition
 
 from hackedit.api import editor, project, widgets
 from hackedit.app.forms import locator_ui
+from hackedit.app.indexing import db
 from hackedit.app.widgets.html_delegate import HTMLDelegate
 
+LIMIT = 50  # 50 items max
 
 class LocatorWidget(QtWidgets.QFrame):
     """
@@ -121,11 +123,8 @@ class LocatorWidget(QtWidgets.QFrame):
                 line = -1
             self.activated.emit(data, line)
         elif isinstance(data, tuple):
-            path, line = data
+            line, path = data
             self.activated.emit(path, line)
-        elif isinstance(data, Definition):
-            self.activated.emit(
-                data.file_path, data.line + 1)
         self._activated = True
         self.close()
 
@@ -160,75 +159,55 @@ class LocatorWidget(QtWidgets.QFrame):
                 except ValueError:
                     _logger().debug('failed to go to line on editor %r', e)
 
-    @staticmethod
-    def flatten(results, level=1):
-        """
-        Flattens the document structure tree as a simple sequential list.
-        """
-        ret_val = []
-        for de in results:
-            ret_val.append(de)
-            for sub_d in de.children:
-                nd = Definition(
-                    sub_d.name, sub_d.line, sub_d.column, sub_d.icon,
-                    file_path=sub_d.file_path)
-                ret_val += LocatorWidget.flatten(sub_d.children, level+1)
-                ret_val.append(nd)
-        return ret_val
-
     def search_symbol(self):
         search_term = self._get_search_term()
-        try:
-            outline_mode = editor.get_current_editor().modes.get('OutlineMode')
-        except (KeyError, AttributeError):
-            self.ui.treeWidget.clear()
-        else:
-            definitions = self.flatten(outline_mode.definitions)
-            results = get_search_scores(
-                search_term,
-                [(d, d.name.split('(')[0].strip()) for d in definitions],
-                True, '<b>{}</b>', True, True)
-
-            # display
-            self.ui.treeWidget.clear()
-            first_item = None
-            for original, d, enriched, _ in results:
-                text = '%s<br><i>%s:%d</i>' % (enriched, d.file_path, d.line)
-                item = QtWidgets.QTreeWidgetItem()
-                item.setText(0, text)
-                item.setIcon(0, self.icon_provider.icon(d.file_path))
-                item.setData(0, QtCore.Qt.UserRole, d)
-                if first_item is None:
-                    first_item = item
-                self.ui.treeWidget.addTopLevelItem(item)
-            if self.ui.treeWidget.topLevelItemCount():
-                self.ui.treeWidget.show()
-                self.ui.treeWidget.setCurrentItem(first_item)
-            else:
-                self.ui.treeWidget.hide()
-            self.adjustSize()
-
-    def search_symbol_in_project(self):
-        search_term = self._get_search_term()
-        symbols = project.get_project_symbols(project.get_root_project())
-        definitions = self.flatten(symbols)
-        results = get_search_scores(
-            search_term,
-            [(d, d.name.split('(')[0].strip()) for d in definitions],
-            True, '<b>{}</b>', True, True)
-
+        symbols = project.get_project_symbols(
+            file_path=editor.get_current_editor().file.path,
+            name_filter=search_term)
         # display
         self.ui.treeWidget.clear()
         first_item = None
-        for original, d, enriched, _ in results:
-            text = '%s<br><i>%s:%d</i>' % (enriched, d.file_path, d.line)
+        for i, (symbol_item, file_item) in enumerate(symbols):
+            name = symbol_item[db.COL_SYMBOL_NAME]
+            line = int(symbol_item[db.COL_SYMBOL_LINE]) + 1
+            path = file_item[db.COL_FILE_PATH]
+            text = '%s<br><i>%s:%d</i>' % (name, path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
-            item.setIcon(0, self.icon_provider.icon(d.file_path))
-            item.setData(0, QtCore.Qt.UserRole, d)
+            item.setIcon(0, self.icon_provider.icon(path))
+            item.setData(0, QtCore.Qt.UserRole, (line, path))
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
+            # if i > LIMIT:
+            #     break
+        if self.ui.treeWidget.topLevelItemCount():
+            self.ui.treeWidget.show()
+            self.ui.treeWidget.setCurrentItem(first_item)
+        else:
+            self.ui.treeWidget.hide()
+        self.adjustSize()
+
+    def search_symbol_in_project(self):
+        search_term = self._get_search_term()
+        symbols = project.get_project_symbols(name_filter=search_term)
+        # display
+        self.ui.treeWidget.clear()
+        first_item = None
+        for i, (symbol_item, file_item) in enumerate(symbols):
+            name = symbol_item[db.COL_SYMBOL_NAME]
+            line = int(symbol_item[db.COL_SYMBOL_LINE]) + 1
+            path = file_item[db.COL_FILE_PATH]
+            text = '%s<br><i>%s:%d</i>' % (name, path, line)
+            item = QtWidgets.QTreeWidgetItem()
+            item.setText(0, text)
+            item.setIcon(0, self.icon_provider.icon(path))
+            item.setData(0, QtCore.Qt.UserRole, (line, path))
+            if first_item is None:
+                first_item = item
+            self.ui.treeWidget.addTopLevelItem(item)
+            # if i > LIMIT:
+            #     break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
@@ -255,18 +234,18 @@ class LocatorWidget(QtWidgets.QFrame):
         return icon
 
     def search_files(self):
-        project_files = project.get_project_files()
-        search_term = self._get_search_term()
-        results = get_search_scores(
-            search_term,
-            [(p, QtCore.QFileInfo(p).fileName()) for p in project_files],
-            True, '<b>{}</b>', True, bool(search_term))
+        name_filter = self._get_search_term()
+
+        # get files from db
+        project_files = project.get_project_files(name_filter=name_filter)
 
         # display
         self.ui.treeWidget.clear()
         first_item = None
-        for original, path, enriched, _ in results:
-            text = '%s<br><i>%s</i>' % (enriched, path)
+        for i, file_item in enumerate(project_files):
+            path = file_item[db.COL_FILE_PATH]
+            name = file_item[db.COL_FILE_NAME]
+            text = '%s<br><i>%s</i>' % (name, path)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -322,255 +301,13 @@ to open the selected entry. Press <i>ESCAPE</i> to close the popup window.<p>
     def _on_current_item_changed(self, item):
         text = self.ui.lineEdit.text()
         if item and self.GOTO_SYMBOL_PATTERN.match(text):
-            data = item.data(0, QtCore.Qt.UserRole)
-            TextHelper(editor.get_current_editor()).goto_line(data.line)
+            line, path = item.data(0, QtCore.Qt.UserRole)
+            TextHelper(editor.get_current_editor()).goto_line(line - 1)
 
 
 # The following 3 functions have been taken from SpyderIDE.
 NOT_FOUND_SCORE = -1
 NO_SCORE = 0
-
-
-@utils.memoized
-def get_search_regex(query, ignore_case=True):
-    """Returns a compiled regex pattern to search for query letters in order.
-    Parameters
-    ----------
-    query : str
-        String to search in another string (in order of character occurence).
-    ignore_case : True
-        Optional value perform a case insensitive search (True by default).
-    Returns
-    -------
-    pattern : SRE_Pattern
-    Notes
-    -----
-    This function adds '.*' between the query characters and compiles the
-    resulting regular expression.
-    """
-    query = _clean_query(query)
-    regex_text = [char for char in query if char != ' ']
-    regex_text = [(char + '.*') if char != '\\' else char for char in query]
-    regex_text = ''.join(regex_text)
-    regex = '({0})'.format(regex_text)
-
-    if ignore_case:
-        pattern = re.compile(regex, re.IGNORECASE)
-    else:
-        pattern = re.compile(regex)
-
-    return pattern
-
-
-def get_search_score(query, choice, ignore_case, apply_regex, template):
-    """Returns a tuple with the enriched text (if a template is provided) and
-    a score for the match.
-    Parameters
-    ----------
-    query : str
-        String with letters to search in choice (in order of appearance).
-    choice : str
-        Sentence/words in which to search for the 'query' letters.
-    ignore_case : bool, optional
-        Optional value perform a case insensitive search (True by default).
-    apply_regex : bool, optional
-        Optional value (True by default) to perform a regex search. Useful
-        when this function is called directly.
-    template : str, optional
-        Optional template string to surround letters found in choices. This is
-        useful when using a rich text editor ('{}' by default).
-        Examples: '<b>{}</b>', '<code>{}</code>', '<i>{}</i>'
-    Returns
-    -------
-    results : tuple
-        Tuples where the first item is the text (enriched if a template was
-        used) and the second item is a search score.
-    Notes
-    -----
-    The score is given according the following precedence (high to low):
-    - Letters in one word and no spaces with exact match.
-      Example: 'up' in 'up stroke'
-    - Letters in one word and no spaces with partial match.
-      Example: 'up' in 'upstream stroke'
-    - Letters in one word but with skip letters.
-      Example: 'cls' in 'close up'
-    - Letters in two or more words
-      Example: 'cls' in 'car lost'
-    """
-    original_choice = choice
-    result = (original_choice, original_choice, NOT_FOUND_SCORE)
-
-    # Handle empty string case
-    if not query:
-        return result
-
-    if ignore_case:
-        query = query.lower()
-        choice = choice.lower()
-
-    if apply_regex:
-        pattern = get_search_regex(query, ignore_case=ignore_case)
-        r = re.search(pattern, choice)
-        if r is None:
-            return result
-    else:
-        sep = u'-'  # Matches will be replaced by this character
-        let = u'x'  # Nonmatches (except spaed) will be replaced by this
-        score = 0
-
-        exact_words = [query == word for word in choice.split(u' ')]
-        partial_words = [query in word for word in choice.split(u' ')]
-
-        if any(exact_words) or any(partial_words):
-            pos_start = choice.find(query)
-            pos_end = pos_start + len(query)
-            score += pos_start
-            text = choice.replace(query, sep*len(query), 1)
-
-            enriched_text = original_choice[:pos_start] +\
-                template.format(original_choice[pos_start:pos_end]) +\
-                original_choice[pos_end:]
-
-        if any(exact_words):
-            # Check if the query words exists in a word with exact match
-            score += 1
-        elif any(partial_words):
-            # Check if the query words exists in a word with partial match
-            score += 100
-        else:
-            # Check letter by letter
-            text = [l for l in original_choice]
-            if ignore_case:
-                temp_text = [l.lower() for l in original_choice]
-            else:
-                temp_text = text[:]
-
-            # Give points to start of string
-            try:
-                score += temp_text.index(query[0])
-            except ValueError:
-                score -= 1
-
-            # Find the query letters and replace them by `sep`, also apply
-            # template as needed for enricching the letters in the text
-            enriched_text = text[:]
-            for char in query:
-                if char != u'' and char in temp_text:
-                    index = temp_text.index(char)
-                    enriched_text[index] = template.format(text[index])
-                    text[index] = sep
-                    temp_text = [u' ']*(index + 1) + temp_text[index+1:]
-
-        enriched_text = u''.join(enriched_text)
-
-        patterns_text = []
-        for i, char in enumerate(text):
-            if char not in [u' ', sep]:
-                new_char = let
-            else:
-                new_char = char
-            patterns_text.append(new_char)
-        patterns_text = u''.join(patterns_text)
-        for i in reversed(range(1, len(query) + 1)):
-            score += (len(query) - patterns_text.count(sep*i))*100000
-
-        temp = patterns_text.split(sep)
-        while u'' in temp:
-            temp.remove(u'')
-        if not patterns_text.startswith(sep):
-            temp = temp[1:]
-        if not patterns_text.endswith(sep):
-            temp = temp[:-1]
-
-        for pat in temp:
-            score += pat.count(u' ')*10000
-            score += pat.count(let)*100
-
-    return original_choice, enriched_text, score
-
-
-@utils.memoized
-def _clean_query(query):
-    """
-    Cleans the query before it is transformed to an SRE_Pattern.
-
-    Cleaning means removing the white spaces and removing any regex operator
-    (*, ?, +, .).
-    """
-    query = query.replace(' ', '')
-    return re.escape(query)
-
-
-def get_search_scores(query, choices, ignore_case, template, valid_only, sort):
-    """Search for query inside choices and return a list of tuples.
-    Returns a list of tuples of text with the enriched text (if a template is
-    provided) and a score for the match. Lower scores imply a better match.
-    Parameters
-    ----------
-    query : str
-        String with letters to search in each choice (in order of appearance).
-    choices : list of tuple (user_data, name)
-        List of sentences/words in which to search for the 'query' letters.
-        User data is any data you would like to associate with the name to
-        check (e.g. definition object for a symbol,...)
-    ignore_case : bool, optional
-        Optional value perform a case insensitive search (True by default).
-    template : str, optional
-        Optional template string to surround letters found in choices. This is
-        useful when using a rich text editor ('{}' by default).
-        Examples: '<b>{}</b>', '<code>{}</code>', '<i>{}</i>'
-    Returns
-    -------
-    results : list of tuples
-        List of tuples:
-            - original_text
-            - enriched_text (= original text if not match were found)
-            - user_data
-            - score
-
-        Lower scores means better match.
-
-    Note
-    ----
-
-    We (the hackedit team) changed the implementation a bit to be more fault
-    tolerant (user might make some typos and the results should ignore those
-    typos).
-    """
-    # First remove spaces from query
-
-    # Make sure user did not insert a repeating symbol
-
-    results = []
-
-    for user_data, choice in choices:
-        to_remove = 0
-        if query:
-            for i in reversed(range(len(query))):
-                my_query = query[:i + 1]
-                r = re.search(get_search_regex(my_query, ignore_case), choice)
-                if my_query and r:
-                    original_choice, enriched_text, score = get_search_score(
-                        query, choice, ignore_case, False, template)
-                    result = original_choice, user_data, enriched_text, \
-                        score - to_remove
-                    break
-                else:
-                    if my_query and not r:
-                        result = (choice, user_data, choice, NOT_FOUND_SCORE)
-                    else:
-                        result = (choice, user_data, choice, NO_SCORE)
-                to_remove -= 10  # not exact match (typos)
-        else:
-            result = (choice, user_data, choice, NO_SCORE)
-
-        if not valid_only or result[-1] != NOT_FOUND_SCORE:
-            results.append(result)
-
-    if sort:
-        results = sorted(results, key=lambda row: row[-1])
-
-    return results
 
 
 def _logger():

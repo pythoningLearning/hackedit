@@ -10,7 +10,7 @@ pyqode.rst
 pyqode.json
 future
 pygments
-jedi
+-e git://github.com/ColinDuquesnoy/jedi.git@bugfix/performances_degradation#egg=jedi
 pep8
 pyflakes
 restructuredtext_lint

@@ -34,6 +34,7 @@ class SubprocessTaskHandle:
         :param message: Message associated with the progress update
         :param progress: New progress value.
         """
+        print(message)
         # send progress though stream (much more efficient than using sockets).
         print('Progress update: %s|%d' % (message, progress))
 

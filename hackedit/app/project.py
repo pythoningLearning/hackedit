@@ -1,14 +1,13 @@
 """
 This plugin show the project contents in a tree view.
 """
+import pkg_resources
 import logging
 import mimetypes
 import os
 import shlex
 import subprocess
-import time
 import webbrowser
-from fnmatch import fnmatch
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.api import DelayJobRunner, TextHelper
@@ -21,108 +20,39 @@ from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import FileIconProvider
 from hackedit.app import settings, boss_wrapper as boss, common
 from hackedit.app.dialogs.dlg_ignore import DlgIgnore
+from hackedit.app.indexing.backend import index_project_files
 from hackedit.app.widgets.locator import LocatorWidget
 from hackedit.app.workspaces import WorkspaceManager
-
-
-try:
-    # new scandir function in python 3.5
-    from os import scandir as listdir
-except ImportError:
-    try:
-        # new scandir function from scandir package on pypi
-        from scandir import scandir as listdir
-    except ImportError:
-        # scandir package not found, use the slow listdir function
-        from os import listdir
 
 
 def _logger():
     return logging.getLogger(__name__)
 
 
-NB_FILES_LIMIT = 1000
+class ProjectIndexor:
+    def __init__(self, project, parser_plugins):
+        self.project = project
+        self._parsers = parser_plugins
+        self._running_task = None
+        self.db_path = os.path.join(self.project, '.hackedit', 'project.db')
+        self.perform_indexing()
 
+    def cancel(self):
+        if self._running_task:
+            self._running_task.cancel()
+        self._running_task = None
 
-def ignore_path(path, ignore_patterns=None):
-    """
-    Utility function that checks if a given path should be ignored.
+    def perform_indexing(self):
+        if self._running_task is None:
+            ignored_patterns = ProjectExplorer.get_ignored_patterns()
+            args = self.db_path, self.project, ignored_patterns, self._parsers
+            self._running_task = api.tasks.start(
+                _('Indexing project files (%r)') % os.path.split(
+                    self.project)[1], index_project_files,
+                self._on_finished, cancellable=True, args=args)
 
-    A path is ignored if it matches one of the ignored_patterns.
-
-    :param path: the path to check
-    :param ignore_patterns: The ignore patters to respect.
-        If none, :func:hackedit.api.settings.ignore_patterns() is used instead.
-    :returns: True if the path is in an directory that must be ignored
-        or if the file name matches an ignore pattern, otherwise False.
-    """
-    if ignore_patterns is None:
-        ignore_patterns = utils.get_ignored_patterns()
-
-    def ignore(name):
-        for ptrn in ignore_patterns:
-            if fnmatch(name, ptrn):
-                return True
-
-    for part in os.path.normpath(path).split(os.path.sep):
-        if part and ignore(part):
-            return True
-    return False
-
-
-def scandir(directory, ignore_patterns, total):
-    files = []
-    print('scanning directory: %s' % directory)
-    ignore_patterns += ['*.exe', '*.dll', '*.usr', '*.so', '*.dylib', '*.svg',
-                        '*.png', '*.jpeg', '*.jpg', '*.tga', '*.gif', '*.psd']
-    join = os.path.join
-    isfile = os.path.isfile
-    isdir = os.path.isdir
-    append = files.append
-    for path in listdir(directory):
-        try:
-            path = path.name
-        except AttributeError:
-            _logger().debug('using the old python api for scanning '
-                            'directories')
-        full_path = join(directory, path)
-        ignored = ignore_path(full_path, ignore_patterns)
-        if not ignored:
-            if isfile(full_path):
-                append(full_path)
-                total += 1
-                if total > NB_FILES_LIMIT:
-                    return files, total
-            elif isdir(full_path):
-                try:
-                    results, total = scandir(full_path, ignore_patterns, total)
-                    files += results
-                except PermissionError:
-                    _logger().warn('failed to scan directory %r, permission '
-                                   'error', full_path)
-            time.sleep(0)
-    return files, total
-
-
-def scan_project_directories(_, directories, ignore_patterns, root_proj):
-    files = []
-    total = 0
-    for directory in directories:
-        try:
-            results, total = scandir(directory, ignore_patterns, total)
-            files += results
-        except PermissionError:
-            _logger().warn('failed to scan directory %r, permission '
-                           'error', directory)
-    files = sorted(files)
-    cache = api.project.load_user_cache(root_proj)
-    cache['project_files'] = files
-    api.project.save_user_cache(root_proj, cache)
-
-    if total > NB_FILES_LIMIT:
-        return False
-
-    return True
+    def _on_finished(self, *args):
+        self._running_task = None
 
 
 class ProjectExplorer(QtCore.QObject):
@@ -138,13 +68,15 @@ class ProjectExplorer(QtCore.QObject):
     def __init__(self, window):
         super().__init__()
         self.main_window = window
+        self._parser_plugins = []
+        self._indexors = []
         self._locator = LocatorWidget(self.main_window)
         self._locator.activated.connect(self._on_locator_activated)
         self._locator.cancelled.connect(self._on_locator_cancelled)
         self._widget = QtWidgets.QWidget(self.main_window)
         self._job_runner = DelayJobRunner()
         self._cached_files = []
-        self._task_running = False
+        self._running_tasks = False
         self._widget.installEventFilter(self)
         self._setup_filesystem_treeview()
         self._setup_prj_selector_widget(self.main_window)
@@ -152,11 +84,28 @@ class ProjectExplorer(QtCore.QObject):
         self._setup_tab_bar_context_menu(self.main_window)
         self._setup_locator()
         self._setup_project_menu()
+        self._load_parser_plugins()
         api.signals.connect_slot(api.signals.CURRENT_EDITOR_CHANGED,
                                  self._on_current_editor_changed)
+        for p in api.project.get_projects():
+            self._indexors.append(ProjectIndexor(p, self._parser_plugins))
+
+    def _load_parser_plugins(self):
+        _logger().debug('loading symbol parser plugins')
+        for entrypoint in pkg_resources.iter_entry_points(
+                api.plugins.SymbolParserPlugin.ENTRYPOINT):
+            _logger().debug('  - loading plugin: %s', entrypoint)
+            try:
+                plugin = entrypoint.load()()
+            except ImportError:
+                _logger().exception('failed to load plugin')
+            else:
+                self._parser_plugins.append(plugin)
+                _logger().debug('  - plugin loaded: %s', entrypoint)
+        _logger().debug('indexor plugins: %r', self._parser_plugins)
 
     @staticmethod
-    def _get_ignored_patterns():
+    def get_ignored_patterns():
         patterns = utils.get_ignored_patterns()
         prj_path = api.project.get_root_project()
         # project specific ignore patterns
@@ -168,15 +117,17 @@ class ProjectExplorer(QtCore.QObject):
         return patterns
 
     def _run_update_projects_model_thread(self):
-        if not self._task_running:
-            self._task_running = True
-            directories = api.project.get_projects()
-            api.tasks.start(_('Indexing project files'),
-                            scan_project_directories,
-                            self._on_file_list_available,
-                            args=(directories, self._get_ignored_patterns(),
-                                  api.project.get_root_project()),
-                            cancellable=False)
+        if not self._running_tasks:
+            self._running_tasks += 1
+            for project_dir in api.project.get_projects():
+                db_path = os.path.join(project_dir, '.hackedit', 'project.db')
+                api.tasks.start(
+                    _('Indexing project files (%r)') % os.path.split(
+                        project_dir)[1],
+                    index_project_files,
+                    self._on_file_list_available,
+                    args=(db_path, project_dir, self.get_ignored_patterns(),
+                          self._parser_plugins), cancellable=True)
 
     @staticmethod
     def get_files():
@@ -204,9 +155,8 @@ class ProjectExplorer(QtCore.QObject):
         if self._last_ignore_patterns != new_patterns:
             self._last_ignore_patterns = new_patterns
             self.view.clear_ignore_patterns()
-            self.view.add_ignore_patterns(self._get_ignored_patterns())
+            self.view.add_ignore_patterns(self.get_ignored_patterns())
             self.view.set_root_path(api.project.get_current_project())
-        self._run_update_projects_model_thread()
         self.view.context_menu.update_show_in_explorer_action()
         self._tab_bar_action_show_in_explorer.setText(
             _('Show in %s') % FileSystemContextMenu.get_file_explorer_name())
@@ -223,7 +173,7 @@ class ProjectExplorer(QtCore.QObject):
         self._update_templates_menu()
 
     def _on_file_list_available(self, status):
-        self._task_running = False
+        self._running_tasks = False
         if status is False:
             # too much file indexed, display a warning to let the user know
             # he should ignore some unwanted directories.
@@ -408,7 +358,7 @@ class ProjectExplorer(QtCore.QObject):
         self.view = FileSystemTreeView(self._widget)
         self.view.setMinimumWidth(200)
         self._last_ignore_patterns = ';'.join(utils.get_ignored_patterns())
-        self.view.add_ignore_patterns(self._get_ignored_patterns())
+        self.view.add_ignore_patterns(self.get_ignored_patterns())
         self.view.file_created.connect(self._on_file_created)
         self.view.file_deleted.connect(self._on_file_deleted)
         self.view.file_renamed.connect(self._on_file_renamed)
@@ -492,13 +442,10 @@ class ProjectExplorer(QtCore.QObject):
                 usd['ignored_patterns'] = patterns
                 api.project.save_user_config(prj, usd)
                 self.view.clear_ignore_patterns()
-                self.view.add_ignore_patterns(self._get_ignored_patterns())
+                self.view.add_ignore_patterns(self.get_ignored_patterns())
                 # force reload
                 self.view.set_root_path(api.project.get_current_project())
-                # update the list of project files, this should trigger an
-                # indexation.
-                self._run_update_projects_model_thread()
-                self.main_window.indexor.force_stop()
+                self._reindex_all_projects()
 
     def _on_about_to_show_context_menu(self, path):
         is_html = mimetypes.guess_type(path)[0] == 'text/html'
@@ -576,6 +523,7 @@ class ProjectExplorer(QtCore.QObject):
         self.main_window.current_project = active_path
 
     def _on_path_added(self, path):
+        print('PATH ADDED', path)
         if os.path.isfile(path):
             return
         index = self._combo_projects.count()
@@ -585,7 +533,7 @@ class ProjectExplorer(QtCore.QObject):
             self._combo_projects.count() > 1)
         data = load_user_config(api.project.get_projects()[0])
         data['active_project'] = path
-        self._run_update_projects_model_thread()
+        self._indexors.append(ProjectIndexor(path, self._parser_plugins))
 
     def _on_current_index_changed(self, index):
         new_path = self._combo_projects.itemData(index)
@@ -595,7 +543,12 @@ class ProjectExplorer(QtCore.QObject):
     def _refresh(self):
         self.view.set_root_path('/')
         self.view.set_root_path(api.project.get_current_project())
-        self._run_update_projects_model_thread()
+        self._reindex_all_projects()
+
+    def _reindex_all_projects(self):
+        for indexor in self._indexors:
+            indexor.cancel()
+            indexor.perform_indexing()
 
     def _remove_current_project(self):
         path = self._combo_projects.itemData(
@@ -617,19 +570,23 @@ class ProjectExplorer(QtCore.QObject):
         finally:
             data['linked_paths'] = linked_paths
             save_user_config(initial_path, data)
-            self._run_update_projects_model_thread()
+            for indexor in self._indexors:
+                if indexor.project == path:
+                    self._indexors.remove(indexor)
 
     def _on_file_created(self, path):
         api.editor.open_file(path)
-        self._run_update_projects_model_thread()
+        # todo: indexate new file
 
     def _on_file_renamed(self, old_path, new_path):
         self.main_window.tab_widget.rename_document(old_path, new_path)
-        self._run_update_projects_model_thread()
+        # todo: update file_path
 
     def _on_file_deleted(self, path):
         self.main_window.tab_widget.close_document(path)
-        self._job_runner.request_job(self._run_update_projects_model_thread)
+        # todo: remove file from db
+
+    # todo: on file saved
 
     @staticmethod
     def _on_locator_activated(path, line):

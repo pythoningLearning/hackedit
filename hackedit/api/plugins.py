@@ -173,17 +173,18 @@ class WorkspaceProviderPlugin:
         pass
 
 
-class SymbolIndexorPlugin:
+class SymbolParserPlugin:
     """
-    Plugin used to parse and store the symbols of a given file.
+    Plugin used to parse the symbols of a file.
 
     The plugin must declare the mimetypes it can handle and implement
     the ``parse`` method.
 
-    The parse method will inspect the content of a file and return a list
-    of :class:`pyqode.core.share.Definition`.
+    The parse method will parse the content of a file and return a list
+    of :class:`pyqode.core.share.Definition` that will be written to the
+    project's index database by the indexing backend.
     """
-    ENTRYPOINT = 'hackedit.plugins.symbol_indexors'
+    ENTRYPOINT = 'hackedit.plugins.symbol_parsers'
 
     #: Specify the mimetypes that can be handled by a particular indexor
     #: plugin

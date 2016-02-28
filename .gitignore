@@ -67,6 +67,7 @@ win32/build
 *.usr
 history
 objectdb
+*.db
 
 tests/**/.hackedit
 
@@ -74,3 +75,4 @@ tests/**/.hackedit
 WinPython.zip
 .DS_Store
 *.log.*
+/src/
