@@ -26,11 +26,6 @@ class HtmlPreview(api.plugins.WorkspacePlugin):
                                      self.set_editor)
             self.preview.hide_requested.connect(self._dock.hide)
             self.preview.show_requested.connect(self._dock.show)
-            if api.utils.is_dark_theme():
-                p = self.preview.palette()
-                p.setColor(QtGui.QPalette.Base, QtCore.Qt.white)
-                self.preview.setPalette(p)
-
             self._dock.hide()
 
     def set_editor(self, editor):

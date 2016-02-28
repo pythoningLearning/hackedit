@@ -1,8 +1,58 @@
-"""Logging Framework Extension"""
+"""
+The Logging Extension provides log handling based on
+the standard :py:class:`logging.Logger`, and is the default log
+handler used by Cement.
+
+Requirements
+------------
+
+ * No external dependencies.
+
+Configuration
+-------------
+
+This extension honors the following configuration settings from the config
+section ``log.logging``:
+
+    * level
+    * file
+    * to_console
+    * rotate
+    * max_bytes
+    * max_files
+
+
+A sample config section (in any config file) might look like:
+
+.. code-block:: text
+
+    [log.logging]
+    file = /path/to/config/file
+    level = info
+    to_console = true
+    rotate = true
+    max_bytes = 512000
+    max_files = 4
+
+Usage
+-----
+
+.. code-block:: python
+
+    from cement.core.foundation import CementApp
+
+    with MyApp() as app:
+        app.log.info("This is an info message")
+        app.log.warn("This is an warning message")
+        app.log.error("This is an error message")
+        app.log.fatal("This is a fatal message")
+        app.log.debug("This is a debug message")
+
+"""
 
 import os
 import logging
-from ..core import exc, log, handler
+from ..core import exc, log
 from ..utils.misc import is_true, minimal_logger
 from ..utils import fs
 
@@ -33,35 +83,12 @@ class LoggingLogHandler(log.CementLogHandler):
     interface, and sets up the logging facility using the standard Python
     `logging <http://docs.python.org/library/logging.html>`_ module.
 
-    Configuration Options
-
-    The following configuration options are recognized in this class
-    (assuming that Meta.config_section is `log.logging`):
-
-        * level
-        * file
-        * to_console
-        * rotate
-        * max_bytes
-        * max_files
-
-
-    A sample config section (in any config file) might look like:
-
-    .. code-block:: text
-
-        [log.logging]
-        file = /path/to/config/file
-        level = info
-        to_console = true
-        rotate = true
-        max_bytes = 512000
-        max_files = 4
-
     """
 
-    #: Handler meta-data.
     class Meta:
+
+        """Handler meta-data."""
+
         #: The interface that this class implements.
         interface = log.ILog
 
@@ -162,11 +189,12 @@ class LoggingLogHandler(log.CementLogHandler):
         return logging.getLevelName(self.backend.level)
 
     def clear_loggers(self, namespace):
-        """Clear any previously configured loggers for `namespace`."""
+        """Clear any previously configured loggers for ``namespace``."""
 
         for i in logging.getLogger("cement:app:%s" % namespace).handlers:
             logging.getLogger("cement:app:%s" % namespace).removeHandler(i)
-            self.backend = logging.getLogger("cement:app:%s" % namespace)
+
+        self.backend = logging.getLogger("cement:app:%s" % namespace)
 
     def _get_console_format(self):
         if self.get_level() == logging.getLevelName(logging.DEBUG):
@@ -192,6 +220,7 @@ class LoggingLogHandler(log.CementLogHandler):
 
     def _setup_console_log(self):
         """Add a console log handler."""
+        namespace = self._meta.namespace
         to_console = self.app.config.get(self._meta.config_section,
                                          'to_console')
         if is_true(to_console):
@@ -203,11 +232,17 @@ class LoggingLogHandler(log.CementLogHandler):
         else:
             console_handler = NullHandler()
 
+        # FIXME: self._clear_loggers() should be preventing this but its not!
+        for i in logging.getLogger("cement:app:%s" % namespace).handlers:
+            if isinstance(i, logging.StreamHandler):
+                self.backend.removeHandler(i)
+
         self.backend.addHandler(console_handler)
 
     def _setup_file_log(self):
         """Add a file log handler."""
 
+        namespace = self._meta.namespace
         file_path = self.app.config.get(self._meta.config_section, 'file')
         rotate = self.app.config.get(self._meta.config_section, 'rotate')
         max_bytes = self.app.config.get(self._meta.config_section,
@@ -237,6 +272,11 @@ class LoggingLogHandler(log.CementLogHandler):
             file_handler.setLevel(getattr(logging, self.get_level()))
         else:
             file_handler = NullHandler()
+
+        # FIXME: self._clear_loggers() should be preventing this but its not!
+        for i in logging.getLogger("cement:app:%s" % namespace).handlers:
+            if isinstance(i, file_handler.__class__):   # pragma: nocover
+                self.backend.removeHandler(i)           # pragma: nocover
 
         self.backend.addHandler(file_handler)
 
@@ -331,4 +371,4 @@ class LoggingLogHandler(log.CementLogHandler):
 
 
 def load(app):
-    handler.register(LoggingLogHandler)
+    app.handler.register(LoggingLogHandler)
