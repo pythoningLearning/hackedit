@@ -7,7 +7,7 @@ from pyqode.core.api import DelayJobRunner, TextHelper, utils
 
 from hackedit.api import editor, index, project, widgets
 from hackedit.app.forms import locator_ui
-from hackedit.app.index.db import get_search_tokens
+from hackedit.app.index.db import get_search_tokens, DbHelper
 from hackedit.app.widgets.html_delegate import HTMLDelegate
 
 
@@ -297,7 +297,9 @@ class LocatorWidget(QtWidgets.QFrame):
     @staticmethod
     def get_match_spans(expr, item):
         spans = []
-        for token in get_search_tokens(expr):
+        item = item.lower()
+        search_expr = DbHelper._get_searchable_name(expr)
+        for token in get_search_tokens(search_expr):
             if not token:
                 continue
             try:
@@ -312,7 +314,7 @@ class LocatorWidget(QtWidgets.QFrame):
 
     @staticmethod
     def get_enriched_text(item, expr):
-        spans = LocatorWidget.get_match_spans(expr.lower(), item.lower())
+        spans = LocatorWidget.get_match_spans(expr, item)
         offset = 0
         enriched = ''
         for start, end in sorted(spans, key=lambda x: x[0]):

@@ -7,6 +7,8 @@ import sqlite3
 
 import sys
 
+import re
+
 from hackedit.api import system
 
 
@@ -221,7 +223,8 @@ class DbHelper:
             self.conn.commit()
             fid = self._get_last_insert_row_id(c)
             # add to file index
-            sql = "INSERT INTO File_index(FILE_ID, CONTENT) VALUES('%d', '%s');" % (fid, file_name)
+            sql = "INSERT INTO File_index(FILE_ID, CONTENT) VALUES('%d', '%s');" % (
+                fid, self._get_searchable_name(file_name))
             c.execute(sql)
             self.conn.commit()
             return fid
@@ -297,7 +300,8 @@ class DbHelper:
             if name_filter:
                 sql = 'SELECT * FROM File WHERE PROJECT_ID IN {0} AND ' \
                       'FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE CONTENT MATCH "*{1}*") ' \
-                      'ORDER BY MATCH_RATIO(FILE_NAME, "{1}") ASC;'.format(project_ids, name_filter)
+                      'ORDER BY MATCH_RATIO(FILE_NAME, "{2}") ASC;'.format(
+                        project_ids, self._get_searchable_name(name_filter), name_filter)
             else:
                 sql = 'SELECT * FROM File WHERE PROJECT_ID IN {0} ORDER BY FILE_NAME ASC;'.format(project_ids)
         else:
@@ -305,7 +309,8 @@ class DbHelper:
             if name_filter:
                 sql = 'SELECT * FROM File ' \
                       'WHERE FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE CONTENT MATCH "*{0}*")' \
-                      'ORDER BY MATCH_RATIO(FILE_NAME, "{0}") ASC;'.format(name_filter)
+                      'ORDER BY MATCH_RATIO(FILE_NAME, "{1}") ASC;'.format(
+                        self._get_searchable_name(name_filter), name_filter)
             else:
                 sql = 'SELECT * FROM File ORDER BY FILE_NAME ASC LIMIT 50;'
         c = self.conn.cursor()
@@ -381,7 +386,8 @@ class DbHelper:
 
         sid = self._get_last_insert_row_id(c)
 
-        sql = "INSERT INTO Symbol_index(SYMBOL_ID, CONTENT) VALUES('%d', '%s');" % (sid, name)
+        sql = "INSERT INTO Symbol_index(SYMBOL_ID, CONTENT) VALUES('%d', '%s');" % (
+            sid, self._get_searchable_name(name))
         c.execute(sql)
         self.conn.commit()
 
@@ -420,7 +426,8 @@ class DbHelper:
             if name_filter:
                 sql = 'SELECT * FROM Symbol WHERE FILE_ID = {0} AND ' \
                       'SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
-                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{1}") ASC;'.format(file_id, name_filter)
+                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{2}") ASC;'.format(
+                        file_id, self._get_searchable_name(name_filter), name_filter)
             else:
                 sql = 'SELECT * FROM Symbol WHERE FILE_ID = {0} ORDER BY SYMBOL_NAME ASC;'.format(file_id)
         elif project_ids:
@@ -430,7 +437,8 @@ class DbHelper:
                 sql = 'SELECT * FROM Symbol INNER JOIN File ' \
                       'WHERE Symbol.FILE_ID=File.FILE_ID AND File.PROJECT_ID IN {0} AND ' \
                       'Symbol.SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
-                      'ORDER BY MATCH_RATIO(Symbol.SYMBOL_NAME, "{1}") ASC;'.format(project_ids, name_filter)
+                      'ORDER BY MATCH_RATIO(Symbol.SYMBOL_NAME, "{2}") ASC;'.format(
+                        project_ids, self._get_searchable_name(name_filter), name_filter)
             else:
                 sql = 'SELECT * FROM Symbol INNER JOIN File ' \
                       'WHERE Symbol.FILE_ID=File.FILE_ID AND File.PROJECT_ID IN {0} ' \
@@ -440,7 +448,8 @@ class DbHelper:
             if name_filter:
                 sql = 'SELECT * FROM Symbol ' \
                       'WHERE SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{0}*")' \
-                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{0}") ASC;'.format(name_filter)
+                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{1}") ASC;'.format(
+                        self._get_searchable_name(name_filter), name_filter)
             else:
                 sql = 'SELECT * FROM Symbol ORDER BY SYMBOL_NAME ASC;'
         c = self.conn.cursor()
@@ -470,6 +479,17 @@ class DbHelper:
         """
         c.execute("SELECT last_insert_rowid();")
         return int(c.fetchone()['last_insert_rowid()'])
+
+    @staticmethod
+    def _get_searchable_name(name):
+        """
+        Replaces capital letters by _ + small letter
+
+        :param name: name to conver
+        :return: converted name
+        """
+        v = ''.join([('_' + l.lower()) if l.isupper() else l for l in name])
+        return v
 
 
 def match_ratio(item, expr):
