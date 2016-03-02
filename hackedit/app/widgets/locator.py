@@ -3,14 +3,14 @@ import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.api import DelayJobRunner, TextHelper, utils
-from pyqode.core.share import Definition
 
-from hackedit.api import editor, project, widgets
+from hackedit.api import editor, index, project, widgets
 from hackedit.app.forms import locator_ui
-from hackedit.app.indexing import db
 from hackedit.app.widgets.html_delegate import HTMLDelegate
 
+
 LIMIT = 50  # 50 items max
+
 
 class LocatorWidget(QtWidgets.QFrame):
     """
@@ -56,22 +56,27 @@ class LocatorWidget(QtWidgets.QFrame):
         self.ui.treeWidget.currentItemChanged.connect(
             self._on_current_item_changed)
         self.ui.treeWidget.itemDoubleClicked.connect(self._activate)
+        self.ui.cb_non_project_files.toggled.connect(self._search)
 
     def showEvent(self, ev):
         self._activated = False
         self.ui.lineEdit.clear()
         if self.mode == self.MODE_GOTO_ANYTHING:
             self.search_files()
+            self.ui.cb_non_project_files.setVisible(True)
         elif self.mode == self.MODE_GOTO_SYMBOL:
             self.ui.lineEdit.setText('@')
             self.search_symbol()
+            self.ui.cb_non_project_files.setVisible(False)
         elif self.mode == self.MODE_GOTO_SYMBOL_IN_PROJECT:
             self.ui.lineEdit.setText('!')
             self.search_symbol_in_project()
+            self.ui.cb_non_project_files.setVisible(True)
         elif self.mode == self.MODE_GOTO_LINE:
             self.ui.lineEdit.setText(':')
             self.ui.treeWidget.hide()
             self.adjustSize()
+            self.ui.cb_non_project_files.setVisible(False)
         self.ui.lineEdit.setFocus()
         super().showEvent(ev)
 
@@ -96,6 +101,10 @@ class LocatorWidget(QtWidgets.QFrame):
                     next_item = self.ui.treeWidget.topLevelItem(
                         self.ui.treeWidget.topLevelItemCount() - 1)
                 self.ui.treeWidget.setCurrentItem(next_item)
+                return True
+            if ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter] and ev.modifiers() & QtCore.Qt.ShiftModifier:
+                self.ui.cb_non_project_files.setChecked(not self.ui.cb_non_project_files.isChecked())
+                self.ui.lineEdit.setFocus(True)
                 return True
             elif ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter]:
                 self._activate()
@@ -135,43 +144,55 @@ class LocatorWidget(QtWidgets.QFrame):
         text = self.ui.lineEdit.text()
         # check the source to use for search (symbols or files).
         if self.GOTO_SYMBOL_PATTERN.match(text):
+            self.ui.cb_non_project_files.setVisible(False)
             if self.GOTO_LINE_PATTERN.match(text):
                 self.ui.treeWidget.hide()
                 self.adjustSize()
-            else:
+            elif editor.get_current_editor():
                 self.search_symbol()
         elif self.GOTO_SYMBOL_IN_PROJ_PATTERN.match(text):
             if self.GOTO_LINE_PATTERN.match(text):
+                self.ui.cb_non_project_files.setVisible(False)
                 self.ui.treeWidget.hide()
                 self.adjustSize()
             else:
+                self.ui.cb_non_project_files.setVisible(True)
                 self.search_symbol_in_project()
         else:
             if not text.startswith(':'):
+                self.ui.cb_non_project_files.setVisible(True)
                 self.search_files()
             else:
+                self.ui.cb_non_project_files.setVisible(False)
                 # will be used to goto line in the current editor.
                 self.ui.treeWidget.hide()
                 self.adjustSize()
                 e = editor.get_current_editor()
                 try:
                     TextHelper(e).goto_line(self._get_requested_line_nbr() - 1)
-                except ValueError:
+                except (ValueError, AttributeError):
                     _logger().debug('failed to go to line on editor %r', e)
+
+    def _get_projects(self):
+        if self.ui.cb_non_project_files.isChecked():
+            return None
+        # all active project
+        return project.get_projects()
 
     def search_symbol(self):
         search_term = self._get_search_term()
-        symbols = project.get_project_symbols(
-            file_path=editor.get_current_editor().file.path,
-            name_filter=search_term)
+        fpath = editor.get_current_editor().file.path
+        symbols = index.get_symbols(name_filter=search_term, file=fpath)
+
         # display
         self.ui.treeWidget.clear()
         first_item = None
         for i, (symbol_item, file_item) in enumerate(symbols):
-            name = symbol_item[db.COL_SYMBOL_NAME]
-            line = int(symbol_item[db.COL_SYMBOL_LINE]) + 1
-            path = file_item[db.COL_FILE_PATH]
+            name = symbol_item.name
+            line = symbol_item.line + 1
+            path = file_item.path
             text = '%s<br><i>%s:%d</i>' % (name, path, line)
+
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -179,8 +200,8 @@ class LocatorWidget(QtWidgets.QFrame):
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
-            # if i > LIMIT:
-            #     break
+            if i > LIMIT:
+                break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
@@ -190,14 +211,15 @@ class LocatorWidget(QtWidgets.QFrame):
 
     def search_symbol_in_project(self):
         search_term = self._get_search_term()
-        symbols = project.get_project_symbols(name_filter=search_term)
+        symbols = index.get_symbols(name_filter=search_term, projects=self._get_projects())
+
         # display
         self.ui.treeWidget.clear()
         first_item = None
         for i, (symbol_item, file_item) in enumerate(symbols):
-            name = symbol_item[db.COL_SYMBOL_NAME]
-            line = int(symbol_item[db.COL_SYMBOL_LINE]) + 1
-            path = file_item[db.COL_FILE_PATH]
+            name = symbol_item.name
+            line = symbol_item.line + 1
+            path = file_item.path
             text = '%s<br><i>%s:%d</i>' % (name, path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
@@ -206,8 +228,8 @@ class LocatorWidget(QtWidgets.QFrame):
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
-            # if i > LIMIT:
-            #     break
+            if i > LIMIT:
+                break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
@@ -235,16 +257,15 @@ class LocatorWidget(QtWidgets.QFrame):
 
     def search_files(self):
         name_filter = self._get_search_term()
-
         # get files from db
-        project_files = project.get_project_files(name_filter=name_filter)
+        project_files = index.get_files(name_filter=name_filter, projects=self._get_projects())
 
         # display
         self.ui.treeWidget.clear()
         first_item = None
         for i, file_item in enumerate(project_files):
-            path = file_item[db.COL_FILE_PATH]
-            name = file_item[db.COL_FILE_NAME]
+            path = file_item.path
+            name = file_item.name
             text = '%s<br><i>%s</i>' % (name, path)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
@@ -253,6 +274,8 @@ class LocatorWidget(QtWidgets.QFrame):
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
+            if i > LIMIT:
+                break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)

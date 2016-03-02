@@ -185,6 +185,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notifications = events.Manager(self)
         self.open_folder(path)
         self.project_explorer = ProjectExplorer(self)
+        self.project_explorer.activate()
         self.project_explorer.apply_preferences()
 
         self._update_mem_label_timer = QtCore.QTimer()

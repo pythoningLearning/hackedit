@@ -73,46 +73,48 @@ def get_root_project():
         return None
 
 
-def get_project_files(root_project=None, name_filter=None):
+def get_project_files(project=None, name_filter=None):
     """
     Generator that yields the list of project files.
 
-    :param root_project: The project to get the files from, if None all open projects
-        will be used.
-    :param name_filter: The name filter to use to filter the project files. If None, the whole list
-        will be generated.
+    :param project: The project to get the files from, if None all open
+        projects will be used.
+    :param name_filter: The name filter to use to filter the project files.
+
+    If None, the whole list will be generated.
     """
-    from hackedit.app.indexing.db import DbHelper
-    if root_project is None:
+    from hackedit.app.index.db import DbHelper
+    if project is None:
         projects = get_projects()
     else:
-        projects = [root_project]
+        projects = [project]
     for proj in projects:
         db_path = os.path.join(proj, '.hackedit', 'project.db')
         try:
             with DbHelper(db_path) as dbh:
                 if name_filter:
-                    generator = dbh.get_files(name_filter)
+                    generator = dbh.get_project_files(name_filter)
                 else:
-                    generator = dbh.get_all_files()
+                    generator = dbh.get_files()
                 for file in generator:
                     yield file
         except Exception:
-            _logger().exception('failed to get project files for project: %r', proj)
+            _logger().exception('failed to get project files for project: %r',
+                                proj)
 
 
-def get_project_symbols(root_project=None, file_path=None, name_filter=None):
+def get_project_symbols(project=None, file_path=None, name_filter=None):
     """
     Returns a dict that contains all the project symbols.
 
     Each key in the dict is a file path. Each value is a list of
     :class:`pyqode.core.share.Definition` for the associated file path.
     """
-    from hackedit.app.indexing.db import DbHelper, COL_SYMBOL_FILE_ID
-    if root_project is None:
+    from hackedit.app.index.db import DbHelper, COL_SYMBOL_FILE_ID
+    if project is None:
         projects = get_projects()
     else:
-        projects = [root_project]
+        projects = [project]
     for proj in projects:
         db_path = os.path.join(proj, '.hackedit', 'project.db')
         try:
@@ -121,7 +123,8 @@ def get_project_symbols(root_project=None, file_path=None, name_filter=None):
                     if file_path:
                         file = dbh.get_file_by_path(file_path)
                         if file:
-                            generator = dbh.get_file_symbols(file['FILE_ID'], name_filter)
+                            generator = dbh.get_file_symbols(file['FILE_ID'],
+                                                             name_filter)
                         else:
                             return
                     else:
@@ -130,7 +133,8 @@ def get_project_symbols(root_project=None, file_path=None, name_filter=None):
                     if file_path:
                         file = dbh.get_file_by_path(file_path)
                         if file:
-                            generator = dbh.get_all_file_symbols(file['FILE_ID'])
+                            generator = dbh.get_all_file_symbols(
+                                file['FILE_ID'])
                         else:
                             return
                     else:
@@ -139,7 +143,8 @@ def get_project_symbols(root_project=None, file_path=None, name_filter=None):
                     file = dbh.get_file_by_id(symbol[COL_SYMBOL_FILE_ID])
                     yield symbol, file
         except Exception:
-            _logger().exception('failed to get project files for project: %r', proj)
+            _logger().exception('failed to get project files for project: %r',
+                                proj)
 
 
 def set_project_symbols(project_path, symbols):

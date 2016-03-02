@@ -641,6 +641,44 @@ class PathLineEdit(QtWidgets.QLineEdit):
             self.setFocus()
 
 
+class ElidedLabel(QtWidgets.QLabel):
+    """
+    Label with text elision.
+    """
+    @property
+    def elide_mode(self):
+        return self._elide_mode
+
+    @elide_mode.setter
+    def elide_mode(self, mode):
+        self._elide_mode = mode
+        self.updateGeometry()
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self._elide_mode = QtCore.Qt.ElideMiddle
+        self._cached = ''
+
+    def setText(self, txt):
+        self._cache_elided_text(self.width())
+        super().setText(txt)
+
+    def _cache_elided_text(self, width):
+        self._cached = self.fontMetrics().elidedText(self.text(), self.elide_mode, width - 10,
+                                                     QtCore.Qt.TextShowMnemonic);
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        self._cache_elided_text(e.size().width())
+
+    def paintEvent(self, e):
+        if self._elide_mode == QtCore.Qt.ElideNone:
+            super().paintEvent(e)
+        else:
+            p = QtGui.QPainter(self)
+            p.drawText(0, 0, self.geometry().width(), self.geometry().height(), self.alignment(), self._cached)
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     edit = PathLineEdit()

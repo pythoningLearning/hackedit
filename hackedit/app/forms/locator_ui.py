@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/locator.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/locator.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Frame(object):
     def setupUi(self, Frame):
         Frame.setObjectName("Frame")
-        Frame.resize(400, 300)
+        Frame.resize(698, 274)
         Frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         Frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.verticalLayout = QtWidgets.QVBoxLayout(Frame)
@@ -40,6 +40,9 @@ class Ui_Frame(object):
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "1")
         self.verticalLayout.addWidget(self.treeWidget)
+        self.cb_non_project_files = QtWidgets.QCheckBox(Frame)
+        self.cb_non_project_files.setObjectName("cb_non_project_files")
+        self.verticalLayout.addWidget(self.cb_non_project_files)
 
         self.retranslateUi(Frame)
         QtCore.QMetaObject.connectSlotsByName(Frame)
@@ -52,5 +55,6 @@ class Ui_Frame(object):
         self.bt_infos.setText(_("..."))
         self.bt_close.setToolTip(_("Close"))
         self.bt_close.setText(_("..."))
+        self.cb_non_project_files.setText(_("Include non-project files (Shift+Enter)"))
 
 from pyqode.core.widgets import PromptLineEdit

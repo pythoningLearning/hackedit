@@ -149,7 +149,11 @@ class Task(QtCore.QObject):
         .. note:: It is up to the worker implementation to check this flag to
                   and exit from its process method.
         """
-        self.finished.emit(self)
+        try:
+            self.finished.emit(self)
+        except RuntimeError as e:
+            # wrapped C/C++ object of type Task has been
+            return
         try:
             self.process.terminate()
         except AttributeError:
@@ -303,10 +307,8 @@ class TaskListWidget(QtWidgets.QWidget):
         spacer = QtWidgets.QSpacerItem(
             20, 20, vPolicy=QtWidgets.QSizePolicy.Expanding)
         self.vertical_layout.addSpacerItem(spacer)
-        # self.vertical_layout.setContentsMargins(0, 0, 0, 0)
-        self.vertical_layout.setSizeConstraint(
-            self.vertical_layout.SetMinimumSize)
         self.setLayout(self.vertical_layout)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         self.tm = task_manager
         self.tm.task_started.connect(self._add_task)
         self.tm.task_finished.connect(self._rm_task)

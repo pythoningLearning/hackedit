@@ -15,12 +15,12 @@ from pyqode.core.widgets import FileSystemTreeView, FileSystemContextMenu, \
     FileSystemHelper
 
 from hackedit import api
-from hackedit.api import shortcuts, utils
+from hackedit.api import shortcuts, utils, index
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import FileIconProvider
 from hackedit.app import settings, boss_wrapper as boss, common
 from hackedit.app.dialogs.dlg_ignore import DlgIgnore
-from hackedit.app.indexing.backend import index_project_files
+from hackedit.app.index.backend import index_project_files
 from hackedit.app.widgets.locator import LocatorWidget
 from hackedit.app.workspaces import WorkspaceManager
 
@@ -30,11 +30,13 @@ def _logger():
 
 
 class ProjectIndexor:
-    def __init__(self, project, parser_plugins):
+    """
+    Utility class to perform project indexation.
+    """
+    def __init__(self, project, window):
         self.project = project
-        self._parsers = parser_plugins
+        self.main_window = window
         self._running_task = None
-        self.db_path = os.path.join(self.project, '.hackedit', 'project.db')
         self.perform_indexing()
 
     def cancel(self):
@@ -44,14 +46,11 @@ class ProjectIndexor:
 
     def perform_indexing(self):
         if self._running_task is None:
-            ignored_patterns = ProjectExplorer.get_ignored_patterns()
-            args = self.db_path, self.project, ignored_patterns, self._parsers
-            self._running_task = api.tasks.start(
-                _('Indexing project files (%r)') % os.path.split(
-                    self.project)[1], index_project_files,
-                self._on_finished, cancellable=True, args=args)
+            _logger().info('indexing project %r', self.project)
+            self._running_task = index.perform_indexation(self.project, callback=self._on_finished)
 
     def _on_finished(self, *args):
+        _logger().info('finished indexing of project %r', self.project)
         self._running_task = None
 
 
@@ -68,7 +67,7 @@ class ProjectExplorer(QtCore.QObject):
     def __init__(self, window):
         super().__init__()
         self.main_window = window
-        self._parser_plugins = []
+        self.parser_plugins = []
         self._indexors = []
         self._locator = LocatorWidget(self.main_window)
         self._locator.activated.connect(self._on_locator_activated)
@@ -87,8 +86,10 @@ class ProjectExplorer(QtCore.QObject):
         self._load_parser_plugins()
         api.signals.connect_slot(api.signals.CURRENT_EDITOR_CHANGED,
                                  self._on_current_editor_changed)
+
+    def activate(self):
         for p in api.project.get_projects():
-            self._indexors.append(ProjectIndexor(p, self._parser_plugins))
+            self._indexors.append(ProjectIndexor(p, self.main_window))
 
     def _load_parser_plugins(self):
         _logger().debug('loading symbol parser plugins')
@@ -100,9 +101,9 @@ class ProjectExplorer(QtCore.QObject):
             except ImportError:
                 _logger().exception('failed to load plugin')
             else:
-                self._parser_plugins.append(plugin)
+                self.parser_plugins.append(plugin)
                 _logger().debug('  - plugin loaded: %s', entrypoint)
-        _logger().debug('indexor plugins: %r', self._parser_plugins)
+        _logger().debug('indexor plugins: %r', self.parser_plugins)
 
     @staticmethod
     def get_ignored_patterns():
@@ -127,14 +128,7 @@ class ProjectExplorer(QtCore.QObject):
                     index_project_files,
                     self._on_file_list_available,
                     args=(db_path, project_dir, self.get_ignored_patterns(),
-                          self._parser_plugins), cancellable=True)
-
-    @staticmethod
-    def get_files():
-        """
-        Returns the filtered list of files for all open projects.
-        """
-        return api.project.get_project_files()
+                          self.parser_plugins), cancellable=True)
 
     def close(self):
         # save active project in first open project
@@ -533,7 +527,7 @@ class ProjectExplorer(QtCore.QObject):
             self._combo_projects.count() > 1)
         data = load_user_config(api.project.get_projects()[0])
         data['active_project'] = path
-        self._indexors.append(ProjectIndexor(path, self._parser_plugins))
+        self._indexors.append(ProjectIndexor(path, self.main_window))
 
     def _on_current_index_changed(self, index):
         new_path = self._combo_projects.itemData(index)
