@@ -48,12 +48,14 @@ def index_project_files(task_handle, project_directory, ignore_patterns, parser_
             _scandir(task_handle, db_helper, proj_id, project_directory, ignore_patterns,
                      parser_plugins, project_directory)
             # remove project paths that do not exist or that have been ignored
-            task_handle.report_progress('Cleaning database', -1)
+            task_handle.report_progress('Cleaning database', 95)
             for file_item in db_helper.get_files(project_ids=[proj_id]):
                 path = file_item[db.COL_FILE_PATH]
                 if not os.path.exists(path) or \
                         _is_ignored_path(path, ignore_patterns):
                     db_helper.delete_file(path)
+                task_handle.report_progress('Cleaning database', -1)
+            task_handle.report_progress('Finished', 100)
     except Exception:
         _logger().exception('exception while indexing project: %s', project_directory)
 
@@ -94,11 +96,11 @@ def _scandir(task_handle, db_helper, proj_id, directory, ignore_patterns, parser
     :type ignore_patterns: list
     """
     rel_dir = os.path.relpath(directory, root_directory)
-    task_handle.report_progress('Indexing %r' % rel_dir, -1)
     join = os.path.join
     isfile = os.path.isfile
     isdir = os.path.isdir
     for path in listdir(directory):
+        task_handle.report_progress('Indexing %r' % rel_dir, -1)
         try:
             path = path.name
         except AttributeError:
@@ -113,6 +115,7 @@ def _scandir(task_handle, db_helper, proj_id, directory, ignore_patterns, parser
                 if old_mtime is None or cur_mtime > old_mtime:
                     # try to parse file symbols
                     _parse_document(task_handle, db_helper, file_id, full_path, parser_plugins, root_directory)
+                    task_handle.report_progress('Indexing %r' % rel_dir, -1)
             elif isdir(full_path):
                 try:
                     _scandir(task_handle, db_helper, proj_id, full_path, ignore_patterns, parser_plugins,

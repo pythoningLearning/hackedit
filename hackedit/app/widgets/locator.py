@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -6,6 +7,7 @@ from pyqode.core.api import DelayJobRunner, TextHelper, utils
 
 from hackedit.api import editor, index, project, widgets
 from hackedit.app.forms import locator_ui
+from hackedit.app.index.db import get_search_tokens
 from hackedit.app.widgets.html_delegate import HTMLDelegate
 
 
@@ -191,7 +193,7 @@ class LocatorWidget(QtWidgets.QFrame):
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path
-            text = '%s<br><i>%s:%d</i>' % (name, path, line)
+            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(name, search_term), path, line)
 
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
@@ -206,7 +208,10 @@ class LocatorWidget(QtWidgets.QFrame):
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
         else:
-            self.ui.treeWidget.hide()
+            item = QtWidgets.QTreeWidgetItem()
+            item.setText(0, _('No match found'))
+            item.setIcon(0, QtGui.QIcon.fromTheme('dialog-warning'))
+            self.ui.treeWidget.addTopLevelItem(item)
         self.adjustSize()
 
     def search_symbol_in_project(self):
@@ -220,7 +225,7 @@ class LocatorWidget(QtWidgets.QFrame):
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path
-            text = '%s<br><i>%s:%d</i>' % (name, path, line)
+            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(name, search_term), path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -234,7 +239,10 @@ class LocatorWidget(QtWidgets.QFrame):
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
         else:
-            self.ui.treeWidget.hide()
+            item = QtWidgets.QTreeWidgetItem()
+            item.setText(0, _('No match found'))
+            item.setIcon(0, QtGui.QIcon.fromTheme('dialog-warning'))
+            self.ui.treeWidget.addTopLevelItem(item)
         self.adjustSize()
 
     def get_definition_icon(self, icon):
@@ -266,7 +274,7 @@ class LocatorWidget(QtWidgets.QFrame):
         for i, file_item in enumerate(project_files):
             path = file_item.path
             name = file_item.name
-            text = '%s<br><i>%s</i>' % (name, path)
+            text = '%s<br><i>%s</i>' % (self.get_enriched_text(name, name_filter), os.path.dirname(path))
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -280,8 +288,38 @@ class LocatorWidget(QtWidgets.QFrame):
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
         else:
-            self.ui.treeWidget.hide()
+            item = QtWidgets.QTreeWidgetItem()
+            item.setText(0, _('No match found'))
+            item.setIcon(0, QtGui.QIcon.fromTheme('dialog-information'))
+            self.ui.treeWidget.addTopLevelItem(item)
         self.adjustSize()
+
+    @staticmethod
+    def get_match_spans(expr, item):
+        spans = []
+        for token in get_search_tokens(expr):
+            if not token:
+                continue
+            try:
+                start = item.index(token)
+                length = len(token)
+                spans.append((start, length))
+                to_replace = item[start:length]
+                item = item.replace(to_replace, len(to_replace) * '*')
+            except ValueError:
+                pass
+        return spans
+
+    @staticmethod
+    def get_enriched_text(item, expr):
+        spans = LocatorWidget.get_match_spans(expr.lower(), item.lower())
+        offset = 0
+        enriched = ''
+        for start, end in sorted(spans, key=lambda x: x[0]):
+            enriched += item[offset:start] + '<b>' + item[start:start + end] + '</b>'
+            offset = start + end
+        enriched += item[offset:]
+        return enriched
 
     def _get_search_term(self):
         text = self.ui.lineEdit.text()
@@ -291,7 +329,7 @@ class LocatorWidget(QtWidgets.QFrame):
             text = text[1:]
         if self.GOTO_LINE_PATTERN.match(text):
             text = text.split(':')[0]
-        return text.strip()
+        return text.strip().replace("'", '').replace('"', '').replace('*', '')
 
     def _get_requested_line_nbr(self):
         text = self.ui.lineEdit.text()
@@ -335,3 +373,11 @@ NO_SCORE = 0
 
 def _logger():
     return logging.getLogger(__name__)
+
+
+if __name__ == '__main__':
+    print(LocatorWidget.get_enriched_text('test_my_editor', 'test'))
+    print(LocatorWidget.get_enriched_text('test_my_editor', 'test edit'))
+    print(LocatorWidget.get_enriched_text('test_my_editor', 'test editor'))
+    print(LocatorWidget.get_enriched_text('test_my_editor', 'editor test'))
+    print(LocatorWidget.get_enriched_text('code_edit', 'code_e'))
