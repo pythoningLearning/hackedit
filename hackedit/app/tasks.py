@@ -297,7 +297,6 @@ class TaskListWidget(QtWidgets.QWidget):
     """
     Shows a list of TaskWidget in a widget window
     """
-
     def __init__(self, task_manager):
         """
         :type task_manager: TaskManager
@@ -308,7 +307,8 @@ class TaskListWidget(QtWidgets.QWidget):
             20, 20, vPolicy=QtWidgets.QSizePolicy.Expanding)
         self.vertical_layout.addSpacerItem(spacer)
         self.setLayout(self.vertical_layout)
-        self.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Preferred,
+                           QtWidgets.QSizePolicy.Fixed)
         self.tm = task_manager
         self.tm.task_started.connect(self._add_task)
         self.tm.task_finished.connect(self._rm_task)

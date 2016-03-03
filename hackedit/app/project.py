@@ -328,8 +328,9 @@ class ProjectExplorer(QtCore.QObject):
         bt_remove_project.clicked.connect(self._remove_current_project)
         layout.addWidget(bt_remove_project)
         self._widget_active_projects.setLayout(layout)
+        self.bt_rm_proj = bt_remove_project
         if self._combo_projects.count() == 1:
-            self._widget_active_projects.hide()
+            self.bt_rm_proj.hide()
 
     def load_project_combo(self, current_index=None):
         if current_index is None:
@@ -520,14 +521,12 @@ class ProjectExplorer(QtCore.QObject):
         self.main_window.current_project = active_path
 
     def _on_path_added(self, path):
-        print('PATH ADDED', path)
         if os.path.isfile(path):
             return
         index = self._combo_projects.count()
         self.load_project_combo(current_index=index)
         self._on_current_index_changed(index)
-        self._widget_active_projects.setVisible(
-            self._combo_projects.count() > 1)
+        self.bt_rm_proj.setVisible(self._combo_projects.count() > 1)
         data = load_user_config(api.project.get_projects()[0])
         data['active_project'] = path
         self._indexors.append(ProjectIndexor(path, self.main_window))
@@ -584,6 +583,7 @@ class ProjectExplorer(QtCore.QObject):
         # todo: remove file from db
 
     # todo: on file saved
+    # todo: directory removed
 
     @staticmethod
     def _on_locator_activated(path, line):

@@ -43,8 +43,6 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
     ignore_patterns += ['*.exe', '*.dll', '*.usr', '*.so', '*.dylib', '*.psd',
                         '*.db', '.hackedit', '.eggs', '.cache', '.git', '.svn',
                         '.hackedit', 'build', 'dist', '_build']
-
-    symbol_ignored_patterns = ['*.png', '*.jpg', '*.tga', '*.svg', '*.ui']
     parser_plugins = tuple(parser_plugins)
     # create projects
     proj_ids = []
@@ -63,6 +61,7 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
         files = []
         paths = scandir(task_handle, project_directory, ignore_patterns,
                         os.path.dirname(project_directory))
+        task_handle.report_progress(_('Writing project files to index'), -1)
         with db.DbHelper() as dbh:
             for path in paths:
                 fid = dbh.create_file(path, proj_id, commit=False)
@@ -75,33 +74,38 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
         for file_path, file_id, root_directory in files:
             ext = os.path.splitext(file_path)[1]
             plugin = get_symbol_parser('file%s' % ext, parser_plugins)
-            if is_ignored_path(file_path, symbol_ignored_patterns):
-                continue
             if not plugin:
                 continue
             rel_path = os.path.relpath(file_path, root_directory)
             task_handle.report_progress(_('Indexing %r') % rel_path, -1)
-            time.sleep(0.01)
+            time.sleep(0.01)  # allow other process to perform a query
             new_mtime = os.path.getmtime(file_path)
             with db.DbHelper() as dbh:
                 old_mtime = dbh.get_file_mtime(file_path)
                 dbh.update_file(file_path, new_mtime)
-            time.sleep(0.01)
+            time.sleep(0.01)  # allow other process to perform a query
             if old_mtime is None or new_mtime > old_mtime:
                 # try to parse file symbols
                 parse_document(task_handle, file_id, file_path,
                                plugin, root_directory)
 
-        # remove project paths that do not exist or that have been ignored
-        task_handle.report_progress('Cleaning project index', -1)
-        with db.DbHelper() as db_helper:
-            for file_item in db_helper.get_files(project_ids=[proj_id]):
-                path = file_item[db.COL_FILE_PATH]
-                if not os.path.exists(path) or \
-                        is_ignored_path(path, ignore_patterns):
-                    db_helper.delete_file(path)
+        clean_project_files(task_handle, proj_id, ignore_patterns)
 
     task_handle.report_progress('Finished', 100)
+
+
+def clean_project_files(task_handle, project_id, ignore_patterns):
+    """
+    Removes project files that do not exist or that have been ignored
+    from the project index.
+    """
+    task_handle.report_progress('Cleaning project index', -1)
+    with db.DbHelper() as db_helper:
+        for file_item in db_helper.get_files(project_ids=[project_id]):
+            path = file_item[db.COL_FILE_PATH]
+            if not os.path.exists(path) or \
+                    is_ignored_path(path, ignore_patterns):
+                db_helper.delete_file(path)
 
 
 def is_ignored_path(path, ignore_patterns=None):
