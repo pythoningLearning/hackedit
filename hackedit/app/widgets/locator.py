@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+import sqlite3
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.api import DelayJobRunner, TextHelper, utils
@@ -40,8 +41,9 @@ class LocatorWidget(QtWidgets.QFrame):
 
     def __init__(self, window=None):
         super().__init__()
+        self._query_thread = None
         self.icon_provider = widgets.FileIconProvider()
-        self._runner = DelayJobRunner(delay=100)
+        self._runner = DelayJobRunner(delay=300)
         self.main_window = window
         self.ui = locator_ui.Ui_Frame()
         self.ui.setupUi(self)
@@ -85,6 +87,9 @@ class LocatorWidget(QtWidgets.QFrame):
     def closeEvent(self, ev):
         if not self._activated:
             self.cancelled.emit()
+        if self._query_thread:
+            self._query_thread.quit()
+            self._on_query_finished()
         super().closeEvent(ev)
 
     def eventFilter(self, obj, ev):
@@ -104,8 +109,10 @@ class LocatorWidget(QtWidgets.QFrame):
                         self.ui.treeWidget.topLevelItemCount() - 1)
                 self.ui.treeWidget.setCurrentItem(next_item)
                 return True
-            if ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter] and ev.modifiers() & QtCore.Qt.ShiftModifier:
-                self.ui.cb_non_project_files.setChecked(not self.ui.cb_non_project_files.isChecked())
+            if ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter] and \
+                    ev.modifiers() & QtCore.Qt.ShiftModifier:
+                self.ui.cb_non_project_files.setChecked(
+                    not self.ui.cb_non_project_files.isChecked())
                 self.ui.lineEdit.setFocus(True)
                 return True
             elif ev.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter]:
@@ -184,17 +191,19 @@ class LocatorWidget(QtWidgets.QFrame):
     def search_symbol(self):
         search_term = self._get_search_term()
         fpath = editor.get_current_editor().file.path
-        symbols = index.get_symbols(name_filter=search_term, file=fpath)
+        self._request_exec_query(
+            index.get_symbols, self._display_search_symbol_results,
+            name_filter=search_term, file=fpath)
 
-        # display
-        self.ui.treeWidget.clear()
+    def _display_search_symbol_results(self, symbols):
+        search_term = self._get_search_term()
         first_item = None
-        for i, (symbol_item, file_item) in enumerate(symbols):
+        for symbol_item, file_item in enumerate(symbols):
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path
-            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(name, search_term), path, line)
-
+            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(
+                name, search_term), path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -202,8 +211,6 @@ class LocatorWidget(QtWidgets.QFrame):
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
-            if i > LIMIT:
-                break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
@@ -216,16 +223,21 @@ class LocatorWidget(QtWidgets.QFrame):
 
     def search_symbol_in_project(self):
         search_term = self._get_search_term()
-        symbols = index.get_symbols(name_filter=search_term, projects=self._get_projects())
+        self._request_exec_query(
+            index.get_symbols, self._display_search_symbol_in_project_results,
+            name_filter=search_term, projects=self._get_projects())
 
+    def _display_search_symbol_in_project_results(self, symbols):
+        search_term = self._get_search_term()
         # display
         self.ui.treeWidget.clear()
         first_item = None
-        for i, (symbol_item, file_item) in enumerate(symbols):
+        for symbol_item, file_item in symbols:
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path
-            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(name, search_term), path, line)
+            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(
+                name, search_term), path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -233,8 +245,6 @@ class LocatorWidget(QtWidgets.QFrame):
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
-            if i > LIMIT:
-                break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
@@ -263,18 +273,52 @@ class LocatorWidget(QtWidgets.QFrame):
                 icon = QtGui.QIcon(icon)
         return icon
 
+    def _request_exec_query(self, query_fct, callback, **kwargs):
+        class QueryThread(QtCore.QThread):
+            results_available = QtCore.pyqtSignal(object)
+
+            def __init__(self, query_fct, **kwargs):
+                super().__init__()
+                self.query_fct = query_fct
+                self.kwargs = kwargs
+
+            def run(self):
+                generator = query_fct(**kwargs)
+                ret = []
+                try:
+                    for i, value in enumerate(generator):
+                        ret.append(value)
+                        if i > LIMIT:
+                            break
+                except sqlite3.OperationalError:
+                    _logger().exception('failed to execute sql query')
+                    ret = []
+                self.results_available.emit(ret)
+        if self._query_thread is None:
+            self._query_thread = QueryThread(query_fct, **kwargs)
+            self._query_thread.setParent(self)
+            self._query_thread.results_available.connect(callback)
+            self._query_thread.finished.connect(self._on_query_finished)
+            self._query_thread.start()
+
+    def _on_query_finished(self):
+        self._query_thread = None
+
     def search_files(self):
         name_filter = self._get_search_term()
-        # get files from db
-        project_files = index.get_files(name_filter=name_filter, projects=self._get_projects())
+        self._request_exec_query(
+            index.get_files, self._display_search_results,
+            name_filter=name_filter, projects=self._get_projects())
 
-        # display
+    def _display_search_results(self, project_files):
+        name_filter = self._get_search_term()
         self.ui.treeWidget.clear()
         first_item = None
-        for i, file_item in enumerate(project_files):
+        for file_item in project_files:
             path = file_item.path
             name = file_item.name
-            text = '%s<br><i>%s</i>' % (self.get_enriched_text(name, name_filter), os.path.dirname(path))
+            text = '%s<br><i>%s</i>' % (self.get_enriched_text(
+                name, name_filter), os.path.dirname(path))
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -282,8 +326,6 @@ class LocatorWidget(QtWidgets.QFrame):
             if first_item is None:
                 first_item = item
             self.ui.treeWidget.addTopLevelItem(item)
-            if i > LIMIT:
-                break
         if self.ui.treeWidget.topLevelItemCount():
             self.ui.treeWidget.show()
             self.ui.treeWidget.setCurrentItem(first_item)
@@ -318,7 +360,8 @@ class LocatorWidget(QtWidgets.QFrame):
         offset = 0
         enriched = ''
         for start, end in sorted(spans, key=lambda x: x[0]):
-            enriched += item[offset:start] + '<b>' + item[start:start + end] + '</b>'
+            enriched += item[offset:start] + '<b>' + \
+                item[start:start + end] + '</b>'
             offset = start + end
         enriched += item[offset:]
         return enriched

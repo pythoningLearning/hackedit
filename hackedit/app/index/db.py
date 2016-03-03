@@ -97,6 +97,8 @@ class DbHelper:
     .. note:: The database tables are created automatically if the database
         file did not exist.
     """
+    prog_camel_case = re.compile(r'(?:[A-Z][a-z]+)+')
+
     def __init__(self):
         """
         :param db_path: Path to the database file.
@@ -110,13 +112,11 @@ class DbHelper:
         and create the connection object.
         """
         db_path = self.get_db_path()
-        self.conn = sqlite3.connect(db_path)
+        self.conn = sqlite3.connect(db_path, timeout=60)
         self.conn.row_factory = sqlite3.Row
-        self.conn.create_function('MATCH_RATIO', 2, match_ratio)
         if not self.exists:
             _logger().debug('creating database %r', db_path)
             self._create_tables()
-        _logger().debug('database %r created', db_path)
         return self
 
     def __exit__(self, *args, **kwargs):
@@ -205,28 +205,32 @@ class DbHelper:
     # File management
     # ---------------------------------------------------------------
     # FILE CRUD Operations
-    def create_file(self, file_path, project_id):
+    def create_file(self, file_path, project_id, commit=True):
         """
-        Creates a file. If the file does already exists, the method simply returns it's file id.
+        Creates a file.
+
+        If the file does already exists, the method simply returns the file id.
 
         :param file_path: Path of the file to create
         :param project_id: Id of the parent project.
 
         :returns: FILE_ID
         """
-        sql = "INSERT INTO File(FILE_PATH, FILE_NAME, PROJECT_ID) VALUES('%s', '%s', %d);"
+        sql = "INSERT INTO File(FILE_PATH, FILE_NAME, PROJECT_ID) " \
+              "VALUES('%s', '%s', %d);"
         if not self.has_file(file_path):
             file_name = os.path.split(file_path)[1]
             sql = sql % (file_path, file_name, project_id)
             c = self.conn.cursor()
             c.execute(sql)
-            self.conn.commit()
             fid = self._get_last_insert_row_id(c)
             # add to file index
-            sql = "INSERT INTO File_index(FILE_ID, CONTENT) VALUES('%d', '%s');" % (
-                fid, self._get_searchable_name(file_name))
+            searchable_name = self._get_searchable_name(file_name)
+            sql = "INSERT INTO File_index(FILE_ID, CONTENT) " \
+                  "VALUES('%d', '%s');" % (fid, searchable_name)
             c.execute(sql)
-            self.conn.commit()
+            if commit:
+                self.conn.commit()
             return fid
         else:
             f = self.get_file_by_path(file_path)
@@ -249,6 +253,7 @@ class DbHelper:
         c = self.conn.cursor()
         sql = 'UPDATE File SET FILE_TIME_STAMP={0} WHERE FILE_ID = {1};'.format(mtime, fid)
         c.execute(sql)
+        self.conn.commit()
 
     def delete_file(self, file_path):
         """
@@ -298,6 +303,7 @@ class DbHelper:
             # look into specified project files
             project_ids = str(tuple(project_ids)).replace(',)', ')')
             if name_filter:
+                self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM File WHERE PROJECT_ID IN {0} AND ' \
                       'FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE CONTENT MATCH "*{1}*") ' \
                       'ORDER BY MATCH_RATIO(FILE_NAME, "{2}") ASC;'.format(
@@ -307,6 +313,7 @@ class DbHelper:
         else:
             # look into all files, across all projects
             if name_filter:
+                self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM File ' \
                       'WHERE FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE CONTENT MATCH "*{0}*")' \
                       'ORDER BY MATCH_RATIO(FILE_NAME, "{1}") ASC;'.format(
@@ -359,7 +366,7 @@ class DbHelper:
     # ---------------------------------------------------------------
     # FILE CRUD Operations
     def create_symbol(self, name, line, column, icon_theme, icon_path,
-                      file_id, parent_symbol_id=None):
+                      file_id, parent_symbol_id=None, commit=True):
         """
         Adds a symbol to the database.
 
@@ -377,20 +384,18 @@ class DbHelper:
         """
         if parent_symbol_id is None:
             parent_symbol_id = 'null'
+
         statement = ('INSERT INTO Symbol(SYMBOL_LINE, SYMBOL_COLUMN, SYMBOL_ICON_THEME, SYMBOL_ICON_PATH, SYMBOL_NAME, '
                      'FILE_ID, PARENT_SYMBOL_ID) values (%d, %d, "%s", "%s", "%s", %d, %s);' %
                      (line, column, icon_theme, icon_path, name, file_id, str(parent_symbol_id)))
         c = self.conn.cursor()
         c.execute(statement)
-        self.conn.commit()
-
         sid = self._get_last_insert_row_id(c)
-
         sql = "INSERT INTO Symbol_index(SYMBOL_ID, CONTENT) VALUES('%d', '%s');" % (
             sid, self._get_searchable_name(name))
         c.execute(sql)
-        self.conn.commit()
-
+        if commit:
+            self.conn.commit()
         return sid
 
     def delete_file_symbols(self, file_id):
@@ -424,6 +429,7 @@ class DbHelper:
         if file_id:
             # get file symbols
             if name_filter:
+                self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM Symbol WHERE FILE_ID = {0} AND ' \
                       'SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
                       'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{2}") ASC;'.format(
@@ -434,6 +440,7 @@ class DbHelper:
             # get project symbols
             project_ids = str(tuple(project_ids)).replace(',)', ')')
             if name_filter:
+                self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM Symbol INNER JOIN File ' \
                       'WHERE Symbol.FILE_ID=File.FILE_ID AND File.PROJECT_ID IN {0} AND ' \
                       'Symbol.SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
@@ -446,6 +453,7 @@ class DbHelper:
         else:
             # get all symbols
             if name_filter:
+                self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM Symbol ' \
                       'WHERE SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{0}*")' \
                       'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{1}") ASC;'.format(
@@ -488,8 +496,16 @@ class DbHelper:
         :param name: name to conver
         :return: converted name
         """
-        v = ''.join([('_' + l.lower()) if l.isupper() else l for l in name])
+        if DbHelper.is_camel_case(name):
+            v = ''.join([('_' + l.lower()) if l.isupper() else l
+                         for l in name])
+        else:
+            v = name
         return v
+
+    @staticmethod
+    def is_camel_case(name):
+        return DbHelper.prog_camel_case.match(name) is not None
 
 
 def match_ratio(item, expr):

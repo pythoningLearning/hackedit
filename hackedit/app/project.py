@@ -47,7 +47,10 @@ class ProjectIndexor:
     def perform_indexing(self):
         if self._running_task is None:
             _logger().info('indexing project %r', self.project)
-            self._running_task = index.perform_indexation(self.project, callback=self._on_finished)
+            self._running_task = index.perform_indexation(
+                [self.project], callback=self._on_finished,
+                task_name=_('Indexing project: %s' % os.path.split(
+                    self.project)[1]))
 
     def _on_finished(self, *args):
         _logger().info('finished indexing of project %r', self.project)

@@ -53,8 +53,8 @@ def get_project_ids(projects):
     :return: list of id
     """
     project_ids = []
-    with db.DbHelper() as dbh:
-        for proj in projects:
+    for proj in projects:
+        with db.DbHelper() as dbh:
             project_ids.append(dbh.get_project(proj)[db.COL_PROJECT_ID])
     return project_ids
 
@@ -75,7 +75,8 @@ def get_files(name_filter='', projects=None):
     if projects:
         project_ids = get_project_ids(projects)
     with db.DbHelper() as dbh:
-        for itm in dbh.get_files(project_ids=project_ids, name_filter=name_filter):
+        for itm in dbh.get_files(project_ids=project_ids,
+                                 name_filter=name_filter):
             yield File(itm)
 
 
@@ -110,13 +111,13 @@ def get_symbols(name_filter='', projects=None, file=None):
             yield Symbol(item), File(file_item)
 
 
-def perform_indexation(directory, callback=None, task_name=None):
+def perform_indexation(directories, callback=None, task_name=None):
     """
     Perform a background indexation of the specified directory.
 
     The optional callback function will be called automatically when operation has finished.
 
-    :param directory: Directory to indexate.
+    :param directory: List of directories to indexate
     :param task_name: The name of the background task as show to the users.
                       Default is "Indexing project file (project_path)".
     :param callback: Callback function (callable).
@@ -126,8 +127,8 @@ def perform_indexation(directory, callback=None, task_name=None):
     w = _window()
     ignored_patterns = w.project_explorer.get_ignored_patterns()
     parsers_plugins = w.project_explorer.parser_plugins
-    args = directory, ignored_patterns, parsers_plugins
+    args = directories, ignored_patterns, parsers_plugins
     if not task_name:
-        task_name = _('Indexing project files (%r)') % os.path.split(directory)[1]
+        task_name = _('Indexing project files')
     return w.task_manager.start(
         task_name, backend.index_project_files, callback, args, True, False)
