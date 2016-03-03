@@ -133,7 +133,10 @@ def set_restore_session(val):
 
 
 def file_manager_cmd():
-    default = FileSystemContextMenu.get_file_explorer_command()
+    try:
+        default = FileSystemContextMenu.get_file_explorer_command()
+    except Exception:
+        default = ''
     return _SETTINGS.value('env/file_manager_command', default)
 
 
