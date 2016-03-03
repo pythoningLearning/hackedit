@@ -56,17 +56,6 @@ class FindReplace(plugins.WorkspacePlugin):
 
         api.window.add_actions(mnu_edit.actions())
 
-        # list of project file is not initially available, wait for them
-        # to be available before allowing search/replace
-        self.afind.setEnabled(False)
-        self.areplace.setEnabled(False)
-        api.signals.connect_slot(api.signals.PROJECT_FILES_AVAILABLE,
-                                 self.on_project_files_available)
-
-    def on_project_files_available(self):
-        self.afind.setEnabled(True)
-        self.areplace.setEnabled(True)
-
     def apply_preferences(self):
         self.areplace.setShortcut(shortcuts.get(
             'Replace in path', _('Replace in path'), 'Ctrl+Shift+H'))
@@ -176,11 +165,11 @@ class FindReplace(plugins.WorkspacePlugin):
     def _start_search_in_path(self, search_settings):
         self._search_settings = search_settings
         callback = self._on_search_finished
-        project_root = api.project.get_root_project()
+        print(search_settings)
         api.tasks.start(
             _('searching for %r') % search_settings['find'],
             search_in_path, callback,
-            args=(search_settings, project_root))
+            args=(search_settings, ))
 
     def _on_replace_triggered(self):
         text = ''
@@ -481,28 +470,32 @@ def filter_files(files, search_settings):
     ret_val = []
     patterns = search_settings['patterns']
     for f in files:
+        try:
+            file_path = f.path
+        except AttributeError:
+            file_path = f
         for path in search_settings['paths']:
             path += os.sep
             # file is in scope, let's check patterns
             if patterns:
                 for pattern in patterns:
-                    if fnmatch(f, pattern):
-                        ret_val.append(f)
+                    if fnmatch(file_path, pattern):
+                        ret_val.append(file_path)
                         break
                     time.sleep(0)
             else:
-                ret_val.append(f)
+                ret_val.append(file_path)
             time.sleep(0)
         time.sleep(0)
     return sorted(list(set(ret_val)))
 
 
-def search_in_path(th, search_settings, project_root):
+def search_in_path(th, search_settings):
     """
     Worker function that performs the actual search.
     """
     results = []
-    project_files = api.project.get_project_files(project_root)
+    project_files = api.index.get_files(projects=search_settings['paths'])
     files = filter_files(project_files, search_settings)
     count = len(files)
     split_path = os.path.split
