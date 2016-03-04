@@ -273,10 +273,14 @@ class ProjectExplorer(QtCore.QObject):
         self._show_locator()
 
     def _goto_symbol(self):
-        self._cached_cursor_position = TextHelper(
-            api.editor.get_current_editor()).cursor_position()
-        self._locator.mode = self._locator.MODE_GOTO_SYMBOL
-        self._show_locator()
+        try:
+            self._cached_cursor_position = TextHelper(
+                api.editor.get_current_editor()).cursor_position()
+        except (TypeError, AttributeError):
+            pass  # no current editor or not a code edit
+        else:
+            self._locator.mode = self._locator.MODE_GOTO_SYMBOL
+            self._show_locator()
 
     def _goto_symbol_in_project(self):
         self._locator.mode = self._locator.MODE_GOTO_SYMBOL_IN_PROJECT
