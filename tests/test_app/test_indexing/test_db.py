@@ -47,19 +47,19 @@ def test_delete_project():
         pid1 = dbh.create_project('/home/colin')
         fid1 = dbh.create_file('/path1', pid1)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid1)
         fid2 = dbh.create_file('/path2', pid1)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid1)
 
         # project 2: 2 files, 2 symbols
         pid2 = dbh.create_project('/home/colin2')
         fid3 = dbh.create_file('/path3', pid2)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid3)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid3, pid2)
         fid4 = dbh.create_file('/path4', pid2)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid4)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid4, pid2)
 
         assert len(list(dbh.get_files())) == 4
         assert len(list(dbh.get_symbols())) == 4
@@ -153,15 +153,14 @@ def test_delete_files():
     remove_db()
     path = '/home/file.py'
     with db.DbHelper() as dbh:
-        with pytest.raises(ValueError):
-            dbh.delete_file(path)
+        assert dbh.delete_file(path) is False
         pid = dbh.create_project('/home/colin')
         file_id = dbh.create_file(path, pid)
         assert dbh.has_file(path)
         dbh.create_symbol(
-            'spam', 10, 45, 'code-variable', '/path/to/icon.png', file_id)
+            'spam', 10, 45, 'code-variable', '/path/to/icon.png', file_id, pid)
         dbh.create_symbol(
-            'eggs', 22, 45, 'code-variable', '/path/to/icon.png', file_id)
+            'eggs', 22, 45, 'code-variable', '/path/to/icon.png', file_id, pid)
         assert len(list(dbh.get_files(project_ids=[file_id]))) == 1
         dbh.delete_file(path)
         assert not dbh.has_file(path)
@@ -176,7 +175,7 @@ def test_add_symbols():
         file_id = dbh.create_file(path, pid)
         assert len(list(dbh.get_symbols(file_id=file_id))) == 0
         symbol_id = dbh.create_symbol(
-            'spam', 10, 45, 'code-variable', '/path/to/icon.png', file_id)
+            'spam', 10, 45, 'code-variable', '/path/to/icon.png', file_id, pid)
         assert symbol_id == 1
         symbols = list(dbh.get_symbols(file_id=file_id))
         assert len(symbols) == 1
@@ -197,13 +196,13 @@ def test_get_symbols():
         pid = dbh.create_project('/home/colin')
         fid = dbh.create_file(path, pid)
         dbh.create_symbol(
-            'set_Tool_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid)
+            'set_Tool_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
         dbh.create_symbol(
-            'set_Call_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid)
+            'set_Call_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
         dbh.create_symbol(
-            'set_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid)
+            'set_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
         dbh.create_symbol(
-            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid)
+            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
         symbols = list(dbh.get_symbols(name_filter=''))
         assert len(symbols) == 4
         symbols = list(dbh.get_symbols(name_filter='set Tip'))
@@ -222,15 +221,15 @@ def test_get_file_symbols():
         fid1 = dbh.create_file(path1, pid)
         fid2 = dbh.create_file(path2, pid)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid)
         dbh.create_symbol(
-            'setCallTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1)
+            'setCallTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid)
         dbh.create_symbol(
-            'setTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'setTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid)
         dbh.create_symbol(
-            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid)
         dbh.create_symbol(
-            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid)
         assert len(list(dbh.get_symbols())) == 5
         assert len(list(dbh.get_symbols(file_id=fid1))) == 2
         assert len(list(dbh.get_symbols(file_id=fid2))) == 3
@@ -249,15 +248,15 @@ def test_get_project_symbols():
         fid1 = dbh.create_file(path1, pid1)
         fid2 = dbh.create_file(path2, pid2)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid1)
         dbh.create_symbol(
-            'setCallTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1)
+            'setCallTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid1)
         dbh.create_symbol(
-            'setTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'setTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid2)
         dbh.create_symbol(
-            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid2)
         dbh.create_symbol(
-            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2)
+            'word', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid2)
         assert len(list(dbh.get_symbols())) == 5
         assert len(list(dbh.get_symbols(project_ids=[pid1]))) == 2
         assert len(list(dbh.get_symbols(project_ids=[pid2]))) == 3
@@ -271,9 +270,9 @@ def test_delete_file_symbols():
         pid = dbh.create_project('/home/colin')
         file_id = dbh.create_file(path, pid)
         dbh.create_symbol(
-            'spam', 10, 45, 'code-variable', '/path/to/icon.png', file_id)
+            'spam', 10, 45, 'code-variable', '/path/to/icon.png', file_id, pid)
         dbh.create_symbol(
-            'eggs', 22, 45, 'code-variable', '/path/to/icon.png', file_id)
+            'eggs', 22, 45, 'code-variable', '/path/to/icon.png', file_id, pid)
         assert len(list(dbh.get_symbols(file_id=file_id))) == 2
         dbh.delete_file_symbols(file_id)
         assert len(list(dbh.get_symbols(file_id=file_id))) == 0

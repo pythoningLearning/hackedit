@@ -48,10 +48,8 @@ def get_app_data_directory():
     retval = get_path()
     try:
         os.makedirs(retval)
-    except OSError as e:
-        import logging
-        logging.getLogger(__name__).debug(
-            'failed to create app data directory: %s', str(e))
+    except FileExistsError:
+        pass
     return retval
 
 

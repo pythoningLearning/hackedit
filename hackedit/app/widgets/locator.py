@@ -196,9 +196,10 @@ class LocatorWidget(QtWidgets.QFrame):
             name_filter=search_term, file=fpath)
 
     def _display_search_symbol_results(self, symbols):
+        self.ui.treeWidget.clear()
         search_term = self._get_search_term()
         first_item = None
-        for symbol_item, file_item in enumerate(symbols):
+        for symbol_item, file_item in symbols:
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path

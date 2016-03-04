@@ -55,7 +55,9 @@ def get_project_ids(projects):
     project_ids = []
     for proj in projects:
         with db.DbHelper() as dbh:
-            project_ids.append(dbh.get_project(proj)[db.COL_PROJECT_ID])
+            p = dbh.get_project(proj)
+            if p:
+                project_ids.append(p[db.COL_PROJECT_ID])
     return project_ids
 
 

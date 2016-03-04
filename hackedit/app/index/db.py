@@ -32,8 +32,7 @@ SQL_CREATE_TABLES = [
         FILE_PATH VARCHAR(512),
         FILE_TIME_STAMP FLOAT,
         FILE_NAME VARCHAR(256),
-        PROJECT_ID INT NOT NULL,
-        FOREIGN KEY(PROJECT_ID) REFERENCES Project(PROJECT_ID));
+        PROJECT_ID INT NOT NULL REFERENCES Project(PROJECT_ID));
     """,
 
     "CREATE VIRTUAL TABLE File_index USING fts4(FILE_ID INT, CONTENT);",
@@ -46,10 +45,10 @@ SQL_CREATE_TABLES = [
         SYMBOL_ICON_THEME VARCHAR(128),
         SYMBOL_ICON_PATH VARCHAR(256),
         SYMBOL_NAME VARCHAR(256),
-        FILE_ID INT NOT NULL,
-        PARENT_SYMBOL_ID INT,
-        FOREIGN KEY(FILE_ID) REFERENCES File(FILE_ID)
-        FOREIGN KEY(PARENT_SYMBOL_ID) REFERENCES Symbol(SYMBOL_ID));""",
+        FILE_ID INT NOT NULL REFERENCES File(FILE_ID),
+        PROJECT_ID INT NOT NULL REFERENCES Project(PROJECT_ID),
+        PARENT_SYMBOL_ID INT REFERENCES Symbol(SYMBOL_ID));
+    """,
 
     "CREATE VIRTUAL TABLE Symbol_index USING fts4(SYMBOL_ID INT, CONTENT);",
 ]
@@ -191,15 +190,20 @@ class DbHelper:
         :param project_path: path
         """
         proj = self.get_project(project_path)
-        for file in self.get_files(project_ids=[proj[COL_PROJECT_ID]]):
-            try:
-                self.delete_file(file[COL_FILE_PATH])
-            except ValueError:
-                pass  # already deleted
-        statement = 'DELETE FROM File where PROJECT_ID = {0}'.format(proj[COL_PROJECT_ID])
+        if proj is None:
+            return False
+        pid = proj[COL_PROJECT_ID]
+        statement = 'DELETE FROM Project where PROJECT_ID = {0};'.format(pid)
+        c = self.conn.cursor()
+        c.execute(statement)
+        statement = 'DELETE FROM File where PROJECT_ID = {0};'.format(pid)
+        c = self.conn.cursor()
+        c.execute(statement)
+        statement = 'DELETE FROM Symbol where PROJECT_ID = {0};'.format(pid)
         c = self.conn.cursor()
         c.execute(statement)
         self.conn.commit()
+        return True
 
     # ---------------------------------------------------------------
     # File management
@@ -255,7 +259,7 @@ class DbHelper:
         c.execute(sql)
         self.conn.commit()
 
-    def delete_file(self, file_path):
+    def delete_file(self, file_path, commit):
         """
         Deletes a file from the index.
 
@@ -264,14 +268,16 @@ class DbHelper:
         """
         file_row = self.get_file_by_path(file_path)
         if file_row is None:
-            raise ValueError('invalid file path')
+            return False
         fid = file_row[COL_FILE_ID]
         c = self.conn.cursor()
         statement = 'DELETE FROM File where FILE_ID = {0}'.format(fid)
         c.execute(statement)
-        self.conn.commit()
-        # delete associated symbols
-        self.delete_file_symbols(fid)
+        statement = 'DELETE FROM Symbol where FILE_ID = {0}'.format(fid)
+        c.execute(statement)
+        if commit:
+            self.conn.commit()
+        return True
 
     # Utility methods related to files management
     def has_file(self, file_path):
@@ -366,7 +372,7 @@ class DbHelper:
     # ---------------------------------------------------------------
     # FILE CRUD Operations
     def create_symbol(self, name, line, column, icon_theme, icon_path,
-                      file_id, parent_symbol_id=None, commit=True):
+                      file_id, project_id, parent_symbol_id=None, commit=True):
         """
         Adds a symbol to the database.
 
@@ -386,8 +392,8 @@ class DbHelper:
             parent_symbol_id = 'null'
 
         statement = ('INSERT INTO Symbol(SYMBOL_LINE, SYMBOL_COLUMN, SYMBOL_ICON_THEME, SYMBOL_ICON_PATH, SYMBOL_NAME, '
-                     'FILE_ID, PARENT_SYMBOL_ID) values (%d, %d, "%s", "%s", "%s", %d, %s);' %
-                     (line, column, icon_theme, icon_path, name, file_id, str(parent_symbol_id)))
+                     'FILE_ID, PARENT_SYMBOL_ID, PROJECT_ID) values (%d, %d, "%s", "%s", "%s", %d, %s, %d);' %
+                     (line, column, icon_theme, icon_path, name, file_id, str(parent_symbol_id), project_id))
         c = self.conn.cursor()
         c.execute(statement)
         sid = self._get_last_insert_row_id(c)
@@ -441,14 +447,14 @@ class DbHelper:
             project_ids = str(tuple(project_ids)).replace(',)', ')')
             if name_filter:
                 self.conn.create_function('MATCH_RATIO', 2, match_ratio)
-                sql = 'SELECT * FROM Symbol INNER JOIN File ' \
-                      'WHERE Symbol.FILE_ID=File.FILE_ID AND File.PROJECT_ID IN {0} AND ' \
+                sql = 'SELECT * FROM Symbol ' \
+                      'WHERE Symbol.PROJECT_ID IN {0} AND ' \
                       'Symbol.SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
                       'ORDER BY MATCH_RATIO(Symbol.SYMBOL_NAME, "{2}") ASC;'.format(
                         project_ids, self._get_searchable_name(name_filter), name_filter)
             else:
-                sql = 'SELECT * FROM Symbol INNER JOIN File ' \
-                      'WHERE Symbol.FILE_ID=File.FILE_ID AND File.PROJECT_ID IN {0} ' \
+                sql = 'SELECT * FROM Symbol ' \
+                      'WHERE Symbol.PROJECT_ID IN {0} ' \
                       'ORDER BY Symbol.SYMBOL_NAME ASC;'.format(project_ids)
         else:
             # get all symbols

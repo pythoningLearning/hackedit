@@ -54,44 +54,77 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
                              project_directory))
 
     # create file index
-    for proj_id, project_directory in proj_ids:
-        # scan project dir recursively
-        task_handle.report_progress(_('Indexing project directories: %r') %
-                                    project_directory, -1)
-        files = []
-        paths = scandir(task_handle, project_directory, ignore_patterns,
-                        os.path.dirname(project_directory))
-        task_handle.report_progress(_('Writing project files to index'), -1)
-        with db.DbHelper() as dbh:
-            for path in paths:
-                fid = dbh.create_file(path, proj_id, commit=False)
-                files.append((path, fid, project_directory))
-            dbh.conn.commit()
-
-        # parse each document
-        task_handle.report_progress(_('Indexing project files: %r') %
-                                    project_directory, -1)
-        for file_path, file_id, root_directory in files:
-            ext = os.path.splitext(file_path)[1]
-            plugin = get_symbol_parser('file%s' % ext, parser_plugins)
-            if not plugin:
-                continue
-            rel_path = os.path.relpath(file_path, root_directory)
-            task_handle.report_progress(_('Indexing %r') % rel_path, -1)
-            time.sleep(0.01)  # allow other process to perform a query
-            new_mtime = os.path.getmtime(file_path)
-            with db.DbHelper() as dbh:
-                old_mtime = dbh.get_file_mtime(file_path)
-                dbh.update_file(file_path, new_mtime)
-            time.sleep(0.01)  # allow other process to perform a query
-            if old_mtime is None or new_mtime > old_mtime:
-                # try to parse file symbols
-                parse_document(task_handle, file_id, file_path,
-                               plugin, root_directory)
-
-        clean_project_files(task_handle, proj_id, ignore_patterns)
+    for project_id, project_directory in proj_ids:
+        recursive_index_dirs(task_handle, project_directory, ignore_patterns, project_directory,
+                             project_id, parser_plugins)
+        clean_project_files(task_handle, project_id, ignore_patterns)
 
     task_handle.report_progress('Finished', 100)
+
+def recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, project_id, parser_plugins):
+    """
+    Performs a recursive indexation of the specified path.
+
+    :param task_handle: task handle, to report progress updates to the frontend.
+    :param directory: path to analyse
+    :param ignore_patterns: The list of ignore patterns to respect.
+    :param project_dir: The root project directory
+    :param project_id: Id of the
+    :param parser_plugins: The list of parser plugins
+    """
+    paths = []
+    rel_dir = os.path.relpath(directory, project_dir)
+    task_handle.report_progress('Indexing %r' % rel_dir, -1)
+    join = os.path.join
+    isfile = os.path.isfile
+    for path in listdir(directory):
+        try:
+            path = path.name
+        except AttributeError:
+            _logger().debug('using the old python api for scanning dirs')
+        full_path = join(directory, path)
+        ignored = is_ignored_path(full_path, ignore_patterns)
+        if not ignored:
+            if isfile(full_path):
+                paths.append(full_path)
+            else:
+                recursive_index_dirs(task_handle, full_path, ignore_patterns, project_dir, project_id, parser_plugins)
+
+    files = []
+    with db.DbHelper() as dbh:
+        for path in paths:
+            fid = dbh.create_file(path, project_id, commit=False)
+            files.append((path, fid))
+        dbh.conn.commit()
+    index_documents(files, parser_plugins, project_id, project_dir, task_handle)
+
+
+def index_documents(files, parser_plugins, proj_id, project_directory, task_handle):
+    """
+    Indexate documents
+    :param files: list of files to indexate.
+    :param parser_plugins: List of parser plugins
+    :param proj_id: Id of the project
+    :param project_directory: Path of the project
+    :param task_handle: Task handle, to report progress to the frontend
+    """
+    for file_path, file_id in files:
+        ext = os.path.splitext(file_path)[1]
+        plugin = get_symbol_parser('file%s' % ext, parser_plugins)
+        if not plugin:
+            continue
+        rel_path = os.path.relpath(file_path, project_directory)
+        task_handle.report_progress(_('Indexing %r') % rel_path, -1)
+        time.sleep(0.01)  # allow other process to perform a query
+        new_mtime = os.path.getmtime(file_path)
+        with db.DbHelper() as dbh:
+            old_mtime = dbh.get_file_mtime(file_path)
+            dbh.update_file(file_path, new_mtime)
+        time.sleep(0.01)  # allow other process to perform a query
+        if old_mtime is None or new_mtime > old_mtime:
+            # try to parse file symbols
+            parse_document(task_handle, file_id, proj_id, file_path,
+                           plugin, project_directory)
 
 
 def clean_project_files(task_handle, project_id, ignore_patterns):
@@ -100,12 +133,19 @@ def clean_project_files(task_handle, project_id, ignore_patterns):
     from the project index.
     """
     task_handle.report_progress('Cleaning project index', -1)
+    to_delete = []
     with db.DbHelper() as db_helper:
         for file_item in db_helper.get_files(project_ids=[project_id]):
             path = file_item[db.COL_FILE_PATH]
             if not os.path.exists(path) or \
                     is_ignored_path(path, ignore_patterns):
-                db_helper.delete_file(path)
+                to_delete.append(path)
+    task_handle.report_progress('Cleaning project index', -1)
+    with db.DbHelper() as db_helper:
+        for path in to_delete:
+            db_helper.delete_file(path, commit=False)
+        db_helper.conn.commit()
+        time.sleep(0.001)  # allow other process to perform a query
 
 
 def is_ignored_path(path, ignore_patterns=None):
@@ -134,32 +174,7 @@ def is_ignored_path(path, ignore_patterns=None):
     return False
 
 
-def scandir(task_handle, directory, ignore_patterns, root_directory):
-    """
-    Scan a directory recursively and returns the complete list of files.
-    """
-    paths = []
-    rel_dir = os.path.relpath(directory, root_directory)
-    task_handle.report_progress('Indexing %r' % rel_dir, -1)
-    join = os.path.join
-    isfile = os.path.isfile
-    for path in listdir(directory):
-        try:
-            path = path.name
-        except AttributeError:
-            _logger().debug('using the old python api for scanning dirs')
-        full_path = join(directory, path)
-        ignored = is_ignored_path(full_path, ignore_patterns)
-        if not ignored:
-            if isfile(full_path):
-                paths.append(full_path)
-            else:
-                paths += scandir(task_handle, full_path, ignore_patterns,
-                                 root_directory)
-    return paths
-
-
-def parse_document(task_handle, file_id, path, plugin, root_directory):
+def parse_document(task_handle, file_id, project_id, path, plugin, root_directory):
     """
     Parse file symbols using the indexor plugins.
     """
@@ -174,11 +189,11 @@ def parse_document(task_handle, file_id, path, plugin, root_directory):
         with db.DbHelper() as dbh:
             dbh.delete_file_symbols(file_id)
             _write_symbols_to_db(
-                dbh, symbols, file_id, parent_id=None)
+                dbh, symbols, file_id, project_id, parent_id=None)
             dbh.conn.commit()
 
 
-def _write_symbols_to_db(dbh, symbols, file_id, parent_id=None):
+def _write_symbols_to_db(dbh, symbols, file_id, project_id, parent_id=None):
     """
     Writes the list of symbols to the index database.
     """
@@ -190,9 +205,9 @@ def _write_symbols_to_db(dbh, symbols, file_id, parent_id=None):
             icon_theme, icon_path = '', ''
         symbol_id = dbh.create_symbol(
             symbol.name, symbol.line, symbol.column, icon_theme,
-            icon_path, file_id, parent_symbol_id=parent_id, commit=False)
+            icon_path, file_id, project_id, parent_symbol_id=parent_id, commit=False)
         _write_symbols_to_db(
-            dbh, symbol.children, file_id, parent_id=symbol_id)
+            dbh, symbol.children, file_id, project_id, parent_id=symbol_id)
 
 
 @functools.lru_cache()
