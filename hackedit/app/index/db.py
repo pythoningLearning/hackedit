@@ -259,7 +259,7 @@ class DbHelper:
         c.execute(sql)
         self.conn.commit()
 
-    def delete_file(self, file_path, commit):
+    def delete_file(self, file_path, commit=True):
         """
         Deletes a file from the index.
 
