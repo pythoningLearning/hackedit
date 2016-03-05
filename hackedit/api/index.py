@@ -110,7 +110,8 @@ def get_symbols(name_filter='', projects=None, file=None):
     with db.DbHelper() as dbh:
         for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids, name_filter=name_filter):
             file_item = dbh.get_file_by_id(item[db.COL_SYMBOL_FILE_ID])
-            yield Symbol(item), File(file_item)
+            if item and file_item:
+                yield Symbol(item), File(file_item)
 
 
 def perform_indexation(directories, callback=None, task_name=None):
