@@ -8,21 +8,22 @@ import logging
 import mimetypes
 import os
 import time
-from fnmatch import fnmatch
 
 from pyqode.core.share import Definition
 
-from hackedit.api import utils
+from hackedit.api.utils import is_ignored_path
 from hackedit.app import mime_types
 from hackedit.app.index import db
 
 
+# Try to use the new scandir function, introduced in python 3.5
+# also available from the scandir package on pypi
 try:
     # new scandir function in python 3.5
     from os import scandir as listdir
 except ImportError:
     try:
-        # new scandir function from _scandir package on pypi
+        # new scandir function from scandir package on pypi
         from scandir import scandir as listdir
     except ImportError:
         # scandir function not found, use the slow listdir function
@@ -32,11 +33,12 @@ except ImportError:
 def index_project_files(task_handle, project_directories, ignore_patterns,
                         parser_plugins):
     """
-    Perform project files indexation.
+    Perform a full indexation of the project files.
 
-    :param task_handle: TaskHandle to report task progress.
-    :param project_directory: Project directory to indexate.
-    :param ignore_patterns: The ignore patterns to respect.
+    :param project_directories: the directories to scan.
+    :param task_handle: task handle, to report task progress.
+    :param ignore_patterns: the ignore patterns to respect.
+    :param parser_plugins: the list of parser plugins.
     """
     mime_types.load()
     # adjust ignore patterns to always exclude binary files from indexation
@@ -55,82 +57,46 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
 
     # create file index
     for project_id, project_directory in proj_ids:
-        recursive_index_dirs(task_handle, project_directory, ignore_patterns, project_directory,
-                             project_id, parser_plugins)
+        _recursive_index_dirs(task_handle, project_directory, ignore_patterns, project_directory,
+                              project_id, parser_plugins)
         clean_project_files(task_handle, project_id, ignore_patterns)
 
     task_handle.report_progress('Finished', 100)
 
-def recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, project_id, parser_plugins):
+
+def index_documents(task_handle, files, project_id, project_directory, parser_plugins):
     """
-    Performs a recursive indexation of the specified path.
+    Parse the document content if there is a suitable parser plugin and update
+    the file time stamp.
 
-    :param task_handle: task handle, to report progress updates to the frontend.
-    :param directory: path to analyse
-    :param ignore_patterns: The list of ignore patterns to respect.
-    :param project_dir: The root project directory
-    :param project_id: Id of the
-    :param parser_plugins: The list of parser plugins
-    """
-    paths = []
-    rel_dir = os.path.relpath(directory, project_dir)
-    task_handle.report_progress('Indexing %r' % rel_dir, -1)
-    join = os.path.join
-    isfile = os.path.isfile
-    for path in listdir(directory):
-        try:
-            path = path.name
-        except AttributeError:
-            _logger().debug('using the old python api for scanning dirs')
-        full_path = join(directory, path)
-        ignored = is_ignored_path(full_path, ignore_patterns)
-        if not ignored:
-            if isfile(full_path):
-                paths.append(full_path)
-            else:
-                recursive_index_dirs(task_handle, full_path, ignore_patterns, project_dir, project_id, parser_plugins)
-
-    files = []
-    with db.DbHelper() as dbh:
-        for path in paths:
-            fid = dbh.create_file(path, project_id, commit=False)
-            files.append((path, fid))
-        dbh.conn.commit()
-    index_documents(files, parser_plugins, project_id, project_dir, task_handle)
-
-
-def index_documents(files, parser_plugins, proj_id, project_directory, task_handle):
-    """
-    Indexate documents
+    :param task_handle: Task handle, to report progress to the frontend.
     :param files: list of files to indexate.
-    :param parser_plugins: List of parser plugins
-    :param proj_id: Id of the project
-    :param project_directory: Path of the project
-    :param task_handle: Task handle, to report progress to the frontend
+    :param project_id: Id of the project.
+    :param project_directory: Path of the project.
+    :param parser_plugins: List of parser plugins.
     """
     for file_path, file_id in files:
         ext = os.path.splitext(file_path)[1]
-        plugin = get_symbol_parser('file%s' % ext, parser_plugins)
+        plugin = _get_symbol_parser('file%s' % ext, parser_plugins)
         if not plugin:
             continue
         rel_path = os.path.relpath(file_path, project_directory)
         task_handle.report_progress(_('Indexing %r') % rel_path, -1)
         time.sleep(0.01)  # allow other process to perform a query
-        new_mtime = os.path.getmtime(file_path)
-        with db.DbHelper() as dbh:
-            old_mtime = dbh.get_file_mtime(file_path)
-            dbh.update_file(file_path, new_mtime)
+        new_mtime, old_mtime = _update_mtime(file_path)
         time.sleep(0.01)  # allow other process to perform a query
         if old_mtime is None or new_mtime > old_mtime:
-            # try to parse file symbols
-            parse_document(task_handle, file_id, proj_id, file_path,
-                           plugin, project_directory)
+            parse_symbols(task_handle, file_id, project_id, file_path,
+                          plugin, project_directory)
 
 
 def clean_project_files(task_handle, project_id, ignore_patterns):
     """
-    Removes project files that do not exist or that have been ignored
-    from the project index.
+    Removes project files that do not exist or that have been ignored.
+
+    :param task_handle: Task handle, to report progress to the frontend.
+    :param project_id: Id of the project to clean.
+    :param ignore_patterns: The list of ignore patterns.
     """
     task_handle.report_progress('Cleaning project index', -1)
     to_delete = []
@@ -148,35 +114,70 @@ def clean_project_files(task_handle, project_id, ignore_patterns):
         time.sleep(0.001)  # allow other process to perform a query
 
 
-def is_ignored_path(path, ignore_patterns=None):
+def _recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, project_id, parser_plugins):
     """
-    Utility function that checks if a given path should be ignored.
+    Performs a recursive indexation of the specified path.
 
-    A path is ignored if it matches one of the ignored_patterns.
-
-    :param path: the path to check
-    :param ignore_patterns: The ignore patters to respect.
-        If none, :func:hackedit.api.settings.ignore_patterns() is used instead.
-    :returns: True if the path is in an directory that must be ignored
-        or if the file name matches an ignore pattern, otherwise False.
+    :param task_handle: task handle, to report progress updates to the frontend.
+    :param directory: path to analyse.
+    :param ignore_patterns: The list of ignore patterns to respect.
+    :param project_dir: The root project directory.
+    :param project_id: Id of the.
+    :param parser_plugins: The list of parser plugins.
     """
-    if ignore_patterns is None:
-        ignore_patterns = utils.get_ignored_patterns()
+    paths = []
+    rel_dir = os.path.relpath(directory, project_dir)
+    task_handle.report_progress('Indexing %r' % rel_dir, -1)
+    join = os.path.join
+    isfile = os.path.isfile
+    for path in listdir(directory):
+        try:
+            path = path.name
+        except AttributeError:
+            _logger().debug('using the old python api for scanning dirs')
+        full_path = join(directory, path)
+        ignored = is_ignored_path(full_path, ignore_patterns)
+        if not ignored:
+            if isfile(full_path):
+                paths.append(full_path)
+            else:
+                _recursive_index_dirs(task_handle, full_path, ignore_patterns, project_dir, project_id, parser_plugins)
 
-    def ignore(name):
-        for ptrn in ignore_patterns:
-            if fnmatch(name, ptrn):
-                return True
-
-    for part in os.path.normpath(path).split(os.path.sep):
-        if part and ignore(part):
-            return True
-    return False
+    files = []
+    with db.DbHelper() as dbh:
+        for path in paths:
+            fid = dbh.create_file(path, project_id, commit=False)
+            files.append((path, fid))
+        dbh.conn.commit()
+    index_documents(task_handle, files, project_id, project_dir, parser_plugins)
 
 
-def parse_document(task_handle, file_id, project_id, path, plugin, root_directory):
+def _update_mtime(file_path):
     """
-    Parse file symbols using the indexor plugins.
+    Update the modification time (mtime) of the specified file.
+
+    :param file_path: Path of the file to update.
+    :return: the new and the old file modification time.
+    """
+    new_mtime = os.path.getmtime(file_path)
+    with db.DbHelper() as dbh:
+        old_mtime = dbh.get_file_mtime(file_path)
+        dbh.update_file(file_path, new_mtime)
+    return new_mtime, old_mtime
+
+
+def parse_symbols(task_handle, file_id, project_id, path, plugin, root_directory):
+    """
+    Parses the symbols of the specified file using the parser plugin.
+
+    The symbols are written to the index database.
+
+    :param task_handle: task handle, to report progress to the frontend.
+    :param file_id: id of the file to parse.
+    :param project_id: parent project id.
+    :param path: path of the file to parse.
+    :param plugin: associated parser plugin.
+    :param root_directory: project directory.
     """
     rel_path = os.path.relpath(path, root_directory)
     task_handle.report_progress('Parsing %r' % rel_path, -1)
@@ -185,9 +186,12 @@ def parse_document(task_handle, file_id, project_id, path, plugin, root_director
     except Exception as e:
         print(path, e)
     else:
-        # flatten results and add to the db
+        # write results to the database
         with db.DbHelper() as dbh:
+            # delete all associated symbols
             dbh.delete_file_symbols(file_id)
+            # write them all and commit once all inserts have been done to
+            # improve performances
             _write_symbols_to_db(
                 dbh, symbols, file_id, project_id, parent_id=None)
             dbh.conn.commit()
@@ -211,9 +215,14 @@ def _write_symbols_to_db(dbh, symbols, file_id, project_id, parent_id=None):
 
 
 @functools.lru_cache()
-def get_symbol_parser(path, plugins):
+def _get_symbol_parser(path, plugins):
     """
     Gets the symbol parser for the file's mimetype.
+
+    :param path: path of the file.
+    :param plugins: the list of parser plugins.
+
+    :returns: SymbolParserPlugin.
     """
     mime = mimetypes.guess_type(path)[0]
     for plugin in plugins:
