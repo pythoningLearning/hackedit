@@ -26,6 +26,10 @@ class File:
         self.id = item[db.COL_FILE_ID]
         self.path = item[db.COL_FILE_PATH]
         self.time_stamp = item[db.COL_FILE_TIME_STAMP]
+        self.project_id = item[db.COL_FILE_PROJECT_ID]
+
+    def __repr__(self):
+        return 'File(name=%r, id=%r, path=%r, time_stamp=%r)' % (self.name, self.id, self.path, self.time_stamp)
 
 
 class Symbol:
@@ -40,22 +44,37 @@ class Symbol:
         self.icon_theme = item[db.COL_SYMBOL_ICON_THEME]
         self.icon_path = item[db.COL_SYMBOL_ICON_PATH]
         self.file_id = int(item[db.COL_SYMBOL_FILE_ID])
+        self.project_id = item[db.COL_FILE_PROJECT_ID]
         parent_id = item[db.COL_SYMBOL_PARENT_SYMBOL_ID]
         if not parent_id:
             self.parent_symbol_id = None
         else:
             self.parent_symbol_id = int(parent_id)
 
+    def __repr__(self):
+        return 'Symbol(name=%r, id=%r, line=%r, column=%r)' % (self.name, self.id, self.line, self.column)
+
+
+class Project:
+    """
+    Represents a project entry in the index database.
+    """
+    def __init__(self, item):
+        self.name = item[db.COL_PROJECT_NAME]
+        self.id = item[db.COL_PROJECT_ID]
+        self.path = item[db.COL_PROJECT_PATH]
+
+    def __repr__(self):
+        return 'Project(name=%r, id=%r, path=%r)' % (self.name, self.id, self.path)
+
 
 def _logger():
     return logging.getLogger(__name__)
 
 
-def create_index_database():
+def create_database():
     """
-    Creates index database.
-
-    Do nothing if the db already exists
+    Creates the index database if does not already exists.
 
     :return: Whether the operation succeeded or not.
     """
@@ -67,6 +86,20 @@ def create_index_database():
         return False
     else:
         return True
+
+
+def get_all_projects():
+    """
+    Gets the list of indexed project paths.
+
+    :return: list of paths
+    """
+    projects = []
+    with db.DbHelper() as dbh:
+        for item in dbh.get_projects():
+            p = Project(item)
+            projects.append(p)
+    return sorted(projects, key=lambda x: x.name)
 
 
 def get_project_ids(projects):
@@ -84,6 +117,20 @@ def get_project_ids(projects):
                 if p:
                     project_ids.append(p[db.COL_PROJECT_ID])
     return project_ids
+
+
+def get_file(file_path):
+    """
+    Gets a file from the database
+    :param file_path: path of the File entry to retrieve.
+
+    :returns: File
+    """
+    with db.DbHelper() as dbh:
+        row = dbh.get_file_by_path(file_path)
+        if row:
+            return File(row)
+    return None
 
 
 def get_files(name_filter='', projects=None):
@@ -149,7 +196,7 @@ def perform_indexation(directories, callback=None, task_name=None):
 
     The optional callback function will be called automatically when operation has finished.
 
-    :param directory: List of directories to indexate
+    :param directories: List of directories to perform indexation on.
     :param task_name: The name of the background task as show to the users.
                       Default is "Indexing project file (project_path)".
     :param callback: Callback function (callable).
@@ -166,3 +213,10 @@ def perform_indexation(directories, callback=None, task_name=None):
         task_name = _('Indexing project files')
     return w.task_manager.start(
         task_name, backend.index_project_files, callback, args, True, False)
+
+
+def get_database_path():
+    """
+    Gets the path to the index database.
+    """
+    return db.DbHelper.get_db_path()

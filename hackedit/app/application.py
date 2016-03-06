@@ -80,7 +80,7 @@ class Application(QtCore.QObject):
         shortcuts.load()
 
         show_msg_on_splash(_('Creating index database...'))
-        if not api.index.create_index_database():
+        if not api.index.create_database():
             _logger().warn('indexing is disabled because database creation failed1')
             # failed to create db (missing extension)
             settings.set_indexing_enabled(False)

@@ -38,6 +38,7 @@ def test_create_project():
         assert dbh.create_project('/home/colin') == 1
         assert dbh.create_project('/home/colin') == 1
         assert dbh.create_project('/home/colin2') == 2
+        assert len(list(dbh.get_projects())) == 2
 
 
 def test_delete_project():

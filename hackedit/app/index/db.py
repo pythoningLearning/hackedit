@@ -181,6 +181,19 @@ class DbHelper:
             count = results['COUNT(*)']
         return count > 0
 
+    def get_projects(self):
+        """
+        Gets the complete list of indexed projects.
+        """
+        c = self.conn.cursor()
+        statement = 'SELECT * FROM Project;'
+        c.execute(statement)
+        while True:
+            row = c.fetchone()
+            if row is None:
+                return
+            yield row
+
     def get_project(self, project_path):
         """
         Gets a Project item.
@@ -249,24 +262,29 @@ class DbHelper:
             f = self.get_file_by_path(file_path)
             return int(f[COL_FILE_ID])
 
-    def update_file(self, file_path, mtime):
+    def update_file(self, file_path, mtime, new_path=None, commit=True):
         """
-        Updates a file in the database. The only data that can be update is the
-        file's modification time.
+        Updates a file in the database.
 
         :param file_path: Path of the file to update.
         :param mtime: The new modification time of the file.
+        :param new_path: The new file path. None to specify the path/name has not changed.
 
         :raises: ValueError if the file_path is not in the db.
         """
         file_row = self.get_file_by_path(file_path)
         if file_row is None:
             raise ValueError('invalid file path')
+        if new_path is None:
+            new_path = file_path
+        file_name = os.path.split(new_path)[1]
         fid = file_row[COL_FILE_ID]
         c = self.conn.cursor()
-        sql = 'UPDATE File SET FILE_TIME_STAMP={0} WHERE FILE_ID = {1};'.format(mtime, fid)
+        sql = 'UPDATE File SET FILE_TIME_STAMP={0}, FILE_PATH = "{1}", FILE_NAME = "{2}" ' \
+              'WHERE FILE_ID = {3};'.format(mtime, new_path, file_name, fid)
         c.execute(sql)
-        self.conn.commit()
+        if commit:
+            self.conn.commit()
 
     def delete_file(self, file_path, commit=True):
         """
@@ -334,7 +352,7 @@ class DbHelper:
                       'ORDER BY MATCH_RATIO(FILE_NAME, "{1}") ASC;'.format(
                         self._get_searchable_name(name_filter), name_filter)
             else:
-                sql = 'SELECT * FROM File ORDER BY FILE_NAME ASC LIMIT 50;'
+                sql = 'SELECT * FROM File ORDER BY FILE_NAME ASC;'
         c = self.conn.cursor()
         c.execute(sql)
         while True:
@@ -353,7 +371,7 @@ class DbHelper:
         """
         file_row = self.get_file_by_path(file_path)
         if file_row is None:
-            raise ValueError('invalid file path')
+            raise ValueError('invalid file path: %s' % file_path)
         return file_row[COL_FILE_TIME_STAMP]
 
     def get_file_by_path(self, path):

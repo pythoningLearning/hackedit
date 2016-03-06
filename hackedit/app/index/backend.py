@@ -59,12 +59,64 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
     for project_id, project_directory in proj_ids:
         _recursive_index_dirs(task_handle, project_directory, ignore_patterns, project_directory,
                               project_id, parser_plugins)
-        clean_project_files(task_handle, project_id, ignore_patterns)
+        _clean_project_files(task_handle, project_id, ignore_patterns)
 
     task_handle.report_progress('Finished', 100)
 
 
-def index_documents(task_handle, files, project_id, project_directory, parser_plugins):
+def update_file(task_handle, file_path, file_id, project_directory, project_id, parser_plugin):
+    """
+    Update the modification time of the specified file and parse the file's symbols if the file has changed
+
+    :param task_handle: task handle, to report progress update to the frontend
+    :param file_path: path of the file to update
+    :param file_id: id of the file to update
+    :param project_directory: project directory
+    :param project_id: project id
+    :param parser_plugin: symbol parser plugin
+    """
+    rel_path = os.path.relpath(file_path, project_directory)
+    task_handle.report_progress(_('Indexing %r') % rel_path, -1)
+    new_mtime, old_mtime = _update_mtime(file_path)
+    if old_mtime is None or new_mtime > old_mtime:
+        _parse_symbols(task_handle, file_id, project_id, file_path, parser_plugin, project_directory)
+
+
+def rename_files(task_handle, renamed_files):
+    """
+    Update renamed files
+
+    :param task_handle: task handle, to report progress update to the frontend
+    :param renamed_files: list of renamed files, each element in the list is a tuple(old_path, new_path).
+    """
+    with db.DbHelper() as dbh:
+        for old_path, new_path in renamed_files:
+            task_handle.report_progress(_('Updating renamed file %r -> %r') % (old_path, new_path), -1)
+            try:
+                mtime = dbh.get_file_mtime(old_path)
+            except ValueError:
+                continue
+            else:
+                dbh.update_file(old_path, mtime, new_path=new_path, commit=False)
+        dbh.conn.commit()
+
+
+def delete_files(task_handle, deleted_files):
+    """
+    Removes the specified deleted files from the index database.
+
+    :param task_handle: task handle, to report progress update to the frontend
+    :param deleted_files: the list of deleted files to remove.
+    :return:
+    """
+    with db.DbHelper() as dbh:
+        for path in deleted_files:
+            task_handle.report_progress(_('Delete file %r from index') % path, -1)
+            dbh.delete_file(path, commit=False)
+        dbh.conn.commit()
+
+
+def _index_documents(task_handle, files, project_id, project_directory, parser_plugins):
     """
     Parse the document content if there is a suitable parser plugin and update
     the file time stamp.
@@ -77,7 +129,7 @@ def index_documents(task_handle, files, project_id, project_directory, parser_pl
     """
     for file_path, file_id in files:
         ext = os.path.splitext(file_path)[1]
-        plugin = _get_symbol_parser('file%s' % ext, parser_plugins)
+        plugin = get_symbol_parser('file%s' % ext, parser_plugins)
         if not plugin:
             continue
         rel_path = os.path.relpath(file_path, project_directory)
@@ -86,11 +138,11 @@ def index_documents(task_handle, files, project_id, project_directory, parser_pl
         new_mtime, old_mtime = _update_mtime(file_path)
         time.sleep(0.01)  # allow other process to perform a query
         if old_mtime is None or new_mtime > old_mtime:
-            parse_symbols(task_handle, file_id, project_id, file_path,
-                          plugin, project_directory)
+            _parse_symbols(task_handle, file_id, project_id, file_path,
+                           plugin, project_directory)
 
 
-def clean_project_files(task_handle, project_id, ignore_patterns):
+def _clean_project_files(task_handle, project_id, ignore_patterns):
     """
     Removes project files that do not exist or that have been ignored.
 
@@ -130,7 +182,11 @@ def _recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, 
     task_handle.report_progress('Indexing %r' % rel_dir, -1)
     join = os.path.join
     isfile = os.path.isfile
-    for path in listdir(directory):
+    try:
+        dir_paths = listdir(directory)
+    except FileNotFoundError:
+        return
+    for path in dir_paths:
         try:
             path = path.name
         except AttributeError:
@@ -149,7 +205,7 @@ def _recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, 
             fid = dbh.create_file(path, project_id, commit=False)
             files.append((path, fid))
         dbh.conn.commit()
-    index_documents(task_handle, files, project_id, project_dir, parser_plugins)
+    _index_documents(task_handle, files, project_id, project_dir, parser_plugins)
 
 
 def _update_mtime(file_path):
@@ -166,7 +222,7 @@ def _update_mtime(file_path):
     return new_mtime, old_mtime
 
 
-def parse_symbols(task_handle, file_id, project_id, path, plugin, root_directory):
+def _parse_symbols(task_handle, file_id, project_id, path, plugin, root_directory):
     """
     Parses the symbols of the specified file using the parser plugin.
 
@@ -215,7 +271,7 @@ def _write_symbols_to_db(dbh, symbols, file_id, project_id, parent_id=None):
 
 
 @functools.lru_cache()
-def _get_symbol_parser(path, plugins):
+def get_symbol_parser(path, plugins):
     """
     Gets the symbol parser for the file's mimetype.
 

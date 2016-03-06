@@ -20,7 +20,8 @@ from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import FileIconProvider
 from hackedit.app import settings, boss_wrapper as boss, common
 from hackedit.app.dialogs.dlg_ignore import DlgIgnore
-from hackedit.app.index.backend import index_project_files
+from hackedit.app.index.db import DbHelper
+from hackedit.app.index.backend import index_project_files, update_file, get_symbol_parser, rename_files, delete_files
 from hackedit.app.widgets.locator import LocatorWidget
 from hackedit.app.workspaces import WorkspaceManager
 
@@ -362,8 +363,9 @@ class ProjectExplorer(QtCore.QObject):
         self._last_ignore_patterns = ';'.join(utils.get_ignored_patterns())
         self.view.add_ignore_patterns(self.get_ignored_patterns())
         self.view.file_created.connect(self._on_file_created)
-        self.view.file_deleted.connect(self._on_file_deleted)
-        self.view.file_renamed.connect(self._on_file_renamed)
+        self.view.files_deleted.connect(self._on_files_deleted)
+        self.view.files_renamed.connect(self._on_files_renamed)
+        self.main_window.document_saved.connect(self._on_file_saved)
         self.view.set_icon_provider(FileIconProvider())
         context_menu = FileSystemContextMenu()
         self.view.set_context_menu(context_menu)
@@ -477,8 +479,9 @@ class ProjectExplorer(QtCore.QObject):
         path = FileSystemHelper(self.view).get_current_path()
         if os.path.isfile(path):
             path = os.path.dirname(path)
-        common.create_new_from_template(source, template, path, True,
-                                        self.main_window, self.main_window.app)
+        path = common.create_new_from_template(source, template, path, True,
+                                               self.main_window, self.main_window.app)
+        self._on_file_created(path)
 
     @staticmethod
     def _on_show_in_explorer_triggered():
@@ -576,25 +579,58 @@ class ProjectExplorer(QtCore.QObject):
 
     def _on_file_created(self, path):
         api.editor.open_file(path)
-        # todo: indexate new file
+        project_path = self._combo_projects.itemData(self._combo_projects.currentIndex())
 
-    def _on_file_renamed(self, old_path, new_path):
-        self.main_window.tab_widget.rename_document(old_path, new_path)
-        # todo: update file_path
+        with DbHelper() as dbh:
+            try:
+                dbh.create_file(path, project_id=index.get_project_ids([project_path])[0])
+            except (TypeError, IndexError):
+                return
+            else:
+                # perform indexing of the newly created file (not empty if from template)
+                # todo: find associated plugin and perform indexation if plugin found
+                self._update_document_index(path)
 
-    def _on_file_deleted(self, path):
-        self.main_window.tab_widget.close_document(path)
-        # todo: remove file from db
+    def _on_file_saved(self, path):
+        self._update_document_index(path)
 
-    # todo: on file saved
-    # todo: directory removed
+    def _update_document_index(self, path):
+        file = index.get_file(path)
+        if not file:
+            return
+
+        project = None
+        for p in index.get_all_projects():
+            if p.id == file.project_id:
+                project = p
+                break
+        if not project:
+            return
+        test_path = 'file' + os.path.splitext(path)[1]
+        plugin = get_symbol_parser(test_path, tuple(self.parser_plugins))
+        if not plugin:
+            return
+        args = (path, file.id, project.path, project.id, plugin)
+        api.tasks.start('Update file index', update_file, None, args=args)
+
+    def _on_files_renamed(self, renamed_files):
+        for old_path, new_path in renamed_files:
+            self.main_window.tab_widget.rename_document(old_path, new_path)
+        api.tasks.start('Update renamed files index', rename_files, None,
+                        args=(renamed_files,))
+
+    def _on_files_deleted(self, deleted_files):
+        for path in deleted_files:
+            self.main_window.tab_widget.close_document(path)
+        api.tasks.start('Update renamed files index', delete_files, None,
+                        args=(deleted_files,))
 
     @staticmethod
     def _on_locator_activated(path, line):
         if line == -1:
             line = None
         else:
-            line = line - 1  # 0 based
+            line -= 1  # 0 based
         api.editor.open_file(path, line=line)
 
     def _on_locator_cancelled(self):
