@@ -14,7 +14,7 @@ pygments
 pep8
 pyflakes
 restructuredtext_lint
-boss
+-e git://github.com/ColinDuquesnoy/boss.git@bugfix/sre_constants_error#egg=boss
 cement
 qdarkstyle
 qcrash
