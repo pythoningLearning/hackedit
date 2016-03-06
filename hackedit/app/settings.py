@@ -352,6 +352,14 @@ def set_log_level(value):
     _SETTINGS.setValue('env/log_level', value)
 
 
+def indexing_enabled():
+    return bool(int(_SETTINGS.value('env/indexing_enabled', 1)))
+
+
+def set_indexing_enabled(value):
+    _SETTINGS.setValue('env/indexing_enabled', int(value))
+
+
 # -----------------------------------------------------------------------------
 # Editor settings
 # -----------------------------------------------------------------------------

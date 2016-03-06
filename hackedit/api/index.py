@@ -10,9 +10,11 @@ and call `perform_indexation` to perform indexation when you plugin is activated
 To add you own symbol parser (e.g. to parse the symbols of an unsupported mime types), just implement a
 :class:`hackedit.api.plugins.SymbolParserPlugin`, define the mimetypes you support and implement the parse method.
 """
-import os
+import logging
+import sqlite3
 
 from hackedit.app.index import db
+from hackedit.app.settings import indexing_enabled
 
 
 class File:
@@ -45,6 +47,28 @@ class Symbol:
             self.parent_symbol_id = int(parent_id)
 
 
+def _logger():
+    return logging.getLogger(__name__)
+
+
+def create_index_database():
+    """
+    Creates index database.
+
+    Do nothing if the db already exists
+
+    :return: Whether the operation succeeded or not.
+    """
+    try:
+        with db.DbHelper():
+            pass
+    except (OSError, sqlite3.OperationalError):
+        _logger().exception("failed to create index database...")
+        return False
+    else:
+        return True
+
+
 def get_project_ids(projects):
     """
     Gets the id of the specified projects.
@@ -53,11 +77,12 @@ def get_project_ids(projects):
     :return: list of id
     """
     project_ids = []
-    for proj in projects:
-        with db.DbHelper() as dbh:
-            p = dbh.get_project(proj)
-            if p:
-                project_ids.append(p[db.COL_PROJECT_ID])
+    if indexing_enabled():
+        for proj in projects:
+            with db.DbHelper() as dbh:
+                p = dbh.get_project(proj)
+                if p:
+                    project_ids.append(p[db.COL_PROJECT_ID])
     return project_ids
 
 
@@ -73,6 +98,8 @@ def get_files(name_filter='', projects=None):
     :param projects: List of projects to search into. If None, all files from all indexed projects will be used.
     :return: A generator that yields class:`File`.
     """
+    if not indexing_enabled():
+        return
     project_ids = None
     if projects:
         project_ids = get_project_ids(projects)
@@ -98,6 +125,8 @@ def get_symbols(name_filter='', projects=None, file=None):
 
     :return: A generator that yields :class:`Symbol`.
     """
+    if not indexing_enabled():
+        return
     if projects and file:
         raise ValueError('Cannot set both file and projects parameter')
     project_ids = None
@@ -125,6 +154,8 @@ def perform_indexation(directories, callback=None, task_name=None):
                       Default is "Indexing project file (project_path)".
     :param callback: Callback function (callable).
     """
+    if not indexing_enabled():
+        return
     from hackedit.app.index import backend
     from ._shared import _window
     w = _window()
