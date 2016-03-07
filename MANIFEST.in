@@ -27,6 +27,7 @@ recursive-include launchers *.py
 recursive-include scripts *.py
 recursive-include scripts *.rst
 recursive-include tests *.py
+recursive-include hackedit/extlibs/*.txt
 
 include scripts/git-hooks/post-commit
 include scripts/git-hooks/pre-commit
