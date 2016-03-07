@@ -19,8 +19,11 @@ os.environ['PATH'] = EXTLIBS_PATH + os.pathsep + os.environ['PATH']
 if sys.platform == 'win32':
     # copy _sqlite3.pyd next to our own sqlite3.dll (with fts4 support enabled)
     pyd = os.path.join(os.path.dirname(sys.executable), 'DLLs', '_sqlite3.pyd')
-    shutil.copy(pyd, EXTLIBS_PATH)
-
+    try:
+        shutil.copy(pyd, EXTLIBS_PATH)
+    except PermissionError:
+        # already copied and in use
+        pass
 
 from hackedit import __version__                  # noqa
 from hackedit.api.gettext import get_translation  # noqa
