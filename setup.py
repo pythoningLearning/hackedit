@@ -143,7 +143,8 @@ setup(
         'pygments.styles': [
             'aube = hackedit.styles.aube:AubeStyle',
             'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
-            'ark-dark = hackedit.styles.arkdark:ArkDarkStyle'
+            'ark-dark = hackedit.styles.arkdark:ArkDarkStyle',
+            'midna-dark = hackedit.styles.midnadark:MidnaDarkStyle',
         ],
         'pyqt_distutils_hooks': [
             'hackedit_gettext = hackedit.api.gettext:hackedit_gettext_hook']

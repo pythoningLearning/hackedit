@@ -605,7 +605,7 @@ def is_dark_color_scheme(scheme=None):
         scheme = color_scheme()
     return scheme in [
         'darcula', 'fruity', 'native', 'monokai', 'vim', 'paraiso-dark',
-        'crepuscule', 'ark-dark']
+        'crepuscule', 'ark-dark', 'midna-dark']
 
 
 def editor_font():
