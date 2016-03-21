@@ -169,6 +169,16 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', _('Goto line'), 'Ctrl+G'))
         self._update_templates_menu()
+        menu = api.window.get_menu(_('&Goto'))
+        for action in menu.actions():
+            action.setEnabled(settings.indexing_enabled())
+        tab = api.editor.get_current_editor()
+        self.action_goto_line.setEnabled(tab is not None)
+        if self.main_window.app.flg_force_indexing:
+            self._reindex_all_projects()
+        if not settings.indexing_enabled():
+            for indexor in self._indexors:
+                indexor.cancel()
 
     def _on_file_list_available(self, status):
         self._running_tasks = False
@@ -261,13 +271,22 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_symbol_in_project.triggered.connect(
             self._goto_symbol_in_project)
 
-        menu.addSeparator()
-
         self.action_goto_line = menu.addAction(_('Goto line'))
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', _('Goto line'), 'Ctrl+G'))
         self.main_window.addAction(self.action_goto_line)
         self.action_goto_line.triggered.connect(self._goto_line)
+
+        menu.addSeparator()
+
+        indexing_menu = menu.addMenu('Indexing')
+        action = indexing_menu.addAction('Update project(s) index')
+        action.setToolTip('Update project index database...')
+        action.triggered.connect(self._reindex_all_projects)
+        action = indexing_menu.addAction('Force full project(s) indexation')
+        action.setToolTip('Invalidate project index and force a full '
+                          'reindexation...')
+        action.triggered.connect(self._force_reindex_all_projects)
 
     def _goto_anything(self):
         self._locator.mode = self._locator.MODE_GOTO_ANYTHING
@@ -322,7 +341,7 @@ class ProjectExplorer(QtCore.QObject):
         bt_refresh = QtWidgets.QToolButton()
         bt_refresh.setIcon(QtGui.QIcon.fromTheme('view-refresh'))
         bt_refresh.setToolTip(
-            _('Refresh tree view and run project indexation'))
+            _('Refresh project tree view...'))
         bt_refresh.clicked.connect(self._refresh)
         layout.addWidget(bt_refresh)
 
@@ -479,8 +498,9 @@ class ProjectExplorer(QtCore.QObject):
         path = FileSystemHelper(self.view).get_current_path()
         if os.path.isfile(path):
             path = os.path.dirname(path)
-        path = common.create_new_from_template(source, template, path, True,
-                                               self.main_window, self.main_window.app)
+        path = common.create_new_from_template(
+            source, template, path, True, self.main_window,
+            self.main_window.app)
         self._on_file_created(path)
 
     @staticmethod
@@ -499,7 +519,8 @@ class ProjectExplorer(QtCore.QObject):
         if tab is not None:
             self.view.select_path(tab.file.path)
         self.action_goto_line.setEnabled(tab is not None)
-        self.action_goto_symbol.setEnabled(tab is not None)
+        self.action_goto_symbol.setEnabled(
+            tab is not None and settings.indexing_enabled())
 
     def _on_current_proj_changed(self, new_path):
         if api.project.get_current_project() != new_path:
@@ -546,11 +567,26 @@ class ProjectExplorer(QtCore.QObject):
     def _refresh(self):
         self.view.set_root_path('/')
         self.view.set_root_path(api.project.get_current_project())
+
+    def _force_reindex_all_projects(self):
+        for indexor in self._indexors:
+            indexor.cancel()
+        # wait a bit before removing the index database (to make sure
+        # pending indexation tasks are actually canceled).
+        QtCore.QTimer.singleShot(100, self._perform_full_reindexation)
+
+    def _perform_full_reindexation(self):
+        for project in api.project.get_projects():
+            index.remove_project(project)
         self._reindex_all_projects()
 
     def _reindex_all_projects(self):
         for indexor in self._indexors:
             indexor.cancel()
+        QtCore.QTimer.singleShot(100, self._perform_reindexation)
+
+    def _perform_reindexation(self):
+        for indexor in self._indexors:
             indexor.perform_indexing()
 
     def _remove_current_project(self):
@@ -587,8 +623,6 @@ class ProjectExplorer(QtCore.QObject):
             except (TypeError, IndexError):
                 return
             else:
-                # perform indexing of the newly created file (not empty if from template)
-                # todo: find associated plugin and perform indexation if plugin found
                 self._update_document_index(path)
 
     def _on_file_saved(self, path):

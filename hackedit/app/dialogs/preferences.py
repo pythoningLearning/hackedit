@@ -158,6 +158,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         env.colors = colors
         self._add_page(colors)
         self._add_page(preference_pages.EditorDisplay())
+        self._add_page(preference_pages.Indexing())
         self._add_page(preference_pages.Mimetypes())
         self._add_page(preference_pages.Notifications())
         self._add_page(preference_pages.Shortcuts())

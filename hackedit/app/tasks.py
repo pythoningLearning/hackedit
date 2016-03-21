@@ -94,7 +94,7 @@ class TaskThread(QtCore.QThread):
 def run_task(func, *args):
     print('running task: %r with args=%r' % (func, args[0]))
     ret = func(SubprocessTaskHandle(), *args[0])
-    print('task finished: %r' % ret)
+    print('task finished: %r' % func)
     return ret
 
 

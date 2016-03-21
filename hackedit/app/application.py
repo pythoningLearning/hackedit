@@ -68,6 +68,7 @@ class Application(QtCore.QObject):
         self.editor_windows = []
         show_msg_on_splash(_('Setting up except hook...'))
         self._setup_except_hook()
+        self.flg_force_indexing = False
 
         show_msg_on_splash(_('Loading translations...'))
         _logger().info('available locales: %r',
@@ -286,6 +287,8 @@ class Application(QtCore.QObject):
             settings.file_manager_cmd())
         for w in self.editor_windows:
             w.apply_preferences()
+        self.flg_force_indexing = False
+
 
     # -------------------------------------------------------------------------
     # Private API (+ overridden methods)

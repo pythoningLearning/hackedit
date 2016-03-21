@@ -10,6 +10,7 @@ and call `perform_indexation` to perform indexation when you plugin is activated
 To add you own symbol parser (e.g. to parse the symbols of an unsupported mime types), just implement a
 :class:`hackedit.api.plugins.SymbolParserPlugin`, define the mimetypes you support and implement the parse method.
 """
+import os
 import logging
 import sqlite3
 
@@ -220,3 +221,35 @@ def get_database_path():
     Gets the path to the index database.
     """
     return db.DbHelper.get_db_path()
+
+
+def remove_project(path):
+    """
+    Removes project from the index database
+
+    :param path: path of the project to remove
+    """
+    with db.DbHelper() as dbh:
+        dbh.delete_project(path)
+
+
+def clear_database():
+    """
+    Clears the index database.
+
+    The database file is deleted and an empty db is built.
+
+    :return True if the operation succeeded, False otherwise.
+    """
+    try:
+        os.remove(db.DbHelper.get_db_path())
+    except OSError:
+        return False
+    else:
+        # create empty db
+        ok = False
+        while not ok:
+            try:
+                ok = create_database()
+            except IOError:
+                ok = False
