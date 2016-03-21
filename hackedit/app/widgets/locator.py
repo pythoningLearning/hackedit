@@ -203,8 +203,10 @@ class LocatorWidget(QtWidgets.QFrame):
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path
-            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(
-                name, search_term), path, line)
+            enriched = self.get_enriched_text(name, search_term)
+            if enriched == name and search_term:
+                continue
+            text = '%s<br><i>%s:%d</i>' % (enriched, path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -237,8 +239,10 @@ class LocatorWidget(QtWidgets.QFrame):
             name = symbol_item.name
             line = symbol_item.line + 1
             path = file_item.path
-            text = '%s<br><i>%s:%d</i>' % (self.get_enriched_text(
-                name, search_term), path, line)
+            enriched = self.get_enriched_text(name, search_term)
+            if enriched == name and search_term:
+                continue
+            text = '%s<br><i>%s:%d</i>' % (enriched, path, line)
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))
@@ -318,8 +322,10 @@ class LocatorWidget(QtWidgets.QFrame):
         for file_item in project_files:
             path = file_item.path
             name = file_item.name
-            text = '%s<br><i>%s</i>' % (self.get_enriched_text(
-                name, name_filter), os.path.dirname(path))
+            enriched = self.get_enriched_text(name, name_filter)
+            if enriched == name and name_filter:
+                continue
+            text = '%s<br><i>%s</i>' % (enriched, os.path.dirname(path))
             item = QtWidgets.QTreeWidgetItem()
             item.setText(0, text)
             item.setIcon(0, self.icon_provider.icon(path))

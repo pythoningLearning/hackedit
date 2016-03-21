@@ -552,7 +552,7 @@ def match_ratio(item, expr):
     try:
         index = item.lower().index(get_search_tokens(expr)[0])
     except ValueError:
-        ratio = 0
+        ratio = sys.maxsize
     else:
         ratio = index - len(expr) / len(item)
     return ratio
