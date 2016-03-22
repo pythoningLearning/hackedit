@@ -66,6 +66,9 @@ def get_translation(package='hackedit'):
         get_translation function usable directly in your module.
     """
     locale_dir = os.path.join(sys.prefix, 'share', 'locale')
+    if not os.path.exists(locale_dir):
+        locale_dir = os.path.join(
+            sys.prefix, 'local', 'share', 'locale')
     try:
         t = gettext.translation(package, localedir=locale_dir,
                                 languages=[get_locale()])
@@ -76,7 +79,11 @@ def get_translation(package='hackedit'):
         else:
             return t.gettext
     except OSError:
-        return gettext.NullTranslations().gettext
+        t = gettext.NullTranslations()
+        if package == 'hackedit':
+            # we can install globally
+            t.install()
+        return t.gettext
 
 
 def hackedit_gettext_hook(ui_script_path):
