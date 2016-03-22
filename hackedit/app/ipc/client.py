@@ -68,8 +68,11 @@ class Process(QtCore.QObject):
             self._interpreter, (server.__file__, str(self.port)))
 
     def _on_ready_read(self):
-        output = self._process.readAllStandardOutput().data().decode(
-            locale.getpreferredencoding())
+        try:
+            output = self._process.readAllStandardOutput().data().decode(
+                locale.getpreferredencoding())
+        except (TypeError, AttributeError):
+            return
         for line in output.splitlines():
             if not line:
                 continue
@@ -78,17 +81,26 @@ class Process(QtCore.QObject):
                 message, progress = [t.strip() for t in line.split('|')]
                 progress = int(progress)
                 msg = {'message': message, 'progress': progress}
-                self.message_available.emit(msg)
+                try:
+                    self.message_available.emit(msg)
+                except TypeError:
+                    pass
             else:
                 _logger().debug('server::localhost:%s> %s', self.port, line)
 
     def _on_state_changed(self, state):
-        if state == self._process.Running:
-            # connect to server
-            QtCore.QTimer.singleShot(100, self.connect)
+        try:
+            if state == self._process.Running:
+                # connect to server
+                QtCore.QTimer.singleShot(100, self.connect)
+        except (TypeError, AttributeError):
+            return
 
     def connect(self):
-        _logger().debug('connecting to server: localhost:%s', self.port)
+        try:
+            _logger().debug('connecting to server: localhost:%s', self.port)
+        except AttributeError:
+            return
         if self._socket:
             self._socket.setParent(None)
             self._socket.deleteLater()
@@ -108,7 +120,7 @@ class Process(QtCore.QObject):
             ret_val = data['ret_val']
             try:
                 self.result_available.emit(ret_val)
-            except TypeError:
+            except (TypeError, AttributeError):
                 # c++ instance deleted
                 return
         elif 'exception' in data.keys():
@@ -133,11 +145,18 @@ class Process(QtCore.QObject):
             raise e
 
     def _on_finished(self, exit_code, exit_status):
-        if exit_status == self._process.CrashExit:
-            exit_code = 139
+        try:
+            if exit_status == self._process.CrashExit:
+                exit_code = 139
+        except (AttributeError, TypeError):
+            pass
         _logger().debug('process finished with exit code %d' % exit_code)
-        self.finished.emit(exit_code)
-        QtCore.QTimer.singleShot(1, self.cleanup)
+        try:
+            self.finished.emit(exit_code)
+        except (TypeError, AttributeError):
+            pass
+        else:
+            QtCore.QTimer.singleShot(1, self.cleanup)
 
     def cleanup(self):
         if self._socket:
