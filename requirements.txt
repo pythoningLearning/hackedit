@@ -1,13 +1,13 @@
 #
 # Dependencies that need to be installed to develop hackedit.
 #
-# extlibs that are distributed though an internal package put on sys.path
-pyqode.qt
-pyqode.core
-pyqode.python
-pyqode.cobol
-pyqode.rst
-pyqode.json
+# extlibs that are distributed through an internal package put on sys.path
+-e git://github.com/pyQode/pyqode.qt#egg=pyqode.qt
+-e git://github.com/pyQode/pyqode.core#egg=pyqode.core
+-e git://github.com/pyQode/pyqode.python#egg=pyqode.python
+-e git://github.com/pyQode/pyqode.cobol#egg=pyqode.cobol
+-e git://github.com/pyQode/pyqode.rst#egg=pyqode.rst
+-e git://github.com/pyQode/pyqode.json#egg=pyqode.json
 future
 pygments
 jedi
