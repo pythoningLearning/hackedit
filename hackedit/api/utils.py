@@ -157,7 +157,7 @@ def is_ignored_path(path, ignore_patterns=None):
         or if the file name matches an ignore pattern, otherwise False.
     """
     if ignore_patterns is None:
-        ignore_patterns = utils.get_ignored_patterns()
+        ignore_patterns = get_ignored_patterns()
 
     def ignore(name):
         for ptrn in ignore_patterns:

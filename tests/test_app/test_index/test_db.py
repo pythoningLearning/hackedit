@@ -27,7 +27,7 @@ def test_has_project():
     remove_db()
     with db.DbHelper() as dbh:
         assert not dbh.has_project('/home/colin')
-        pid = dbh.create_project('/home/colin')
+        dbh.create_project('/home/colin')
         assert dbh.has_project('/home/colin')
 
 
@@ -48,23 +48,29 @@ def test_delete_project():
         pid1 = dbh.create_project('/home/colin')
         fid1 = dbh.create_file('/path1', pid1)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid1)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png',
+            fid1, pid1)
         fid2 = dbh.create_file('/path2', pid1)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid1)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png',
+            fid2, pid1)
 
         # project 2: 2 files, 2 symbols
         pid2 = dbh.create_project('/home/colin2')
         fid3 = dbh.create_file('/path3', pid2)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid3, pid2)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png',
+            fid3, pid2)
         fid4 = dbh.create_file('/path4', pid2)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid4, pid2)
+            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png',
+            fid4, pid2)
 
         assert len(list(dbh.get_files())) == 4
         assert len(list(dbh.get_symbols())) == 4
-        dbh.delete_project('/home/colin')
+        assert dbh.delete_project('/home/colin') is True
+        # second attempt to delete project should fail
+        assert dbh.delete_project('/home/colin') is False
         assert len(list(dbh.get_files())) == 2
         assert len(list(dbh.get_symbols())) == 2
 
@@ -101,20 +107,27 @@ def test_get_project_files():
         dbh.create_file('/home/set_call_tip.txt', pid)
         dbh.create_file('/home/set_tip.txt', pid)
         dbh.create_file('/home/set_tip2.txt', pid2)
-        dbh.create_file('/home/test_my_code_editor.txt', pid2)
+        dbh.create_file('/home/testMyCodeEditor.txt', pid2)
     with db.DbHelper() as dbh:
-        assert len(list(dbh.get_files(project_ids=[pid], name_filter='file'))) == 2
-        assert len(list(dbh.get_files(project_ids=[pid], name_filter='zu'))) == 1
+        assert len(list(dbh.get_files(
+            project_ids=[pid], name_filter='file'))) == 2
+        assert len(list(dbh.get_files(
+            project_ids=[pid], name_filter='zu'))) == 1
         items = list(dbh.get_files(project_ids=[pid], name_filter='set tip'))
         assert len(items) == 3
         assert len(list(dbh.get_files(project_ids=[pid], name_filter=''))) == 6
         # check that using multiple projects works too
-        assert len(list(dbh.get_files(project_ids=[pid, pid2], name_filter='set Tip'))) == 4
+        assert len(list(dbh.get_files(
+            project_ids=[pid, pid2], name_filter='set Tip'))) == 4
         assert len(list(dbh.get_files(name_filter='set tip'))) == 4
         assert len(list(dbh.get_files(name_filter='g'))) == 0
         assert len(list(dbh.get_files())) == 8
-        assert len(list(dbh.get_files(name_filter='test_editor'))) == 1
-        assert len(list(dbh.get_files(name_filter='code_editor'))) == 1
+        assert len(list(dbh.get_files(project_ids=[pid, pid2],
+                                      name_filter='my'))) == 1
+        assert len(list(dbh.get_files(project_ids=[pid, pid2],
+                                      name_filter='my editor'))) == 1
+        assert len(list(dbh.get_files(project_ids=[pid, pid2],
+                                      name_filter='code editor'))) == 1
 
 
 def test_get_files():
@@ -197,9 +210,11 @@ def test_get_symbols():
         pid = dbh.create_project('/home/colin')
         fid = dbh.create_file(path, pid)
         dbh.create_symbol(
-            'set_Tool_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
+            'set_Tool_Tip', 10, 45, 'code-variable',
+            '/path/to/icon.png', fid, pid)
         dbh.create_symbol(
-            'set_Call_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
+            'set_Call_Tip', 10, 45, 'code-variable',
+            '/path/to/icon.png', fid, pid)
         dbh.create_symbol(
             'set_Tip', 10, 45, 'code-variable', '/path/to/icon.png', fid, pid)
         dbh.create_symbol(
@@ -222,9 +237,11 @@ def test_get_file_symbols():
         fid1 = dbh.create_file(path1, pid)
         fid2 = dbh.create_file(path2, pid)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid)
+            'setToolTip', 10, 45, 'code-variable',
+            '/path/to/icon.png', fid1, pid)
         dbh.create_symbol(
-            'setCallTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid)
+            'setCallTip', 10, 45, 'code-variable',
+            '/path/to/icon.png', fid1, pid)
         dbh.create_symbol(
             'setTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid)
         dbh.create_symbol(
@@ -249,9 +266,11 @@ def test_get_project_symbols():
         fid1 = dbh.create_file(path1, pid1)
         fid2 = dbh.create_file(path2, pid2)
         dbh.create_symbol(
-            'setToolTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid1)
+            'setToolTip', 10, 45, 'code-variable',
+            '/path/to/icon.png', fid1, pid1)
         dbh.create_symbol(
-            'setCallTip', 10, 45, 'code-variable', '/path/to/icon.png', fid1, pid1)
+            'setCallTip', 10, 45, 'code-variable',
+            '/path/to/icon.png', fid1, pid1)
         dbh.create_symbol(
             'setTip', 10, 45, 'code-variable', '/path/to/icon.png', fid2, pid2)
         dbh.create_symbol(
@@ -261,7 +280,8 @@ def test_get_project_symbols():
         assert len(list(dbh.get_symbols())) == 5
         assert len(list(dbh.get_symbols(project_ids=[pid1]))) == 2
         assert len(list(dbh.get_symbols(project_ids=[pid2]))) == 3
-        assert len(list(dbh.get_symbols(project_ids=[pid2], name_filter='wo'))) == 2
+        assert len(list(dbh.get_symbols(
+            project_ids=[pid2], name_filter='wo'))) == 2
 
 
 def test_delete_file_symbols():
@@ -277,3 +297,9 @@ def test_delete_file_symbols():
         assert len(list(dbh.get_symbols(file_id=file_id))) == 2
         dbh.delete_file_symbols(file_id)
         assert len(list(dbh.get_symbols(file_id=file_id))) == 0
+
+
+def test_is_camel_case():
+    assert db.DbHelper.is_camel_case('TESTMYCODEEDIT') is False
+    assert db.DbHelper.is_camel_case('TestMyCodeEdit') is True
+    assert db.DbHelper.is_camel_case('testMyCodeEdit') is True

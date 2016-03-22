@@ -524,9 +524,10 @@ class DbHelper:
     @staticmethod
     def _get_searchable_name(name):
         """
-        Replaces capital letters by _ + small letter
+        Replaces capital letters by _ + small letter if name is camel/pascal
+        case.
 
-        :param name: name to conver
+        :param name: name to convert
         :return: converted name
         """
         if DbHelper.is_camel_case(name):
@@ -538,7 +539,10 @@ class DbHelper:
 
     @staticmethod
     def is_camel_case(name):
-        return DbHelper.prog_camel_case.match(name) is not None
+        """
+        Checks if a name is camel case (or pascal case).
+        """
+        return bool(DbHelper.prog_camel_case.findall(name))
 
 
 def match_ratio(item, expr):

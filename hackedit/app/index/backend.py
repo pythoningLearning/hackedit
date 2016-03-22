@@ -45,6 +45,8 @@ def index_project_files(task_handle, project_directories, ignore_patterns,
     ignore_patterns += ['*.exe', '*.dll', '*.usr', '*.so', '*.dylib', '*.psd',
                         '*.db', '.hackedit', '.eggs', '.cache', '.git', '.svn',
                         '.hackedit', 'build', 'dist', '_build']
+    if os.environ.get('TRAVIS', default=None) is not None:
+        ignore_patterns.remove('build')
     parser_plugins = tuple(parser_plugins)
     # create projects
     proj_ids = []
@@ -197,7 +199,8 @@ def _recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, 
             if isfile(full_path):
                 paths.append(full_path)
             else:
-                _recursive_index_dirs(task_handle, full_path, ignore_patterns, project_dir, project_id, parser_plugins)
+                _recursive_index_dirs(task_handle, full_path, ignore_patterns,
+                                      project_dir, project_id, parser_plugins)
 
     files = []
     with db.DbHelper() as dbh:
