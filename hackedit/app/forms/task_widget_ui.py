@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/task_widget.ui'
+# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/task_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -11,16 +11,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(428, 98)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
-        Form.setSizePolicy(sizePolicy)
-        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setSpacing(0)
-        self.verticalLayout.setObjectName("verticalLayout")
+        Form.resize(456, 114)
+        Form.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.gridLayout = QtWidgets.QGridLayout(Form)
+        self.gridLayout.setObjectName("gridLayout")
         self.group = QtWidgets.QGroupBox(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -28,11 +22,14 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.group.sizePolicy().hasHeightForWidth())
         self.group.setSizePolicy(sizePolicy)
         self.group.setObjectName("group")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.group)
-        self.verticalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.group)
+        self.gridLayout_2.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.bt_cancel = QtWidgets.QToolButton(self.group)
+        icon = QtGui.QIcon.fromTheme("process-stop")
+        self.bt_cancel.setIcon(icon)
+        self.bt_cancel.setObjectName("bt_cancel")
+        self.gridLayout_2.addWidget(self.bt_cancel, 0, 1, 1, 1)
         self.pbar_progress = QtWidgets.QProgressBar(self.group)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -44,17 +41,24 @@ class Ui_Form(object):
         self.pbar_progress.setProperty("value", -1)
         self.pbar_progress.setTextVisible(True)
         self.pbar_progress.setObjectName("pbar_progress")
-        self.horizontalLayout.addWidget(self.pbar_progress)
-        self.bt_cancel = QtWidgets.QToolButton(self.group)
-        icon = QtGui.QIcon.fromTheme("process-stop")
-        self.bt_cancel.setIcon(icon)
-        self.bt_cancel.setObjectName("bt_cancel")
-        self.horizontalLayout.addWidget(self.bt_cancel)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-        self.lbl_description = QtWidgets.QLabel(self.group)
+        self.gridLayout_2.addWidget(self.pbar_progress, 0, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lbl_description = ElidedLabel(self.group)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbl_description.sizePolicy().hasHeightForWidth())
+        self.lbl_description.setSizePolicy(sizePolicy)
+        self.lbl_description.setMinimumSize(QtCore.QSize(350, 0))
+        self.lbl_description.setMaximumSize(QtCore.QSize(350, 16777215))
+        self.lbl_description.setWordWrap(False)
         self.lbl_description.setObjectName("lbl_description")
-        self.verticalLayout_2.addWidget(self.lbl_description)
-        self.verticalLayout.addWidget(self.group)
+        self.horizontalLayout.addWidget(self.lbl_description)
+        spacerItem = QtWidgets.QSpacerItem(32, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.gridLayout_2.addLayout(self.horizontalLayout, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.group, 0, 0, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -68,3 +72,4 @@ class Ui_Form(object):
         self.bt_cancel.setText(_("..."))
         self.lbl_description.setText(_("Description"))
 
+from hackedit.api.widgets import ElidedLabel

@@ -65,7 +65,7 @@ class TaskHandle:
         :param message: Message associated with the progress update
         :param progress: New progress value.
         """
-        pass
+        print(message)
         server.send(self.conn, {'message': message, 'progress': progress})
 
 

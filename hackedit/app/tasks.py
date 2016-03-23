@@ -34,6 +34,7 @@ class SubprocessTaskHandle:
         :param message: Message associated with the progress update
         :param progress: New progress value.
         """
+        print(message)
         # send progress though stream (much more efficient than using sockets).
         print('Progress update: %s|%d' % (message, progress))
 
@@ -93,7 +94,7 @@ class TaskThread(QtCore.QThread):
 def run_task(func, *args):
     print('running task: %r with args=%r' % (func, args[0]))
     ret = func(SubprocessTaskHandle(), *args[0])
-    print('task finished: %r' % ret)
+    print('task finished: %r' % func)
     return ret
 
 
@@ -148,7 +149,11 @@ class Task(QtCore.QObject):
         .. note:: It is up to the worker implementation to check this flag to
                   and exit from its process method.
         """
-        self.finished.emit(self)
+        try:
+            self.finished.emit(self)
+        except RuntimeError as e:
+            # wrapped C/C++ object of type Task has been
+            return
         try:
             self.process.terminate()
         except AttributeError:
@@ -292,7 +297,6 @@ class TaskListWidget(QtWidgets.QWidget):
     """
     Shows a list of TaskWidget in a widget window
     """
-
     def __init__(self, task_manager):
         """
         :type task_manager: TaskManager
@@ -302,10 +306,9 @@ class TaskListWidget(QtWidgets.QWidget):
         spacer = QtWidgets.QSpacerItem(
             20, 20, vPolicy=QtWidgets.QSizePolicy.Expanding)
         self.vertical_layout.addSpacerItem(spacer)
-        # self.vertical_layout.setContentsMargins(0, 0, 0, 0)
-        self.vertical_layout.setSizeConstraint(
-            self.vertical_layout.SetMinimumSize)
         self.setLayout(self.vertical_layout)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Preferred,
+                           QtWidgets.QSizePolicy.Fixed)
         self.tm = task_manager
         self.tm.task_started.connect(self._add_task)
         self.tm.task_finished.connect(self._rm_task)

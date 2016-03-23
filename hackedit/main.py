@@ -4,6 +4,7 @@ Entry point of HackEdit.
 """
 import logging
 import os
+import shutil
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -14,6 +15,15 @@ if not EXTLIBS_PATH:
     EXTLIBS_PATH = os.path.join(os.path.dirname(hackedit.__file__), 'extlibs')
     os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
 sys.path.insert(0, EXTLIBS_PATH)
+os.environ['PATH'] = EXTLIBS_PATH + os.pathsep + os.environ['PATH']
+if sys.platform == 'win32':
+    # copy _sqlite3.pyd next to our own sqlite3.dll (with fts4 support enabled)
+    pyd = os.path.join(os.path.dirname(sys.executable), 'DLLs', '_sqlite3.pyd')
+    try:
+        shutil.copy(pyd, EXTLIBS_PATH)
+    except PermissionError:
+        # already copied and in use
+        pass
 
 from hackedit import __version__                  # noqa
 from hackedit.api.gettext import get_translation  # noqa

@@ -5,8 +5,6 @@ import json
 import logging
 import os
 
-from pyqode.core.share import Definition
-
 from ._shared import _window
 
 
@@ -73,58 +71,6 @@ def get_root_project():
         return None
 
 
-def get_project_files(root_project=None):
-    """
-    Gets the list of relevant project files.
-
-    The list is fildered according to the ignore patterns defined
-    in ``Preferences > Mimetypes``.
-
-    .. note:: The list of project files is initially contains only the list of
-        open files int the main tab widget.
-        Use the signal :attr:`hackedit.api.signals.PROJECT_FILES_AVAILABLE`
-        to know when the list is available.
-    """
-    if root_project is None:
-        root_project = get_root_project()
-    usd = load_user_cache(root_project)
-    try:
-        files = usd['project_files']
-    except KeyError:
-        files = []
-    try:
-        # make sure to include external files currently opened.
-        from hackedit.api.editor import get_all_paths
-        files += get_all_paths()
-    except AttributeError:
-        _logger().exception(
-            'failed to get all paths for project %r', root_project)
-    return sorted(list(set(files)))
-
-
-def get_project_symbols(project_path):
-    """
-    Returns a dict that contains all the project symbols.
-
-    Each key in the dict is a file path. Each value is a list of
-    :class:`pyqode.core.share.Definition` for the associated file path.
-    """
-    usd = load_user_cache(project_path)
-    try:
-        symbols = usd['project_symbols']
-    except KeyError:
-        symbols = {}
-    symbols = [Definition.from_dict(d) for d in symbols]
-    return symbols
-
-
-def set_project_symbols(project_path, symbols):
-    usd = load_user_cache(project_path)
-    symbols = [d.to_dict() for d in symbols]
-    usd['project_symbols'] = symbols
-    save_user_cache(project_path, usd)
-
-
 def load_user_config(project_path):
     """
     Loads project user config (.hackedit/config.usr)
@@ -163,46 +109,6 @@ def save_user_config(project_path, data):
                                separators=(',', ': ')))
     except PermissionError:
         _logger().warn('failed to save user config file, permission error')
-
-
-def load_user_cache(project_path):
-    """
-    Loads project user cache (.hackedit/cache.usr).
-
-    The cache is used to cache project data such as the project files list,
-    the list of symbols,...
-
-    :param project_path: path of the project to read user data from.
-    :return: dict
-    """
-    path = os.path.join(project_path, FOLDER, 'cache.usr')
-    try:
-        with open(path, 'r') as f:
-            return json.loads(f.read())
-    except (OSError, ValueError):
-        return {}
-
-
-def save_user_cache(project_path, data):
-    """
-    Saves the project user cache to the specified path
-
-    :param project_path: project path
-    :param data: data to save
-    """
-    path = os.path.join(project_path, FOLDER, 'cache.usr')
-    try:
-        os.makedirs(os.path.dirname(path))
-    except FileExistsError:
-        _logger().debug('failed to created path: %r, already exists',
-                        os.path.dirname(path))
-    # write data
-    try:
-        with open(path, 'w') as f:
-            f.write(json.dumps(data, sort_keys=True, indent=4,
-                               separators=(',', ': ')))
-    except PermissionError:
-        _logger().warn('failed to save user cache file, permission error')
 
 
 def load_workspace(path):

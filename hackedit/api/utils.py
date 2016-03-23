@@ -1,6 +1,9 @@
 """
 A set of utility functions that plugin would use.
 """
+import os
+from fnmatch import fnmatch
+
 from PyQt5 import QtWidgets
 
 from hackedit.app import settings, mime_types
@@ -139,3 +142,29 @@ class block_signals:
 
     def __exit__(self, *args, **kwargs):
         self.qobject.blockSignals(False)
+
+
+def is_ignored_path(path, ignore_patterns=None):
+    """
+    Utility function that checks if a given path should be ignored.
+
+    A path is ignored if it matches one of the ignored_patterns.
+
+    :param path: the path to check.
+    :param ignore_patterns: The ignore patters to respect.
+        If none, :func:hackedit.api.settings.ignore_patterns() is used instead.
+    :returns: True if the path is in an directory that must be ignored
+        or if the file name matches an ignore pattern, otherwise False.
+    """
+    if ignore_patterns is None:
+        ignore_patterns = get_ignored_patterns()
+
+    def ignore(name):
+        for ptrn in ignore_patterns:
+            if fnmatch(name, ptrn):
+                return True
+
+    for part in os.path.normpath(path).split(os.path.sep):
+        if part and ignore(part):
+            return True
+    return False

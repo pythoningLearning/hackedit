@@ -25,7 +25,7 @@ from hackedit.api import system, shortcuts
 from hackedit.api.events import Event, WARNING, ExceptionEvent
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import ClickableLabel, FileIconProvider
-from hackedit.app import common, events, indexor, generic_pyqode_server
+from hackedit.app import common, events, generic_pyqode_server
 from hackedit.app.dialogs.preferences import DlgPreferences
 from hackedit.app.docks import DockWidgetsManager
 from hackedit.app.forms import main_window_ui
@@ -183,9 +183,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_statusbar_widget(self.task_manager_widget)
         self._setup_status_bar_widgets()
         self.notifications = events.Manager(self)
-        self.indexor = indexor.FileIndexor(self)
         self.open_folder(path)
         self.project_explorer = ProjectExplorer(self)
+        self.project_explorer.activate()
         self.project_explorer.apply_preferences()
 
         self._update_mem_label_timer = QtCore.QTimer()
@@ -660,7 +660,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.notifications.close()
                 self.notifications = None
                 self.task_manager_widget.close()
-                self.indexor.window = None
                 self._dock_manager.window = None
                 self.project_explorer.close()
 

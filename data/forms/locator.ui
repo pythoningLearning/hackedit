@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>698</width>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,8 +35,7 @@
        </property>
        <property name="icon">
         <iconset theme="dialog-information">
-         <normaloff/>
-        </iconset>
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -60,8 +59,7 @@
        </property>
        <property name="icon">
         <iconset theme="window-close">
-         <normaloff/>
-        </iconset>
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -83,6 +81,13 @@
        <string notr="true">1</string>
       </property>
      </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cb_non_project_files">
+     <property name="text">
+      <string>Include non-project files (Shift+Enter)</string>
+     </property>
     </widget>
    </item>
   </layout>

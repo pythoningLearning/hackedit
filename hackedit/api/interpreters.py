@@ -271,7 +271,6 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
             except TypeError:
                 _logger().debug('open_file_requested signal already connected')
         else:
-            # todo run in external terminal.
             cmd = ' '.join([interpreter] + args)
             cmd = utils.get_cmd_run_command_in_terminal() % cmd
             tokens = shlex.split(cmd, posix=False)

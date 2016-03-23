@@ -68,6 +68,7 @@ class Application(QtCore.QObject):
         self.editor_windows = []
         show_msg_on_splash(_('Setting up except hook...'))
         self._setup_except_hook()
+        self.flg_force_indexing = False
 
         show_msg_on_splash(_('Loading translations...'))
         _logger().info('available locales: %r',
@@ -78,6 +79,12 @@ class Application(QtCore.QObject):
 
         show_msg_on_splash(_('Loading shortcuts...'))
         shortcuts.load()
+
+        show_msg_on_splash(_('Creating index database...'))
+        if not api.index.create_database():
+            _logger().warn('indexing is disabled because database creation failed1')
+            # failed to create db (missing extension)
+            settings.set_indexing_enabled(False)
 
         show_msg_on_splash(_('Loading font: Hack-Bold.ttf'))
         QtGui.QFontDatabase.addApplicationFont(
@@ -280,6 +287,8 @@ class Application(QtCore.QObject):
             settings.file_manager_cmd())
         for w in self.editor_windows:
             w.apply_preferences()
+        self.flg_force_indexing = False
+
 
     # -------------------------------------------------------------------------
     # Private API (+ overridden methods)

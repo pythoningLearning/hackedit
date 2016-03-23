@@ -121,3 +121,4 @@ def create_new_from_template(source, template, dest_dir, single_file, window,
         window.open_file(path)
     else:
         app.open_path(path, sender=sender)
+    return path

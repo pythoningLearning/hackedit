@@ -1,14 +1,13 @@
 """
 This plugin show the project contents in a tree view.
 """
+import pkg_resources
 import logging
 import mimetypes
 import os
 import shlex
 import subprocess
-import time
 import webbrowser
-from fnmatch import fnmatch
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.api import DelayJobRunner, TextHelper
@@ -16,113 +15,47 @@ from pyqode.core.widgets import FileSystemTreeView, FileSystemContextMenu, \
     FileSystemHelper
 
 from hackedit import api
-from hackedit.api import shortcuts, utils
+from hackedit.api import shortcuts, utils, index
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import FileIconProvider
 from hackedit.app import settings, boss_wrapper as boss, common
 from hackedit.app.dialogs.dlg_ignore import DlgIgnore
+from hackedit.app.index.db import DbHelper
+from hackedit.app.index.backend import index_project_files, update_file, get_symbol_parser, rename_files, delete_files
 from hackedit.app.widgets.locator import LocatorWidget
 from hackedit.app.workspaces import WorkspaceManager
-
-
-try:
-    # new scandir function in python 3.5
-    from os import scandir as listdir
-except ImportError:
-    try:
-        # new scandir function from scandir package on pypi
-        from scandir import scandir as listdir
-    except ImportError:
-        # scandir package not found, use the slow listdir function
-        from os import listdir
 
 
 def _logger():
     return logging.getLogger(__name__)
 
 
-NB_FILES_LIMIT = 1000
-
-
-def ignore_path(path, ignore_patterns=None):
+class ProjectIndexor:
     """
-    Utility function that checks if a given path should be ignored.
-
-    A path is ignored if it matches one of the ignored_patterns.
-
-    :param path: the path to check
-    :param ignore_patterns: The ignore patters to respect.
-        If none, :func:hackedit.api.settings.ignore_patterns() is used instead.
-    :returns: True if the path is in an directory that must be ignored
-        or if the file name matches an ignore pattern, otherwise False.
+    Utility class to perform project indexation.
     """
-    if ignore_patterns is None:
-        ignore_patterns = utils.get_ignored_patterns()
+    def __init__(self, project, window):
+        self.project = project
+        self.main_window = window
+        self._running_task = None
+        self.perform_indexing()
 
-    def ignore(name):
-        for ptrn in ignore_patterns:
-            if fnmatch(name, ptrn):
-                return True
+    def cancel(self):
+        if self._running_task:
+            self._running_task.cancel()
+        self._running_task = None
 
-    for part in os.path.normpath(path).split(os.path.sep):
-        if part and ignore(part):
-            return True
-    return False
+    def perform_indexing(self):
+        if self._running_task is None:
+            _logger().info('indexing project %r', self.project)
+            self._running_task = index.perform_indexation(
+                [self.project], callback=self._on_finished,
+                task_name=_('Indexing project: %s' % os.path.split(
+                    self.project)[1]))
 
-
-def scandir(directory, ignore_patterns, total):
-    files = []
-    print('scanning directory: %s' % directory)
-    ignore_patterns += ['*.exe', '*.dll', '*.usr', '*.so', '*.dylib', '*.svg',
-                        '*.png', '*.jpeg', '*.jpg', '*.tga', '*.gif', '*.psd']
-    join = os.path.join
-    isfile = os.path.isfile
-    isdir = os.path.isdir
-    append = files.append
-    for path in listdir(directory):
-        try:
-            path = path.name
-        except AttributeError:
-            _logger().debug('using the old python api for scanning '
-                            'directories')
-        full_path = join(directory, path)
-        ignored = ignore_path(full_path, ignore_patterns)
-        if not ignored:
-            if isfile(full_path):
-                append(full_path)
-                total += 1
-                if total > NB_FILES_LIMIT:
-                    return files, total
-            elif isdir(full_path):
-                try:
-                    results, total = scandir(full_path, ignore_patterns, total)
-                    files += results
-                except PermissionError:
-                    _logger().warn('failed to scan directory %r, permission '
-                                   'error', full_path)
-            time.sleep(0)
-    return files, total
-
-
-def scan_project_directories(_, directories, ignore_patterns, root_proj):
-    files = []
-    total = 0
-    for directory in directories:
-        try:
-            results, total = scandir(directory, ignore_patterns, total)
-            files += results
-        except PermissionError:
-            _logger().warn('failed to scan directory %r, permission '
-                           'error', directory)
-    files = sorted(files)
-    cache = api.project.load_user_cache(root_proj)
-    cache['project_files'] = files
-    api.project.save_user_cache(root_proj, cache)
-
-    if total > NB_FILES_LIMIT:
-        return False
-
-    return True
+    def _on_finished(self, *args):
+        _logger().info('finished indexing of project %r', self.project)
+        self._running_task = None
 
 
 class ProjectExplorer(QtCore.QObject):
@@ -138,13 +71,15 @@ class ProjectExplorer(QtCore.QObject):
     def __init__(self, window):
         super().__init__()
         self.main_window = window
+        self.parser_plugins = []
+        self._indexors = []
         self._locator = LocatorWidget(self.main_window)
         self._locator.activated.connect(self._on_locator_activated)
         self._locator.cancelled.connect(self._on_locator_cancelled)
         self._widget = QtWidgets.QWidget(self.main_window)
         self._job_runner = DelayJobRunner()
         self._cached_files = []
-        self._task_running = False
+        self._running_tasks = False
         self._widget.installEventFilter(self)
         self._setup_filesystem_treeview()
         self._setup_prj_selector_widget(self.main_window)
@@ -152,11 +87,30 @@ class ProjectExplorer(QtCore.QObject):
         self._setup_tab_bar_context_menu(self.main_window)
         self._setup_locator()
         self._setup_project_menu()
+        self._load_parser_plugins()
         api.signals.connect_slot(api.signals.CURRENT_EDITOR_CHANGED,
                                  self._on_current_editor_changed)
 
+    def activate(self):
+        for p in api.project.get_projects():
+            self._indexors.append(ProjectIndexor(p, self.main_window))
+
+    def _load_parser_plugins(self):
+        _logger().debug('loading symbol parser plugins')
+        for entrypoint in pkg_resources.iter_entry_points(
+                api.plugins.SymbolParserPlugin.ENTRYPOINT):
+            _logger().debug('  - loading plugin: %s', entrypoint)
+            try:
+                plugin = entrypoint.load()()
+            except ImportError:
+                _logger().exception('failed to load plugin')
+            else:
+                self.parser_plugins.append(plugin)
+                _logger().debug('  - plugin loaded: %s', entrypoint)
+        _logger().debug('indexor plugins: %r', self.parser_plugins)
+
     @staticmethod
-    def _get_ignored_patterns():
+    def get_ignored_patterns():
         patterns = utils.get_ignored_patterns()
         prj_path = api.project.get_root_project()
         # project specific ignore patterns
@@ -168,22 +122,17 @@ class ProjectExplorer(QtCore.QObject):
         return patterns
 
     def _run_update_projects_model_thread(self):
-        if not self._task_running:
-            self._task_running = True
-            directories = api.project.get_projects()
-            api.tasks.start(_('Indexing project files'),
-                            scan_project_directories,
-                            self._on_file_list_available,
-                            args=(directories, self._get_ignored_patterns(),
-                                  api.project.get_root_project()),
-                            cancellable=False)
-
-    @staticmethod
-    def get_files():
-        """
-        Returns the filtered list of files for all open projects.
-        """
-        return api.project.get_project_files()
+        if not self._running_tasks:
+            self._running_tasks += 1
+            for project_dir in api.project.get_projects():
+                db_path = os.path.join(project_dir, '.hackedit', 'project.db')
+                api.tasks.start(
+                    _('Indexing project files (%r)') % os.path.split(
+                        project_dir)[1],
+                    index_project_files,
+                    self._on_file_list_available,
+                    args=(db_path, project_dir, self.get_ignored_patterns(),
+                          self.parser_plugins), cancellable=True)
 
     def close(self):
         # save active project in first open project
@@ -204,9 +153,8 @@ class ProjectExplorer(QtCore.QObject):
         if self._last_ignore_patterns != new_patterns:
             self._last_ignore_patterns = new_patterns
             self.view.clear_ignore_patterns()
-            self.view.add_ignore_patterns(self._get_ignored_patterns())
+            self.view.add_ignore_patterns(self.get_ignored_patterns())
             self.view.set_root_path(api.project.get_current_project())
-        self._run_update_projects_model_thread()
         self.view.context_menu.update_show_in_explorer_action()
         self._tab_bar_action_show_in_explorer.setText(
             _('Show in %s') % FileSystemContextMenu.get_file_explorer_name())
@@ -221,9 +169,19 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', _('Goto line'), 'Ctrl+G'))
         self._update_templates_menu()
+        menu = api.window.get_menu(_('&Goto'))
+        for action in menu.actions():
+            action.setEnabled(settings.indexing_enabled())
+        tab = api.editor.get_current_editor()
+        self.action_goto_line.setEnabled(tab is not None)
+        if self.main_window.app.flg_force_indexing:
+            self._reindex_all_projects()
+        if not settings.indexing_enabled():
+            for indexor in self._indexors:
+                indexor.cancel()
 
     def _on_file_list_available(self, status):
-        self._task_running = False
+        self._running_tasks = False
         if status is False:
             # too much file indexed, display a warning to let the user know
             # he should ignore some unwanted directories.
@@ -313,23 +271,36 @@ class ProjectExplorer(QtCore.QObject):
         self.action_goto_symbol_in_project.triggered.connect(
             self._goto_symbol_in_project)
 
-        menu.addSeparator()
-
         self.action_goto_line = menu.addAction(_('Goto line'))
         self.action_goto_line.setShortcut(shortcuts.get(
             'Goto line', _('Goto line'), 'Ctrl+G'))
         self.main_window.addAction(self.action_goto_line)
         self.action_goto_line.triggered.connect(self._goto_line)
 
+        menu.addSeparator()
+
+        indexing_menu = menu.addMenu('Indexing')
+        action = indexing_menu.addAction('Update project(s) index')
+        action.setToolTip('Update project index database...')
+        action.triggered.connect(self._reindex_all_projects)
+        action = indexing_menu.addAction('Force full project(s) indexation')
+        action.setToolTip('Invalidate project index and force a full '
+                          'reindexation...')
+        action.triggered.connect(self._force_reindex_all_projects)
+
     def _goto_anything(self):
         self._locator.mode = self._locator.MODE_GOTO_ANYTHING
         self._show_locator()
 
     def _goto_symbol(self):
-        self._cached_cursor_position = TextHelper(
-            api.editor.get_current_editor()).cursor_position()
-        self._locator.mode = self._locator.MODE_GOTO_SYMBOL
-        self._show_locator()
+        try:
+            self._cached_cursor_position = TextHelper(
+                api.editor.get_current_editor()).cursor_position()
+        except (TypeError, AttributeError):
+            pass  # no current editor or not a code edit
+        else:
+            self._locator.mode = self._locator.MODE_GOTO_SYMBOL
+            self._show_locator()
 
     def _goto_symbol_in_project(self):
         self._locator.mode = self._locator.MODE_GOTO_SYMBOL_IN_PROJECT
@@ -370,7 +341,7 @@ class ProjectExplorer(QtCore.QObject):
         bt_refresh = QtWidgets.QToolButton()
         bt_refresh.setIcon(QtGui.QIcon.fromTheme('view-refresh'))
         bt_refresh.setToolTip(
-            _('Refresh tree view and run project indexation'))
+            _('Refresh project tree view...'))
         bt_refresh.clicked.connect(self._refresh)
         layout.addWidget(bt_refresh)
 
@@ -381,8 +352,9 @@ class ProjectExplorer(QtCore.QObject):
         bt_remove_project.clicked.connect(self._remove_current_project)
         layout.addWidget(bt_remove_project)
         self._widget_active_projects.setLayout(layout)
+        self.bt_rm_proj = bt_remove_project
         if self._combo_projects.count() == 1:
-            self._widget_active_projects.hide()
+            self.bt_rm_proj.hide()
 
     def load_project_combo(self, current_index=None):
         if current_index is None:
@@ -408,10 +380,11 @@ class ProjectExplorer(QtCore.QObject):
         self.view = FileSystemTreeView(self._widget)
         self.view.setMinimumWidth(200)
         self._last_ignore_patterns = ';'.join(utils.get_ignored_patterns())
-        self.view.add_ignore_patterns(self._get_ignored_patterns())
+        self.view.add_ignore_patterns(self.get_ignored_patterns())
         self.view.file_created.connect(self._on_file_created)
-        self.view.file_deleted.connect(self._on_file_deleted)
-        self.view.file_renamed.connect(self._on_file_renamed)
+        self.view.files_deleted.connect(self._on_files_deleted)
+        self.view.files_renamed.connect(self._on_files_renamed)
+        self.main_window.document_saved.connect(self._on_file_saved)
         self.view.set_icon_provider(FileIconProvider())
         context_menu = FileSystemContextMenu()
         self.view.set_context_menu(context_menu)
@@ -492,13 +465,10 @@ class ProjectExplorer(QtCore.QObject):
                 usd['ignored_patterns'] = patterns
                 api.project.save_user_config(prj, usd)
                 self.view.clear_ignore_patterns()
-                self.view.add_ignore_patterns(self._get_ignored_patterns())
+                self.view.add_ignore_patterns(self.get_ignored_patterns())
                 # force reload
                 self.view.set_root_path(api.project.get_current_project())
-                # update the list of project files, this should trigger an
-                # indexation.
-                self._run_update_projects_model_thread()
-                self.main_window.indexor.force_stop()
+                self._reindex_all_projects()
 
     def _on_about_to_show_context_menu(self, path):
         is_html = mimetypes.guess_type(path)[0] == 'text/html'
@@ -528,8 +498,10 @@ class ProjectExplorer(QtCore.QObject):
         path = FileSystemHelper(self.view).get_current_path()
         if os.path.isfile(path):
             path = os.path.dirname(path)
-        common.create_new_from_template(source, template, path, True,
-                                        self.main_window, self.main_window.app)
+        path = common.create_new_from_template(
+            source, template, path, True, self.main_window,
+            self.main_window.app)
+        self._on_file_created(path)
 
     @staticmethod
     def _on_show_in_explorer_triggered():
@@ -547,7 +519,8 @@ class ProjectExplorer(QtCore.QObject):
         if tab is not None:
             self.view.select_path(tab.file.path)
         self.action_goto_line.setEnabled(tab is not None)
-        self.action_goto_symbol.setEnabled(tab is not None)
+        self.action_goto_symbol.setEnabled(
+            tab is not None and settings.indexing_enabled())
 
     def _on_current_proj_changed(self, new_path):
         if api.project.get_current_project() != new_path:
@@ -581,11 +554,10 @@ class ProjectExplorer(QtCore.QObject):
         index = self._combo_projects.count()
         self.load_project_combo(current_index=index)
         self._on_current_index_changed(index)
-        self._widget_active_projects.setVisible(
-            self._combo_projects.count() > 1)
+        self.bt_rm_proj.setVisible(self._combo_projects.count() > 1)
         data = load_user_config(api.project.get_projects()[0])
         data['active_project'] = path
-        self._run_update_projects_model_thread()
+        self._indexors.append(ProjectIndexor(path, self.main_window))
 
     def _on_current_index_changed(self, index):
         new_path = self._combo_projects.itemData(index)
@@ -595,7 +567,27 @@ class ProjectExplorer(QtCore.QObject):
     def _refresh(self):
         self.view.set_root_path('/')
         self.view.set_root_path(api.project.get_current_project())
-        self._run_update_projects_model_thread()
+
+    def _force_reindex_all_projects(self):
+        for indexor in self._indexors:
+            indexor.cancel()
+        # wait a bit before removing the index database (to make sure
+        # pending indexation tasks are actually canceled).
+        QtCore.QTimer.singleShot(100, self._perform_full_reindexation)
+
+    def _perform_full_reindexation(self):
+        for project in api.project.get_projects():
+            index.remove_project(project)
+        self._reindex_all_projects()
+
+    def _reindex_all_projects(self):
+        for indexor in self._indexors:
+            indexor.cancel()
+        QtCore.QTimer.singleShot(100, self._perform_reindexation)
+
+    def _perform_reindexation(self):
+        for indexor in self._indexors:
+            indexor.perform_indexing()
 
     def _remove_current_project(self):
         path = self._combo_projects.itemData(
@@ -617,26 +609,62 @@ class ProjectExplorer(QtCore.QObject):
         finally:
             data['linked_paths'] = linked_paths
             save_user_config(initial_path, data)
-            self._run_update_projects_model_thread()
+            for indexor in self._indexors:
+                if indexor.project == path:
+                    self._indexors.remove(indexor)
 
     def _on_file_created(self, path):
         api.editor.open_file(path)
-        self._run_update_projects_model_thread()
+        project_path = self._combo_projects.itemData(self._combo_projects.currentIndex())
 
-    def _on_file_renamed(self, old_path, new_path):
-        self.main_window.tab_widget.rename_document(old_path, new_path)
-        self._run_update_projects_model_thread()
+        with DbHelper() as dbh:
+            try:
+                dbh.create_file(path, project_id=index.get_project_ids([project_path])[0])
+            except (TypeError, IndexError):
+                return
+            else:
+                self._update_document_index(path)
 
-    def _on_file_deleted(self, path):
-        self.main_window.tab_widget.close_document(path)
-        self._job_runner.request_job(self._run_update_projects_model_thread)
+    def _on_file_saved(self, path):
+        self._update_document_index(path)
+
+    def _update_document_index(self, path):
+        file = index.get_file(path)
+        if not file:
+            return
+
+        project = None
+        for p in index.get_all_projects():
+            if p.id == file.project_id:
+                project = p
+                break
+        if not project:
+            return
+        test_path = 'file' + os.path.splitext(path)[1]
+        plugin = get_symbol_parser(test_path, tuple(self.parser_plugins))
+        if not plugin:
+            return
+        args = (path, file.id, project.path, project.id, plugin)
+        api.tasks.start('Update file index', update_file, None, args=args)
+
+    def _on_files_renamed(self, renamed_files):
+        for old_path, new_path in renamed_files:
+            self.main_window.tab_widget.rename_document(old_path, new_path)
+        api.tasks.start('Update renamed files index', rename_files, None,
+                        args=(renamed_files,))
+
+    def _on_files_deleted(self, deleted_files):
+        for path in deleted_files:
+            self.main_window.tab_widget.close_document(path)
+        api.tasks.start('Update renamed files index', delete_files, None,
+                        args=(deleted_files,))
 
     @staticmethod
     def _on_locator_activated(path, line):
         if line == -1:
             line = None
         else:
-            line = line - 1  # 0 based
+            line -= 1  # 0 based
         api.editor.open_file(path, line=line)
 
     def _on_locator_cancelled(self):

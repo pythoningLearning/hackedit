@@ -34,6 +34,7 @@ the coverage as high as possible.
 from . import editor
 from . import events
 from . import gettext
+from . import index
 from . import interpreters
 from . import plugins
 from . import project
@@ -52,6 +53,7 @@ __all__ = [
     'editor',
     'events',
     'gettext',
+    'index',
     'interpreters',
     'plugins',
     'project',

@@ -11,8 +11,24 @@ from pyqode.core.backend.workers import findall
 
 from hackedit import api
 from hackedit.api import editor, plugins, shortcuts, window
+from hackedit.api.utils import is_ignored_path
 from hackedit.api.widgets import FindResultsWidget
+from hackedit.app import settings
 from hackedit.app.forms.dlg_find_replace_ui import Ui_Dialog
+
+
+# Try to use the new scandir function, introduced in python 3.5
+# also available from the scandir package on pypi
+try:
+    # new scandir function in python 3.5
+    from os import scandir as listdir
+except ImportError:
+    try:
+        # new scandir function from scandir package on pypi
+        from scandir import scandir as listdir
+    except ImportError:
+        # scandir function not found, use the slow listdir function
+        from os import listdir
 
 
 class FindReplace(plugins.WorkspacePlugin):
@@ -55,17 +71,6 @@ class FindReplace(plugins.WorkspacePlugin):
         mnu_edit.insertAction(action_before, sep)
 
         api.window.add_actions(mnu_edit.actions())
-
-        # list of project file is not initially available, wait for them
-        # to be available before allowing search/replace
-        self.afind.setEnabled(False)
-        self.areplace.setEnabled(False)
-        api.signals.connect_slot(api.signals.PROJECT_FILES_AVAILABLE,
-                                 self.on_project_files_available)
-
-    def on_project_files_available(self):
-        self.afind.setEnabled(True)
-        self.areplace.setEnabled(True)
 
     def apply_preferences(self):
         self.areplace.setShortcut(shortcuts.get(
@@ -176,11 +181,10 @@ class FindReplace(plugins.WorkspacePlugin):
     def _start_search_in_path(self, search_settings):
         self._search_settings = search_settings
         callback = self._on_search_finished
-        project_root = api.project.get_root_project()
         api.tasks.start(
             _('searching for %r') % search_settings['find'],
             search_in_path, callback,
-            args=(search_settings, project_root))
+            args=(search_settings, ))
 
     def _on_replace_triggered(self):
         text = ''
@@ -481,28 +485,80 @@ def filter_files(files, search_settings):
     ret_val = []
     patterns = search_settings['patterns']
     for f in files:
+        try:
+            file_path = f.path
+        except AttributeError:
+            file_path = f
         for path in search_settings['paths']:
             path += os.sep
             # file is in scope, let's check patterns
             if patterns:
                 for pattern in patterns:
-                    if fnmatch(f, pattern):
-                        ret_val.append(f)
+                    if fnmatch(file_path, pattern):
+                        ret_val.append(file_path)
                         break
                     time.sleep(0)
             else:
-                ret_val.append(f)
+                ret_val.append(file_path)
             time.sleep(0)
         time.sleep(0)
     return sorted(list(set(ret_val)))
 
 
-def search_in_path(th, search_settings, project_root):
+def get_project_files(project_directories, ignore_patterns):
+    ret_val = []
+    for directory in project_directories:
+        ret_val += get_files_recursively(directory, ignore_patterns)
+    return ret_val
+
+
+def get_files_recursively(directory, ignore_patterns):
+    join = os.path.join
+    isfile = os.path.isfile
+    try:
+        dir_paths = listdir(directory)
+    except FileNotFoundError:
+        return
+    for path in dir_paths:
+        try:
+            path = path.name
+        except AttributeError:
+            _logger().debug('using the old python api for scanning dirs')
+        full_path = join(directory, path)
+        ignored = is_ignored_path(full_path, ignore_patterns)
+        if not ignored:
+            if isfile(full_path):
+                yield full_path
+            else:
+                for path in get_files_recursively(full_path, ignore_patterns):
+                    yield path
+
+
+def get_ignored_patterns(root_project):
+    patterns = api.utils.get_ignored_patterns()
+    # project specific ignore patterns
+    usd = api.project.load_user_config(root_project)
+    try:
+        patterns += usd['ignored_patterns']
+    except KeyError:
+        _logger().debug('no ignored patterns found in user config')
+    patterns += ['*.exe', '*.dll', '*.usr', '*.so', '*.dylib', '*.psd',
+                 '*.db', '.hackedit', '.eggs', '.cache', '.git', '.svn',
+                 '.hackedit', 'build', 'dist', '_build']
+    return patterns
+
+
+def search_in_path(th, search_settings):
     """
     Worker function that performs the actual search.
     """
     results = []
-    project_files = api.project.get_project_files(project_root)
+    project_directories = search_settings['paths']
+    project_files = api.index.get_files(projects=project_directories)
+    if not settings.indexing_enabled():
+        # indexing disabled or not built yet
+        project_files = get_project_files(
+            project_directories, get_ignored_patterns(project_directories[0]))
     files = filter_files(project_files, search_settings)
     count = len(files)
     split_path = os.path.split

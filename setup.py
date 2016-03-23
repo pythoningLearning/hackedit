@@ -113,6 +113,7 @@ setup(
     long_description=long_desc,
     test_suite="tests",
     tests_require=['pytest', 'pytest-qt'],
+    include_package_data=True,
     zip_safe=False,
     entry_points={
         # Main gui script

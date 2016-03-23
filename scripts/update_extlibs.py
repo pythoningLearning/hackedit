@@ -88,8 +88,13 @@ def embed_packages(packages):
 try:
     os.mkdir(BUILD)
 except FileExistsError:
-    shutil.rmtree(BUILD)
-    os.mkdir(BUILD)
+    for path in os.listdir(BUILD):
+        p = os.path.join(BUILD, path)
+        if not p.endswith('.dll'):
+            if os.path.isdir(p):
+                shutil.rmtree(p)
+            else:
+                os.remove(p)
 finally:
     embed_packages([
         future, pygments, qdarkstyle, jedi, pep8, pyflakes, boss, cement,

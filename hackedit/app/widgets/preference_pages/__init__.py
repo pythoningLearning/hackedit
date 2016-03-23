@@ -3,6 +3,7 @@ from .editor import Editor
 from .editor_colors import EditorColors
 from .editor_display import EditorDisplay
 from .environment import Environment
+from .indexing import Indexing
 from .mimetypes import Mimetypes
 from .notifications import Notifications
 from .shortcuts import Shortcuts
@@ -17,6 +18,7 @@ __all__ = [
     'EditorDisplay',
     'Environment',
     'EnvVariables',
+    'Indexing',
     'Mimetypes',
     'Notifications',
     'Shortcuts',
