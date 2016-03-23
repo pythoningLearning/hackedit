@@ -29,9 +29,13 @@ def icon_themes():
                 pth = os.path.join(path, d)
                 if os.path.isfile(pth):
                     continue
-                files = os.listdir(pth)
-                if 'cursors' not in files and 'index.theme' in files:
-                    themes.append(d)
+                try:
+                    files = os.listdir(pth)
+                except OSError:
+                    pass
+                else:
+                    if 'cursors' not in files and 'index.theme' in files:
+                        themes.append(d)
     return sorted(list(set(themes)))
 
 

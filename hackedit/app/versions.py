@@ -20,12 +20,18 @@ def get_vcs_revision():
     Gets the vcs revision (git branch + commit).
     """
     def get_git_revision_hash():
-        return subprocess.check_output(
-            ['git', 'rev-parse', '--short', 'HEAD']).decode('utf-8').replace(
-            '\n', '')
+        try:
+            return subprocess.check_output(
+                ['git', 'rev-parse', '--short', 'HEAD']).decode(
+                    'utf-8').replace('\n', '')
+        except (OSError, subprocess.CalledProcessError):
+            return ''
 
     def get_git_branch_name():
-        output = subprocess.check_output(['git', 'branch']).decode('utf-8')
+        try:
+            output = subprocess.check_output(['git', 'branch']).decode('utf-8')
+        except (OSError, subprocess.CalledProcessError):
+            output = ''
         for l in output.splitlines():
             if l.startswith('*'):
                 return l.replace('*', '').replace(' ', '')
@@ -56,7 +62,7 @@ def get_versions():
             try:
                 out = str(subprocess.check_output(['lsb_release', '-i']),
                           locale.getpreferredencoding())
-            except OSError:
+            except (OSError, subprocess.CalledProcessError):
                 distro = ':distribution not found'
             else:
                 distro = out.split(':')[1].strip()

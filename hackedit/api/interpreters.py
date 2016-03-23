@@ -277,10 +277,16 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
             if system.LINUX:
                 tokens = tokens[:2] + [' '.join(tokens[2:])]
             pgm, args = tokens[0], tokens[1:]
-            QtCore.QProcess.startDetached(pgm, args, cwd)
-            events.post(
-                events.Event(_('Program running in external terminal'), cmd),
-                force_show=True)
+            ret = QtCore.QProcess.startDetached(pgm, args, cwd)
+            if ret:
+                events.post(
+                    events.Event(_('Program running in external terminal'),
+                                 cmd), force_show=True)
+            else:
+                events.post(events.Event(
+                    _('Failed to start program in external terminal'),
+                    _('Failed to start program: %r') % cmd,
+                    level=events.WARNING), force_show=True)
 
     def configure(self):
         """
@@ -789,8 +795,11 @@ def save_configs(path, configs):
         # invalid config
         _logger().exception('failed normalise path')
     path = os.path.join(base_path, project.FOLDER, 'project.json')
-    with open(path, 'w') as f:
-        json.dump(configs, f, indent=4, sort_keys=True)
+    try:
+        with open(path, 'w') as f:
+            json.dump(configs, f, indent=4, sort_keys=True)
+    except OSError:
+        _logger().exception('failed to save project configuration to %r', path)
 
 
 def create_default_config(path):

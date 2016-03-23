@@ -494,7 +494,11 @@ class ProjectExplorer(QtCore.QObject):
             webbrowser.open_new_tab(path)
         else:
             cmd = utils.get_custom_browser_command() % path
-            subprocess.Popen(cmd)
+            try:
+                subprocess.Popen(cmd)
+            except (OSError, subprocess.CalledProcessError):
+                _logger().exception('failed to open file in browser (cmd=%s)',
+                                    cmd)
 
     def _execute_file(self):
         path = FileSystemHelper(self.view).get_current_path()
@@ -507,11 +511,14 @@ class ProjectExplorer(QtCore.QObject):
         if os.path.isfile(path):
             path = os.path.dirname(path)
         cmd = utils.get_cmd_open_folder_in_terminal() % path
-        if api.system.WINDOWS:
-            subprocess.Popen(cmd,
-                             creationflags=subprocess.CREATE_NEW_CONSOLE)
-        else:
-            subprocess.Popen(shlex.split(cmd, posix=False))
+        try:
+            if api.system.WINDOWS:
+                subprocess.Popen(
+                    cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)
+            else:
+                subprocess.Popen(shlex.split(cmd, posix=False))
+        except (OSError, subprocess.CalledProcessError):
+            _logger().exception('failed to open directory in terminal')
 
     def _add_file_from_template(self):
         source, template = self.sender().data()

@@ -222,16 +222,22 @@ class FindReplace(plugins.WorkspacePlugin):
         data_list = self._find_results_widget.data_list
         cpy = data_list.copy()
         for data in cpy:
-            with open(data['path'], 'r') as fin:
-                content = fin.read()
-                newlines = fin.newlines
+            try:
+                with open(data['path'], 'r') as fin:
+                    content = fin.read()
+                    newlines = fin.newlines
+            except OSError:
+                continue
             lines = content.splitlines()
             line = lines[data['line']]
             assert isinstance(line, str)
             line = line[:data['start']] + replacement + line[data['end']:]
             lines[data['line']] = line
-            with open(data['path'], 'w') as fout:
-                fout.write(newlines.join(lines) + newlines)
+            try:
+                with open(data['path'], 'w') as fout:
+                    fout.write(newlines.join(lines) + newlines)
+            except OSError:
+                continue
             data_list.remove(data)
 
             # update occurrences that are on the same line, in the same file

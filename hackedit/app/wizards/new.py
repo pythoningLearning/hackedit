@@ -135,7 +135,11 @@ class WizardNew(QtWidgets.QWizard):
         ok = False
         message = ''
         if os.path.isdir(path):
-            if not self.single_file and os.listdir(path):
+            try:
+                files = os.listdir(path)
+            except OSError:
+                files = []
+            if not self.single_file and files:
                 message = _('Directory is not empty')
             else:
                 ok = True

@@ -231,5 +231,8 @@ class Workspaces(PreferencePage):
             except KeyError:
                 pass
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, 'w') as f:
-            json.dump(content, f)
+        try:
+            with open(path, 'w') as f:
+                json.dump(content, f)
+        except OSError:
+            print('failed to save workspace')

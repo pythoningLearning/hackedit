@@ -27,10 +27,14 @@ def main():
     else:
         program = sys.argv[1]
         args = sys.argv[2:]
-        if args:
-            ret = subprocess.call([program] + args)
-        else:
-            ret = subprocess.call([program])
+        try:
+            if args:
+                ret = subprocess.call([program] + args)
+            else:
+                ret = subprocess.call([program])
+        except (OSError, subprocess.CalledProcessError) as e:
+            print('failed to start process: program = %r, args = %r. '
+                  'Error=%s' % (program, args, str(e)))
     print('\nProcess terminated with exit code %d' % ret)
     prompt = 'Press ENTER to close this window...'
     input(prompt)
