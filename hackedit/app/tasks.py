@@ -150,14 +150,14 @@ class Task(QtCore.QObject):
                   and exit from its process method.
         """
         try:
+            self.worker.terminate()
+        except AttributeError:
+            _logger().debug('failed to terminate process, already terminated')
+        try:
             self.finished.emit(self)
         except RuntimeError as e:
             # wrapped C/C++ object of type Task has been
             return
-        try:
-            self.process.terminate()
-        except AttributeError:
-            _logger().debug('failed to terminate process, already terminated')
 
     def start(self):
         """
