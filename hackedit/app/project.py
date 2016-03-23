@@ -499,7 +499,8 @@ class ProjectExplorer(QtCore.QObject):
     def _execute_file(self):
         path = FileSystemHelper(self.view).get_current_path()
         run_widget = api.window.get_run_widget()
-        run_widget.run_program(path)
+        assert isinstance(run_widget, api.widgets.RunWidget)
+        run_widget.run_program(path, cwd=os.path.dirname(path))
 
     def _on_show_in_terminal_triggered(self):
         path = FileSystemHelper(self.view).get_current_path()
