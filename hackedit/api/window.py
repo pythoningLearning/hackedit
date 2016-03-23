@@ -174,5 +174,33 @@ def restore(window):
     window.raise_()
 
 
+def get_run_widget():
+    """
+    Gets the run widget currently visible or create one if the run dock widget
+    has been removed.
+    """
+    from hackedit import api
+    w = _window()
+    run_dock = w.get_dock_widget(_('Run'))
+    if not run_dock:
+        w.run_widget = api.widgets.RunWidget(w)
+        w.run_widget.last_tab_closed.connect(_remove_run_dock)
+        w.run_dock = api.window.add_dock_widget(
+            w.run_widget, _('Run'), api.special_icons.run_icon())
+        w.run_dock.run_widget = w.run_widget
+    else:
+        w.run_dock = run_dock
+        w.run_widget = run_dock.run_widget
+    return w.run_widget
+
+
+def _remove_run_dock():
+    w = _window()
+    w.removeDockWidget(w.run_dock)
+    w.run_dock.run_widget = None
+    w.run_widget = None
+    w.run_dock = None
+
+
 def __logger():
     return logging.getLogger(__name__)

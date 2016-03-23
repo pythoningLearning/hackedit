@@ -421,16 +421,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         editor.open_file(path, line=line)
 
     def _create_dock(self):
-        self._run_widget = widgets.RunWidget(self.main_window)
-        self._dock_run = window.add_dock_widget(
-            self._run_widget, _('Run'), special_icons.run_icon(),
-            QtCore.Qt.BottomDockWidgetArea)
-        self._run_widget.last_tab_closed.connect(self._remove_dock)
-
-    def _remove_dock(self):
-        window.remove_dock_widget(self._dock_run)
-        self._dock_run = None
-        self._run_widget = None
+        self._run_widget = window.get_run_widget()
 
     def _on_current_config_changed(self, index):
         if self._loading_configs:

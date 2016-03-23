@@ -423,6 +423,18 @@ class ProjectExplorer(QtCore.QObject):
             self._on_action_open_in_browser_triggered)
         self.view.context_menu.addAction(self.action_open_in_browser)
 
+        insert_pt = self.view.context_menu.menu_new.menuAction()
+
+        action = QtWidgets.QAction(_('Execute file'), self.main_window)
+        action.setToolTip(_('Run executable'))
+        action.setIcon(api.special_icons.run_icon())
+        action.triggered.connect(self._execute_file)
+        self.action_exec_file = action
+        self.view.context_menu.insertAction(insert_pt, action)
+        action = QtWidgets.QAction(self.main_window)
+        action.setSeparator(True)
+        self.view.context_menu.insertAction(insert_pt, action)
+
         self.view.about_to_show_context_menu.connect(
             self._on_about_to_show_context_menu)
 
@@ -473,6 +485,8 @@ class ProjectExplorer(QtCore.QObject):
     def _on_about_to_show_context_menu(self, path):
         is_html = mimetypes.guess_type(path)[0] == 'text/html'
         self.action_open_in_browser.setVisible(is_html)
+        is_executable = os.access(path, os.X_OK) and os.path.isfile(path)
+        self.action_exec_file.setVisible(is_executable)
 
     def _on_action_open_in_browser_triggered(self):
         path = FileSystemHelper(self.view).get_current_path()
@@ -481,6 +495,11 @@ class ProjectExplorer(QtCore.QObject):
         else:
             cmd = utils.get_custom_browser_command() % path
             subprocess.Popen(cmd)
+
+    def _execute_file(self):
+        path = FileSystemHelper(self.view).get_current_path()
+        run_widget = api.window.get_run_widget()
+        run_widget.run_program(path)
 
     def _on_show_in_terminal_triggered(self):
         path = FileSystemHelper(self.view).get_current_path()
