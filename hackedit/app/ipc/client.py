@@ -124,9 +124,15 @@ class Process(QtCore.QObject):
                 # c++ instance deleted
                 return
         elif 'exception' in data.keys():
-            self.errored.emit(data['exception'], data['traceback'])
+            try:
+                self.errored.emit(data['exception'], data['traceback'])
+            except (TypeError, AttributeError):
+                pass
         else:
-            self.message_available.emit(data)
+            try:
+                self.message_available.emit(data)
+            except (TypeError, AttributeError):
+                pass
 
     def _on_socket_error(self, error):
         if error == self._socket.ConnectionRefusedError:
