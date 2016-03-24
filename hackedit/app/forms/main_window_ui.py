@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/main_window.ui'
+# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/main_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.5.1
 #
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.stackedWidget, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 778, 30))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 778, 26))
         self.menubar.setObjectName("menubar")
         self.mnu_file = QtWidgets.QMenu(self.menubar)
         self.mnu_file.setObjectName("mnu_file")
@@ -75,6 +75,11 @@ class Ui_MainWindow(object):
         self.toolBarFile = QtWidgets.QToolBar(MainWindow)
         self.toolBarFile.setObjectName("toolBarFile")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBarFile)
+        self.toolBarMenu = QtWidgets.QToolBar(MainWindow)
+        self.toolBarMenu.setMovable(False)
+        self.toolBarMenu.setFloatable(False)
+        self.toolBarMenu.setObjectName("toolBarMenu")
+        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBarMenu)
         self.action_open = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon.fromTheme("folder")
         self.action_open.setIcon(icon)
@@ -132,12 +137,8 @@ class Ui_MainWindow(object):
         self.a_fullscreen.setObjectName("a_fullscreen")
         self.a_menu = QtWidgets.QAction(MainWindow)
         self.a_menu.setCheckable(True)
-        self.a_menu.setChecked(True)
+        self.a_menu.setChecked(False)
         self.a_menu.setObjectName("a_menu")
-        self.a_toolbars = QtWidgets.QAction(MainWindow)
-        self.a_toolbars.setCheckable(True)
-        self.a_toolbars.setChecked(True)
-        self.a_toolbars.setObjectName("a_toolbars")
         self.action_open_file = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon.fromTheme("document-open")
         self.action_open_file.setIcon(icon)
@@ -155,7 +156,6 @@ class Ui_MainWindow(object):
         self.mnu_file.addAction(self.action_quit)
         self.mnu_view.addAction(self.a_fullscreen)
         self.mnu_view.addAction(self.a_menu)
-        self.mnu_view.addAction(self.a_toolbars)
         self.mnu_view.addSeparator()
         self.mnu_view.addAction(self.mnu_windows.menuAction())
         self.mnu_help.addAction(self.action_help)
@@ -198,6 +198,7 @@ class Ui_MainWindow(object):
         self.menuActive_editor.setTitle(_("&Active editor"))
         self.menuTools.setTitle(_("&Tools"))
         self.toolBarFile.setWindowTitle(_("FileToolBar"))
+        self.toolBarMenu.setWindowTitle(_("toolBar"))
         self.action_open.setText(_("&Open project"))
         self.action_open.setToolTip(_("Open a project"))
         self.action_open.setShortcut(_("Ctrl+O"))
@@ -232,9 +233,6 @@ class Ui_MainWindow(object):
         self.a_fullscreen.setToolTip(_("Toggle fullscreen"))
         self.a_menu.setText(_("Toggle &menu"))
         self.a_menu.setToolTip(_("Show/Hide menu bar"))
-        self.a_toolbars.setText(_("T&oggle toolbars"))
-        self.a_toolbars.setToolTip(_("Show/Hide toolbars"))
-        self.a_toolbars.setShortcut(_("Ctrl+Shift+T"))
         self.action_open_file.setText(_("Open &file"))
         self.action_open_file.setToolTip(_("Open a file"))
 

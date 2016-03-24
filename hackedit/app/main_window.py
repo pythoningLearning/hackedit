@@ -164,6 +164,26 @@ class MainWindow(QtWidgets.QMainWindow):
             'Tools': self._ui.menuTools,
             '?': self._ui.mnu_help
         }
+        self._menus_list = [
+            self.ui.mnu_file,
+            self._ui.mnu_edit,
+            self._ui.menuTools,
+            self._ui.mnu_view,
+            self._ui.mnu_help
+        ]
+        # setup application menu button
+        menu_button = QtWidgets.QToolButton(self)
+        menu_button.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+        menu_button.setIcon(QtGui.QIcon.fromTheme('application-menu'))
+        menu_button.setToolTip('Application menu')
+        empty = QtWidgets.QWidget()
+        empty.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                            QtWidgets.QSizePolicy.Preferred)
+        self.menu_button = menu_button
+        self._update_menu_button()
+        self.ui.toolBarMenu.addWidget(empty)
+        self.ui.toolBarMenu.addWidget(menu_button)
+
         # setup recent files menu
         self._mnu_recents = MenuRecentFiles(
             self._ui.mnu_file,
@@ -193,6 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._update_mem_label_timer.timeout.connect(self._update_mem_label)
         self._update_mem_label_timer.start()
         self._update_mem_label()
+        self._update_menu_visibility()
 
     def __repr__(self):
         return 'MainWindow(path=%r)' % self.projects
@@ -257,6 +278,11 @@ class MainWindow(QtWidgets.QMainWindow):
             mnu = QtWidgets.QMenu(menu_name, self.menuBar())
             self.menuBar().insertMenu(self._menus['Tools'].menuAction(), mnu)
             self._menus[menu_name.replace('&', '')] = mnu
+
+            tools_menu = self._menus['Tools']
+            i = self._menus_list.index(tools_menu)
+            self._menus_list.insert(i, mnu)
+            self._update_menu_button()
             return mnu
 
     def get_toolbar(self, name, title):
@@ -963,14 +989,8 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot()
     def on_a_menu_triggered(self):
         state = self._ui.a_menu.isChecked()
-        self._ui.menubar.setVisible(state)
-
-    @QtCore.pyqtSlot()
-    def on_a_toolbars_triggered(self):
-        state = self._ui.a_toolbars.isChecked()
-        toolbars = self.findChildren(QtWidgets.QToolBar)
-        for tb in toolbars:
-            tb.setVisible(state)
+        settings.set_show_menu(state)
+        self._update_menu_visibility()
 
     @QtCore.pyqtSlot()
     def _report_bug(self):
@@ -1046,8 +1066,6 @@ class MainWindow(QtWidgets.QMainWindow):
             'Toggle fullscreen', _('Toggle fullscreen'), 'Ctrl+F11'))
         self._ui.a_menu.setShortcut(shortcuts.get(
             'Toggle menu', _('Toggle menu'), 'Ctrl+M'))
-        self._ui.a_toolbars.setShortcut(shortcuts.get(
-            'Toggle toolbars', _('Toggle toolbars'), 'Ctrl+Shift+T'))
 
     @staticmethod
     def _apply_editor_shortcuts(editor):
@@ -1247,3 +1265,14 @@ class MainWindow(QtWidgets.QMainWindow):
             mem = int(process.memory_info().rss) / 1024 / 1024
             self.lbl_memory.setText('%.3f MiB' % mem)
             self._update_mem_label_timer.start()
+
+    def _update_menu_visibility(self):
+        self.ui.a_menu.setChecked(settings.show_menu())
+        self.ui.menubar.setVisible(settings.show_menu())
+        self.ui.toolBarMenu.setVisible(not settings.show_menu())
+
+    def _update_menu_button(self):
+        for a in self.menu_button.actions():
+            self.menu_button.removeAction(a)
+        for menu in self._menus_list:
+            self.menu_button.addAction(menu.menuAction())

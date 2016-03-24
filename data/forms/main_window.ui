@@ -137,7 +137,7 @@
      <x>0</x>
      <y>0</y>
      <width>778</width>
-     <height>30</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="mnu_file">
@@ -170,7 +170,6 @@
     </widget>
     <addaction name="a_fullscreen"/>
     <addaction name="a_menu"/>
-    <addaction name="a_toolbars"/>
     <addaction name="separator"/>
     <addaction name="mnu_windows"/>
    </widget>
@@ -232,6 +231,23 @@
    <addaction name="separator"/>
    <addaction name="action_save"/>
    <addaction name="action_save_as"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarMenu">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <action name="action_open">
    <property name="icon">
@@ -421,30 +437,13 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Toggle &amp;menu</string>
    </property>
    <property name="toolTip">
     <string>Show/Hide menu bar</string>
-   </property>
-  </action>
-  <action name="a_toolbars">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>T&amp;oggle toolbars</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/Hide toolbars</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+T</string>
    </property>
   </action>
   <action name="action_open_file">

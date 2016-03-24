@@ -32,6 +32,14 @@ def load():
 # -----------------------------------------------------------------------------
 # Environment settings
 # -----------------------------------------------------------------------------
+def show_menu():
+    return bool(int(_SETTINGS.value('env/show_menu', 0)))
+
+
+def set_show_menu(value):
+    _SETTINGS.setValue('env/show_menu', int(value))
+
+
 def widescreen_layout():
     """
     True to use a widescreen layout where the left and right dock widget
