@@ -176,13 +176,8 @@ class MainWindow(QtWidgets.QMainWindow):
         menu_button.setPopupMode(QtWidgets.QToolButton.InstantPopup)
         menu_button.setIcon(QtGui.QIcon.fromTheme('application-menu'))
         menu_button.setToolTip('Application menu')
-        empty = QtWidgets.QWidget()
-        empty.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                            QtWidgets.QSizePolicy.Preferred)
         self.menu_button = menu_button
         self._update_menu_button()
-        self.ui.toolBarMenu.addWidget(empty)
-        self.ui.toolBarMenu.addWidget(menu_button)
 
         # setup recent files menu
         self._mnu_recents = MenuRecentFiles(
@@ -213,6 +208,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self._update_mem_label_timer.timeout.connect(self._update_mem_label)
         self._update_mem_label_timer.start()
         self._update_mem_label()
+
+    def setup_menu_toolbar(self):
+        empty = QtWidgets.QWidget()
+        empty.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                            QtWidgets.QSizePolicy.Preferred)
+        self.toolbar_menu = QtWidgets.QToolBar(self)
+        self.toolbar_menu.setMovable(False)
+        self.toolbar_menu.addWidget(empty)
+        self.toolbar_menu.addWidget(self.menu_button)
+        self.addToolBar(self.toolbar_menu)
         self._update_menu_visibility()
 
     def __repr__(self):
@@ -1269,7 +1274,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def _update_menu_visibility(self):
         self.ui.a_menu.setChecked(settings.show_menu())
         self.ui.menubar.setVisible(settings.show_menu())
-        self.ui.toolBarMenu.setVisible(not settings.show_menu())
+        self.toolbar_menu.setVisible(not settings.show_menu())
 
     def _update_menu_button(self):
         for a in self.menu_button.actions():

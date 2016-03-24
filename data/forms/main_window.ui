@@ -232,23 +232,6 @@
    <addaction name="action_save"/>
    <addaction name="action_save_as"/>
   </widget>
-  <widget class="QToolBar" name="toolBarMenu">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <property name="floatable">
-    <bool>false</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <action name="action_open">
    <property name="icon">
     <iconset theme="folder">

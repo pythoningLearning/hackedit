@@ -525,6 +525,7 @@ class Application(QtCore.QObject):
         window.current_tab_changed.connect(self._update_windows)
         window.setup_status_bar()
         window.flg_setup = False
+        window.setup_menu_toolbar()
         return window
 
     def _ask_open_mode(self, path):
