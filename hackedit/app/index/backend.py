@@ -139,6 +139,9 @@ def _index_documents(task_handle, files, project_id, project_directory, parser_p
         time.sleep(0.01)  # allow other process to perform a query
         new_mtime, old_mtime = _update_mtime(file_path)
         time.sleep(0.01)  # allow other process to perform a query
+        if new_mtime is None:
+            # file deleted
+            continue
         if old_mtime is None or new_mtime > old_mtime:
             _parse_symbols(task_handle, file_id, project_id, file_path,
                            plugin, project_directory)
@@ -218,11 +221,16 @@ def _update_mtime(file_path):
     :param file_path: Path of the file to update.
     :return: the new and the old file modification time.
     """
-    new_mtime = os.path.getmtime(file_path)
-    with db.DbHelper() as dbh:
-        old_mtime = dbh.get_file_mtime(file_path)
-        dbh.update_file(file_path, new_mtime)
-    return new_mtime, old_mtime
+    try:
+        new_mtime = os.path.getmtime(file_path)
+    except FileNotFoundError:
+        with db.DbHelper() as dbh:
+            dbh.delete_file(file_path)
+    else:
+        with db.DbHelper() as dbh:
+            old_mtime = dbh.get_file_mtime(file_path)
+            dbh.update_file(file_path, new_mtime)
+        return new_mtime, old_mtime
 
 
 def _parse_symbols(task_handle, file_id, project_id, path, plugin, root_directory):
