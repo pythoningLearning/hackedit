@@ -10,6 +10,9 @@ from PyQt5 import QtCore
 from hackedit.api import system
 
 
+# make sure qt will log to console (especially qfatal output)
+os.environ['QT_LOGGING_TO_CONSOLE'] = '1'
+
 if system.DARWIN:
     try:
         path = os.environ['PATH']
@@ -21,50 +24,20 @@ if system.DARWIN:
     os.environ['PATH'] = ':'.join(paths)
 
 
-original_environ = os.environ.copy()
-
-
-def ignore(k):
-    """
-    Checks if an environment variable should be ignored by the IDE.
-
-    We ignore variables whose content change when you boot your machine (i.e.
-    socket adress, id,...)
-    """
-    for test in ['_ID', '_ADDRESS', '_SOCK', 'SESSION', 'DISPLAY', 'HACKEDIT']:
-        if test in k:
-            return True
-    return False
-
-
 def apply():
     """
     Loads environment variables from QSettings and update os.environ
     """
     # update user defined variables
     for k, v in load().items():
-        if ignore(k):
-            continue
         os.environ[k] = v
-    # remove system variables removed by the user
-    user_defined = load().keys()
-    system_keys = os.environ.keys()
-    to_remove = []
-    for k in system_keys:
-        if ignore(k):
-            continue
-        if k not in user_defined:
-            to_remove.append(k)
-    for k in to_remove:
-        os.environ.pop(k)
-    os.environ['QT_LOGGING_TO_CONSOLE'] = '1'
 
 
 def restore():
     """
     Restore default environment
     """
-    save(dict(original_environ.copy()))
+    save({})
     apply()
 
 
@@ -72,16 +45,14 @@ def load():
     """
     Loads environment variables from QSettings
     """
-    val = json.loads(QtCore.QSettings().value('env/variables', '{}'))
-    if not val:
-        val = dict(original_environ.copy())
-        save(val)
+    val = json.loads(QtCore.QSettings().value(
+        'env/environment_variables', '{}'))
     return val
 
 
 def save(env):
     """
-    Saves the environement variables dict to QSettings and update os.environ.
+    Saves the environement variables dict to QSettings.
     """
     value = json.dumps(env)
-    QtCore.QSettings().setValue('env/variables', value)
+    QtCore.QSettings().setValue('env/environment_variables', value)

@@ -92,7 +92,12 @@ class Environment(PreferencePage):
 
     def _remove(self):
         itm = self.ui.table.selectedItems()[0]
+        key = itm.text()
         self.ui.table.removeRow(self.ui.table.row(itm))
+        try:
+            os.environ.pop(key)
+        except KeyError:
+            pass
 
     def reset(self):
         self._reset_flg = True
@@ -119,9 +124,8 @@ class Environment(PreferencePage):
             self._check_cmd(sender=edit)
         # environment variables
         self.ui.table.clearContents()
-        env = os.environ
-        keys = [k for k in sorted(os.environ.keys()) if '_ID' not in k and
-                '_ADDRESS' not in k and '_SOCK' not in k]
+        env = environ.load()
+        keys = [k for k in sorted(env.keys())]
         self.ui.table.setRowCount(len(keys))
         for i, k in enumerate(keys):
             # key
