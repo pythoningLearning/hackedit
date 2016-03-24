@@ -1,3 +1,4 @@
+import os
 import logging
 from PyQt5 import QtWidgets
 
@@ -50,6 +51,7 @@ class DlgAbout(QtWidgets.QDialog):
         self.ui.combo_log_level.currentIndexChanged.connect(
             self._on_log_level_changed)
         self.adjustSize()
+        self.ui.bt_clear_logs.clicked.connect(self._clear_logs)
 
     def _fill_versions(self):
         vdict = versions.get_versions()
@@ -67,6 +69,24 @@ class DlgAbout(QtWidgets.QDialog):
         settings.set_log_level(lvl)
         logging.getLogger().setLevel(lvl)
 
+    def _clear_logs(self):
+        logger.do_roll_over()
+        for i in range(6):
+            filename = 'hackedit.log%s' % ('' if not i else '.%d' % i)
+            pth = os.path.join(os.path.dirname(logger.get_path()), filename)
+            try:
+                os.remove(pth)
+            except OSError:
+                if os.path.exists(pth):
+                    _logger().exception('failed to remove log file %r', pth)
+        QtWidgets.QMessageBox.information(self, 'Logs cleared',
+                                          'Log files have been cleared.')
+        self.ui.edit_log.clear()
+
     @staticmethod
     def show_about(parent):
         DlgAbout(parent).exec_()
+
+
+def _logger():
+    return logging.getLogger(__name__)

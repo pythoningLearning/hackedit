@@ -5,6 +5,9 @@ import logging.handlers
 import os
 
 
+_rotating_file_handler = None
+
+
 def get_path():
     """
     Returns the log file path.
@@ -25,11 +28,12 @@ def setup(level=logging.INFO):
 
     :param level: log level, default is logging.INFO
     """
-    handler = logging.handlers.RotatingFileHandler(
+    global _rotating_file_handler
+    _rotating_file_handler = logging.handlers.RotatingFileHandler(
             get_path(), maxBytes=2*1024*1024, backupCount=5)
     handlers = [
         # a new log will be created on each new day with 5 days backup
-        handler,
+        _rotating_file_handler,
         logging.StreamHandler()
     ]
     logging.basicConfig(
@@ -38,3 +42,8 @@ def setup(level=logging.INFO):
         '::%(message)s', datefmt='%H:%M:%S')
     logging.getLogger().setLevel(level)
     logging.getLogger('hackedit').info('-' * 80)
+
+
+def do_roll_over():
+    global _rotating_file_handler
+    _rotating_file_handler.doRollover()
