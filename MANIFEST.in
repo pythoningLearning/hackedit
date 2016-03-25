@@ -31,4 +31,5 @@ include hackedit/extlibs/jedi/parser/*.txt
 
 include scripts/git-hooks/post-commit
 include scripts/git-hooks/pre-commit
-include hackedit/extlibs/sqlite3.dll
+include hackedit/extlibs/sqlite3-32bits.dll
+include hackedit/extlibs/sqlite3-64bits.dll
