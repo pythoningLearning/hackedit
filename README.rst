@@ -21,7 +21,7 @@
 .. image:: https://coveralls.io/repos/HackEdit/hackedit/badge.svg?branch=master&service=github
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master
   :alt: API Coverage
-  
+
 .. image:: https://www.quantifiedcode.com/api/v1/project/a24d2603c5914cd389686da2799ac4da/badge.svg
   :target: https://www.quantifiedcode.com/app/project/a24d2603c5914cd389686da2799ac4da
   :alt: Code issues
@@ -31,10 +31,6 @@
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/HackEdit/hackedit
    :target: https://gitter.im/HackEdit/hackedit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
-.. image:: https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png
-   :target: https://zenhub.io
-   :alt: Supercharged by zenhub
 
 |
 
