@@ -86,7 +86,21 @@ class Process(QtCore.QObject):
                 except TypeError:
                     pass
             else:
-                _logger().debug('server::localhost:%s> %s', self.port, line)
+                levels = [
+                    ('DEBUG:', _logger().debug),
+                    ('INFO:', _logger().info),
+                    ('WARNING:', _logger().warn),
+                    ('ERROR:', _logger().error),
+                    ('CRITICAL:', _logger().critical),
+                ]
+                for lvl, log_fct in levels:
+                    if line.startswith(lvl):
+                        line = line.replace(lvl, '')
+                        log_fct('server::<localhost:%s> %s', self.port, line)
+                        break
+                else:
+                    _logger().debug('server::localhost:%s> %s',
+                                    self.port, line)
 
     def _on_state_changed(self, state):
         try:

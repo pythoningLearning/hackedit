@@ -2,6 +2,7 @@
 This module contains the server script that will execute the requested function
 and send back the results.
 """
+import logging
 import os
 import socket
 import struct
@@ -96,6 +97,9 @@ if __name__ == '__main__':
 
         def __getattr__(self, attr):
             return getattr(self.stream, attr)
+
+    logging.basicConfig(format='%(levelname)s:%(name)s:%(message)s',
+                        level=logging.DEBUG)
 
     QCoreApplication.setOrganizationName('HackEdit')
     QCoreApplication.setOrganizationDomain('hackedit.com')
