@@ -485,7 +485,10 @@ class ProjectExplorer(QtCore.QObject):
     def _on_about_to_show_context_menu(self, path):
         is_html = mimetypes.guess_type(path)[0] == 'text/html'
         self.action_open_in_browser.setVisible(is_html)
-        is_executable = os.access(path, os.X_OK) and os.path.isfile(path)
+        if api.system.WINDOWS:
+            is_executable = path.endswith('.exe') or path.endswith('.bat')
+        else:
+            is_executable = os.access(path, os.X_OK) and os.path.isfile(path)
         self.action_exec_file.setVisible(is_executable)
 
     def _on_action_open_in_browser_triggered(self):
