@@ -24,6 +24,17 @@ if sys.platform == 'win32':
     except PermissionError:
         # already copied and in use
         pass
+    # select the correct sqlite3 dll at runtime depending on the bitness of
+    # the python intepreter, see github issue #75
+    bitness = 64 if sys.maxsize > 2**32 else 32
+    src_dll = os.path.join(EXTLIBS_PATH, 'sqlite3-%dbits.dll' % bitness)
+    dst_dll = os.path.join(EXTLIBS_PATH, 'sqlite3.dll')
+    try:
+        shutil.copy(src_dll, dst_dll)
+    except PermissionError:
+        # already copied and in use
+        pass
+
 
 from hackedit import __version__                  # noqa
 from hackedit.api.gettext import get_translation  # noqa

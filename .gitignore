@@ -76,3 +76,5 @@ WinPython.zip
 .DS_Store
 *.log.*
 /src/
+
+sqlite3.dll
