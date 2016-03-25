@@ -375,11 +375,11 @@ class FileManager(Manager):
             encoding = self._encoding
         self.saving = True
         self.editor.text_saving.emit(str(path))
-        
+
         # get file persmission on linux
         try:
             st_mode = os.stat(path).st_mode
-        except (ImportError, TypeError, AttributeError):
+        except (ImportError, TypeError, AttributeError, OSError):
             st_mode = None
 
         # perform a safe save: we first save to a temporary file, if the save
@@ -418,12 +418,13 @@ class FileManager(Manager):
             self.saving = False
             _logger().debug('file saved: %s', path)
             self._check_for_readonly()
-            
+
             # restore file permission
-            try:
-                os.chmod(path, st_mode)
-            except (ImportError, TypeError, AttributeError):
-                pass
+            if st_mode:
+                try:
+                    os.chmod(path, st_mode)
+                except (ImportError, TypeError, AttributeError):
+                    pass
 
     def close(self, clear=True):
         """
