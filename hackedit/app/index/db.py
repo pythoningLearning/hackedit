@@ -157,7 +157,7 @@ class DbHelper:
             project_name = os.path.split(project_path)[1]
             sql = sql % (project_path, project_name)
             c = self.conn.cursor()
-            c.execute(sql)
+            DbHelper.exec_sql(c, sql)
             self.conn.commit()
             return self._get_last_insert_row_id(c)
         else:
@@ -174,7 +174,7 @@ class DbHelper:
         """
         statement = 'SELECT COUNT(*) FROM Project WHERE PROJECT_PATH = "%s";' % project_path
         c = self.conn.cursor()
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         results = c.fetchone()
         count = 0
         if results:
@@ -187,7 +187,7 @@ class DbHelper:
         """
         c = self.conn.cursor()
         statement = 'SELECT * FROM Project;'
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         while True:
             row = c.fetchone()
             if row is None:
@@ -202,7 +202,7 @@ class DbHelper:
         """
         c = self.conn.cursor()
         statement = 'SELECT * FROM Project WHERE PROJECT_PATH = "{0}"'.format(project_path)
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         return c.fetchone()
 
     def delete_project(self, project_path):
@@ -217,13 +217,13 @@ class DbHelper:
         pid = proj[COL_PROJECT_ID]
         statement = 'DELETE FROM Project where PROJECT_ID = {0};'.format(pid)
         c = self.conn.cursor()
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         statement = 'DELETE FROM File where PROJECT_ID = {0};'.format(pid)
         c = self.conn.cursor()
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         statement = 'DELETE FROM Symbol where PROJECT_ID = {0};'.format(pid)
         c = self.conn.cursor()
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         self.conn.commit()
         return True
 
@@ -248,13 +248,13 @@ class DbHelper:
             file_name = os.path.split(file_path)[1]
             sql = sql % (file_path, file_name, project_id)
             c = self.conn.cursor()
-            c.execute(sql)
+            DbHelper.exec_sql(c, sql)
             fid = self._get_last_insert_row_id(c)
             # add to file index
             searchable_name = self._get_searchable_name(file_name)
             sql = "INSERT INTO File_index(FILE_ID, CONTENT) " \
                   "VALUES('%d', '%s');" % (fid, searchable_name)
-            c.execute(sql)
+            DbHelper.exec_sql(c, sql)
             if commit:
                 self.conn.commit()
             return fid
@@ -282,7 +282,7 @@ class DbHelper:
         c = self.conn.cursor()
         sql = 'UPDATE File SET FILE_TIME_STAMP={0}, FILE_PATH = "{1}", FILE_NAME = "{2}" ' \
               'WHERE FILE_ID = {3};'.format(mtime, new_path, file_name, fid)
-        c.execute(sql)
+        DbHelper.exec_sql(c, sql)
         if commit:
             self.conn.commit()
 
@@ -299,9 +299,9 @@ class DbHelper:
         fid = file_row[COL_FILE_ID]
         c = self.conn.cursor()
         statement = 'DELETE FROM File where FILE_ID = {0}'.format(fid)
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         statement = 'DELETE FROM Symbol where FILE_ID = {0}'.format(fid)
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         if commit:
             self.conn.commit()
         return True
@@ -315,7 +315,7 @@ class DbHelper:
         """
         statement = 'SELECT COUNT(*) FROM FILE WHERE FILE_PATH == "%s";' % file_path
         c = self.conn.cursor()
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         results = c.fetchone()
         count = 0
         if results:
@@ -354,7 +354,7 @@ class DbHelper:
             else:
                 sql = 'SELECT * FROM File ORDER BY FILE_NAME ASC;'
         c = self.conn.cursor()
-        c.execute(sql)
+        DbHelper.exec_sql(c, sql)
         while True:
             row = c.fetchone()
             if row is None:
@@ -380,7 +380,7 @@ class DbHelper:
         """
         c = self.conn.cursor()
         statement = 'SELECT * FROM File WHERE FILE_PATH = "{0}"'.format(path)
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         return c.fetchone()
 
     def get_file_by_id(self, fid):
@@ -391,7 +391,7 @@ class DbHelper:
         """
         c = self.conn.cursor()
         statement = 'SELECT * FROM File WHERE FILE_ID = {0}'.format(fid)
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         return c.fetchone()
 
     # ---------------------------------------------------------------
@@ -422,11 +422,11 @@ class DbHelper:
                      'FILE_ID, PARENT_SYMBOL_ID, PROJECT_ID) values (%d, %d, "%s", "%s", "%s", %d, %s, %d);' %
                      (line, column, icon_theme, icon_path, name, file_id, str(parent_symbol_id), project_id))
         c = self.conn.cursor()
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         sid = self._get_last_insert_row_id(c)
         sql = "INSERT INTO Symbol_index(SYMBOL_ID, CONTENT) VALUES('%d', '%s');" % (
             sid, self._get_searchable_name(name))
-        c.execute(sql)
+        DbHelper.exec_sql(c, sql)
         if commit:
             self.conn.commit()
         return sid
@@ -442,7 +442,7 @@ class DbHelper:
         """
         c = self.conn.cursor()
         statement = 'DELETE FROM Symbol where FILE_ID = {0}'.format(file_id)
-        c.execute(statement)
+        DbHelper.exec_sql(c, statement)
         self.conn.commit()
 
     def get_symbols(self, file_id=None, name_filter='', project_ids=None):
@@ -494,7 +494,7 @@ class DbHelper:
             else:
                 sql = 'SELECT * FROM Symbol ORDER BY SYMBOL_NAME ASC;'
         c = self.conn.cursor()
-        c.execute(sql)
+        DbHelper.exec_sql(c, sql)
         while True:
             row = c.fetchone()
             if row is None:
@@ -508,7 +508,7 @@ class DbHelper:
         """
         c = self.conn.cursor()
         for statement in SQL_CREATE_TABLES:
-            c.execute(statement)
+            DbHelper.exec_sql(c, statement)
         self.conn.commit()
 
     @staticmethod
@@ -518,7 +518,7 @@ class DbHelper:
         :param c: sqlite3.Cursor
         :return: int
         """
-        c.execute("SELECT last_insert_rowid();")
+        DbHelper.exec_sql(c, "SELECT last_insert_rowid();")
         return int(c.fetchone()['last_insert_rowid()'])
 
     @staticmethod
@@ -543,6 +543,14 @@ class DbHelper:
         Checks if a name is camel case (or pascal case).
         """
         return bool(DbHelper.prog_camel_case.findall(name))
+
+    @staticmethod
+    def exec_sql(cursor, statement):
+        try:
+            cursor.execute(statement)
+        except sqlite3.OperationalError as e:
+            _logger().warn('failed to executed SQL statement: %r. Error = %s',
+                           statement, str(e))
 
 
 def match_ratio(item, expr):
