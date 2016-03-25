@@ -5,9 +5,7 @@
         "name": "bootstrap",
         "run_in_external_terminal": false,
         "script": "bootstrap.pyw",
-        "script_parameters": [
-            "--verbose"
-        ],
+        "script_parameters": [],
         "working_dir": "."
     },
     {

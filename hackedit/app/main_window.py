@@ -214,6 +214,7 @@ class MainWindow(QtWidgets.QMainWindow):
         empty.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
                             QtWidgets.QSizePolicy.Preferred)
         self.toolbar_menu = QtWidgets.QToolBar(self)
+        self.toolbar_menu.setObjectName('toolBarAppMenu')
         self.toolbar_menu.setMovable(False)
         self.toolbar_menu.addWidget(empty)
         self.toolbar_menu.addWidget(self.menu_button)
