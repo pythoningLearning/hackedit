@@ -198,7 +198,7 @@ def test_add_symbols():
         assert symbols[0][db.COL_SYMBOL_COLUMN] == 45
         assert symbols[0][db.COL_SYMBOL_ICON_THEME] == 'code-variable'
         assert symbols[0][db.COL_SYMBOL_ICON_PATH] == '/path/to/icon.png'
-        assert symbols[0][db.COL_SYMBOL_PARENT_SYMBOL_ID] is None
+        assert symbols[0][db.COL_SYMBOL_PARENT_SYMBOL_ID] == 'null'
         assert symbols[0][db.COL_SYMBOL_FILE_ID] == file_id
         assert symbols[0][db.COL_SYMBOL_ID] == symbol_id
 
@@ -303,3 +303,19 @@ def test_is_camel_case():
     assert db.DbHelper.is_camel_case('TESTMYCODEEDIT') is False
     assert db.DbHelper.is_camel_case('TestMyCodeEdit') is True
     assert db.DbHelper.is_camel_case('testMyCodeEdit') is True
+
+
+def test_unescaped_symbol():
+    remove_db()
+    path = '/home/file.py'
+    with db.DbHelper() as dbh:
+        pid = dbh.create_project('/home/colin')
+        file_id = dbh.create_file(path, pid)
+        assert len(list(dbh.get_symbols(file_id=file_id))) == 0
+        symbol_id = dbh.create_symbol(
+            "78 SOME-VAR VALUE '459'", 10, 45, 'code-variable',
+            '/path/to/icon.png', file_id, pid)
+        assert symbol_id == 1
+        symbols = list(dbh.get_symbols(file_id=file_id))
+        assert len(symbols) == 1
+        assert symbols[0][db.COL_SYMBOL_NAME] == "78 SOME-VAR VALUE '459'"

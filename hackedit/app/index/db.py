@@ -145,19 +145,20 @@ class DbHelper:
     # ---------------------------------------------------------------
     def create_project(self, project_path):
         """
-        Creates a project. If the project does already exists, the method simply returns it's project id.
+        Creates a project. If the project does already exists, the method
+        simply returns it's project id.
 
-        A project is just a path that will get scanned recursively to build the file and symbol index.
+        A project is just a path that will get scanned recursively to build
+        the file and symbol index.
 
         :param project_path: path of the project to create.
         :return: PROJECT_ID
         """
-        sql = "INSERT INTO Project(PROJECT_PATH, PROJECT_NAME) VALUES('%s', '%s');"
+        sql = "INSERT INTO Project(PROJECT_PATH, PROJECT_NAME) VALUES(?, ?);"
         if not self.has_project(project_path):
             project_name = os.path.split(project_path)[1]
-            sql = sql % (project_path, project_name)
             c = self.conn.cursor()
-            DbHelper.exec_sql(c, sql)
+            DbHelper.exec_sql(c, sql, project_path, project_name)
             self.conn.commit()
             return self._get_last_insert_row_id(c)
         else:
@@ -172,9 +173,9 @@ class DbHelper:
 
         :returns: True if the file has been added to the db.
         """
-        statement = 'SELECT COUNT(*) FROM Project WHERE PROJECT_PATH = "%s";' % project_path
+        statement = 'SELECT COUNT(*) FROM Project WHERE PROJECT_PATH = ?;'
         c = self.conn.cursor()
-        DbHelper.exec_sql(c, statement)
+        DbHelper.exec_sql(c, statement, project_path)
         results = c.fetchone()
         count = 0
         if results:
@@ -201,13 +202,14 @@ class DbHelper:
         :param project_path: path of the project item to retrieve.
         """
         c = self.conn.cursor()
-        statement = 'SELECT * FROM Project WHERE PROJECT_PATH = "{0}"'.format(project_path)
-        DbHelper.exec_sql(c, statement)
+        statement = 'SELECT * FROM Project WHERE PROJECT_PATH = ?'
+        DbHelper.exec_sql(c, statement, project_path)
         return c.fetchone()
 
     def delete_project(self, project_path):
         """
-        Delete a project from the index database (all associated files and symbols will be deleted).
+        Delete a project from the index database (all associated files and
+        symbols will be deleted).
 
         :param project_path: path
         """
@@ -215,15 +217,15 @@ class DbHelper:
         if proj is None:
             return False
         pid = proj[COL_PROJECT_ID]
-        statement = 'DELETE FROM Project where PROJECT_ID = {0};'.format(pid)
+        statement = 'DELETE FROM Project where PROJECT_ID = ?;'
         c = self.conn.cursor()
-        DbHelper.exec_sql(c, statement)
-        statement = 'DELETE FROM File where PROJECT_ID = {0};'.format(pid)
+        DbHelper.exec_sql(c, statement, pid)
+        statement = 'DELETE FROM File where PROJECT_ID = ?;'
         c = self.conn.cursor()
-        DbHelper.exec_sql(c, statement)
-        statement = 'DELETE FROM Symbol where PROJECT_ID = {0};'.format(pid)
+        DbHelper.exec_sql(c, statement, pid)
+        statement = 'DELETE FROM Symbol where PROJECT_ID = ?;'.format(pid)
         c = self.conn.cursor()
-        DbHelper.exec_sql(c, statement)
+        DbHelper.exec_sql(c, statement, pid)
         self.conn.commit()
         return True
 
@@ -243,18 +245,16 @@ class DbHelper:
         :returns: FILE_ID
         """
         sql = "INSERT INTO File(FILE_PATH, FILE_NAME, PROJECT_ID) " \
-              "VALUES('%s', '%s', %d);"
+              "VALUES(?, ?, ?);"
         if not self.has_file(file_path):
             file_name = os.path.split(file_path)[1]
-            sql = sql % (file_path, file_name, project_id)
             c = self.conn.cursor()
-            DbHelper.exec_sql(c, sql)
+            DbHelper.exec_sql(c, sql, file_path, file_name, project_id)
             fid = self._get_last_insert_row_id(c)
             # add to file index
             searchable_name = self._get_searchable_name(file_name)
-            sql = "INSERT INTO File_index(FILE_ID, CONTENT) " \
-                  "VALUES('%d', '%s');" % (fid, searchable_name)
-            DbHelper.exec_sql(c, sql)
+            sql = "INSERT INTO File_index(FILE_ID, CONTENT) VALUES(?, ?);"
+            DbHelper.exec_sql(c, sql, fid, searchable_name)
             if commit:
                 self.conn.commit()
             return fid
@@ -268,7 +268,8 @@ class DbHelper:
 
         :param file_path: Path of the file to update.
         :param mtime: The new modification time of the file.
-        :param new_path: The new file path. None to specify the path/name has not changed.
+        :param new_path: The new file path. None to specify the path/name
+            has not changed.
 
         :raises: ValueError if the file_path is not in the db.
         """
@@ -280,9 +281,9 @@ class DbHelper:
         file_name = os.path.split(new_path)[1]
         fid = file_row[COL_FILE_ID]
         c = self.conn.cursor()
-        sql = 'UPDATE File SET FILE_TIME_STAMP={0}, FILE_PATH = "{1}", FILE_NAME = "{2}" ' \
-              'WHERE FILE_ID = {3};'.format(mtime, new_path, file_name, fid)
-        DbHelper.exec_sql(c, sql)
+        sql = 'UPDATE File SET FILE_TIME_STAMP=?, FILE_PATH = ?, ' \
+            'FILE_NAME = ? WHERE FILE_ID = ?;'
+        DbHelper.exec_sql(c, sql, mtime, new_path, file_name, fid)
         if commit:
             self.conn.commit()
 
@@ -298,10 +299,10 @@ class DbHelper:
             return False
         fid = file_row[COL_FILE_ID]
         c = self.conn.cursor()
-        statement = 'DELETE FROM File where FILE_ID = {0}'.format(fid)
-        DbHelper.exec_sql(c, statement)
-        statement = 'DELETE FROM Symbol where FILE_ID = {0}'.format(fid)
-        DbHelper.exec_sql(c, statement)
+        statement = 'DELETE FROM File where FILE_ID = ?'
+        DbHelper.exec_sql(c, statement, fid)
+        statement = 'DELETE FROM Symbol where FILE_ID = ?'
+        DbHelper.exec_sql(c, statement, fid)
         if commit:
             self.conn.commit()
         return True
@@ -313,9 +314,9 @@ class DbHelper:
 
         :returns: True if the file has been added to the db.
         """
-        statement = 'SELECT COUNT(*) FROM FILE WHERE FILE_PATH == "%s";' % file_path
+        statement = 'SELECT COUNT(*) FROM FILE WHERE FILE_PATH = ?;'
         c = self.conn.cursor()
-        DbHelper.exec_sql(c, statement)
+        DbHelper.exec_sql(c, statement, file_path)
         results = c.fetchone()
         count = 0
         if results:
@@ -326,35 +327,41 @@ class DbHelper:
         """
         Generates the list of all files found in the index.
 
-        Client code can specify to only look into the specified projects and apply a name filter.
+        Client code can specify to only look into the specified projects and
+        apply a name filter.
 
-        :param project_ids: the list of project ids to look into. Use None the gets the whole list of files,
-            across projects.
+        :param project_ids: the list of project ids to look into.
+                            Use None the gets the whole list of files, across
+                            projects.
         :param name_filter: optional name filter to apply.
         """
+        searchable_name = '*%s*' % self._get_searchable_name(name_filter)
+        c = self.conn.cursor()
         if project_ids:
             # look into specified project files
             project_ids = str(tuple(project_ids)).replace(',)', ')')
             if name_filter:
                 self.conn.create_function('MATCH_RATIO', 2, match_ratio)
-                sql = 'SELECT * FROM File WHERE PROJECT_ID IN {0} AND ' \
-                      'FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE CONTENT MATCH "*{1}*") ' \
-                      'ORDER BY MATCH_RATIO(FILE_NAME, "{2}") ASC;'.format(
-                        project_ids, self._get_searchable_name(name_filter), name_filter)
+                sql = 'SELECT * FROM File WHERE PROJECT_ID IN %s AND ' \
+                      'FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE ' \
+                      'CONTENT MATCH ?) ' \
+                      'ORDER BY MATCH_RATIO(FILE_NAME, ?) ASC;' % project_ids
+                DbHelper.exec_sql(c, sql, searchable_name, name_filter)
             else:
-                sql = 'SELECT * FROM File WHERE PROJECT_ID IN {0} ORDER BY FILE_NAME ASC;'.format(project_ids)
+                sql = 'SELECT * FROM File WHERE PROJECT_ID IN %s ' \
+                    'ORDER BY FILE_NAME ASC;' % project_ids
+                DbHelper.exec_sql(c, sql)
         else:
             # look into all files, across all projects
             if name_filter:
                 self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM File ' \
-                      'WHERE FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE CONTENT MATCH "*{0}*")' \
-                      'ORDER BY MATCH_RATIO(FILE_NAME, "{1}") ASC;'.format(
-                        self._get_searchable_name(name_filter), name_filter)
+                    'WHERE FILE_ID IN ( SELECT FILE_ID FROM File_index WHERE '\
+                    'CONTENT MATCH ?) ORDER BY MATCH_RATIO(FILE_NAME, ?) ASC;'
+                DbHelper.exec_sql(c, sql, searchable_name, name_filter)
             else:
                 sql = 'SELECT * FROM File ORDER BY FILE_NAME ASC;'
-        c = self.conn.cursor()
-        DbHelper.exec_sql(c, sql)
+                DbHelper.exec_sql(c, sql)
         while True:
             row = c.fetchone()
             if row is None:
@@ -379,8 +386,8 @@ class DbHelper:
         Gets a File row from path
         """
         c = self.conn.cursor()
-        statement = 'SELECT * FROM File WHERE FILE_PATH = "{0}"'.format(path)
-        DbHelper.exec_sql(c, statement)
+        statement = 'SELECT * FROM File WHERE FILE_PATH = ?'
+        DbHelper.exec_sql(c, statement, path)
         return c.fetchone()
 
     def get_file_by_id(self, fid):
@@ -390,8 +397,8 @@ class DbHelper:
         :param fid: id of the file to retrieve.
         """
         c = self.conn.cursor()
-        statement = 'SELECT * FROM File WHERE FILE_ID = {0}'.format(fid)
-        DbHelper.exec_sql(c, statement)
+        statement = 'SELECT * FROM File WHERE FILE_ID = ?'
+        DbHelper.exec_sql(c, statement, fid)
         return c.fetchone()
 
     # ---------------------------------------------------------------
@@ -418,15 +425,16 @@ class DbHelper:
         if parent_symbol_id is None:
             parent_symbol_id = 'null'
 
-        statement = ('INSERT INTO Symbol(SYMBOL_LINE, SYMBOL_COLUMN, SYMBOL_ICON_THEME, SYMBOL_ICON_PATH, SYMBOL_NAME, '
-                     'FILE_ID, PARENT_SYMBOL_ID, PROJECT_ID) values (%d, %d, "%s", "%s", "%s", %d, %s, %d);' %
-                     (line, column, icon_theme, icon_path, name, file_id, str(parent_symbol_id), project_id))
+        statement = ('INSERT INTO Symbol(SYMBOL_LINE, SYMBOL_COLUMN, '
+                     'SYMBOL_ICON_THEME, SYMBOL_ICON_PATH, SYMBOL_NAME, '
+                     'FILE_ID, PARENT_SYMBOL_ID, PROJECT_ID) '
+                     'values (?, ?, ?, ?, ?, ?, ?, ?);')
         c = self.conn.cursor()
-        DbHelper.exec_sql(c, statement)
+        DbHelper.exec_sql(c, statement, line, column, icon_theme, icon_path,
+                          name, file_id, str(parent_symbol_id), project_id)
         sid = self._get_last_insert_row_id(c)
-        sql = "INSERT INTO Symbol_index(SYMBOL_ID, CONTENT) VALUES('%d', '%s');" % (
-            sid, self._get_searchable_name(name))
-        DbHelper.exec_sql(c, sql)
+        sql = "INSERT INTO Symbol_index(SYMBOL_ID, CONTENT) VALUES(?, ?);"
+        DbHelper.exec_sql(c, sql, sid, self._get_searchable_name(name))
         if commit:
             self.conn.commit()
         return sid
@@ -441,60 +449,74 @@ class DbHelper:
             removed from db before the updated symbols are inserted.
         """
         c = self.conn.cursor()
-        statement = 'DELETE FROM Symbol where FILE_ID = {0}'.format(file_id)
-        DbHelper.exec_sql(c, statement)
+        statement = 'DELETE FROM Symbol where FILE_ID = ?'
+        DbHelper.exec_sql(c, statement, file_id)
         self.conn.commit()
 
     def get_symbols(self, file_id=None, name_filter='', project_ids=None):
         """
-        Generates a filtered list of all symbol names (using fuzzy matching) found in the index.
+        Generates a filtered list of all symbol names (using fuzzy matching)
+        found in the index.
 
-        Client code can specify to look into the symbols of the specified projects or the specified file.
+        Client code can specify to look into the symbols of the specified
+        projects or the specified file.
 
-        .. note:: Both ``file_id`` and ``project_ids`` cannot be used together, ``file_id`` has the biggest priority.
+        .. note:: Both ``file_id`` and ``project_ids`` cannot be used together,
+            ``file_id`` has the biggest priority.
 
         :param file_id: Id of the file to look into.
-        :param project_ids: Id of the projects to look into. Discarded if file_id is not None.
+        :param project_ids: Id of the projects to look into.
+            Discarded if file_id is not None.
         :param name_filter: Optional filter to apply on every symbol name.
 
         :returns: Generator that yield Symbol items.
         """
+        c = self.conn.cursor()
+        searchable_name = '*%s*' % self._get_searchable_name(name_filter)
         if file_id:
             # get file symbols
             if name_filter:
                 self.conn.create_function('MATCH_RATIO', 2, match_ratio)
-                sql = 'SELECT * FROM Symbol WHERE FILE_ID = {0} AND ' \
-                      'SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
-                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{2}") ASC;'.format(
-                        file_id, self._get_searchable_name(name_filter), name_filter)
+                sql = 'SELECT * FROM Symbol WHERE FILE_ID = ? AND ' \
+                      'SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index ' \
+                      'WHERE CONTENT MATCH ?) ' \
+                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, ?) ASC;'
+                self.exec_sql(c, sql, file_id, searchable_name, name_filter)
             else:
-                sql = 'SELECT * FROM Symbol WHERE FILE_ID = {0} ORDER BY SYMBOL_NAME ASC;'.format(file_id)
+                sql = 'SELECT * FROM Symbol WHERE FILE_ID = ? ' \
+                    'ORDER BY SYMBOL_NAME ASC;'
+                self.exec_sql(c, sql, file_id)
         elif project_ids:
             # get project symbols
             project_ids = str(tuple(project_ids)).replace(',)', ')')
             if name_filter:
                 self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM Symbol ' \
-                      'WHERE Symbol.PROJECT_ID IN {0} AND ' \
-                      'Symbol.SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{1}*")' \
-                      'ORDER BY MATCH_RATIO(Symbol.SYMBOL_NAME, "{2}") ASC;'.format(
-                        project_ids, self._get_searchable_name(name_filter), name_filter)
+                      'WHERE Symbol.PROJECT_ID IN %s AND ' \
+                      'Symbol.SYMBOL_ID IN ( ' \
+                      'SELECT SYMBOL_ID FROM Symbol_index ' \
+                      'WHERE CONTENT MATCH ?)' \
+                      'ORDER BY MATCH_RATIO(Symbol.SYMBOL_NAME, ?) ASC;' % \
+                      project_ids
+                self.exec_sql(c, sql, searchable_name, name_filter)
             else:
                 sql = 'SELECT * FROM Symbol ' \
-                      'WHERE Symbol.PROJECT_ID IN {0} ' \
-                      'ORDER BY Symbol.SYMBOL_NAME ASC;'.format(project_ids)
+                      'WHERE Symbol.PROJECT_ID IN %s ' \
+                      'ORDER BY Symbol.SYMBOL_NAME ASC;' % project_ids
+                self.exec_sql(c, sql)
         else:
             # get all symbols
             if name_filter:
                 self.conn.create_function('MATCH_RATIO', 2, match_ratio)
                 sql = 'SELECT * FROM Symbol ' \
-                      'WHERE SYMBOL_ID IN ( SELECT SYMBOL_ID FROM Symbol_index WHERE CONTENT MATCH "*{0}*")' \
-                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, "{1}") ASC;'.format(
-                        self._get_searchable_name(name_filter), name_filter)
+                      'WHERE SYMBOL_ID IN ( ' \
+                      'SELECT SYMBOL_ID FROM Symbol_index ' \
+                      'WHERE CONTENT MATCH ?)' \
+                      'ORDER BY MATCH_RATIO(SYMBOL_NAME, ?) ASC;'
+                DbHelper.exec_sql(c, sql, searchable_name, name_filter)
             else:
                 sql = 'SELECT * FROM Symbol ORDER BY SYMBOL_NAME ASC;'
-        c = self.conn.cursor()
-        DbHelper.exec_sql(c, sql)
+                DbHelper.exec_sql(c, sql)
         while True:
             row = c.fetchone()
             if row is None:
@@ -545,12 +567,12 @@ class DbHelper:
         return bool(DbHelper.prog_camel_case.findall(name))
 
     @staticmethod
-    def exec_sql(cursor, statement):
+    def exec_sql(cursor, statement, *args):
         try:
-            cursor.execute(statement)
+            cursor.execute(statement, args)
         except sqlite3.OperationalError as e:
-            _logger().warn('failed to executed SQL statement: %r. Error = %s',
-                           statement, str(e))
+            _logger().warn('failed to executed SQL statement: %r. Args=%r - '
+                           'Error = %s', statement, args, str(e))
 
 
 def match_ratio(item, expr):
@@ -571,7 +593,8 @@ def match_ratio(item, expr):
 
 
 def get_search_tokens(expr):
-    return expr.lower().replace('_', ' ').replace('-', ' ').replace('.', ' ').split(' ')
+    return expr.lower().replace('_', ' ').replace('-', ' ').replace(
+        '.', ' ').split(' ')
 
 
 def _logger():

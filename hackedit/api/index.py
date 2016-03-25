@@ -1,14 +1,16 @@
 """
 High level api for manipulating project file/symbols index.
 
-Indexing is the process of scanning a project directory recursively to build an index of all the project files and
-their symbols.
+Indexing is the process of scanning a project directory recursively to build
+an index of all the project files and their symbols.
 
-To add your own index (e.g. to perform indexing on libraries), implement :class:`hackedit.api.plugins.WorkspacePlugin`
-and call `perform_indexation` to perform indexation when you plugin is activated.
+To add your own index (e.g. to perform indexing on libraries), implement
+:class:`hackedit.api.plugins.WorkspacePlugin` and call `perform_indexation` to
+perform indexation when you plugin is activated.
 
-To add you own symbol parser (e.g. to parse the symbols of an unsupported mime types), just implement a
-:class:`hackedit.api.plugins.SymbolParserPlugin`, define the mimetypes you support and implement the parse method.
+To add you own symbol parser (e.g. to parse the symbols of an unsupported
+mime types), just implement a :class:`hackedit.api.plugins.SymbolParserPlugin`,
+define the mimetypes you support and implement the parse method.
 """
 import os
 import logging
@@ -30,7 +32,8 @@ class File:
         self.project_id = item[db.COL_FILE_PROJECT_ID]
 
     def __repr__(self):
-        return 'File(name=%r, id=%r, path=%r, time_stamp=%r)' % (self.name, self.id, self.path, self.time_stamp)
+        return 'File(name=%r, id=%r, path=%r, time_stamp=%r)' % (
+            self.name, self.id, self.path, self.time_stamp)
 
 
 class Symbol:
@@ -47,13 +50,14 @@ class Symbol:
         self.file_id = int(item[db.COL_SYMBOL_FILE_ID])
         self.project_id = item[db.COL_FILE_PROJECT_ID]
         parent_id = item[db.COL_SYMBOL_PARENT_SYMBOL_ID]
-        if not parent_id:
+        if not parent_id or parent_id == 'null':
             self.parent_symbol_id = None
         else:
             self.parent_symbol_id = int(parent_id)
 
     def __repr__(self):
-        return 'Symbol(name=%r, id=%r, line=%r, column=%r)' % (self.name, self.id, self.line, self.column)
+        return 'Symbol(name=%r, id=%r, line=%r, column=%r)' % (
+            self.name, self.id, self.line, self.column)
 
 
 class Project:
@@ -66,7 +70,8 @@ class Project:
         self.path = item[db.COL_PROJECT_PATH]
 
     def __repr__(self):
-        return 'Project(name=%r, id=%r, path=%r)' % (self.name, self.id, self.path)
+        return 'Project(name=%r, id=%r, path=%r)' % (
+            self.name, self.id, self.path)
 
 
 def _logger():
@@ -143,7 +148,8 @@ def get_files(name_filter='', projects=None):
     An optional name filter can be used to filter files by names.
 
     :param name_filter: Optional file name filter.
-    :param projects: List of projects to search into. If None, all files from all indexed projects will be used.
+    :param projects: List of projects to search into. If None, all files from
+    all indexed projects will be used.
     :return: A generator that yields class:`File`.
     """
     if not indexing_enabled():
@@ -165,10 +171,12 @@ def get_symbols(name_filter='', projects=None, file=None):
 
     An optional name filter can be used to filter symbols by names.
 
-    .. note:: You cannot specify both file and project filters. It's either one or the other (or none at all).
+    .. note:: You cannot specify both file and project filters.
+        It's either one or the other (or none at all).
 
     :param name_filter: Optional symbol name filter
-    :param projects: List of projects to search into. If None, all files from all indexed projects will be used.
+    :param projects: List of projects to search into.
+        If None, all files from all indexed projects will be used.
     :param file: File to search into.
 
     :return: A generator that yields :class:`Symbol`.
@@ -185,7 +193,8 @@ def get_symbols(name_filter='', projects=None, file=None):
         with db.DbHelper() as dbh:
             file_id = dbh.get_file_by_path(file)[db.COL_FILE_ID]
     with db.DbHelper() as dbh:
-        for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids, name_filter=name_filter):
+        for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids,
+                                    name_filter=name_filter):
             file_item = dbh.get_file_by_id(item[db.COL_SYMBOL_FILE_ID])
             if item and file_item:
                 yield Symbol(item), File(file_item)
@@ -195,7 +204,8 @@ def perform_indexation(directories, callback=None, task_name=None):
     """
     Perform a background indexation of the specified directory.
 
-    The optional callback function will be called automatically when operation has finished.
+    The optional callback function will be called automatically when operation
+    has finished.
 
     :param directories: List of directories to perform indexation on.
     :param task_name: The name of the background task as show to the users.
