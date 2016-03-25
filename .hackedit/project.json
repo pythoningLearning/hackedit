@@ -143,5 +143,13 @@
         "script": "scripts/update_extlibs.py",
         "script_parameters": [],
         "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "copy_hooks",
+        "script": "scripts/git-hooks/copy_hooks.py",
+        "script_parameters": [],
+        "working_dir": "scripts/git-hooks"
     }
 ]
