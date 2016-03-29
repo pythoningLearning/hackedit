@@ -13,7 +13,11 @@ def fix_registry(python_ver):
     python_ver must be "34", "27", etc.
     """
     import winreg
-    python_dir = r'C:\Python%s' % python_ver
+    arch = os.environ['PYTHON_ARCH']
+    if arch == '64':
+        python_dir = r'C:\Python%s-x64' % python_ver
+    else:
+        python_dir = r'C:\Python%s' % python_ver
     print("Fixing registry %s..." % python_ver)
     assert os.path.isdir(python_dir)
     registry_key = r'Software\Python\PythonCore\%s.%s' % (
