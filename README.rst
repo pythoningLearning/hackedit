@@ -17,6 +17,10 @@
    :target: https://travis-ci.org/HackEdit/hackedit
    :alt: Travis-CI Build Status
 
+.. image:: https://ci.appveyor.com/api/projects/status/ncjwicmi79ljvuyg?svg=true
+    :target: https://ci.appveyor.com/project/ColinDuquesnoy/hackedit
+    :alt: Appveyor Build Status
+
 
 .. image:: https://coveralls.io/repos/HackEdit/hackedit/badge.svg?branch=master&service=github
   :target: https://coveralls.io/github/HackEdit/hackedit?branch=master

@@ -16,24 +16,30 @@ if not vendor:
     os.environ['HACKEDIT_VENDOR_PATH'] = vendor
 sys.path.insert(0, vendor)
 os.environ['PATH'] = vendor + os.pathsep + os.environ['PATH']
-if sys.platform == 'win32':
-    # copy _sqlite3.pyd next to our own sqlite3.dll (with fts4 support enabled)
-    pyd = os.path.join(os.path.dirname(sys.executable), 'DLLs', '_sqlite3.pyd')
-    try:
-        shutil.copy(pyd, vendor)
-    except PermissionError:
-        # already copied and in use
-        pass
-    # select the correct sqlite3 dll at runtime depending on the bitness of
-    # the python intepreter, see github issue #75
-    bitness = 64 if sys.maxsize > 2**32 else 32
-    src_dll = os.path.join(vendor, 'sqlite3-%dbits.dll' % bitness)
-    dst_dll = os.path.join(vendor, 'sqlite3.dll')
-    try:
-        shutil.copy(src_dll, dst_dll)
-    except PermissionError:
-        # already copied and in use
-        pass
+
+
+def setup_sqlite3():
+    if sys.platform == 'win32':
+        # copy _sqlite3.pyd next to our own sqlite3.dll (with fts4 support enabled)
+        pyd = os.path.join(os.path.dirname(sys.executable), 'DLLs', '_sqlite3.pyd')
+        try:
+            shutil.copy(pyd, vendor)
+        except PermissionError:
+            # already copied and in use
+            pass
+        # select the correct sqlite3 dll at runtime depending on the bitness of
+        # the python intepreter, see github issue #75
+        bitness = 64 if sys.maxsize > 2**32 else 32
+        src_dll = os.path.join(vendor, 'sqlite3-%dbits.dll' % bitness)
+        dst_dll = os.path.join(vendor, 'sqlite3.dll')
+        try:
+            shutil.copy(src_dll, dst_dll)
+        except PermissionError:
+            # already copied and in use
+            pass
+
+
+setup_sqlite3()
 
 
 from hackedit import __version__                  # noqa
