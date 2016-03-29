@@ -1,5 +1,5 @@
 environment:
-    matix:
+    matrix:
         - PYTHON: "C:\\Python34"
           PYTHON_VERSION: "3.4.x" # currently 3.4.3
           PYTHON_ARCH: "32"
@@ -9,7 +9,7 @@ environment:
           PYTHON_ARCH: "64"
 
 install:
-  - "%PYTHON% -u scripts\install-qt.py"
+  - python -u scripts\install-qt.py
   - pip install pytest pytest-qt pytest-cov coveralls --upgrade
   - pip install -e .
 
