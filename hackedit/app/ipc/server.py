@@ -105,7 +105,7 @@ if __name__ == '__main__':
     QCoreApplication.setOrganizationDomain('hackedit.com')
     QCoreApplication.setApplicationName('HackEdit')
 
-    sys.path.insert(0, os.environ['HACKEDIT_EXTLIBS_PATH'])
+    sys.path.insert(0, os.environ['HACKEDIT_VENDOR_PATH'])
 
     sys.stdout = Unbuffered(sys.stdout)
 

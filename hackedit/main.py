@@ -10,25 +10,25 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import hackedit
-EXTLIBS_PATH = os.environ.get('HACKEDIT_EXTLIBS_PATH')
-if not EXTLIBS_PATH:
-    EXTLIBS_PATH = os.path.join(os.path.dirname(hackedit.__file__), 'extlibs')
-    os.environ['HACKEDIT_EXTLIBS_PATH'] = EXTLIBS_PATH
-sys.path.insert(0, EXTLIBS_PATH)
-os.environ['PATH'] = EXTLIBS_PATH + os.pathsep + os.environ['PATH']
+vendor = os.environ.get('HACKEDIT_VENDOR_PATH')
+if not vendor:
+    vendor = os.path.join(os.path.dirname(hackedit.__file__), 'vendor')
+    os.environ['HACKEDIT_VENDOR_PATH'] = vendor
+sys.path.insert(0, vendor)
+os.environ['PATH'] = vendor + os.pathsep + os.environ['PATH']
 if sys.platform == 'win32':
     # copy _sqlite3.pyd next to our own sqlite3.dll (with fts4 support enabled)
     pyd = os.path.join(os.path.dirname(sys.executable), 'DLLs', '_sqlite3.pyd')
     try:
-        shutil.copy(pyd, EXTLIBS_PATH)
+        shutil.copy(pyd, vendor)
     except PermissionError:
         # already copied and in use
         pass
     # select the correct sqlite3 dll at runtime depending on the bitness of
     # the python intepreter, see github issue #75
     bitness = 64 if sys.maxsize > 2**32 else 32
-    src_dll = os.path.join(EXTLIBS_PATH, 'sqlite3-%dbits.dll' % bitness)
-    dst_dll = os.path.join(EXTLIBS_PATH, 'sqlite3.dll')
+    src_dll = os.path.join(vendor, 'sqlite3-%dbits.dll' % bitness)
+    dst_dll = os.path.join(vendor, 'sqlite3.dll')
     try:
         shutil.copy(src_dll, dst_dll)
     except PermissionError:

@@ -7,8 +7,8 @@ from PyQt5 import QtWidgets
 os.environ['PYTEST_QT_API'] = 'pyqt5'
 os.environ['QT_API'] = 'pyqt5'
 os.environ['HACKEDIT_CORE_TEST_SUITE'] = '1'
-os.environ['HACKEDIT_EXTLIBS_PATH'] = 'hackedit/extlibs'
-sys.path.insert(0, os.environ['HACKEDIT_EXTLIBS_PATH'])
+os.environ['HACKEDIT_VENDOR_PATH'] = 'hackedit/vendor'
+sys.path.insert(0, os.environ['HACKEDIT_VENDOR_PATH'])
 
 
 try:
