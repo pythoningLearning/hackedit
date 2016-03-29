@@ -18,6 +18,8 @@ install:
   - python -u scripts\install-qt.py
   # Update pip and setuptools
   - python -m pip install --upgrade pip setuptools
+  # Install pytest and pytest-qt
+  - pip install pytest pytest-qt
   # install hackedit in development mode
   - pip install -e .
 
@@ -25,4 +27,4 @@ build: false  # Not a C# project
 
 test_script:
   # Run the project tests
-  - python setup.py test
+  - py.test
