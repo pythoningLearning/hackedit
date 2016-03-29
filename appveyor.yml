@@ -17,7 +17,7 @@ install:
   # Install pyqt
   - python -u scripts\install-qt.py
   # Update pip and setuptools
-  - pip install --upgrade pip setuptools
+  - python -m pip install --upgrade pip setuptools
   # install hackedit in development mode
   - pip install -e .
 
