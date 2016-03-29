@@ -10,8 +10,8 @@ environment:
 
 install:
   - python -u scripts\install-qt.py
-  - pip install pytest pytest-qt pytest-cov coveralls --upgrade
-  - pip install -e .
+  - python -m pip install pytest pytest-qt pytest-cov coveralls --upgrade
+  - python -m pip install -e .
 
 test_script:
   # Run the project tests
