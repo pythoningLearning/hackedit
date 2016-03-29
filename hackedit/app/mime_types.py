@@ -4,10 +4,31 @@ to manipulate user defined mimetypes.
 """
 import json
 import mimetypes
+import pkg_resources
 
 from PyQt5 import QtCore
 from pygments.lexers import get_all_lexers, get_lexer_for_mimetype
 from pyqode.core.widgets import SplittableCodeEditTabWidget
+
+
+# monkeypatch pygments.plugin.find_plugin_lexers
+def find_plugin_lexers():
+    """
+    Copy of pygments.plugins.find_plugin_lexers to avoid RequirementParseError
+    (issue introduced in setuptools 20.2)
+    """
+    if pkg_resources is None:
+        return
+    for entrypoint in pkg_resources.iter_entry_points('pygments.lexers'):
+        try:
+            yield entrypoint.load()
+        except pkg_resources.RequirementParseError:
+            continue
+from pygments import plugin  # noqa
+plugin.find_plugin_lexers = find_plugin_lexers
+# execute it once to make sure the cache is built using our monkeypatched
+# function
+list(plugin.find_plugin_lexers())
 
 
 def load():
