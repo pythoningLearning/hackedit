@@ -9,10 +9,17 @@ environment:
           PYTHON_ARCH: "64"
 
 install:
+  # Prepend newly installed Python to the PATH of this build
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - python -m pip install --upgrade pip setuptools
+  # Check that we have the expected version and architecture for Python
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  # Install pyqt
   - python -u scripts\install-qt.py
-  - python -m pip install -e .
+  # Update pip and setuptools
+  - pip install --upgrade pip setuptools
+  # install hackedit in development mode
+  - pip install -e .
 
 build: false  # Not a C# project
 

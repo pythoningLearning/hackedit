@@ -12,7 +12,7 @@ def fix_registry(python_ver):
     at the correct location.
     python_ver must be "34", "27", etc.
     """
-    import _winreg as winreg
+    import winreg
     python_dir = r'C:\Python%s' % python_ver
     print("Fixing registry %s..." % python_ver)
     assert os.path.isdir(python_dir)
