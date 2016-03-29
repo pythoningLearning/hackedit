@@ -9,9 +9,12 @@ environment:
           PYTHON_ARCH: "64"
 
 install:
+  - python -m pip setuptools install --upgrade pip
   - python -u scripts\install-qt.py
   - python -m pip install pytest pytest-qt pytest-cov coveralls --upgrade
   - python -m pip install -e .
+
+build: false  # Not a C# project
 
 test_script:
   # Run the project tests
