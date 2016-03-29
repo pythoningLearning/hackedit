@@ -4,7 +4,7 @@ omit =
     # qt design ui files
     *_ui.py
     *_rc.py
-    hackedit/extlibs/*
+    hackedit/vendor/*
     tests/*
     scripts/*
 

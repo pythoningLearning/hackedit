@@ -2,8 +2,7 @@
 """
 The bootstrap script lets you run HackEdit from source checkout:
 
-1) patch sys.path with the extlibs archive that contains most external
-   libraries
+1) patch sys.path with the vendor package that contains most external libraries
 
 
 Before running this script, you should:

@@ -29,6 +29,14 @@
     {
         "environment": {},
         "interpreter_options": [],
+        "name": "copy_hooks",
+        "script": "scripts/git-hooks/copy_hooks.py",
+        "script_parameters": [],
+        "working_dir": "scripts/git-hooks"
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
         "name": "git-hooks/copy_hooks",
         "run_in_external_terminal": false,
         "script": "scripts/git-hooks/copy_hooks.py",
@@ -134,22 +142,5 @@
         "script": "scripts/update_breeze_icons.py",
         "script_parameters": [],
         "working_dir": "scripts"
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "update_extlibs",
-        "run_in_external_terminal": false,
-        "script": "scripts/update_extlibs.py",
-        "script_parameters": [],
-        "working_dir": "."
-    },
-    {
-        "environment": {},
-        "interpreter_options": [],
-        "name": "copy_hooks",
-        "script": "scripts/git-hooks/copy_hooks.py",
-        "script_parameters": [],
-        "working_dir": "scripts/git-hooks"
     }
 ]

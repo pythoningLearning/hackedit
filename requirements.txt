@@ -1,7 +1,8 @@
 #
 # Dependencies that need to be installed to develop hackedit.
 #
-# extlibs that are distributed through an internal package put on sys.path
+# Third party libraries that are distributed through an internal package put on
+# sys.path
 -e git://github.com/pyQode/pyqode.qt#egg=pyqode.qt
 -e git://github.com/pyQode/pyqode.core#egg=pyqode.core
 -e git://github.com/pyQode/pyqode.python#egg=pyqode.python
