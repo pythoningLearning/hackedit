@@ -4,7 +4,7 @@ Simple script to install PyQt5 in AppVeyor.
 from __future__ import print_function
 import os
 import subprocess
-import urllib
+import urllib.request
 
 
 def fix_registry(python_ver):
@@ -35,6 +35,6 @@ caption = 'py34-pyqt5-%s' % arch
 url = downloads[caption]
 print("Downloading %s..." % caption)
 installer = r'C:\install-%s.exe' % caption
-urllib.urlretrieve(base_url + url, installer)
+urllib.request.urlretrieve(base_url + url, installer)
 print('Installing %s...' % caption)
 subprocess.check_call([installer, '/S'])
