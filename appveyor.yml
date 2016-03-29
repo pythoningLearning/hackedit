@@ -11,11 +11,10 @@ environment:
 install:
   - python -m pip install --upgrade pip setuptools
   - python -u scripts\install-qt.py
-  - python -m pip install pytest pytest-qt pytest-cov coveralls --upgrade
   - python -m pip install -e .
 
 build: false  # Not a C# project
 
 test_script:
   # Run the project tests
-  - py.test
+  - python setup.py test
