@@ -53,14 +53,23 @@ class TestInterpreterManager:
 
     def test_add_interpreter(self):
         assert len(PythonManager().all_interpreters) == 2
-        PythonManager().add_interpreter('/usr/bin/python2.7')
+        if sys.platform == 'win32':
+            PythonManager().add_interpreter('C:\\Python27\python.exe')
+        else:
+            PythonManager().add_interpreter('/usr/bin/python2.7')
         assert len(PythonManager().all_interpreters) == 3
 
     def test_rm_interpreter(self):
         assert len(PythonManager().all_interpreters) == 2
-        PythonManager().add_interpreter('/usr/bin/python2.7')
+        if sys.platform == 'win32':
+            PythonManager().add_interpreter('C:\\Python27\python.exe')
+        else:
+            PythonManager().add_interpreter('/usr/bin/python2.7')
         assert len(PythonManager().all_interpreters) == 3
-        PythonManager().remove_interpreter('/usr/bin/python2.7')
+        if sys.platform == 'win32':
+            PythonManager().remove_interpreter('C:\\Python27\python.exe')
+        else:
+            PythonManager().remove_interpreter('/usr/bin/python2.7')
         assert len(PythonManager().all_interpreters) == 2
         # cannot remove a system interpreter
         PythonManager().remove_interpreter('/usr/bin/python')
