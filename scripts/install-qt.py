@@ -25,8 +25,8 @@ def fix_registry(python_ver):
 
 base_url = 'http://downloads.sourceforge.net/project/pyqt/'
 downloads = {
-    'py34-pyqt5-32': 'PyQt5/PyQt-5.5/PyQt5-5.5-gpl-Py3.4-Qt5.5.1-x32.exe',
-    'py34-pyqt5-64': 'PyQt5/PyQt-5.5/PyQt5-5.5-gpl-Py3.4-Qt5.5.1-x64.exe',
+    'py34-pyqt5-32': 'PyQt5/PyQt-5.5.1/PyQt5-5.5.1-gpl-Py3.4-Qt5.5.1-x32.exe',
+    'py34-pyqt5-64': 'PyQt5/PyQt-5.5.1/PyQt5-5.5.1-gpl-Py3.4-Qt5.5.1-x64.exe',
 }
 
 fix_registry('34')
