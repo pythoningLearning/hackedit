@@ -1,0 +1,18 @@
+environment:
+    matix:
+        - PYTHON: "C:\\Python34"
+          PYTHON_VERSION: "3.4.x" # currently 3.4.3
+          PYTHON_ARCH: "32"
+
+        - PYTHON: "C:\\Python34-x64"
+          PYTHON_VERSION: "3.4.x" # currently 3.4.3
+          PYTHON_ARCH: "64"
+
+install:
+  - "%PYTHON% -u scripts\install-qt.py"
+  - pip install pytest pytest-qt pytest-cov coveralls --upgrade
+  - pip install -e .
+
+test_script:
+  # Run the project tests
+  - py.test
