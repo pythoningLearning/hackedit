@@ -176,8 +176,13 @@ class Task(QtCore.QObject):
         self.started.emit(self)
 
     def _on_result_available(self, ret_val):
-        _logger().debug('<{}> results available'.format(self.name))
-        self.results_avaialble.emit(self, ret_val)
+        try:
+            self.name
+        except AttributeError:
+            return
+        else:
+            _logger().debug('<{}> results available'.format(self.name))
+            self.results_avaialble.emit(self, ret_val)
 
     def _on_finished(self, _):
         try:
