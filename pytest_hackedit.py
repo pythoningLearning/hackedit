@@ -14,50 +14,49 @@ from hackedit.app import settings
 
 
 APP = None
-WINDOWS = {}
 
 
-def main_window(qtbot, path, remove_project_folder=False):
+class MainWindow:
     """
-    Creates a MainWindow with the given path.
+    Context manager that creates a new editor window and automatically
+    close it when exitting the context.
 
-    :param qtbot: qtbot fixture from pytest-qtbot
-    :param path: path of the project to open
-    :param remove_project_folder: True to remove .hackedit folder in the
-                                  specified path.
+    :attr:`instance` is a reference to the created main window.
+
+    Example::
+
+        import pytest_hackedit
+        from hackedit.app.main_window import MainWindow
+
+        with pytest_hackedit.MainWindow('/path/to/project') as w:
+            assert isinstance(w.instance, MainWindow)
+
     """
-    global WINDOWS
-    if remove_project_folder:
-        try:
-            shutil.rmtree(os.path.join(path, project.FOLDER))
-        except OSError:
-            pass
-    a = app()
-    settings.load()
-    QtCore.QSettings().clear()
-    settings.set_confirm_app_exit(False)
-    if path not in WINDOWS.keys():
-        a.open_path(path)
-        WINDOWS[path] = a.editor_windows[-1]
-    w = WINDOWS[path]
-    w.tab_widget.close_all()
-    QtWidgets.qApp.setActiveWindow(w)
-    QtTest.QTest.qWaitForWindowExposed(w)
-    return w
+    def __init__(self, path, remove_project_folder=False):
+        self._path = path
+        self._remove_project_folder = remove_project_folder
+        #: instance of the MainWindow
+        self.instance = None
 
+    def __enter__(self):
+        if self._remove_project_folder:
+            try:
+                shutil.rmtree(os.path.join(self._path, project.FOLDER))
+            except OSError:
+                pass
+        a = app()
+        settings.load()
+        QtCore.QSettings().clear()
+        settings.set_confirm_app_exit(False)
+        a.open_path(self._path)
+        self.instance = a.editor_windows[-1]
+        QtWidgets.qApp.setActiveWindow(self.instance)
+        QtTest.QTest.qWaitForWindowExposed(self.instance)
+        return self
 
-def close_main_window(main_window):
-    """
-    Close the specified main window.
-
-    :param main_window: the main window instance to close.
-    """
-    global WINDOWS
-    try:
-        WINDOWS.pop(main_window._open_projects[0])
-    except KeyError:
-        pass
-    main_window.close()
+    def __exit__(self, *args):
+        self.instance.close()
+        self.instance = None
 
 
 def app():

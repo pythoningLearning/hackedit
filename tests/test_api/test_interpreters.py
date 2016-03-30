@@ -94,11 +94,10 @@ def test_scriptrunnerplugin(qtbot):
         qtbot.keyPress(QtWidgets.qApp.activeWindow(), QtCore.Qt.Key_Escape)
 
     # not really a unit test, kinda functional
-    w = pytest_hackedit.main_window(qtbot, PROJ_PATH)
-    p = FakeScriptRunnerPlugin(w)
-    p.enable_mnu_configs()
-    p.enable_run()
-    pytest_hackedit.close_main_window(w)
+    with pytest_hackedit.MainWindow(PROJ_PATH) as w:
+        p = FakeScriptRunnerPlugin(w.instance)
+        p.enable_mnu_configs()
+        p.enable_run()
 
 
 def test_create_default_config():

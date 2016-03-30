@@ -39,10 +39,9 @@ def test_entry_points():
 
 def test_get_plugin_instance(qtbot):
     from hackedit.plugins.outline import DocumentOutline
-    w = pytest_hackedit.main_window(qtbot, PROJ_PATH)
-    p = plugins.get_plugin_instance(DocumentOutline)
-    assert p is not None
-    assert isinstance(p, DocumentOutline)
-    with pytest.raises(TypeError):
-        p = plugins.get_plugin_instance(qtbot)
-    pytest_hackedit.close_main_window(w)
+    with pytest_hackedit.MainWindow(PROJ_PATH):
+        p = plugins.get_plugin_instance(DocumentOutline)
+        assert p is not None
+        assert isinstance(p, DocumentOutline)
+        with pytest.raises(TypeError):
+            p = plugins.get_plugin_instance(qtbot)
