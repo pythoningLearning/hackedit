@@ -21,7 +21,7 @@ from pyqode.core.widgets import GenericCodeEdit, TextCodeEdit
 
 from hackedit.app import settings
 from hackedit.app.project import ProjectExplorer
-from hackedit.api import system, shortcuts
+from hackedit.api import system, shortcuts, special_icons
 from hackedit.api.events import Event, WARNING, ExceptionEvent
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import ClickableLabel, FileIconProvider
@@ -174,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # setup application menu button
         menu_button = QtWidgets.QToolButton(self)
         menu_button.setPopupMode(QtWidgets.QToolButton.InstantPopup)
-        menu_button.setIcon(QtGui.QIcon.fromTheme('application-menu'))
+        menu_button.setIcon(special_icons.app_menu())
         menu_button.setToolTip('Application menu')
         self.menu_button = menu_button
         self._update_menu_button()

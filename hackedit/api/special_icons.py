@@ -12,6 +12,8 @@ Example of special icons:
 """
 from PyQt5 import QtGui
 
+from hackedit.api.utils import is_dark_theme
+
 
 def configure_icon(build=False):
     """
@@ -158,3 +160,10 @@ def build_clean():
         return QtGui.QIcon.fromTheme('run-build-clean')
     else:
         return QtGui.QIcon.fromTheme('edit-clear')
+
+
+def app_menu():
+    if QtGui.QIcon.hasThemeIcon('application-menu'):
+        return QtGui.QIcon.fromTheme('application-menu')
+    else:
+        return QtGui.QIcon.fromTheme('open-menu-symbolic')
