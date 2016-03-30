@@ -47,7 +47,7 @@ def test_blacklist():
 
 
 def cancel_dialog():
-    QtTest.QTest.keyPress(QtWidgets.qApp.activeWindow(), QtCore.Qt.Key_Escape)
+    QtWidgets.qApp.activeWindow().reject()
 
 
 def test_exception_event():
