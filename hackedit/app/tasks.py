@@ -180,9 +180,12 @@ class Task(QtCore.QObject):
         self.results_avaialble.emit(self, ret_val)
 
     def _on_finished(self, _):
-        if not self._finished:
-            self.finished.emit(self)
-            self._finished = True
+        try:
+            if not self._finished:
+                self.finished.emit(self)
+                self._finished = True
+        except AttributeError:
+            pass  # already deleted
 
     def _on_error(self, exc, tb):
         self.errored.emit(self, tb, exc)
@@ -195,7 +198,10 @@ class Task(QtCore.QObject):
             _logger().warn('invalid message: %r, "message" and "progress" '
                            'keys not found...', obj)
         else:
-            self.progress_updated.emit(message, progress)
+            try:
+                self.progress_updated.emit(message, progress)
+            except AttributeError:
+                pass  # already deleted
 
 
 class TaskManager(QtCore.QObject):
