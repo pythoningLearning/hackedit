@@ -483,7 +483,7 @@ class ProjectExplorer(QtCore.QObject):
                 self._reindex_all_projects()
 
     def _on_about_to_show_context_menu(self, path):
-        is_html = mimetypes.guess_type(path)[0] == 'text/html'
+        is_html = 'text/html' in mimetypes.guess_type(path)[0]
         self.action_open_in_browser.setVisible(is_html)
         if api.system.WINDOWS:
             is_executable = path.endswith('.exe') or path.endswith('.bat')
