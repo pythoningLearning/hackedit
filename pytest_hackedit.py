@@ -29,9 +29,10 @@ def main_window(qtbot, path, remove_project_folder=False):
     global WINDOWS
     if remove_project_folder:
         try:
-            shutil.rmtree(os.path.join(path, project.FOLDER))
+            project_folder_path = os.path.join(path, project.FOLDER)
+            shutil.rmtree(project_folder_path)
         except OSError:
-            pass
+            print('failed to remove project folder: %s' % project_folder_path)
     a = app()
     settings.load()
     QtCore.QSettings().clear()
