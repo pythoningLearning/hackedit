@@ -24,7 +24,7 @@ def get_available_locales():
     locale_dir = os.path.join(sys.prefix, 'share', 'locale')
     try:
         locales = os.listdir(locale_dir)
-    except OSError as e:
+    except OSError as e:  # pragma: no cover
         _logger().warn('failed to list translations files of directory %r: %s',
                        locale_dir, e)
     else:
@@ -66,7 +66,7 @@ def get_translation(package='hackedit'):
         get_translation function usable directly in your module.
     """
     locale_dir = os.path.join(sys.prefix, 'share', 'locale')
-    if not os.path.exists(locale_dir):
+    if not os.path.exists(locale_dir):  # pragma: no cover
         locale_dir = os.path.join(
             sys.prefix, 'local', 'share', 'locale')
     try:
@@ -86,7 +86,7 @@ def get_translation(package='hackedit'):
         return t.gettext
 
 
-def hackedit_gettext_hook(ui_script_path):
+def hackedit_gettext_hook(ui_script_path):  # pragma: no cover
     """
     pyqt-distutils hook that will replace Qt translate tools by calls to
     ``hackedit.api.gettext.translation``.

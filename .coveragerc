@@ -11,6 +11,8 @@ omit =
 [report]
 # Regexes for lines to exclude from consideration
 exclude_lines =
+    # Use to manually exclude a statement from coverage
+    pragma: no cover
     # Don't complain about missing debug-only code:
     __debug__
     def __repr__
