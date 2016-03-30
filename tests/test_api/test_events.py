@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtTest, QtWidgets
 
 import pytest_hackedit
-from hackedit.api import events
+from hackedit.api import events, window
 
 from .test_window import PROJ_PATH
 
@@ -47,7 +47,8 @@ def test_blacklist():
 
 
 def cancel_dialog():
-    QtWidgets.qApp.activeWindow().reject()
+    for dlg in window.get_main_window().findChildren(QtWidgets.QDialog):
+        dlg.reject()
 
 
 def test_exception_event():
