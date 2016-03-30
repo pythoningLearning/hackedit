@@ -52,26 +52,26 @@ class CorrectType:
         return w
 
 
-# def test_no_window(qtbot):
-#     pytest_hackedit.app()
-#     assert NoWindow().get_window() is None
+def test_no_window(qtbot):
+    pytest_hackedit.app()
+    assert NoWindow().get_window() is None
 
 
-# def test_none_window():
-#     pytest_hackedit.app()
-#     w = NoneWindow().get_window()
-#     assert w is None
+def test_none_window():
+    pytest_hackedit.app()
+    w = NoneWindow().get_window()
+    assert w is None
 
 
-# def test_wrong_type():
-#     pytest_hackedit.app()
-#     w = WrongType().get_window()
-#     assert w is None
+def test_wrong_type():
+    pytest_hackedit.app()
+    w = WrongType().get_window()
+    assert w is None
 
 
-# def test_correct_type():
-#     pytest_hackedit.app()
-#     w = CorrectType().get_window()
-#     assert w is not None
-#     assert isinstance(w, MainWindow)
-#     w.close()
+def test_correct_type():
+    pytest_hackedit.app()
+    w = CorrectType().get_window()
+    assert w is not None
+    assert isinstance(w, MainWindow)
+    w.close()
