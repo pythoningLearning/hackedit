@@ -69,6 +69,7 @@ def test_diff_viewer(qtbot):
 def test_find_results_widgets(qtbot):
     widget = widgets.FindResultsWidget()
     qtbot.addWidget(widget)
+    widget.hide()
     widget.show_results([('foo.py', [
         (10, 'Some random text', [(0, 1), (1, 2)]),
         (11, 'Some random text', [(4, 5)])])], 'search term')
@@ -79,6 +80,7 @@ def test_find_results_widgets(qtbot):
 def test_find_results_widgets_no_occurrences(qtbot):
     widget = widgets.FindResultsWidget()
     qtbot.addWidget(widget)
+    widget.hide()
     widget.show_results([], 'search_term')
     widget.show_results([('foo', [])], 'search_term')
 
@@ -86,6 +88,7 @@ def test_find_results_widgets_no_occurrences(qtbot):
 def test_find_results_widgets_limit(qtbot):
     widget = widgets.FindResultsWidget()
     qtbot.addWidget(widget)
+    widget.hide()
     widget.show_results([], 'search_term')
     widget.show_results([('foo.py', [
         (10, 'Some random text', [(0, 1)])] * 1001)], 'search_term')
@@ -94,8 +97,7 @@ def test_find_results_widgets_limit(qtbot):
 class TestRunWidget:
 
     def test_run_program(self, qtbot):
-        w = self.get_widget()
-        qtbot.addWidget(w)
+        w = self.get_widget(qtbot)
         assert w.ui.tabWidget.count() == 0
         tab = w.run_program(sys.executable, ['-m', 'pip', '-V'])
         assert isinstance(tab, InteractiveConsole)
@@ -105,8 +107,7 @@ class TestRunWidget:
         assert w.ui.tabWidget.count() == 1
 
     def test_clear(self, qtbot):
-        w = self.get_widget()
-        qtbot.addWidget(w)
+        w = self.get_widget(qtbot)
         t = w.run_program(sys.executable, ['-m', 'pip', '-V'])
         QtTest.QTest.qWait(500)
         assert t.toPlainText()
@@ -115,8 +116,7 @@ class TestRunWidget:
         t.process.waitForFinished()
 
     def test_request_close(self, qtbot):
-        w = self.get_widget()
-        qtbot.addWidget(w)
+        w = self.get_widget(qtbot)
         t = w.run_program(sys.executable, ['-m', 'pip', '-V'])
         QtTest.QTest.qWait(10)
         w.close()
@@ -124,7 +124,7 @@ class TestRunWidget:
         t.process.waitForFinished()
 
     def test_reuse_tabs(self, qtbot):
-        w = self.get_widget()
+        w = self.get_widget(qtbot)
         t1 = w.run_program(sys.executable, ['-m', 'pip', '-V'])
         t1.process.waitForFinished()
         t = w.run_program(sys.executable, ['-m', 'pip', '-V'])
@@ -132,7 +132,7 @@ class TestRunWidget:
         t.process.waitForFinished()
 
     def test_run_stop(self, qtbot):
-        w = self.get_widget()
+        w = self.get_widget(qtbot)
         t = w.run_program(sys.executable, ['-m', 'pip', 'list'])
         QtTest.QTest.qWait(10)
         assert t.is_running
@@ -143,7 +143,7 @@ class TestRunWidget:
         t.process.waitForFinished()
 
     def test_pin(self, qtbot):
-        w = self.get_widget()
+        w = self.get_widget(qtbot)
         t1 = w.run_program(sys.executable, ['-m', 'pip', '-V'])
         t1.process.waitForFinished()
         qtbot.mouseClick(w.ui.bt_pin, QtCore.Qt.LeftButton)
@@ -152,10 +152,10 @@ class TestRunWidget:
         t1.process.waitForFinished()
         t2.process.waitForFinished()
 
-    def get_widget(self):
+    def get_widget(self, qtbot):
         w = widgets.RunWidget()
         w._interactive = False
-        w.show()
+        qtbot.addWidget(w)
         return w
 
 
@@ -163,7 +163,6 @@ class TestDlgProgress:
     @pytest.mark.parametrize('value', [-1, 0, 50, 99, 100])
     def test_set_progress(self, qtbot, value):
         dlg = widgets.DlgProgress()
-
         dlg.set_progress(value)
 
     def test_set_msg(self, qtbot):

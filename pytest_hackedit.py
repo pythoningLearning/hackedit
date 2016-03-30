@@ -45,13 +45,12 @@ class MainWindow:
             except OSError:
                 pass
         a = app()
+        a.show_windows = False
         settings.load()
         QtCore.QSettings().clear()
         settings.set_confirm_app_exit(False)
         a.open_path(self._path)
         self.instance = a.editor_windows[-1]
-        QtWidgets.qApp.setActiveWindow(self.instance)
-        QtTest.QTest.qWaitForWindowExposed(self.instance)
         return self
 
     def __exit__(self, *args):

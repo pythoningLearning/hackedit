@@ -58,7 +58,7 @@ class Application(QtCore.QObject):
                         msg, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter,
                         QtCore.Qt.white)
                     qapp.processEvents()
-
+        self.show_windows = True  # set to false when running the test suite
         self._closed = False
         self._args = args
         self._qapp = qapp
@@ -501,8 +501,9 @@ class Application(QtCore.QObject):
         return True
 
     def _show_window(self, window):
-        window.raise_()
-        window.show()
+        if self.show_windows:
+            window.raise_()
+            window.show()
         self._qapp.setActiveWindow(window)
 
     def _add_new_window(self, path, workspace):
@@ -513,7 +514,7 @@ class Application(QtCore.QObject):
         _logger().debug('setting up workspaces plugins')
         self._setup_workspace_plugins(window, workspace)
         _logger().debug('restoring state')
-        if not window.restore_state(path):
+        if not window.restore_state(path) and self.show_windows:
             # show maximised the first time a window is created,
             # afterwards, restore_state will take care of restoring
             # the correct window size/show mode.
