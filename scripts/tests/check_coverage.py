@@ -11,6 +11,7 @@ python3 scripts/check_api.py
 import os
 import sys
 
+os.environ['PYTEST_QT_API'] = 'pyqt5'
 
 os.system('%s setup.py test -a "--cov hackedit --cov-report term '
           '--cov-report html"' % sys.executable)

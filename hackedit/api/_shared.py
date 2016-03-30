@@ -28,16 +28,16 @@ def _window():
         caller = frame.f_locals.get('self')
         return caller
 
+    from hackedit.app.main_window import MainWindow
+
     try:
         w = caller().main_window
-        if w:
+        if w and isinstance(w, MainWindow):
             return w
         raise AttributeError('main_window is None')
     except (AttributeError, IndexError):
         # not from a plugin, use active window instead
         w = QtWidgets.qApp.activeWindow()
-
-        from hackedit.app.main_window import MainWindow
 
         if not isinstance(w, MainWindow):
             try:

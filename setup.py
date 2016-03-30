@@ -102,6 +102,7 @@ setup(
     name='hackedit',
     version=hackedit.__version__,
     packages=find_packages(exclude=['tests']),
+    py_modules=['pytest_hackedit'],
     keywords=['IDE', 'Intergrated Development Environment', 'TextEditor',
               'Editor'],
     data_files=data_files,

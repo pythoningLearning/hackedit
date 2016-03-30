@@ -10,5 +10,6 @@ python3 scripts/check_pep8.py
 import os
 import sys
 
+os.environ['PYTEST_QT_API'] = 'pyqt5'
 
 os.system('%s setup.py test -a "--flake8 -m flake8"' % sys.executable)

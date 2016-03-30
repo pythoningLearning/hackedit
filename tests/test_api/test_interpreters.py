@@ -8,8 +8,7 @@ from hackedit.api import project
 from hackedit.api.interpreters import (
     InterpreterManager, ScriptRunnerPlugin, create_default_config,
     save_configs, load_configs, get_active_config_name, save_active_config)
-from .test_window import win
-
+import pytest_hackedit
 
 DATA_FILES_PATH = os.path.join(os.getcwd(), 'tests', 'data')
 PROJ_PATH = os.path.join(DATA_FILES_PATH, 'SpamEggsProj')
@@ -95,10 +94,11 @@ def test_scriptrunnerplugin(qtbot):
         qtbot.keyPress(QtWidgets.qApp.activeWindow(), QtCore.Qt.Key_Escape)
 
     # not really a unit test, kinda functional
-    w = win(qtbot)
+    w = pytest_hackedit.main_window(qtbot, PROJ_PATH)
     p = FakeScriptRunnerPlugin(w)
     p.enable_mnu_configs()
     p.enable_run()
+    pytest_hackedit.close_main_window(w)
 
 
 def test_create_default_config():

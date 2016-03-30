@@ -8,5 +8,6 @@ python3 scripts/tests/runtests.py
 import os
 import sys
 
+os.environ['PYTEST_QT_API'] = 'pyqt5'
 
 os.system('%s setup.py  test' % sys.executable)
