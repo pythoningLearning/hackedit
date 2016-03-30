@@ -17,6 +17,46 @@ There are 3 level of notification:
 
 To post an event notifications, create a :class:`Event` instance and pass it
 to the :func:`post` function.
+
+Example::
+
+    def test():
+        '''
+        Test notifications system.
+
+        Paste the following code in the IPython console to test it:
+
+        from hackedit.api.events import test; test()
+        '''
+        from PyQt5 import QtWidgets
+
+        def show_msg_box():
+            QtWidgets.QMessageBox.information(
+                QtWidgets.qApp.activeWindow(), 'Click me',
+                'Bravo! You successfully clicked on an event link')
+
+        action = QtWidgets.QAction(None)
+        action.setText('Click me')
+        action.setObjectName('actionClickHere')
+        action.triggered.connect(show_msg_box)
+
+        post(Event('Information event', 'An information message...',
+                   custom_actions=[action]))
+        post(Event('Warning event', 'A warning message...', level=WARNING))
+        post(Event('Error event', 'An error message...', level=ERROR))
+
+
+    def test_info():
+        post(Event('Information event', 'An information message...'))
+
+
+    def test_warning():
+        post(Event('Warning event', 'A warning message...', level=WARNING))
+
+
+    def test_error():
+        post(Event('Error event', 'An error message...', level=ERROR))
+
 """
 import traceback
 import datetime
@@ -83,7 +123,7 @@ class Event(QtCore.QObject):
         Put this event on the events blacklist.
         """
         add_to_blacklist(self)
-        self.remove_requested.emit(self)
+        self.remove()
 
     def remove(self):
         self.remove_requested.emit(self)
@@ -185,41 +225,3 @@ def post(event, show_balloon=None, force_show=False):
     if show_balloon is None and not event.window.flg_setup:
         show_balloon = not event.window.isVisible()
     _window().notifications.add(event, show_balloon, force_show)
-
-
-def test():
-    """
-    Test notifications system.
-
-    Paste the following code in the IPython console to test it:
-
-    from hackedit.api.events import test; test()
-    """
-    from PyQt5 import QtWidgets
-
-    def show_msg_box():
-        QtWidgets.QMessageBox.information(
-            QtWidgets.qApp.activeWindow(), 'Click me',
-            'Bravo! You successfully clicked on an event link')
-
-    action = QtWidgets.QAction(None)
-    action.setText('Click me')
-    action.setObjectName('actionClickHere')
-    action.triggered.connect(show_msg_box)
-
-    post(Event('Information event', 'An information message...',
-               custom_actions=[action]))
-    post(Event('Warning event', 'A warning message...', level=WARNING))
-    post(Event('Error event', 'An error message...', level=ERROR))
-
-
-def test_info():
-    post(Event('Information event', 'An information message...'))
-
-
-def test_warning():
-    post(Event('Warning event', 'A warning message...', level=WARNING))
-
-
-def test_error():
-    post(Event('Error event', 'An error message...', level=ERROR))

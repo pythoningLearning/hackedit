@@ -121,8 +121,11 @@ class HistoryWidget(QtWidgets.QWidget):
 
     def remove_event(self, event):
         self.ui.vertical_layout.removeWidget(event.widget)
-        event.widget.setParent(None)
-        event.widget = None
+        try:
+            event.widget.setParent(None)
+            event.widget = None
+        except (RuntimeError, TypeError, AttributeError):
+            pass
         self._events.remove(event)
         if self.count() == 0:
             self.contents_cleared.emit()
@@ -200,6 +203,7 @@ class Manager(QtCore.QObject):
         self._history.add(e)
         if e.level > self._highest_level:
             self._highest_level = e.level
+        e.main_window = self.main_window
         self._update_tool_button()
         # todo make this configurable
         flags = {
