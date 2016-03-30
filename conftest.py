@@ -25,7 +25,7 @@ try:
 except ImportError:
     pass
 
-
+app = QtWidgets.QApplication(sys.argv)
 QtWidgets.qApp.setOrganizationName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationDisplayName('HackEdit-TestSuite')
 QtWidgets.qApp.setApplicationName('HackEdit-TestSuite')
