@@ -5,7 +5,6 @@ from hackedit.api.plugins import SymbolParserPlugin
 from hackedit.app.tasks import SubprocessTaskHandle
 from hackedit.app.index import backend, db
 
-db.DB_FILE_NAME = 'test-index.db'
 DB_PATH = db.DbHelper.get_db_path()
 PATH = os.path.join(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', '..', 'data')), 'FooBarProj')

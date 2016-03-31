@@ -46,4 +46,4 @@ for pth in ['tests/data/FooBarProj/.hackedit',
 import logging
 from hackedit.app import logger
 
-logger.setup(logging.DEBUG)
+logger.setup(logging.INFO)

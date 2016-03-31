@@ -14,7 +14,7 @@ finished = False  #: flag set by the callback when indexing task has finished.
 DB_PATH = db.DbHelper.get_db_path()
 PROJ_PATH = os.path.join(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'data')), 'FooBarProj')
-SETUP_PATH = os.path.join(PROJ_PATH, 'setup.py')
+FILE_PATH = os.path.join(PROJ_PATH, 'module.py')
 INVALID_FILE_PATH = os.path.join(PROJ_PATH, 'setup2.py')
 
 
@@ -85,9 +85,9 @@ def test_get_file():
     with pytest_hackedit.MainWindow(PROJ_PATH):
         remove_db()
         do_indexing()
-        file = index.get_file(SETUP_PATH)
+        file = index.get_file(FILE_PATH)
         assert file is not None
-        assert file.path == SETUP_PATH
+        assert file.path == FILE_PATH
         assert file.project_id == 1
         assert file.id != 0
         file = index.get_file(INVALID_FILE_PATH)
@@ -109,13 +109,13 @@ def test_get_symbols():
         remove_db()
         do_indexing()
         with pytest.raises(ValueError):
-            list(index.get_symbols(projects=[PROJ_PATH], file=SETUP_PATH))
+            list(index.get_symbols(projects=[PROJ_PATH], file=FILE_PATH))
 
         symbols = list(index.get_symbols(projects=[PROJ_PATH]))
         assert len(symbols)
 
-        symbols = list(index.get_symbols(file=SETUP_PATH))
+        symbols = list(index.get_symbols(file=FILE_PATH))
         assert len(symbols) == 2
 
         symbols = list(index.get_symbols(name_filter='egg'))
-        assert len(symbols) == 2
+        assert len(symbols) == 1

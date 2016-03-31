@@ -16,6 +16,8 @@ from hackedit.api import system
 DB_VERSION = '0.1'
 #: File name of the database
 DB_FILE_NAME = 'index-%s.db' % DB_VERSION
+if os.environ.get('HACKEDIT_CORE_TEST_SUITE', default=None) is not None:
+    DB_FILE_NAME = 'test-index-%s.db' % DB_VERSION
 
 #: sql statements used to create the file and symbol tables.
 SQL_CREATE_TABLES = [

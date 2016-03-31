@@ -3,7 +3,6 @@ import pytest
 from hackedit.app.index import db
 
 
-db.DB_FILE_NAME = 'test-index.db'
 DB_PATH = db.DbHelper.get_db_path()
 
 
