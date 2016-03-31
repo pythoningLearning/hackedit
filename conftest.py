@@ -34,7 +34,6 @@ QtWidgets.qApp.setApplicationName('HackEdit-TestSuite')
 from hackedit.api.gettext import get_translation  # noqa
 get_translation()
 
-
 for pth in ['tests/data/FooBarProj/.hackedit',
             'tests/data/SpamEggsProj/.hackedit',
             'tests/data/SpamEggsProj2/.hackedit',
@@ -43,3 +42,8 @@ for pth in ['tests/data/FooBarProj/.hackedit',
         shutil.rmtree(os.path.join(os.getcwd(), pth))
     except OSError:
         pass
+
+import logging
+from hackedit.app import logger
+
+logger.setup(logging.DEBUG)
