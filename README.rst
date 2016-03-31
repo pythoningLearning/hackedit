@@ -215,7 +215,7 @@ Install the following dependencies using your favorite package manager:
 
 Use pip to install ``hackedit`` and its python dependencies::
 
-      pip3 install hackedit --upgrade
+      pip3 install hackedit --pre --upgrade
 
 
 To install the latest development version, run the following command instead::
@@ -241,7 +241,7 @@ Ubuntu/Debian
 
 3. Install hackedit::
 
-    sudo pip3 install hackedit --upgrade --install-option="--install-layout=deb"
+    sudo pip3 install hackedit --pre --upgrade --install-option="--install-layout=deb"
 
 4. If you're using a gtk based desktop, update the gtk icon cache::
 
@@ -265,7 +265,7 @@ ArchLinux
 
 3. Install hackedit::
 
-    sudo pip3 install hackedit --upgrade
+    sudo pip3 install hackedit --pre --upgrade
 
 4. If you're using a gtk based desktop, update the gtk icon cache::
 
@@ -288,7 +288,7 @@ Windows
 
 * Install hackedit using pip::
 
-    pip install hackedit --upgrade
+    pip install hackedit --pre --upgrade
 
 * Run hackedit in GUI mode::
 
@@ -312,7 +312,7 @@ OSX
 
 3. Install hackedit::
 
-    pip3 install hackedit --upgrade
+    pip3 install hackedit --pre --upgrade
 
 4. Run hackedit from the terminal::
 
