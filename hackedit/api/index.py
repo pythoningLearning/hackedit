@@ -278,3 +278,4 @@ def clear_database():
                 ok = create_database()
             except IOError:  # pragma: no cover
                 ok = False
+    return ok
