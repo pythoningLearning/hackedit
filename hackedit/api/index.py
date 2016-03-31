@@ -268,7 +268,7 @@ def clear_database():
     """
     try:
         os.remove(db.DbHelper.get_db_path())
-    except OSError:
+    except OSError:  # pragma: no cover
         return False
     else:
         # create empty db
@@ -276,5 +276,5 @@ def clear_database():
         while not ok:
             try:
                 ok = create_database()
-            except IOError:
+            except IOError:  # pragma: no cover
                 ok = False

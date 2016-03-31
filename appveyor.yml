@@ -22,7 +22,7 @@ install:
   - pip install pytest pytest-qt
   # install hackedit in development mode
   - pip install -e .
-  - python setup.py install_data --quiet
+  - python setup.py --quiet install_data
   # install a plugin to make the test suite coverage more complete.
   - pip install git+https://github.com/HackEdit/hackedit-python.git
 

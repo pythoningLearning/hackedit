@@ -1,6 +1,6 @@
-def spam():
-    print('spam')
+class EggSpammer:
+    def spam(self):
+        print('spam')
 
-
-def eggs():
-    print('eggs')
+    def eggs(self):
+        print('eggs')

@@ -115,7 +115,26 @@ def test_get_symbols():
         assert len(symbols)
 
         symbols = list(index.get_symbols(file=FILE_PATH))
-        assert len(symbols) == 2
+        assert len(symbols) == 3
 
         symbols = list(index.get_symbols(name_filter='egg'))
-        assert len(symbols) == 1
+        assert len(symbols) == 2
+
+
+def test_remove_project():
+    with pytest_hackedit.MainWindow(PROJ_PATH):
+        remove_db()
+        do_indexing()
+        assert len(list(index.get_all_projects())) == 1
+        index.remove_project(PROJ_PATH)
+        assert len(list(index.get_all_projects())) == 0
+
+
+def test_cleardatabase():
+    with pytest_hackedit.MainWindow(PROJ_PATH):
+        do_indexing()
+        assert os.path.exists(DB_PATH)
+        assert len(list(index.get_all_projects())) == 1
+        assert index.clear_database() is True
+        assert os.path.exists(DB_PATH)
+        assert len(list(index.get_all_projects())) == 0
