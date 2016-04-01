@@ -7,6 +7,7 @@ omit =
     hackedit/vendor/*
     tests/*
     scripts/*
+    *special_icons.py
 
 [report]
 # Regexes for lines to exclude from consideration
@@ -49,10 +50,6 @@ exclude_lines =
 
     # Don't complain about question message box dialog not shown
     .*_interactive*.:
-
-    # Don't complain if there is no file icon plugins
-    .*plugins.FileIconProviderPlugin.ENTRYPOINT\):
-    for plugin in self.plugins:
 
     # skip those classes, they cannot easily be covered by unit tests, they
     # are covered by functional tests

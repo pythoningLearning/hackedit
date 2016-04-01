@@ -13,3 +13,12 @@ def test_connect_slot(signal):
     with pytest_hackedit.MainWindow(PROJ_PATH):
         signals.connect_slot(signal, slot)
         signals.disconnect_slot(signal, slot)
+
+
+def test_invalid_signal():
+    def slot():
+        pass
+    with pytest.raises(ValueError):
+        signals.connect_slot('invalid_signal', slot)
+    with pytest.raises(ValueError):
+        signals.disconnect_slot('invalid_signal', slot)

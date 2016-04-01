@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.widgets import InteractiveConsole
 
 from hackedit.api import project
@@ -16,7 +16,8 @@ PROJ_PATH = os.path.join(DATA_FILES_PATH, 'SpamEggsProj')
 
 class PythonManager(InterpreterManager):
     def __init__(self):
-        super().__init__('python', default_interpreter=sys.executable)
+        super().__init__('python', default_interpreter=sys.executable,
+                         mimetype='text/x-python')
 
     def _detect_system_interpreters(self):
         return ['/usr/bin/python', sys.executable]
@@ -38,6 +39,13 @@ class TestInterpreterManager:
             os.remove(os.path.join(PROJ_PATH, project.FOLDER, 'config.usr'))
         except OSError:
             pass
+
+    def test_extensions(self):
+        assert len(PythonManager().extensions)
+
+    def test_icon(self):
+        icon = PythonManager().get_interpreter_icon()
+        assert isinstance(icon, QtGui.QIcon)
 
     def test_all_interpreters(self):
         assert len(PythonManager().all_interpreters) == 2

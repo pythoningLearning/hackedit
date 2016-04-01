@@ -138,7 +138,7 @@ def disconnect_slot(signal, slot):
         raise ValueError('%r is not a valid signal' % signal)
     try:
         getattr(_window(), signal).disconnect(slot)
-    except (TypeError, RuntimeError):
+    except (TypeError, RuntimeError):  # pragma: no cover
         # already disconnected
         __logger().warn('failed to disconnect slot %r from signal %r',
                         slot, signal)

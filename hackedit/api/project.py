@@ -67,7 +67,7 @@ def get_root_project():
     """
     try:
         return _window().projects[0]
-    except IndexError:
+    except IndexError:  # pragma: no cover
         return None
 
 

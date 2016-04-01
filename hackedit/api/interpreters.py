@@ -798,7 +798,7 @@ def save_configs(path, configs):
     try:
         with open(path, 'w') as f:
             json.dump(configs, f, indent=4, sort_keys=True)
-    except OSError:
+    except OSError:  # pragma: no cover
         _logger().exception('failed to save project configuration to %r', path)
 
 

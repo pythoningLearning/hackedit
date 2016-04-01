@@ -52,12 +52,10 @@ Example::
 """
 from ._shared import _window
 
-from hackedit.app.ipc import server
-
 
 class TaskHandle:
     """
-    Descritbes the public interface for a task handler.
+    Describes the public interface of a task handle (for documentation purpose
     """
     def report_progress(self, message, progress):
         """
@@ -66,7 +64,6 @@ class TaskHandle:
         :param progress: New progress value.
         """
         print(message)
-        server.send(self.conn, {'message': message, 'progress': progress})
 
 
 def start(name, func, callback, args=(), cancellable=True, use_thread=False):

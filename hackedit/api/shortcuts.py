@@ -125,7 +125,7 @@ def _get_map():
     if data:
         try:
             k, (name, sh, text) = list(data.items())[0]
-        except ValueError:
+        except ValueError:  # pragma: no cover
             data = {}  # old format used
     return data
 
