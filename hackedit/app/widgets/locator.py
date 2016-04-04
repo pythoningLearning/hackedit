@@ -128,9 +128,11 @@ class LocatorWidget(QtWidgets.QFrame):
         return super().eventFilter(obj, ev)
 
     def _activate(self, *_):
+        current_item = self.ui.treeWidget.currentItem()
+        if current_item is None:
+            return
         if self.ui.treeWidget.isVisible():
-            data = self.ui.treeWidget.currentItem().data(
-                0, QtCore.Qt.UserRole)
+            data = current_item.data(0, QtCore.Qt.UserRole)
         else:
             data = self.main_window.current_tab.file.path
         if isinstance(data, str):
