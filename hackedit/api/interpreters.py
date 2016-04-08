@@ -116,10 +116,13 @@ class InterpreterManager:
                  defined for the project.
         """
         try:
-            return project.load_user_config(project_path)['interpreter']
+            interpreter = project.load_user_config(project_path)['interpreter']
         except KeyError:
             # use the first interpreter available
-            return self.default_interpreter
+            interpreter = self.default_interpreter
+        if not os.path.exists(interpreter):
+            interpreter = self.default_interpreter
+        return interpreter
 
     @staticmethod
     def set_project_interpreter(project_path, interpreter):
@@ -458,6 +461,7 @@ class _DlgScriptRunConfiguration(QtWidgets.QDialog):
             for path in dlg.configs.keys():
                 save_configs(path, dlg.configs[path])
             if dlg.current_config:
+
                 # save active config in current project
                 save_active_config(
                     window.projects[0], dlg.current_config['name'])
