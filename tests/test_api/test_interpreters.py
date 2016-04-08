@@ -85,8 +85,8 @@ class TestInterpreterManager:
     def test_prj_interpreter(self):
         pm = PythonManager()
         assert pm.get_project_interpreter(PROJ_PATH) == pm.default_interpreter
-        pm.set_project_interpreter(PROJ_PATH, '/usr/bin/python')
-        assert pm.get_project_interpreter(PROJ_PATH) == '/usr/bin/python'
+        pm.set_project_interpreter(PROJ_PATH, sys.executable)
+        assert pm.get_project_interpreter(PROJ_PATH) == sys.executable
 
     def test_detect_interpreters(self):
         assert InterpreterManager('test')._detect_system_interpreters() == []
