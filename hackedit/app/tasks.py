@@ -411,7 +411,8 @@ class TaskManagerWidget(QtWidgets.QWidget):
         elif count > 1:
             self.label.setText(_('%d process running') % count)
         else:
-            self.label.setText(self.task_manager.running_tasks[0].name)
+            if self.task_manager:
+                self.label.setText(self.task_manager.running_tasks[0].name)
 
     def setVisible(self, value):
         if hasattr(self, 'toolbar_action'):
