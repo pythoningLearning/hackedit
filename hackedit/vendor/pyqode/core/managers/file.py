@@ -448,4 +448,3 @@ class FileManager(Manager):
         self.safe_save = original.replace_tabs_by_spaces
         self.clean_trailing_whitespaces = original.clean_trailing_whitespaces
         self.restore_cursor = original.restore_cursor
-

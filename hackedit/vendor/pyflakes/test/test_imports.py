@@ -236,22 +236,6 @@ class Test(TestCase):
         print(fu)
         ''')
 
-    def test_importInClass(self):
-        """
-        Test that import within class is a locally scoped attribute.
-        """
-        self.flakes('''
-        class bar:
-            import fu
-        ''')
-
-        self.flakes('''
-        class bar:
-            import fu
-
-        fu
-        ''', m.UndefinedName)
-
     def test_usedInFunction(self):
         self.flakes('''
         import fu
@@ -586,7 +570,7 @@ class Test(TestCase):
             import fu
             def fun(self):
                 fu
-        ''', m.UndefinedName)
+        ''', m.UnusedImport, m.UndefinedName)
 
     def test_nestedFunctionsNestScope(self):
         self.flakes('''
@@ -606,38 +590,7 @@ class Test(TestCase):
         ''')
 
     def test_importStar(self):
-        """Use of import * at module level is reported."""
-        self.flakes('from fu import *', m.ImportStarUsed, m.UnusedImport)
-        self.flakes('''
-        try:
-            from fu import *
-        except:
-            pass
-        ''', m.ImportStarUsed, m.UnusedImport)
-
-    @skipIf(version_info < (3,),
-            'import * below module level is a warning on Python 2')
-    def test_localImportStar(self):
-        """import * is only allowed at module level."""
-        self.flakes('''
-        def a():
-            from fu import *
-        ''', m.ImportStarNotPermitted)
-        self.flakes('''
-        class a:
-            from fu import *
-        ''', m.ImportStarNotPermitted)
-
-    @skipIf(version_info > (3,),
-            'import * below module level is an error on Python 3')
-    def test_importStarNested(self):
-        """All star imports are marked as used by an undefined variable."""
-        self.flakes('''
-        from fu import *
-        def f():
-            from bar import *
-            x
-        ''', m.ImportStarUsed, m.ImportStarUsed, m.ImportStarUsage)
+        self.flakes('from fu import *', m.ImportStarUsed)
 
     def test_packageImport(self):
         """
@@ -736,6 +689,7 @@ class Test(TestCase):
             pass
         ''')
 
+    @skip("todo: requires evaluating attribute access")
     def test_importedInClass(self):
         """Imports in class scope can be used through self."""
         self.flakes('''
@@ -788,18 +742,6 @@ class Test(TestCase):
         assert print_function is not division
         ''')
 
-    def test_futureImportUndefined(self):
-        """Importing undefined names from __future__ fails."""
-        self.flakes('''
-        from __future__ import print_statement
-        ''', m.FutureFeatureNotDefined)
-
-    def test_futureImportStar(self):
-        """Importing '*' from __future__ fails."""
-        self.flakes('''
-        from __future__ import *
-        ''', m.FutureFeatureNotDefined)
-
 
 class TestSpecialAll(TestCase):
     """
@@ -818,11 +760,12 @@ class TestSpecialAll(TestCase):
 
     def test_ignoredInClass(self):
         """
-        An C{__all__} definition in a class does not suppress unused import warnings.
+        An C{__all__} definition does not suppress unused import warnings in a
+        class scope.
         """
         self.flakes('''
-        import bar
         class foo:
+            import bar
             __all__ = ["bar"]
         ''', m.UnusedImport)
 
@@ -890,14 +833,6 @@ class TestSpecialAll(TestCase):
         from foolib import *
         __all__ = ["foo"]
         ''', m.ImportStarUsed)
-
-    def test_importStarNotExported(self):
-        """Report unused import when not needed to satisfy __all__."""
-        self.flakes('''
-        from foolib import *
-        a = 1
-        __all__ = ['a']
-        ''', m.ImportStarUsed, m.UnusedImport)
 
     def test_usedInGenExp(self):
         """

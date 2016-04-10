@@ -134,5 +134,14 @@
         "script": "scripts/update_breeze_icons.py",
         "script_parameters": [],
         "working_dir": "scripts"
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "update_vendor",
+        "run_in_external_terminal": false,
+        "script": "scripts/update_vendor.py",
+        "script_parameters": [],
+        "working_dir": "."
     }
 ]

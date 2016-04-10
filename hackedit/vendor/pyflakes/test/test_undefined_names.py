@@ -3,7 +3,7 @@ from _ast import PyCF_ONLY_AST
 from sys import version_info
 
 from pyflakes import messages as m, checker
-from pyflakes.test.harness import TestCase, skipIf, skip
+from pyflakes.test.harness import TestCase, skipIf
 
 
 class Test(TestCase):
@@ -71,10 +71,8 @@ class Test(TestCase):
 
     def test_globalImportStar(self):
         """Can't find undefined names with import *."""
-        self.flakes('from fu import *; bar',
-                    m.ImportStarUsed, m.ImportStarUsage)
+        self.flakes('from fu import *; bar', m.ImportStarUsed)
 
-    @skipIf(version_info >= (3,), 'obsolete syntax')
     def test_localImportStar(self):
         """
         A local import * still allows undefined names to be found
@@ -84,7 +82,7 @@ class Test(TestCase):
         def a():
             from fu import *
         bar
-        ''', m.ImportStarUsed, m.UndefinedName, m.UnusedImport)
+        ''', m.ImportStarUsed, m.UndefinedName)
 
     @skipIf(version_info >= (3,), 'obsolete syntax')
     def test_unpackedParameter(self):
@@ -125,29 +123,6 @@ class Test(TestCase):
         global x
         def foo():
             print(x)
-        ''', m.UndefinedName)
-
-    def test_global_reset_name_only(self):
-        """A global statement does not prevent other names being undefined."""
-        # Only different undefined names are reported.
-        # See following test that fails where the same name is used.
-        self.flakes('''
-        def f1():
-            s
-
-        def f2():
-            global m
-        ''', m.UndefinedName)
-
-    @skip("todo")
-    def test_unused_global(self):
-        """An unused global statement does not define the name."""
-        self.flakes('''
-        def f1():
-            m
-
-        def f2():
-            global m
         ''', m.UndefinedName)
 
     def test_del(self):
@@ -311,11 +286,7 @@ class Test(TestCase):
                     return x
                 return x
         ''', m.UndefinedLocal).messages[0]
-
-        # _DoctestMixin.flakes adds two lines preceding the code above.
-        expected_line_num = 7 if self.withDoctest else 5
-
-        self.assertEqual(exc.message_args, ('x', expected_line_num))
+        self.assertEqual(exc.message_args, ('x', 5))
 
     def test_laterRedefinedGlobalFromNestedScope3(self):
         """
@@ -482,20 +453,8 @@ class Test(TestCase):
         Using the loop variable of a generator expression results in no
         warnings.
         """
-        self.flakes('(a for a in [1, 2, 3] if a)')
-
-        self.flakes('(b for b in (a for a in [1, 2, 3] if a) if b)')
-
-    def test_undefinedInGenExpNested(self):
-        """
-        The loop variables of generator expressions nested together are
-        not defined in the other generator.
-        """
-        self.flakes('(b for b in (a for a in [1, 2, 3] if b) if b)',
-                    m.UndefinedName)
-
-        self.flakes('(b for b in (a for a in [1, 2, 3] if a) if a)',
-                    m.UndefinedName)
+        self.flakes('(a for a in %srange(10) if a)' %
+                    ('x' if version_info < (3,) else ''))
 
     def test_undefinedWithErrorHandler(self):
         """
@@ -549,15 +508,6 @@ class Test(TestCase):
                 X = {x for x in T}
                 Y = {x:x for x in T}
             ''')
-
-    def test_definedInClassNested(self):
-        """Defined name for nested generator expressions in a class."""
-        self.flakes('''
-        class A:
-            T = range(10)
-
-            Z = (x for x in (a for a in T))
-        ''')
 
     def test_undefinedInLoop(self):
         """
