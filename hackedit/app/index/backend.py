@@ -226,6 +226,7 @@ def _update_mtime(file_path):
     except FileNotFoundError:
         with db.DbHelper() as dbh:
             dbh.delete_file(file_path)
+        return None, None
     else:
         with db.DbHelper() as dbh:
             old_mtime = dbh.get_file_mtime(file_path)
