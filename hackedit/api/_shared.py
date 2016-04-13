@@ -38,14 +38,9 @@ def _window():
     except (AttributeError, IndexError):
         # not from a plugin, use active window instead
         w = QtWidgets.qApp.activeWindow()
-
         if not isinstance(w, MainWindow):
             try:
-                w = APP.editor_windows[0]
+                w = APP.active_window
             except IndexError:
                 w = None
-            if w is None:
-                w = APP.last_window
-        if isinstance(w, MainWindow):
-            return w
-        return None
+        return w

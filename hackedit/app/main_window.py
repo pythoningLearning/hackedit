@@ -701,6 +701,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.setParent(None)
 
+    def event(self, e):
+        if e.type() == QtCore.QEvent.WindowActivate:
+            self.app.active_window = self
+        return super().event(e)
+
     def showEvent(self, ev):
         super().showEvent(ev)
         if self.task_manager.count:

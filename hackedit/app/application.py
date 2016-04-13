@@ -1,6 +1,7 @@
 """
 This module contains the Application class.
 """
+import weakref
 import logging
 import os
 import sys
@@ -60,6 +61,7 @@ class Application(QtCore.QObject):
                     qapp.processEvents()
         self.show_windows = True  # set to false when running the test suite
         self._closed = False
+        self._active_window = None
         self._args = args
         self._qapp = qapp
         self._splash = splash
@@ -217,7 +219,7 @@ class Application(QtCore.QObject):
         """
         Gets/Sets the active editor window
         """
-        return self._qapp.activeWindow()
+        return self._active_window
 
     @active_window.setter
     def active_window(self, window):
@@ -561,7 +563,9 @@ class Application(QtCore.QObject):
 
     def _set_active_window(self, window):
         _logger().debug('active window set to %r' % window)
+        print('set active window', window)
         self._qapp.setActiveWindow(window)
+        self._active_window = weakref.proxy(window)
         for w in self.editor_windows:
             if w != window:
                 w.update_mnu_view()
