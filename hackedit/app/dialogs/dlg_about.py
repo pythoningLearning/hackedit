@@ -30,12 +30,7 @@ class DlgAbout(QtWidgets.QDialog):
         self.ui.lbl_version.setText(self.ui.lbl_version.text() % __version__)
 
         # Load log file content
-        try:
-            with open(logger.get_path()) as f:
-                log_content = f.read()
-        except FileNotFoundError:
-            log_content = ''
-        self.ui.edit_log.setPlainText(log_content)
+        self.ui.edit_log.setPlainText(logger.get_application_log())
         tc = self.ui.edit_log.textCursor()
         tc.movePosition(tc.End)
         self.ui.edit_log.setTextCursor(tc)
@@ -70,18 +65,16 @@ class DlgAbout(QtWidgets.QDialog):
         logging.getLogger().setLevel(lvl)
 
     def _clear_logs(self):
-        logger.do_roll_over()
-        for i in range(6):
-            filename = 'hackedit.log%s' % ('' if not i else '.%d' % i)
-            pth = os.path.join(os.path.dirname(logger.get_path()), filename)
-            try:
-                os.remove(pth)
-            except OSError:
-                if os.path.exists(pth):
-                    _logger().exception('failed to remove log file %r', pth)
-        QtWidgets.QMessageBox.information(self, 'Logs cleared',
-                                          'Log files have been cleared.')
-        self.ui.edit_log.clear()
+        failures = logger.clear_logs()
+        if not failures:
+            self.ui.edit_log.clear()
+            QtWidgets.QMessageBox.information(self, 'Logs cleared',
+                                              'Log files have been cleared.')
+        else:
+            QtWidgets.QMessageBox.warning(
+                self, 'Failed to clear logs',
+                'Failed to remove the following log files: %r' %
+                failures)
 
     @staticmethod
     def show_about(parent):

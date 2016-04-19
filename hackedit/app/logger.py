@@ -1,11 +1,14 @@
 """
 This module contains functions for easily setup the application logger
 """
-import logging.handlers
+import glob
+import logging
 import os
 
+from hackedit.api import system
 
-_rotating_file_handler = None
+#: reference to the file handler
+file_handler = None
 
 
 def get_path():
@@ -19,7 +22,7 @@ def get_path():
     :return: str
     """
     from hackedit.api import system
-    return os.path.join(system.get_app_data_directory(), 'hackedit.log')
+    return os.path.join(system.get_app_data_directory(), 'hackedit-%d.log' % os.getpid())
 
 
 def setup(level=logging.INFO):
@@ -28,12 +31,13 @@ def setup(level=logging.INFO):
 
     :param level: log level, default is logging.INFO
     """
-    global _rotating_file_handler
-    _rotating_file_handler = logging.handlers.RotatingFileHandler(
-            get_path(), maxBytes=2*1024*1024, backupCount=5)
+    global file_handler
+    if len(get_log_files()) > 5:
+        clear_logs()
+    file_handler = logging.FileHandler(get_path())
     handlers = [
         # a new log will be created on each new day with 5 days backup
-        _rotating_file_handler,
+        file_handler,
         logging.StreamHandler()
     ]
     logging.basicConfig(
@@ -44,6 +48,30 @@ def setup(level=logging.INFO):
     logging.getLogger('hackedit').info('-' * 80)
 
 
-def do_roll_over():
-    global _rotating_file_handler
-    _rotating_file_handler.doRollover()
+def clear_logs():
+    if file_handler:
+        file_handler.close()
+    failures = []
+    for filename in get_log_files():
+        pth = os.path.join(system.get_app_data_directory(), filename)
+        try:
+            os.remove(pth)
+        except OSError:
+            if os.path.exists(pth):
+                logging.getLogger('open_cobol_ide').exception(
+                    'failed to remove log file %r', pth)
+                failures.append(pth)
+    return failures
+
+
+def get_log_files():
+    return glob.glob(os.path.join(system.get_app_data_directory(), '*.log'))
+
+
+def get_application_log():
+    try:
+        with open(get_path(), 'r') as f:
+            content = f.read()
+        return content
+    except FileNotFoundError:
+        return ''

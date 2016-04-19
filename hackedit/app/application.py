@@ -291,13 +291,12 @@ class Application(QtCore.QObject):
             w.apply_preferences()
         self.flg_force_indexing = False
 
-
     # -------------------------------------------------------------------------
     # Private API (+ overridden methods)
     # -------------------------------------------------------------------------
     def _setup_except_hook(self):
         qcrash.get_system_information = versions.get_system_infos
-        qcrash.get_application_log = _get_log
+        qcrash.get_application_log = logger.get_application_log
         qcrash.install_backend(
             qcrash.backends.GithubBackend(QCRASH_GH_OWNER, QCRASH_GH_REPO),
             qcrash.backends.EmailBackend(QCRASH_EMAIL, 'HackEdit'))
@@ -618,14 +617,6 @@ class Application(QtCore.QObject):
                 w.notifications.add(ev, False, True)
         except Exception:
             _logger().exception('exception in excepthook')
-
-
-def _get_log():
-    try:
-        with open(logger.get_path(), 'r') as f:
-            return f.read()
-    except OSError:
-        return ''
 
 
 # monkeypatch needed to use our pygments style plugins when pygments has
