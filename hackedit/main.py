@@ -43,6 +43,19 @@ setup_sqlite3()
 
 
 from hackedit import __version__                  # noqa
+from hackedit.api import system                   # noqa
+
+# Use a file for stdout/stderr if sys.stdout/sys.stderr is None
+# This happens when running the app on Windows with pythow.exe or when
+# running from the native launcher.
+app_data = system.get_app_data_directory()
+stdout_path = os.path.join(app_data, 'stdout-pid%d' % os.getpid())
+stderr_path = os.path.join(app_data, 'stderr-pid%d' % os.getpid())
+if sys.stdout is None:
+    sys.stdout = open(stdout_path, 'w')
+if sys.stderr is None:
+    sys.stderr = open(stderr_path, 'w')
+
 from hackedit.api.gettext import get_translation  # noqa
 from hackedit.app import argparser, logger        # noqa
 import faulthandler                               # noqa
@@ -153,6 +166,18 @@ def main():
     # Run the application!
     _logger().info('running...')
     app.run()
+
+    # remove temporary stdout/stderr
+    try:
+        sys.stdout.close()
+        os.remove(stdout_path)
+    except OSError:
+        pass
+    try:
+        sys.stderr.close()
+        os.remove(stderr_path)
+    except OSError:
+        pass
 
 
 def _logger():
