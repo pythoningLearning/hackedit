@@ -137,7 +137,7 @@
      <x>0</x>
      <y>0</y>
      <width>778</width>
-     <height>26</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="mnu_file">
@@ -151,6 +151,8 @@
     <addaction name="action_save"/>
     <addaction name="action_save_as"/>
     <addaction name="action_save_all"/>
+    <addaction name="separator"/>
+    <addaction name="a_print"/>
     <addaction name="separator"/>
     <addaction name="action_close"/>
     <addaction name="separator"/>
@@ -439,6 +441,15 @@
    </property>
    <property name="toolTip">
     <string>Open a file</string>
+   </property>
+  </action>
+  <action name="a_print">
+   <property name="icon">
+    <iconset theme="document-print">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print</string>
    </property>
   </action>
  </widget>

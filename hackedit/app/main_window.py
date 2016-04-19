@@ -13,7 +13,7 @@ try:
 except ImportError:
     psutil = None  # optional dependency.
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtPrintSupport, QtWidgets
 from pyqode.core import modes, panels
 from pyqode.core.api import TextHelper, ColorScheme, CodeEdit
 from pyqode.core.widgets import EncodingsContextMenu, MenuRecentFiles
@@ -859,6 +859,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._on_open_recent_requested)
         self._ui.tabs.tab_detached.connect(self._on_tab_detached)
         self._ui.tabs.tab_detached.connect(self.editor_detached.emit)
+        self._ui.a_print.triggered.connect(self._print)
 
     def _show_not_implemented_msg(self):
         common.not_implemented_action(self)
@@ -1151,6 +1152,20 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _on_tab_detached(self, _, tab):
         self._apply_editor_preferences(tab)
+
+    def _print(self):
+        printer = QtPrintSupport.QPrinter()
+        try:
+            document = self.current_tab.document()
+            has_selection = self.current_tab.textCursor().hasSelection()
+        except AttributeError:
+            # not a code editor
+            return
+        dialog = QtPrintSupport.QPrintDialog(printer, self)
+        dialog.setOption(dialog.PrintSelection, has_selection)
+        dialog.setWindowTitle(_('Print current editor'))
+        if dialog.exec_() == dialog.Accepted:
+            document.print(printer)
 
     def _apply_editor_preferences(self, editor, set_color_scheme=True):
         if not isinstance(editor, CodeEdit):
