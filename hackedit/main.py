@@ -72,14 +72,6 @@ def main():
     """
     Application entry point, runs the application
     """
-    try:
-        sys.stdout.flush()
-    except AttributeError:
-        # this happen on windows when running with pythonw or the native
-        # launcher
-        sys.stdout = open('stdout', 'w')
-        sys.stderr = open('stderr', 'w')
-
     # parse command line args
     args = argparser.parse_args()
     if args.log:
