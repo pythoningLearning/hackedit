@@ -947,7 +947,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                 'editor, not a CodeEdit instance')
             self._ui.stackedWidget.setCurrentIndex(PAGE_EDITOR)
             try:
-                self._update_encoding_label(tab.file.encoding)
                 self._update_cursor_label()
                 tab.cursorPositionChanged.connect(
                     self._update_cursor_label, QtCore.Qt.UniqueConnection)
@@ -957,12 +956,11 @@ class MainWindow(QtWidgets.QMainWindow):
                                 'signal, already connected')
             except AttributeError:
                 # not a code editor widget
-                try:
-                    self.lbl_encoding.setText('', False)
-                    self.lbl_cursor.setText('', False)
-                except AttributeError:
-                    _logger().debug('failed to retrieve cursor information, '
-                                    'not a CodeEdit instance')
+                self.lbl_cursor.setText('n/a', False)
+            try:
+                self._update_encoding_label(tab.file.encoding)
+            except AttributeError:
+                self.lbl_encoding.setText('n/a', False)
         else:
             if self._ui:
                 self._ui.menuActive_editor.clear()
@@ -1279,11 +1277,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self._apply_editor_plugin_preferences(editor)
 
     def _update_cursor_label(self):
-        if self.current_tab and isinstance(self.current_tab, CodeEdit):
+        try:
             l, c = TextHelper(self.current_tab).cursor_position()
             self.lbl_cursor.setText('%d:%d' % (l+1, c+1), False)
-        else:
-            self.lbl_cursor.setText('n/a', False)
+        except (AttributeError, TypeError):
+            try:
+                l, c = self.current_tab.cursor_position
+                self.lbl_cursor.setText('%d:%d' % (l+1, c+1), False)
+            except AttributeError:
+                self.lbl_cursor.setText('n/a', False)
 
     def _update_mem_label(self):
         if psutil:
