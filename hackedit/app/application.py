@@ -562,7 +562,6 @@ class Application(QtCore.QObject):
 
     def _set_active_window(self, window):
         _logger().debug('active window set to %r' % window)
-        print('set active window', window)
         self._qapp.setActiveWindow(window)
         self._active_window = weakref.proxy(window)
         for w in self.editor_windows:
