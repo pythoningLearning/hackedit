@@ -21,8 +21,6 @@ import jedi
 import pep8
 import pyflakes
 import restructuredtext_lint
-import boss
-import cement
 import qdarkstyle
 import qcrash
 import keyring
@@ -84,7 +82,6 @@ except FileExistsError:
                 os.remove(p)
 finally:
     embed_packages([
-        future, pygments, qdarkstyle, jedi, pep8, pyflakes, boss, cement,
-        pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol, pyqode.rst,
-        pyqode.json, restructuredtext_lint, qcrash, keyring
+        future, pygments, qdarkstyle, jedi, pep8, pyflakes, pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol,
+        pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring
     ])

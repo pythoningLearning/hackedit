@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_editor_display.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/settings_page_editor_display.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -22,6 +22,7 @@ class Ui_Form(object):
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 633, 563))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.groupBox_5 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
         self.groupBox_5.setObjectName("groupBox_5")
@@ -86,32 +87,31 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Form.setWindowTitle(_("Form"))
-        self.groupBox_5.setTitle(_("Text Wrapping"))
-        self.cb_text_wrapping.setToolTip(_("Enable/Disable text wrapping"))
-        self.cb_text_wrapping.setText(_("Enable text wrapping"))
-        self.cb_margin.setToolTip(_("Show/Hide margin at the specified column"))
-        self.cb_margin.setText(_("Show right margin at column:"))
-        self.spin_margin_pos.setToolTip(_("Column where to draw the margin"))
-        self.groupBox.setTitle(_("Display"))
-        self.cb_show_global_errors.setToolTip(_("Show/Hide global panel (next to editor\'s vertical scrollbars)"))
-        self.cb_show_global_errors.setText(_("Display global error panel"))
-        self.cb_show_line_numbers.setToolTip(_("Show/Hide line numbers panel"))
-        self.cb_show_line_numbers.setText(_("Display line numbers"))
-        self.cb_caret_cope.setToolTip(_("Highlight scope under caret"))
-        self.cb_caret_cope.setText(_("Highlight caret scope"))
-        self.cb_show_folding.setToolTip(_("Show/Hide code folding markers"))
-        self.cb_show_folding.setText(_("Display folding markers"))
-        self.cb_show_whitespaces.setToolTip(_("Show whitespaces in editor"))
-        self.cb_show_whitespaces.setText(_("Vizualize whitespaces"))
-        self.cb_caret_line.setToolTip(_("Highlight line under caret"))
-        self.cb_caret_line.setText(_("Highlight caret line"))
-        self.cb_show_errors.setToolTip(_("Display linter/checker messages panel"))
-        self.cb_show_errors.setText(_("Display linter panel"))
-        self.cb_parentheses.setToolTip(_("Highlight matching/unmatching parentheses/brackets"))
-        self.cb_parentheses.setText(_("Highlight matching parentheses"))
-        self.cb_center_on_scoll.setToolTip(_("Center text cursor on scroll"))
-        self.cb_center_on_scoll.setText(_("Center on scroll"))
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.groupBox_5.setTitle(_translate("Form", "Text Wrapping"))
+        self.cb_text_wrapping.setToolTip(_translate("Form", "Enable/Disable text wrapping"))
+        self.cb_text_wrapping.setText(_translate("Form", "Enable text wrapping"))
+        self.cb_margin.setToolTip(_translate("Form", "Show/Hide margin at the specified column"))
+        self.cb_margin.setText(_translate("Form", "Show right margin at column:"))
+        self.spin_margin_pos.setToolTip(_translate("Form", "Column where to draw the margin"))
+        self.groupBox.setTitle(_translate("Form", "Display"))
+        self.cb_show_global_errors.setToolTip(_translate("Form", "Show/Hide global panel (next to editor\'s vertical scrollbars)"))
+        self.cb_show_global_errors.setText(_translate("Form", "Display global error panel"))
+        self.cb_show_line_numbers.setToolTip(_translate("Form", "Show/Hide line numbers panel"))
+        self.cb_show_line_numbers.setText(_translate("Form", "Display line numbers"))
+        self.cb_caret_cope.setToolTip(_translate("Form", "Highlight scope under caret"))
+        self.cb_caret_cope.setText(_translate("Form", "Highlight caret scope"))
+        self.cb_show_folding.setToolTip(_translate("Form", "Show/Hide code folding markers"))
+        self.cb_show_folding.setText(_translate("Form", "Display folding markers"))
+        self.cb_show_whitespaces.setToolTip(_translate("Form", "Show whitespaces in editor"))
+        self.cb_show_whitespaces.setText(_translate("Form", "Vizualize whitespaces"))
+        self.cb_caret_line.setToolTip(_translate("Form", "Highlight line under caret"))
+        self.cb_caret_line.setText(_translate("Form", "Highlight caret line"))
+        self.cb_show_errors.setToolTip(_translate("Form", "Display linter/checker messages panel"))
+        self.cb_show_errors.setText(_translate("Form", "Display linter panel"))
+        self.cb_parentheses.setToolTip(_translate("Form", "Highlight matching/unmatching parentheses/brackets"))
+        self.cb_parentheses.setText(_translate("Form", "Highlight matching parentheses"))
+        self.cb_center_on_scoll.setToolTip(_translate("Form", "Center text cursor on scroll"))
+        self.cb_center_on_scoll.setText(_translate("Form", "Center on scroll"))
 

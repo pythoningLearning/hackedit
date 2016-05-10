@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_about.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/dlg_about.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -37,6 +37,7 @@ class Ui_Dialog(object):
         self.tab_about = QtWidgets.QWidget()
         self.tab_about.setObjectName("tab_about")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.tab_about)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem2)
@@ -54,6 +55,7 @@ class Ui_Dialog(object):
         self.tab_authors = QtWidgets.QWidget()
         self.tab_authors.setObjectName("tab_authors")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.tab_authors)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.text_authors = QtWidgets.QTextBrowser(self.tab_authors)
         font = QtGui.QFont()
@@ -69,6 +71,7 @@ class Ui_Dialog(object):
         self.tab_license = QtWidgets.QWidget()
         self.tab_license.setObjectName("tab_license")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.tab_license)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.edit_license = QtWidgets.QTextEdit(self.tab_license)
         self.edit_license.setReadOnly(True)
@@ -78,6 +81,7 @@ class Ui_Dialog(object):
         self.tab_versions = QtWidgets.QWidget()
         self.tab_versions.setObjectName("tab_versions")
         self.gridLayout = QtWidgets.QGridLayout(self.tab_versions)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.table_versions = QtWidgets.QTableWidget(self.tab_versions)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
@@ -104,6 +108,7 @@ class Ui_Dialog(object):
         self.tab_log = QtWidgets.QWidget()
         self.tab_log.setObjectName("tab_log")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.tab_log)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.edit_log = QtWidgets.QTextEdit(self.tab_log)
         self.edit_log.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
@@ -144,14 +149,13 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Dialog.setWindowTitle(_("About HackEdit"))
-        self.lbl_icon.setText(_("<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
-        self.lbl_version.setText(_("<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" font-weight:600;\">v%s</span></p></body></html>"))
-        self.lbl_copyright.setText(_("<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">The hackable IDE, build with </span><a href=\"https://www.python.org/\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">Python3</span></a><span style=\" font-size:12pt;\">, </span><a href=\"http://www.riverbankcomputing.com/software/pyqt/download5\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">PyQt5</span></a><span style=\" font-size:12pt;\"> and </span><a href=\"https://github.com/pyQode/pyQode\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">pyQode</span></a><span style=\" font-size:12pt;\">.</span></p><p align=\"center\"><br/></p><p align=\"center\"><span style=\" font-family:\'Cantarell\'; font-size:9pt; font-style:italic;\">The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FORA PARTICULAR PURPOSE.</span></p><p align=\"center\"><br/></p><p align=\"center\"><a href=\"https://github.com/HackEdit/hackedit\"><span style=\" text-decoration: underline; color:#2980b9;\">View on github</span></a></p></body></html>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_about), _("About"))
-        self.text_authors.setHtml(_("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "About HackEdit"))
+        self.lbl_icon.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
+        self.lbl_version.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:28pt; font-weight:600;\">HackEdit</span></p><p align=\"center\"><span style=\" font-weight:600;\">v%s</span></p></body></html>"))
+        self.lbl_copyright.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">The hackable IDE, build with </span><a href=\"https://www.python.org/\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">Python3</span></a><span style=\" font-size:12pt;\">, </span><a href=\"http://www.riverbankcomputing.com/software/pyqt/download5\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">PyQt5</span></a><span style=\" font-size:12pt;\"> and </span><a href=\"https://github.com/pyQode/pyQode\"><span style=\" font-size:12pt; text-decoration: underline; color:#2980b9;\">pyQode</span></a><span style=\" font-size:12pt;\">.</span></p><p align=\"center\"><br/></p><p align=\"center\"><span style=\" font-family:\'Cantarell\'; font-size:9pt; font-style:italic;\">The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FORA PARTICULAR PURPOSE.</span></p><p align=\"center\"><br/></p><p align=\"center\"><a href=\"https://github.com/HackEdit/hackedit\"><span style=\" text-decoration: underline; color:#2980b9;\">View on github</span></a></p></body></html>"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_about), _translate("Dialog", "About"))
+        self.text_authors.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Cantarell\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
@@ -161,8 +165,8 @@ class Ui_Dialog(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-size:10pt; font-weight:600;\">Contributors:</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-size:10pt;\">- </span><a href=\"mailto:thiry.celi@gmail.com\"><span style=\" font-family:\'Ubuntu\'; font-size:10pt; text-decoration: underline; color:#2980b9;\">Céline Thiry </span></a><span style=\" font-family:\'Ubuntu\'; font-size:10pt;\">(icon/splashscreen designer)</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:10pt;\"><br /></p></body></html>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_authors), _("Authors"))
-        self.edit_license.setHtml(_("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_authors), _translate("Dialog", "Authors"))
+        self.edit_license.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Cantarell\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
@@ -506,18 +510,18 @@ class Ui_Dialog(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">library.  If this is what you want to do, use the GNU Lesser General</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">Public License instead of this License.</span></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:8pt;\"><br /></p></body></html>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_license), _("License"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_license), _translate("Dialog", "License"))
         item = self.table_versions.horizontalHeaderItem(0)
-        item.setText(_("Version"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_versions), _("Versions"))
-        self.label_2.setText(_("Log level:"))
-        self.combo_log_level.setItemText(0, _("ERROR"))
-        self.combo_log_level.setItemText(1, _("WARNING"))
-        self.combo_log_level.setItemText(2, _("INFO"))
-        self.combo_log_level.setItemText(3, _("DEBUG"))
-        self.combo_log_level.setItemText(4, _("PYQODE_DEBUG"))
-        self.bt_clear_logs.setText(_("Clear logs"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_log), _("Log"))
-        self.label.setText(_("Copyright 2015 Colin Duquesnoy. All rights reserved."))
+        item.setText(_translate("Dialog", "Version"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_versions), _translate("Dialog", "Versions"))
+        self.label_2.setText(_translate("Dialog", "Log level:"))
+        self.combo_log_level.setItemText(0, _translate("Dialog", "ERROR"))
+        self.combo_log_level.setItemText(1, _translate("Dialog", "WARNING"))
+        self.combo_log_level.setItemText(2, _translate("Dialog", "INFO"))
+        self.combo_log_level.setItemText(3, _translate("Dialog", "DEBUG"))
+        self.combo_log_level.setItemText(4, _translate("Dialog", "PYQODE_DEBUG"))
+        self.bt_clear_logs.setText(_translate("Dialog", "Clear logs"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_log), _translate("Dialog", "Log"))
+        self.label.setText(_translate("Dialog", "Copyright 2015 Colin Duquesnoy. All rights reserved."))
 
 from . import hackedit_rc

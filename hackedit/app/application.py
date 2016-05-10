@@ -14,14 +14,13 @@ from qdarkstyle import load_stylesheet_pyqt5
 
 from hackedit import api
 from hackedit.api import system, shortcuts, _shared
-from hackedit.api.project import load_user_config, load_workspace, \
-    save_workspace
-from hackedit.app import common, environ, mime_types, icons, boss_wrapper, \
-    settings, versions, logger
+from hackedit.api.project import load_user_config, load_workspace, save_workspace
+from hackedit.app import common, environ, mime_types, icons, settings, versions, logger
 from hackedit.app.dialogs.open_path import DlgOpen
 from hackedit.app.dialogs.workspace import DlgSelectWorkspace
 from hackedit.app.main_window import MainWindow
 from hackedit.app.plugin_manager import PluginManager
+from hackedit.app import templates
 from hackedit.app.welcome_window import WelcomeWindow
 from hackedit.app.workspaces import WorkspaceManager
 
@@ -129,7 +128,6 @@ class Application(QtCore.QObject):
         show_msg_on_splash('')
 
     def setup_templates(self):
-        force_sync = False
         for template_provider in self.plugin_manager.template_providers:
             try:
                 url = template_provider.get_url()
@@ -140,27 +138,17 @@ class Application(QtCore.QObject):
             else:
                 if url and label:
                     exists = False
-                    sources = boss_wrapper.sources()
+                    sources = templates.get_sources()
                     if not sources:
                         exists = False
                     else:
                         for src in sources:
                             if src['label'] == label:
                                 exists = True
+                                break
                     if not exists:
-                        local = os.path.exists(url)
-                        boss_wrapper.add_source(label, url, local=local)
-                        force_sync = True
-
-        if (force_sync or settings.auto_sync_templates() or
-                not settings.has_sync_templates_once()):
-            try:
-                boss_wrapper.sync()
-            except Exception:
-                _logger().exception('exception while syncing the boss '
-                                    'templates')
-            else:
-                settings.set_has_sync_templates_once(True)
+                        print('add source', label, url)
+                        templates.add_source(label, url)
 
     def check_for_update(self):
         common.check_for_update(

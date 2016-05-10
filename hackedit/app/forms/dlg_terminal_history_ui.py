@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_terminal_history.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/dlg_terminal_history.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -40,10 +40,9 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Dialog.setWindowTitle(_("Terminal history"))
-        self.listWidget.setToolTip(_("The list of terminal commands"))
-        self.bt_remove.setToolTip(_("Remove the selected entry from history"))
-        self.bt_remove.setText(_("..."))
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Terminal history"))
+        self.listWidget.setToolTip(_translate("Dialog", "The list of terminal commands"))
+        self.bt_remove.setToolTip(_translate("Dialog", "Remove the selected entry from history"))
+        self.bt_remove.setText(_translate("Dialog", "..."))
 

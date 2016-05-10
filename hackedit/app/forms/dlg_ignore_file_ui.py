@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_ignore_file.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/dlg_ignore_file.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -44,12 +44,11 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Dialog.setWindowTitle(_("Mark as ignored"))
-        self.rb_explicit.setToolTip(_("Ignore explicitely"))
-        self.rb_explicit.setText(_("I&gnore explicitely (e.g. \'file.obj\')"))
-        self.rb_pattern.setToolTip(_("Use an ignore pattern"))
-        self.rb_pattern.setText(_("Ignore as pa&ttern (e.g. \'*.obj\')"))
-        self.edit_pattern.setToolTip(_("Ignore pattern"))
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Mark as ignored"))
+        self.rb_explicit.setToolTip(_translate("Dialog", "Ignore explicitely"))
+        self.rb_explicit.setText(_translate("Dialog", "I&gnore explicitely (e.g. \'file.obj\')"))
+        self.rb_pattern.setToolTip(_translate("Dialog", "Use an ignore pattern"))
+        self.rb_pattern.setText(_translate("Dialog", "Ignore as pa&ttern (e.g. \'*.obj\')"))
+        self.edit_pattern.setToolTip(_translate("Dialog", "Ignore pattern"))
 

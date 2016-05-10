@@ -8,8 +8,9 @@ import os
 import qcrash.api as qcrash
 from PyQt5 import QtWidgets
 
-from hackedit.app import boss_wrapper as boss, settings
+from hackedit.app import templates, settings
 from hackedit.app.dialogs.dlg_about import DlgAbout
+from hackedit.app.dialogs.dlg_template_answers import DlgTemplateVars
 from hackedit.app.dialogs.preferences import DlgPreferences
 from hackedit.app.wizards.new import WizardNew
 
@@ -105,8 +106,23 @@ def create_new(app, window, current_project=None):
 def create_new_from_template(source, template, dest_dir, single_file, window,
                              app):
     from .main_window import MainWindow
-    files = boss.create(source, template, dest_dir,
-                        input_handler=boss.qt_input_handler)
+
+    try:
+        variables = template['variables']
+    except KeyError:
+        answers = {}
+    else:
+        answers = DlgTemplateVars.get_answers(variables, parent=window)
+        if answers is None:
+            # canceled by user
+            return None
+
+    files = templates.create(template, dest_dir, answers)
+
+    if not files:
+        # should not happen unless the template is empty
+        return None
+
     if single_file:
         path = files[0]
     else:

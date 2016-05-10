@@ -7,7 +7,7 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from hackedit.api.widgets import FileIconProvider
-from hackedit.app import boss_wrapper as boss
+from hackedit.app import templates
 from hackedit.app.forms import wizard_new_ui
 
 
@@ -21,12 +21,6 @@ class WizardNew(QtWidgets.QWizard):
         self.current_project = current_project
         self.ui = wizard_new_ui.Ui_Wizard()
         self.ui.setupUi(self)
-        self.ui.lbl_boss_version.setText(
-            _('<i>Powered by <a href="https://github.com/datafolklabs/boss">'
-              'BOSS</a> (v%s)</i>') % boss.version())
-        font = self.ui.lbl_boss_version.font()
-        font.setPointSize(8)
-        self.ui.lbl_boss_version.setFont(font)
         self.ui.list_sources.currentItemChanged.connect(self.update_templates)
         self.ui.tree_templates.currentItemChanged.connect(
             self.update_next_btn)
@@ -39,13 +33,10 @@ class WizardNew(QtWidgets.QWizard):
         if row == -1:
             row = 0
         self.ui.list_sources.clear()
-        for src in boss.sources():
+        for src in templates.get_sources():
             item = QtWidgets.QListWidgetItem()
             item.setText(src['label'])
-            if src['is_local']:
-                item.setIcon(QtGui.QIcon.fromTheme('folder'))
-            else:
-                item.setIcon(QtGui.QIcon.fromTheme('folder-remote'))
+            item.setIcon(QtGui.QIcon.fromTheme('folder-templates'))
             item.setData(QtCore.Qt.UserRole, src)
             self.ui.list_sources.addItem(item)
         self.ui.list_sources.setCurrentRow(row)
@@ -55,16 +46,15 @@ class WizardNew(QtWidgets.QWizard):
         if is_valid:
             if self.currentId() == 0:
                 item = self.ui.tree_templates.currentItem()
-                label, templ = item.data(0, QtCore.Qt.UserRole)
-                meta = boss.get_template_metadata(label, templ)
-                if meta and meta['category'] == 'File':
+                templ = item.data(0, QtCore.Qt.UserRole)
+                if templ['category'] == 'File':
                     self.single_file = True
                     self.ui.edit_prj_path.setText(self.current_project)
                 else:
                     self.single_file = False
                     self.ui.edit_prj_path.setText(self.home_path)
-                self.label = label
                 self.template = templ
+                self.label = self.ui.list_sources.currentItem().text()
             elif self.currentId() == 1:
                 self.path = self.ui.edit_prj_path.text()
         return is_valid
@@ -83,40 +73,38 @@ class WizardNew(QtWidgets.QWizard):
         else:
             self.button(self.NextButton).setEnabled(True)
             self.ui.tree_templates.setEnabled(True)
-            for label, templ in boss.templates():
-                if label == item.text():
-                    meta = boss.get_template_metadata(label, templ)
-                    name = templ
-                    description = ''
-                    parent = uncategorized_tree_node
-                    icon = 'folder'
-                    if meta:
-                        name = meta['name']
-                        description = meta['name']
-                        cat = meta['category']
-                        try:
-                            icon = meta['icon']
-                        except KeyError:
-                            _logger().debug('no icon set for template %s:%s',
-                                            label, templ)
-                        if cat == 'Project':
-                            parent = project_tree_node
-                        elif cat == 'File':
-                            parent = files_tree_node
-                            if icon == 'folder':
-                                icon = 'document'
-                    titem = QtWidgets.QTreeWidgetItem()
-                    titem.setText(0, name)
-                    titem.setToolTip(0, description)
-                    if icon.startswith(':') or os.path.exists(icon):
-                        icon = QtGui.QIcon(icon)
-                    elif icon.startswith('file.'):
-                        icon = FileIconProvider().icon(icon)
-                    else:
-                        icon = QtGui.QIcon.fromTheme(icon)
-                    titem.setIcon(0, icon)
-                    titem.setData(0, QtCore.Qt.UserRole, (label, templ))
-                    parent.addChild(titem)
+            label = item.text()
+            for templ in templates.get_templates(source_filter=label):
+                name = templ['name']
+                description = ''
+                parent = uncategorized_tree_node
+                icon = 'folder'
+                name = templ['name']
+                description = templ['description']
+                cat = templ['category']
+                try:
+                    icon = templ['icon']
+                except KeyError:
+                    _logger().debug('no icon set for template %s:%s',
+                                    label, templ)
+                if cat == 'Project':
+                    parent = project_tree_node
+                elif cat == 'File':
+                    parent = files_tree_node
+                    if icon == 'folder':
+                        icon = 'document'
+                titem = QtWidgets.QTreeWidgetItem()
+                titem.setText(0, name)
+                titem.setToolTip(0, description)
+                if icon.startswith(':') or os.path.exists(icon):
+                    icon = QtGui.QIcon(icon)
+                elif icon.startswith('file.'):
+                    icon = FileIconProvider().icon(icon)
+                else:
+                    icon = QtGui.QIcon.fromTheme(icon)
+                titem.setIcon(0, icon)
+                titem.setData(0, QtCore.Qt.UserRole, templ)
+                parent.addChild(titem)
         flg_select = False
         for node in [project_tree_node, files_tree_node,
                      uncategorized_tree_node]:

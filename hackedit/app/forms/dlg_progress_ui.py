@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_progress.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/dlg_progress.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -38,9 +38,8 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Dialog.setWindowTitle(_("Dialog"))
-        self.pushButton.setToolTip(_("Cancel operation"))
-        self.label.setText(_("Operation in progress..."))
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.pushButton.setToolTip(_translate("Dialog", "Cancel operation"))
+        self.label.setText(_translate("Dialog", "Operation in progress..."))
 

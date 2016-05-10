@@ -6,6 +6,5 @@ docs/*
 tests/*
 scripts/*
 .hackedit/config.py
-hackedit/app/boss_wrapper.py
 hackedit/app/forms/*
 hackedit/vendor/*

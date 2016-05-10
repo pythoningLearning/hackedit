@@ -174,8 +174,6 @@ The following dependencies are bundled with the hackedit package:
 - `pep8`_
 - `pyflakes`_
 - `jedi`_
-- `boss`_
-- `cement`_
 - `qdarkstyle`_
 - `restructuredtext_lint`_
 

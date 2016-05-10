@@ -49,6 +49,14 @@
     {
         "environment": {},
         "interpreter_options": [],
+        "name": "templates",
+        "script": "hackedit/app/templates.py",
+        "script_parameters": [],
+        "working_dir": "hackedit/app"
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
         "name": "tests/check_api_coverage",
         "run_in_external_terminal": false,
         "script": "scripts/tests/check_api_coverage.py",
@@ -143,5 +151,13 @@
         "script": "scripts/update_vendor.py",
         "script_parameters": [],
         "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "dlg_template_answers",
+        "script": "hackedit/app/dialogs/dlg_template_answers.py",
+        "script_parameters": [],
+        "working_dir": "hackedit/app/dialogs"
     }
 ]

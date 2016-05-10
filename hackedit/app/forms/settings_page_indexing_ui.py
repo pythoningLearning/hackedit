@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/settings_page_indexing.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/settings_page_indexing.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -52,17 +52,16 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Form.setWindowTitle(_("Form"))
-        Form.setToolTip(_("Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))
-        self.groupBox.setTitle(_("Configure indexing"))
-        self.cb_enable_indexing.setToolTip(_("<html><head/><body><p>Enable or disable project indexing. </p><p>If you disable indexing you won\'t be able to use the goto dialog and searching will be a bit slower.</p></body></html>"))
-        self.cb_enable_indexing.setText(_("Enable project indexing"))
-        self.groupBox_2.setTitle(_("Content"))
-        self.list_projects.setToolTip(_("The whole list of indexed locations."))
-        self.bt_rm.setToolTip(_("<html><head/><body><p>Remove the selected project from the index database.</p><p>Removing a project from the index will force a full reindexing of that project.</p></body></html>"))
-        self.bt_rm.setText(_("..."))
-        self.bt_clear.setToolTip(_("<html><head/><body><p>Clear the index database.</p><p>Clearing the index database will force a full reindexing of all open projects.</p></body></html>"))
-        self.bt_clear.setText(_("..."))
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setToolTip(_translate("Form", "Show notifications in system tray (depends on the OS and whether the tray icon is visible or not)"))
+        self.groupBox.setTitle(_translate("Form", "Configure indexing"))
+        self.cb_enable_indexing.setToolTip(_translate("Form", "<html><head/><body><p>Enable or disable project indexing. </p><p>If you disable indexing you won\'t be able to use the goto dialog and searching will be a bit slower.</p></body></html>"))
+        self.cb_enable_indexing.setText(_translate("Form", "Enable project indexing"))
+        self.groupBox_2.setTitle(_translate("Form", "Content"))
+        self.list_projects.setToolTip(_translate("Form", "The whole list of indexed locations."))
+        self.bt_rm.setToolTip(_translate("Form", "<html><head/><body><p>Remove the selected project from the index database.</p><p>Removing a project from the index will force a full reindexing of that project.</p></body></html>"))
+        self.bt_rm.setText(_translate("Form", "..."))
+        self.bt_clear.setToolTip(_translate("Form", "<html><head/><body><p>Clear the index database.</p><p>Clearing the index database will force a full reindexing of all open projects.</p></body></html>"))
+        self.bt_clear.setText(_translate("Form", "..."))
 

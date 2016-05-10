@@ -18,7 +18,7 @@ from hackedit import api
 from hackedit.api import shortcuts, utils, index
 from hackedit.api.project import load_user_config, save_user_config
 from hackedit.api.widgets import FileIconProvider
-from hackedit.app import settings, boss_wrapper as boss, common
+from hackedit.app import settings, templates, common
 from hackedit.app.dialogs.dlg_ignore import DlgIgnore
 from hackedit.app.index.db import DbHelper
 from hackedit.app.index.backend import index_project_files, update_file, get_symbol_parser, rename_files, delete_files
@@ -441,21 +441,21 @@ class ProjectExplorer(QtCore.QObject):
     def _update_templates_menu(self):
         self.templates_menu.clear()
         sources = {}
-        for src in boss.sources():
+        for src in templates.get_sources():
             lbl = src['label']
-            icon = QtGui.QIcon.fromTheme(
-                'folder' if src['is_local'] else 'folder-remote')
+            icon = QtGui.QIcon.fromTheme('folder-templates')
             menu = self.templates_menu.addMenu(icon, lbl)
             sources[lbl] = menu
-        for lbl, template, meta in boss.file_templates(include_meta=True):
-            icon = meta['icon']
+        for template in templates.get_templates(category='File'):
+            icon = template['icon']
+            lbl = template['source']['label']
             if icon.startswith(':') or os.path.exists(icon):
                 icon = QtGui.QIcon(icon)
             elif icon.startswith('file.'):
                 icon = FileIconProvider().icon(icon)
             else:
                 icon = QtGui.QIcon.fromTheme(icon)
-            a = sources[lbl].addAction(icon, meta['name'])
+            a = sources[lbl].addAction(icon, template['name'])
             a.setData((lbl, template))
             a.triggered.connect(self._add_file_from_template)
         for menu in sources.values():

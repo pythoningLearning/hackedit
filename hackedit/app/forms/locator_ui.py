@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/locator.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/locator.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -48,13 +48,12 @@ class Ui_Frame(object):
         QtCore.QMetaObject.connectSlotsByName(Frame)
 
     def retranslateUi(self, Frame):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Frame.setWindowTitle(_("Frame"))
-        self.bt_infos.setToolTip(_("Help"))
-        self.bt_infos.setText(_("..."))
-        self.bt_close.setToolTip(_("Close"))
-        self.bt_close.setText(_("..."))
-        self.cb_non_project_files.setText(_("Include non-project files (Shift+Enter)"))
+        _translate = QtCore.QCoreApplication.translate
+        Frame.setWindowTitle(_translate("Frame", "Frame"))
+        self.bt_infos.setToolTip(_translate("Frame", "Help"))
+        self.bt_infos.setText(_translate("Frame", "..."))
+        self.bt_close.setToolTip(_translate("Frame", "Close"))
+        self.bt_close.setText(_translate("Frame", "..."))
+        self.cb_non_project_files.setText(_translate("Frame", "Include non-project files (Shift+Enter)"))
 
 from pyqode.core.widgets import PromptLineEdit

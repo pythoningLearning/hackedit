@@ -27,6 +27,7 @@ def load():
     """
     global _SETTINGS
     _SETTINGS = QtCore.QSettings()
+    return _SETTINGS
 
 
 # -----------------------------------------------------------------------------

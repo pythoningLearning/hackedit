@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>752</width>
-        <height>648</height>
+        <width>760</width>
+        <height>632</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
@@ -38,6 +38,9 @@
           <string>File encodings &amp; EOL</string>
          </property>
          <layout class="QFormLayout" name="formLayout_4">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
@@ -154,7 +157,7 @@
          </property>
          <layout class="QFormLayout" name="formLayout">
           <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_3">
@@ -332,7 +335,7 @@
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
           </property>
           <item row="1" column="0">
            <widget class="QLabel" name="label_11">

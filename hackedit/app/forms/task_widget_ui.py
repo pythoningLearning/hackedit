@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/hackedit/data/forms/task_widget.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/task_widget.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -64,12 +64,11 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Form.setWindowTitle(_("Form"))
-        self.group.setTitle(_("Name"))
-        self.bt_cancel.setToolTip(_("Cancel operation"))
-        self.bt_cancel.setText(_("..."))
-        self.lbl_description.setText(_("Description"))
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.group.setTitle(_translate("Form", "Name"))
+        self.bt_cancel.setToolTip(_translate("Form", "Cancel operation"))
+        self.bt_cancel.setText(_translate("Form", "..."))
+        self.lbl_description.setText(_translate("Form", "Description"))
 
 from hackedit.api.widgets import ElidedLabel

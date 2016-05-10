@@ -18,19 +18,6 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QCheckBox" name="cb_allow_system_tray">
-     <property name="toolTip">
-      <string>If checked, the IDE notifications will be shown through the system tray icon (or libnotify on GNU/Linux).</string>
-     </property>
-     <property name="text">
-      <string>Show notification in system tray</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Open pane automatically for</string>
@@ -152,6 +139,19 @@
        </layout>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cb_allow_system_tray">
+     <property name="toolTip">
+      <string>If checked, the IDE notifications will be shown through the system tray icon (or libnotify on GNU/Linux).</string>
+     </property>
+     <property name="text">
+      <string>Show notification in system tray</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>

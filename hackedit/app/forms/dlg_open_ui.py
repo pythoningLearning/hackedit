@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/dlg_open.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/dlg_open.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -38,12 +38,11 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Dialog.setWindowTitle(_("Dialog"))
-        self.label.setText(_("How would you like to open the %s?"))
-        self.rb_open_new.setToolTip(_("Open file/project in a new window"))
-        self.rb_open_new.setText(_("Open in &new window"))
-        self.rb_open_current.setToolTip(_("Add project to current window and add it to the list of opened projects."))
-        self.rb_open_current.setText(_("Open in current window (add &to currently opened projects)"))
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.label.setText(_translate("Dialog", "How would you like to open the %s?"))
+        self.rb_open_new.setToolTip(_translate("Dialog", "Open file/project in a new window"))
+        self.rb_open_new.setText(_translate("Dialog", "Open in &new window"))
+        self.rb_open_current.setToolTip(_translate("Dialog", "Add project to current window and add it to the list of opened projects."))
+        self.rb_open_current.setText(_translate("Dialog", "Open in current window (add &to currently opened projects)"))
 

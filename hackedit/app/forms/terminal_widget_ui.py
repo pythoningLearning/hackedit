@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/terminal_widget.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/terminal_widget.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -34,11 +34,10 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        Form.setWindowTitle(_("Form"))
-        self.console.setToolTip(_("Command output"))
-        self.edit_command.setToolTip(_("Type a command to execute"))
-        self.bt_run.setToolTip(_("Run command (keep pressed to access the terminal history)"))
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.console.setToolTip(_translate("Form", "Command output"))
+        self.edit_command.setToolTip(_translate("Form", "Type a command to execute"))
+        self.bt_run.setToolTip(_translate("Form", "Run command (keep pressed to access the terminal history)"))
 
 from pyqode.core.widgets import InteractiveConsole, PromptLineEdit

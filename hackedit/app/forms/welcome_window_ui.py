@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/colin/dev/HackEdit/hackedit/data/forms/welcome_window.ui'
+# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/welcome_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -125,27 +125,26 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        from hackedit.api.gettext import get_translation
-        _ = get_translation(package="hackedit")
-        MainWindow.setWindowTitle(_("Welcome to HackEdit"))
-        self.list_recents.setToolTip(_("The list of recent documents/projects"))
-        self.label_version.setText(_("Version %s"))
-        self.label_title.setText(_("<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p><p align=\"center\"><span style=\" font-size:48pt;\">HackEdit</span></p></body></html>"))
-        self.bt_new.setToolTip(_("Create a new file/project"))
-        self.bt_new.setText(_("New"))
-        self.bt_new.setShortcut(_("Ctrl+N"))
-        self.bt_open.setToolTip(_("Open a project (directory)."))
-        self.bt_open.setText(_("Open"))
-        self.bt_open.setShortcut(_("Ctrl+O"))
-        self.bt_quit.setToolTip(_("Quit application"))
-        self.bt_quit.setText(_("Quit"))
-        self.bt_quit.setShortcut(_("Ctrl+Q"))
-        self.bt_configure.setToolTip(_("Edit preferences"))
-        self.bt_configure.setText(_("Preferences"))
-        self.bt_configure.setShortcut(_("Ctrl+,"))
-        self.bt_help.setToolTip(_("Get some help"))
-        self.bt_help.setText(_("Get Help"))
-        self.bt_help.setShortcut(_("F1"))
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "Welcome to HackEdit"))
+        self.list_recents.setToolTip(_translate("MainWindow", "The list of recent documents/projects"))
+        self.label_version.setText(_translate("MainWindow", "Version %s"))
+        self.label_title.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p><p align=\"center\"><span style=\" font-size:48pt;\">HackEdit</span></p></body></html>"))
+        self.bt_new.setToolTip(_translate("MainWindow", "Create a new file/project"))
+        self.bt_new.setText(_translate("MainWindow", "New"))
+        self.bt_new.setShortcut(_translate("MainWindow", "Ctrl+N"))
+        self.bt_open.setToolTip(_translate("MainWindow", "Open a project (directory)."))
+        self.bt_open.setText(_translate("MainWindow", "Open"))
+        self.bt_open.setShortcut(_translate("MainWindow", "Ctrl+O"))
+        self.bt_quit.setToolTip(_translate("MainWindow", "Quit application"))
+        self.bt_quit.setText(_translate("MainWindow", "Quit"))
+        self.bt_quit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
+        self.bt_configure.setToolTip(_translate("MainWindow", "Edit preferences"))
+        self.bt_configure.setText(_translate("MainWindow", "Preferences"))
+        self.bt_configure.setShortcut(_translate("MainWindow", "Ctrl+,"))
+        self.bt_help.setToolTip(_translate("MainWindow", "Get some help"))
+        self.bt_help.setText(_translate("MainWindow", "Get Help"))
+        self.bt_help.setShortcut(_translate("MainWindow", "F1"))
 
 from hackedit.app.widgets.recents import RecentFilesListWidget
 from . import hackedit_rc

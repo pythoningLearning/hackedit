@@ -6,36 +6,33 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>810</width>
-    <height>519</height>
+    <width>865</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
    <property name="leftMargin">
     <number>6</number>
    </property>
-   <item>
-    <widget class="QLabel" name="lbl_git_not_found">
-     <property name="styleSheet">
-      <string notr="true">background-color: #DD8080;
-color: white;
-padding: 10px;
-border-radius:3px;</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Git not found in PATH, Sync will not work!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Sources</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QListWidget" name="list_sources">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <property name="topMargin">
@@ -44,7 +41,7 @@ border-radius:3px;</string>
         <item>
          <widget class="QPushButton" name="bt_add_source">
           <property name="toolTip">
-           <string>Add a template source repository</string>
+           <string>Add a template source</string>
           </property>
           <property name="text">
            <string>Add</string>
@@ -58,7 +55,7 @@ border-radius:3px;</string>
         <item>
          <widget class="QPushButton" name="bt_rm_source">
           <property name="toolTip">
-           <string>Remove a source repository</string>
+           <string>Remove template source</string>
           </property>
           <property name="text">
            <string>Remove</string>
@@ -69,169 +66,19 @@ border-radius:3px;</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="bt_sync">
-          <property name="toolTip">
-           <string>Sync source repositories (you need to have git in PATH).</string>
-          </property>
-          <property name="text">
-           <string>Sync</string>
-          </property>
-          <property name="icon">
-           <iconset theme="view-refresh">
-            <normaloff>.</normaloff>.</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cb_auto_sync">
-          <property name="toolTip">
-           <string>Check this to automatically sync template repositories on application startup</string>
-          </property>
-          <property name="text">
-           <string>Sync on startup</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
       </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="group_details">
+     <property name="title">
+      <string>Templates</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QListWidget" name="list_sources">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string>The list of template source repositories</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="group_details">
-          <property name="title">
-           <string>Details</string>
-          </property>
-          <layout class="QFormLayout" name="formLayout_2">
-           <property name="horizontalSpacing">
-            <number>12</number>
-           </property>
-           <property name="verticalSpacing">
-            <number>12</number>
-           </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Label:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Path:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Cache:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Last sync time:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Available templates:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QListWidget" name="list_templates">
-             <property name="toolTip">
-              <string>The list of available templates provided by the selected source.</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="edit_source_label">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="edit_source_path">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLabel" name="edit_sync_time">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="edit_source_cache">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QLabel" name="lbl_boss_version">
-        <property name="text">
-         <string>Powered by BOSS v0.9.20</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="openExternalLinks">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QListWidget" name="list_templates"/>
       </item>
      </layout>
     </widget>

@@ -3,12 +3,10 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from hackedit.api import system
 from hackedit.api.widgets import PreferencePage, FileIconProvider
-from hackedit.app import settings
-from hackedit.app import boss_wrapper as boss
+from hackedit.app import templates
 from hackedit.app.forms import settings_page_templates_ui
-from hackedit.app.forms import dlg_add_boss_source_ui
+from hackedit.app.forms import dlg_add_template_source_ui
 
 
 class Templates(PreferencePage):
@@ -25,91 +23,59 @@ class Templates(PreferencePage):
         super().__init__(_('Templates'), icon=icon)
         self.ui = settings_page_templates_ui.Ui_Form()
         self.ui.setupUi(self)
-        self.ui.lbl_boss_version.setText(
-            _('<i>Powered by <a href="https://github.com/datafolklabs/boss">'
-              'BOSS</a> (v%s)</i>') % boss.version())
-        font = self.ui.lbl_boss_version.font()
-        font.setPointSize(8)
-        self.ui.lbl_boss_version.setFont(font)
         self.ui.list_sources.currentItemChanged.connect(
-            self.update_source_details)
-        self.ui.bt_sync.clicked.connect(self.sync)
+            self.update_source_templates)
         self.ui.bt_rm_source.clicked.connect(self.rm_source)
         self.ui.bt_add_source.clicked.connect(self.add_source)
         self.update_sources()
-        self.update_source_details(self.ui.list_sources.currentItem())
-        self.ui.lbl_git_not_found.setVisible(system.which('git') is None)
+        self.update_source_templates(self.ui.list_sources.currentItem())
 
     def update_sources(self):
         row = self.ui.list_sources.currentRow()
         if row == -1:
             row = 0
         self.ui.list_sources.clear()
-        sources = boss.sources()
+        sources = templates.get_sources()
         if not sources:
             return
         for src in sources:
-            # if src['label'] == 'boss':
-            #     # don't show boss templates, they miss the metadata tag
-            #     continue
             item = QtWidgets.QListWidgetItem()
             item.setText(src['label'])
-            if src['is_local']:
-                item.setIcon(QtGui.QIcon.fromTheme('folder'))
-            else:
-                item.setIcon(QtGui.QIcon.fromTheme('folder-remote'))
+            item.setToolTip(src['path'])
+            item.setIcon(QtGui.QIcon.fromTheme('folder-templates'))
             item.setData(QtCore.Qt.UserRole, src)
             self.ui.list_sources.addItem(item)
         self.ui.list_sources.setCurrentRow(row)
 
-    def update_source_details(self, item):
+    def update_source_templates(self, item):
         if item is None:
-            self.ui.edit_source_label.clear()
-            self.ui.edit_source_cache.clear()
             self.ui.edit_source_path.clear()
-            self.ui.edit_sync_time.clear()
             self.ui.list_templates.clear()
             self.ui.group_details.setDisabled(True)
             self.ui.bt_rm_source.setDisabled(True)
         else:
             self.ui.group_details.setDisabled(False)
             self.ui.bt_rm_source.setDisabled(False)
-            src = item.data(QtCore.Qt.UserRole)
-            self.ui.edit_source_label.setText(src['label'])
-            self.ui.edit_source_cache.setText(src['cache'])
-            self.ui.edit_source_path.setText(src['path'])
-            try:
-                self.ui.edit_sync_time.setText(src['last_sync_time'].strftime(
-                    "%Y-%m-%d %H:%M:%S"))
-            except AttributeError:
-                self.ui.edit_sync_time.setText(src['last_sync_time'])
             self.ui.list_templates.clear()
-            for label, templ in boss.templates():
-                if label == item.text():
-                    titem = QtWidgets.QListWidgetItem()
-                    titem.setText(templ)
-                    icon = 'folder'
-                    meta = boss.get_template_metadata(label, templ)
-                    if meta:
-                        try:
-                            icon = meta['icon']
-                        except KeyError:
-                            _logger().debug('no icon set for template %s:%s',
-                                            label, templ)
-                    if icon.startswith(':') or os.path.exists(icon):
-                        icon = QtGui.QIcon(icon)
-                    elif icon.startswith('file.'):
-                        icon = FileIconProvider().icon(icon)
-                    else:
-                        icon = QtGui.QIcon.fromTheme(icon)
-                    titem.setIcon(icon)
-                    self.ui.list_templates.addItem(titem)
-
-    def sync(self):
-        QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
-        boss.sync()
-        QtWidgets.qApp.restoreOverrideCursor()
-        self.update_sources()
+            label = item.text()
+            for templ in templates.get_templates(source_filter=label):
+                titem = QtWidgets.QListWidgetItem()
+                titem.setText(templ['name'])
+                titem.setToolTip(templ['description'])
+                icon = 'folder-templates'
+                try:
+                    icon = templ['icon']
+                except KeyError:
+                    _logger().debug('no icon set for template %s:%s',
+                                    label, templ)
+                if icon.startswith(':') or os.path.exists(icon):
+                    icon = QtGui.QIcon(icon)
+                elif icon.startswith('file.'):
+                    icon = FileIconProvider().icon(icon)
+                else:
+                    icon = QtGui.QIcon.fromTheme(icon)
+                titem.setIcon(icon)
+                self.ui.list_templates.addItem(titem)
 
     def rm_source(self):
         source = self.ui.list_sources.currentItem().text()
@@ -118,32 +84,31 @@ class Templates(PreferencePage):
                                         'source %r?') % source)
         if answer == QtWidgets.QMessageBox.Yes:
             QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
-            boss.rm_source(source)
+            templates.rm_source(source)
             QtWidgets.qApp.restoreOverrideCursor()
         self.update_sources()
 
     def add_source(self):
         label, url = DlgAddSource.add_source(self)
         if label and url:
-            local = os.path.exists(url)
-            boss.add_source(label, url, local=local)
+            templates.add_source(label, url)
         self.update_sources()
 
     def reset(self):
-        self.ui.cb_auto_sync.setChecked(settings.auto_sync_templates())
+        pass
 
     @staticmethod
     def restore_defaults():
-        settings.set_auto_sync_templates(True)
+        pass
 
     def save(self):
-        settings.set_auto_sync_templates(self.ui.cb_auto_sync.isChecked())
+        pass
 
 
 class DlgAddSource(QtWidgets.QDialog):
     def __init__(self, parent):
         super().__init__(parent)
-        self.ui = dlg_add_boss_source_ui.Ui_Dialog()
+        self.ui = dlg_add_template_source_ui.Ui_Dialog()
         self.ui.setupUi(self)
         self.ui.edit_label.textChanged.connect(self.enable_ok)
         self.ui.edit_url.textChanged.connect(self.enable_ok)
