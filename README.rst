@@ -161,7 +161,7 @@ Dependencies
 - `PyGObject`_ and `libnotify`_ on GNU/Linux for nicer notifications on gtk based desktops.
 
 
-The following dependencies are bundled with the hackedit package:
+The following dependencies are `bundled`_ with the hackedit package:
 
 - `pyqode.qt`_
 - `pyqode.core`_
@@ -176,6 +176,8 @@ The following dependencies are bundled with the hackedit package:
 - `jedi`_
 - `qdarkstyle`_
 - `restructuredtext_lint`_
+
+.. _bundled: https://github.com/HackEdit/hackedit/tree/master/hackedit/vendor
 
 Plugins
 =======
