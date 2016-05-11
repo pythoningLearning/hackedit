@@ -6,6 +6,8 @@ import logging
 import os
 import re
 
+from binaryornot.check import is_binary
+
 from hackedit.app import settings
 
 
@@ -24,23 +26,21 @@ def create(template, dest_dir, answers):
         return src_path, dst_path
 
     def get_file_encoding(path):
+        if is_binary(path):
+            return 'binary'
         try:
             encodings = template['encodings']
         except KeyError:
             encodings = ['utf-8', 'cp1252']
-        encodings.append('binary')
 
         for encoding in encodings:
-            if encoding == 'binary':
-                return 'binary'
+            try:
+                with open(path, encoding=encoding) as f:
+                    f.read()
+            except UnicodeDecodeError:
+                continue
             else:
-                try:
-                    with open(path, encoding=encoding) as f:
-                        f.read()
-                except UnicodeDecodeError:
-                    continue
-                else:
-                    return encoding
+                return encoding
 
     def open_file(path, encoding, to_write=None):
         if encoding == 'binary':
@@ -55,7 +55,6 @@ def create(template, dest_dir, answers):
             else:
                 mode = 'w'
         content = None
-        print(path, mode, encoding)
         with open(path, mode, encoding=encoding) as f:
             if to_write is not None:
                 f.write(to_write)
@@ -86,12 +85,16 @@ def create(template, dest_dir, answers):
                 _logger().exception('failed to open file: %r', src)
             if encoding != 'binary':
                 content = subsitute_vars(content)
+            if file == 'btpad_btn_img_0.png':
+                print(len(content), encoding)
             try:
                 open_file(dst, encoding, to_write=content)
             except PermissionError:
                 _logger().exception('failed to write file: %r', dst)
             else:
                 ret_val.append(dst)
+
+            assert open_file(dst, encoding) == content
 
         for directory in dirs:
             src, dst = get_paths(root, directory, src_dir, dest_dir)

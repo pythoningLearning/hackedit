@@ -24,6 +24,7 @@ import restructuredtext_lint
 import qdarkstyle
 import qcrash
 import keyring
+import binaryornot
 
 
 BUILD = os.path.abspath('hackedit/vendor')
@@ -83,5 +84,5 @@ except FileExistsError:
 finally:
     embed_packages([
         future, pygments, qdarkstyle, jedi, pep8, pyflakes, pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol,
-        pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring
+        pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring, binaryornot
     ])

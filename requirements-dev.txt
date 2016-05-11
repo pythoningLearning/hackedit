@@ -11,6 +11,7 @@ pyflakes
 restructuredtext_lint
 qdarkstyle
 qcrash
+binaryornot
 
 # required for development
 sphinx
