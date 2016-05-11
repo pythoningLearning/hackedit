@@ -12,6 +12,7 @@ restructuredtext_lint
 qdarkstyle
 qcrash
 binaryornot
+chardet
 
 # required for development
 sphinx
