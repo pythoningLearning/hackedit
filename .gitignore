@@ -64,10 +64,10 @@ win32/build
 *~
 
 # hackedit project files
-*.usr
-history
-objectdb
-*.db
+.hackedit/objectdb
+.hackedit/history
+.hackedit/*.usr
+.hackedit/*.db
 
 tests/**/*Proj*/.hackedit
 
