@@ -124,6 +124,7 @@ def test_get_symbols():
 def test_remove_project():
     with pytest_hackedit.MainWindow(PROJ_PATH):
         remove_db()
+        assert len(list(index.get_all_projects())) == 0
         do_indexing()
         assert len(list(index.get_all_projects())) == 1
         index.remove_project(PROJ_PATH)
@@ -132,6 +133,7 @@ def test_remove_project():
 
 def test_cleardatabase():
     with pytest_hackedit.MainWindow(PROJ_PATH):
+        remove_db()
         do_indexing()
         assert os.path.exists(DB_PATH)
         assert len(list(index.get_all_projects())) == 1
