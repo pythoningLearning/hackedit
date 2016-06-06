@@ -8,6 +8,7 @@
 
 - Add ability to report feature requests [\#74](https://github.com/HackEdit/hackedit/issues/74)
 - Use GitHub API to create a bug report [\#48](https://github.com/HackEdit/hackedit/issues/48)
+- Add possibility to translate the program into other languages [\#44](https://github.com/HackEdit/hackedit/issues/44)
 - Add option to change used encoding via menu [\#42](https://github.com/HackEdit/hackedit/issues/42)
 - Indexing overhaul [\#26](https://github.com/HackEdit/hackedit/issues/26)
 
