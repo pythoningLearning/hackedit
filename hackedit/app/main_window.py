@@ -702,7 +702,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.setParent(None)
 
     def event(self, e):
-        if e.type() == QtCore.QEvent.WindowActivate:
+        if e.type() == QtCore.QEvent.WindowActivate and self.app:
             self.app.active_window = self
         return super().event(e)
 
