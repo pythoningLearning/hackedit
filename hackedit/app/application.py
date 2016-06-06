@@ -503,6 +503,7 @@ class Application(QtCore.QObject):
         _logger().debug('setting up workspaces plugins')
         self._setup_workspace_plugins(window, workspace)
         _logger().debug('restoring state')
+        window.show()
         if not window.restore_state(path) and self.show_windows:
             # show maximised the first time a window is created,
             # afterwards, restore_state will take care of restoring
