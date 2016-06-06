@@ -1016,7 +1016,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _restore_children(self):
         for dock in self._docks_to_restore:
-                dock.show()
+            dock.show()
         self._docks_to_restore[:] = []
         for tb in self._toolbars:
             if self.toolBarArea(tb) == QtCore.Qt.TopToolBarArea:
