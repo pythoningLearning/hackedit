@@ -4,6 +4,7 @@ This module contains the main window implementation.
 The main window is a windows with a set of preset objects (tab widget, file
 system tree view) that is extended by plugins.
 """
+import json
 import traceback
 import logging
 import os
@@ -554,13 +555,28 @@ class MainWindow(QtWidgets.QMainWindow):
                 _logger().debug('restoring file')
                 self._restore_file()
                 _logger().debug('file restored')
-        self.state_restored.emit()
         if self.notifications.has_errors() or \
                 self.notifications.has_warnings():
             self.notifications.show()
 
         if not self._ui.menuTools.actions():
             self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
+
+        docks_size = json.loads(QtCore.QSettings().value("docks_geometry", "{}"))
+
+        for dock in list(set(self.findChildren(QtWidgets.QDockWidget))):
+            assert isinstance(dock, QtWidgets.QDockWidget)
+            try:
+                s = docks_size[dock.objectName()]
+            except KeyError:
+                continue
+            else:
+                dock.setFixedSize(s[0], s[1])
+                dock.update()
+                dock.setMaximumSize(16777215, 16777215)
+                dock.setMinimumSize(1, 1)
+
+        self.state_restored.emit()
 
         return geometry != b''
 
@@ -805,6 +821,12 @@ class MainWindow(QtWidgets.QMainWindow):
         QtCore.QSettings().setValue('geometry/' + key,
                                     self.saveGeometry())
         QtCore.QSettings().setValue('state/' + key, self.saveState())
+
+        dock_size = {}
+        for dock in list(set(self.findChildren(QtWidgets.QDockWidget))):
+            assert isinstance(dock, QtWidgets.QDockWidget)
+            dock_size[dock.objectName()] = dock.size().width(), dock.size().height()
+        QtCore.QSettings().setValue("docks_geometry", json.dumps(dock_size))
 
     def _restore_file(self):
         path = self._files_to_restore.pop(0)
