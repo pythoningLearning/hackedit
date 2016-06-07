@@ -536,15 +536,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
         If settings.restore_session is True, it restore open files.
         """
+        ret_val = False
         if pth is None:
             pth = self.projects[0]
         key = '%s_' % pth.replace('\\', '_').replace('/', '_')
-        geometry = QtCore.QSettings().value('geometry/' + key, b'')
-        self.restoreState(QtCore.QSettings().value(
-            'state/' + key, b''))
-        _logger().debug('restoreState: OK')
-        self.restoreGeometry(geometry)
+        geometry = QtCore.QSettings().value('window/geometry_' + key)
+        if geometry:
+            ret_val = True
+            self.setGeometry(geometry)
         _logger().debug('restoreGeometry: OK')
+
+        self.restoreState(QtCore.QSettings().value(
+            'window/state_' + key, b''))
+        _logger().debug('restoreState: OK')
 
         if not self._ui.menuTools.actions():
             self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
@@ -568,7 +572,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.state_restored.emit()
         QtWidgets.qApp.processEvents()
 
-        return geometry != b''
+        return ret_val
 
     def apply_preferences(self):
         """
@@ -805,11 +809,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self._restore_children()
         pth = self.projects[0]
         key = '%s_' % pth.replace('\\', '_').replace('/', '_')
-        QtCore.QSettings().setValue('session/' + key, files)
-        QtCore.QSettings().setValue('session_index/' + key,
-                                    int(current_index))
-        QtCore.QSettings().setValue('state/' + key, self.saveState())
-        QtCore.QSettings().setValue('geometry/' + key, self.saveGeometry())
+        QtCore.QSettings().setValue('session/files' + key, files)
+        QtCore.QSettings().setValue('session/index' + key, int(current_index))
+        QtCore.QSettings().setValue('window/state_' + key, self.saveState())
+        QtCore.QSettings().setValue('window/geometry_' + key, self.geometry())
 
     def _restore_file(self):
         path = self._files_to_restore.pop(0)
