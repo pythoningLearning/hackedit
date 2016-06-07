@@ -540,23 +540,23 @@ class MainWindow(QtWidgets.QMainWindow):
         if pth is None:
             pth = self.projects[0]
         key = '%s_' % pth.replace('\\', '_').replace('/', '_')
-        geometry = QtCore.QSettings().value('window/geometry_' + key)
+        geometry = QtCore.QSettings().value('_window/geometry_' + key)
         if geometry:
             ret_val = True
             self.setGeometry(geometry)
         _logger().debug('restoreGeometry: OK')
 
         self.restoreState(QtCore.QSettings().value(
-            'window/state_' + key, b''))
+            '_window/state_' + key, b''))
         _logger().debug('restoreState: OK')
 
         if not self._ui.menuTools.actions():
             self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
 
         self._files_to_restore = QtCore.QSettings().value(
-            'session/' + key, [])
+            '_session/files_' + key, [])
         self._restore_index = int(QtCore.QSettings().value(
-            'session_index/' + key, 0))
+            '_session/index_' + key, 0))
         QtWidgets.qApp.processEvents()
         if settings.restore_session():
             _logger().debug('restoring session')
@@ -809,10 +809,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self._restore_children()
         pth = self.projects[0]
         key = '%s_' % pth.replace('\\', '_').replace('/', '_')
-        QtCore.QSettings().setValue('session/files' + key, files)
-        QtCore.QSettings().setValue('session/index' + key, int(current_index))
-        QtCore.QSettings().setValue('window/state_' + key, self.saveState())
-        QtCore.QSettings().setValue('window/geometry_' + key, self.geometry())
+        QtCore.QSettings().setValue('_session/files_' + key, files)
+        QtCore.QSettings().setValue('_session/index_' + key, int(current_index))
+        QtCore.QSettings().setValue('_window/state_' + key, self.saveState())
+        QtCore.QSettings().setValue('_window/geometry_' + key, self.geometry())
 
     def _restore_file(self):
         path = self._files_to_restore.pop(0)

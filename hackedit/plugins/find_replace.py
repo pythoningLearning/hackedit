@@ -315,7 +315,7 @@ def _last_search_data():
     Loads the last search settings
     :return: SearchSettings dictionary
     """
-    val = QtCore.QSettings().value('cache/search_data', '')
+    val = QtCore.QSettings().value('_cache/search_data', '')
     if val:
         return json.loads(val)
     else:
@@ -335,7 +335,7 @@ def _save_search_data(data):
     Save the search settings
     :param data: search settings to save.
     """
-    QtCore.QSettings().setValue('cache/search_data', json.dumps(data))
+    QtCore.QSettings().setValue('_cache/search_data', json.dumps(data))
 
 
 def _last_search_term():

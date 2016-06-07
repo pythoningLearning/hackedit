@@ -65,7 +65,7 @@ class _Terminal(QtWidgets.QWidget):
         window.current_project_changed.connect(
             self._on_current_project_changed)
         self._history = _unique(QtCore.QSettings().value(
-            'cache/terminal_history', []))
+            '_cache/terminal_history', []))
         self._history_index = -1
         self.main_window = window
         self._ui = terminal_widget_ui.Ui_Form()
@@ -105,9 +105,9 @@ class _Terminal(QtWidgets.QWidget):
         self._ui.console.apply_color_scheme(ColorScheme(cs))
 
     def _clear_history(self):
-        QtCore.QSettings().setValue('cache/terminal_history', [])
+        QtCore.QSettings().setValue('_cache/terminal_history', [])
         self._history = _unique(QtCore.QSettings().value(
-            'cache/terminal_history', []))
+            '_cache/terminal_history', []))
         self._history_index = -1
         self._update_model()
 
@@ -161,7 +161,7 @@ class _Terminal(QtWidgets.QWidget):
         self._last_command = ' '.join([pgm] + args)
 
     def _save_history(self):
-        QtCore.QSettings().setValue('cache/terminal_history', self._history)
+        QtCore.QSettings().setValue('_cache/terminal_history', self._history)
 
     def eventFilter(self, obj, event):
         if event.type() == QtCore.QEvent.KeyPress:

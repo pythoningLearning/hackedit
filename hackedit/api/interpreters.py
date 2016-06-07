@@ -58,7 +58,7 @@ class InterpreterManager:
             except IndexError:
                 default = ''  # interpreter not found
         return QtCore.QSettings().value(
-            '%s/default' % self.name, default)
+            '%s/_default' % self.name, default)
 
     @default_interpreter.setter
     def default_interpreter(self, interpreter):
@@ -67,7 +67,7 @@ class InterpreterManager:
 
         :param interpreter: Default interpreter.
         """
-        QtCore.QSettings().setValue('%s/default' % self.name, interpreter)
+        QtCore.QSettings().setValue('%s/_default' % self.name, interpreter)
 
     @property
     def all_interpreters(self):

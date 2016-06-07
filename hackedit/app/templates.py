@@ -108,10 +108,10 @@ def create(template, dest_dir, answers):
 
 def get_sources():
     """
-    Returns the get_templates get_sources (directory associated with a label).
+    Returns the template sources (directory associated with a label).
     """
     s = settings.load()
-    tmpl_sources = s.value('get_templates/get_sources', '[]')
+    tmpl_sources = s.value('_templates/sources', '[]')
     tmpl_sources = json.loads(tmpl_sources)
     return sorted(tmpl_sources, key=lambda x: x['label'])
 
@@ -126,7 +126,7 @@ def add_source(label, path):
     tmpl_sources = get_sources()
     tmpl_sources.append({'label': label, 'path': path})
     s = settings.load()
-    s.setValue('get_templates/get_sources', json.dumps(tmpl_sources))
+    s.setValue('_templates/sources', json.dumps(tmpl_sources))
 
 
 def rm_source(label):
@@ -140,32 +140,32 @@ def rm_source(label):
         if src['label'] == label:
             tmpl_sources.remove(src)
     s = settings.load()
-    s.setValue('get_templates/get_sources', json.dumps(tmpl_sources))
+    s.setValue('_templates/sources', json.dumps(tmpl_sources))
 
 
 def clear_sources():
     """
-    Clear template get_sources.
+    Clear template sources.
     """
     s = settings.load()
-    s.setValue('get_templates/get_sources', json.dumps([]))
+    s.setValue('_templates/sources', json.dumps([]))
 
 
 def get_templates(category='', source_filter=''):
     """
-    Gets the list of get_templates.
+    Gets the list of templates.
 
     :param category: Template category to retrieve.
-        - use "Project" to get project get_templates
-        - use "File" to get file get_templates
+        - use "Project" to get project templates
+        - use "File" to get file templates
         - use an empty string to retrieve them all (default).
 
-    :param source: Label of the source of the get_templates to retrieve. Use an empty string to retrieve
-        get_templates from all get_sources
+    :param source: Label of the source of the templates to retrieve. Use an empty string to retrieve
+        templates from all sources.
     """
     def filtered_sources():
         """
-        Filter list of get_sources based on the ``source`` parameter.
+        Filter list of sources based on the ``source`` parameter.
         """
         tmpl_sources = get_sources()
         filtered = []

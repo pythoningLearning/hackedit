@@ -144,7 +144,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
 
     def restore_state(self):
         index = int(QtCore.QSettings().value(
-            'preferences/last_index', 0))
+            '_cache/preferences_page_index', 0))
         item = self._find_item_by_index(index)
         self._ui.categories.setCurrentItem(item)
 
@@ -200,12 +200,12 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
     def accept(self):
         self._apply()
         QtCore.QSettings().setValue(
-            'preferences/last_index', self._ui.pages.currentIndex())
+            '_cache/preferences_page_index', self._ui.pages.currentIndex())
         super().accept()
 
     def reject(self):
         QtCore.QSettings().setValue(
-            'preferences/last_index', self._ui.pages.currentIndex())
+            '_cache/preferences_page_index', self._ui.pages.currentIndex())
         super().reject()
 
     def _add_page(self, widget):

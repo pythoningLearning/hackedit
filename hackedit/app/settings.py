@@ -669,73 +669,17 @@ def set_show_whitespaces(value):
 
 
 # -----------------------------------------------------------------------------
-# Template settings
-# -----------------------------------------------------------------------------
-def get_default_datetime_format():
-    return '%Y-%m-%d %H:%M'
-
-
-def get_datetime_format():
-    return _SETTINGS.value('templates/datetime_format',
-                           get_default_datetime_format())
-
-
-def set_datetime_format(fmt):
-    _SETTINGS.setValue('templates/datetime_format', fmt)
-
-
-def get_username():
-    return getpass.getuser()
-
-
-def get_author():
-    return _SETTINGS.value('templates/author', get_username())
-
-
-def set_author(value):
-    _SETTINGS.setValue('templates/author', value)
-
-
-def get_author_email():
-    return _SETTINGS.value('templates/author_email', '')
-
-
-def set_author_email(value):
-    _SETTINGS.setValue('templates/author_email', value)
-
-
-def get_default_prj_path():
-    return _SETTINGS.value('default_prj_path', os.path.expanduser('~'))
-
-
-def auto_sync_templates():
-    return bool(int(_SETTINGS.value('templates/auto_sync_templates', 0)))
-
-
-def set_auto_sync_templates(value):
-    _SETTINGS.setValue('templates/auto_sync_templates', int(value))
-
-
-def has_sync_templates_once():
-    return bool(int(_SETTINGS.value('templates/has_sync_templates_once', 0)))
-
-
-def set_has_sync_templates_once(value):
-    _SETTINGS.setValue('templates/has_sync_templates_once', int(value))
-
-
-# -----------------------------------------------------------------------------
-# Template settings
+# Cached data
 # -----------------------------------------------------------------------------
 def last_open_dir():
     """
     Gets the last directory used for opening file/directory
     """
-    return _SETTINGS.value('cache/last_open_dir', os.path.expanduser('~'))
+    return _SETTINGS.value('_cache/last_open_dir', os.path.expanduser('~'))
 
 
 def set_last_open_dir(value):
     """
     Sets the directory used by the last call to QFileDialog.
     """
-    _SETTINGS.setValue('cache/last_open_dir', value)
+    _SETTINGS.setValue('_cache/last_open_dir', value)
