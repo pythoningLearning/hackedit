@@ -540,43 +540,33 @@ class MainWindow(QtWidgets.QMainWindow):
             pth = self.projects[0]
         key = '%s_' % pth.replace('\\', '_').replace('/', '_')
         geometry = QtCore.QSettings().value('geometry/' + key, b'')
-        self.restoreGeometry(geometry)
-        _logger().debug('restoreGeometry: OK')
         self.restoreState(QtCore.QSettings().value(
             'state/' + key, b''))
         _logger().debug('restoreState: OK')
+        self.restoreGeometry(geometry)
+        _logger().debug('restoreGeometry: OK')
+
+        if not self._ui.menuTools.actions():
+            self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
+
         self._files_to_restore = QtCore.QSettings().value(
             'session/' + key, [])
         self._restore_index = int(QtCore.QSettings().value(
             'session_index/' + key, 0))
+        QtWidgets.qApp.processEvents()
         if settings.restore_session():
             _logger().debug('restoring session')
             while self._files_to_restore:
                 _logger().debug('restoring file')
                 self._restore_file()
                 _logger().debug('file restored')
+                QtWidgets.qApp.processEvents()
         if self.notifications.has_errors() or \
                 self.notifications.has_warnings():
             self.notifications.show()
 
-        if not self._ui.menuTools.actions():
-            self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
-
-        docks_size = json.loads(QtCore.QSettings().value("docks_geometry", "{}"))
-
-        for dock in list(set(self.findChildren(QtWidgets.QDockWidget))):
-            assert isinstance(dock, QtWidgets.QDockWidget)
-            try:
-                s = docks_size[dock.objectName()]
-            except KeyError:
-                continue
-            else:
-                dock.setFixedSize(s[0], s[1])
-                dock.update()
-                dock.setMaximumSize(16777215, 16777215)
-                dock.setMinimumSize(1, 1)
-
         self.state_restored.emit()
+        QtWidgets.qApp.processEvents()
 
         return geometry != b''
 
@@ -689,6 +679,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     event.ignore()
                     return
             current_index, files = self.get_session_info()
+            self.save_state(current_index, files)
             accept = self._close_documents(event)
             event.setAccepted(accept)
             if event.isAccepted():
@@ -701,7 +692,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     finally:
                         plugin.window = None
                 self.plugins.clear()
-                self.save_state(current_index, files)
                 self.closed.emit(self)
                 self._ui = None
                 self.task_manager.terminate()
@@ -818,15 +808,8 @@ class MainWindow(QtWidgets.QMainWindow):
         QtCore.QSettings().setValue('session/' + key, files)
         QtCore.QSettings().setValue('session_index/' + key,
                                     int(current_index))
-        QtCore.QSettings().setValue('geometry/' + key,
-                                    self.saveGeometry())
         QtCore.QSettings().setValue('state/' + key, self.saveState())
-
-        dock_size = {}
-        for dock in list(set(self.findChildren(QtWidgets.QDockWidget))):
-            assert isinstance(dock, QtWidgets.QDockWidget)
-            dock_size[dock.objectName()] = dock.size().width(), dock.size().height()
-        QtCore.QSettings().setValue("docks_geometry", json.dumps(dock_size))
+        QtCore.QSettings().setValue('geometry/' + key, self.saveGeometry())
 
     def _restore_file(self):
         path = self._files_to_restore.pop(0)
