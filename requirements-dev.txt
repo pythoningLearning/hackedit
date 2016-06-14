@@ -13,6 +13,9 @@ qdarkstyle
 qcrash
 binaryornot
 chardet
+colorama
+coloredlogs
+humanfriendly
 
 # required for development
 sphinx

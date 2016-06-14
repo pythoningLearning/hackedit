@@ -65,11 +65,24 @@ class OutputWindow(CodeEdit):
     process_finished = QtCore.Signal()
 
     @property
+    def process(self):
+        """
+        Returns a reference to the child process being run (QProcess)
+        """
+        return self._process
+
+    @property
     def is_running(self):
-        return self._process.state() == self._process.Running
+        """
+        Checks if the child process is running (or is starting).
+        """
+        return self._process.state() in [self._process.Running, self._process.Starting]
 
     @property
     def color_scheme(self):
+        """
+        Gets/Sets the color scheme
+        """
         return self._formatter.theme
 
     @color_scheme.setter
@@ -81,6 +94,9 @@ class OutputWindow(CodeEdit):
 
     @property
     def input_handler(self):
+        """
+        Gets/Sets an input handler (see :class:`InputHandler).
+        """
         return self._input_handler
 
     @input_handler.setter
@@ -122,7 +138,7 @@ class OutputWindow(CodeEdit):
         self.flg_use_pty = False
 
     def start_process(self, program, arguments=None, working_dir=None, print_command=True,
-                      use_pseudo_terminal=False, env=None):
+                      use_pseudo_terminal=True, env=None):
         """
         Starts the child process.
 
@@ -158,9 +174,9 @@ class OutputWindow(CodeEdit):
                                            output_format=OutputFormat.CustomFormat)
         self._process.start(pgm, args)
 
-    def terminate_process(self):
+    def stop_process(self):
         """
-        Terminates the child process.
+        Stops the child process.
         """
         self._process.terminate()
         if not self._process.waitForFinished(100):
@@ -237,18 +253,22 @@ class OutputWindow(CodeEdit):
     #
     # Overriden Qt Methods
     #
-    def eventFilter(self, *args):
-        return False
-
     def closeEvent(self, event):
         """
         Terminates the child process on close.
         """
-        super(OutputWindow, self).closeEvent(event)
-        self.terminate_process()
+        self.stop_process()
         self.backend.stop()
+        try:
+            self.modes.remove('_LinkHighlighter')
+        except KeyError:
+            pass  # already removed
+        super(OutputWindow, self).closeEvent(event)
 
     def keyPressEvent(self, event):
+        """
+        Handle key press event using the defined input handler.
+        """
         if self._process.state() != self._process.Running:
             return
         if self.input_handler.key_press_event(event):
@@ -256,6 +276,9 @@ class OutputWindow(CodeEdit):
             self._formatter._last_cursor_pos = self.textCursor().position()
 
     def mouseMoveEvent(self, event):
+        """
+        Handle mouse over file link.
+        """
         c = self.cursorForPosition(event.pos())
         block = c.block()
         if block != self._last_hovered_block:
@@ -270,6 +293,9 @@ class OutputWindow(CodeEdit):
         super(OutputWindow, self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
+        """
+        Handle file link clicks.
+        """
         super(OutputWindow, self).mousePressEvent(event)
         if self._link_match:
             path = self._link_match.group('url')
@@ -284,9 +310,11 @@ class OutputWindow(CodeEdit):
     # Utility methods
     #
     def _init_code_edit(self, backend):
+        """
+        Initializes the code editor (setup modes, panels and colors).
+        """
         from pyqode.core import panels, modes
-
-        self.modes.append(_LinkHighlighter(self))
+        self.modes.append(_LinkHighlighter(self.document()))
         self.background = self._formatter.color_scheme.background
         self.foreground = self._formatter.color_scheme.foreground
         self._reset_stylesheet()
@@ -310,6 +338,9 @@ class OutputWindow(CodeEdit):
         self.backend.start(backend)
 
     def _setup_process_environment(self, env):
+        """
+        Sets up the process environment.
+        """
         environ = self._process.processEnvironment()
         if env is None:
             env = {}
@@ -324,12 +355,18 @@ class OutputWindow(CodeEdit):
         return environ
 
     def _on_process_error(self, error):
+        """
+        Display child process error in the text edit.
+        """
         if self is None:
             return
         err = PROCESS_ERROR_STRING[error]
         self._formatter.append_message(err + '\r\n', output_format=OutputFormat.ErrorMessageFormat)
 
     def _on_process_finished(self):
+        """
+        Write the process finished message and emit the `finished` signal.
+        """
         exit_code = self._process.exitCode()
         if self._process.exitStatus() != self._process.NormalExit:
             exit_code = 139
@@ -339,6 +376,9 @@ class OutputWindow(CodeEdit):
         self.process_finished.emit()
 
     def _read_stdout(self):
+        """
+        Reads the child process' stdout and process it.
+        """
         output = self._process.readAllStandardOutput().data().decode()
         if self._formatter:
             self._formatter.append_message(output, output_format=OutputFormat.NormalMessageFormat)
@@ -346,6 +386,9 @@ class OutputWindow(CodeEdit):
             self.insertPlainText(output)
 
     def _read_stderr(self):
+        """
+        Reads the child process' stderr and process it.
+        """
         output = self._process.readAllStandardError().data().decode()
         if self._formatter:
             self._formatter.append_message(output, output_format=OutputFormat.ErrorMessageFormat)
@@ -658,20 +701,32 @@ class AnsiEscapeCodeParser(object):
         return ret_val
 
     def end_format_scope(self):
+        """
+        Close the format scope
+        """
         self._prev_fmt_closed = True
 
     def _set_format_scope(self, fmt):
+        """
+        Opens the format scope.
+        """
         self._prev_fmt = QtGui.QTextCharFormat(fmt)
         self._prev_fmt_closed = False
 
 
 def _mid(string, start, end=None):
+    """
+    Returns a substring delimited by start and end position.
+    """
     if end is None:
         end = len(string)
     return string[start:start + end]
 
 
 def _ansi_color(code, theme):
+    """
+    Converts an ansi code to a QColor, taking the color scheme (theme) into account.
+    """
     red = 170 if code & 1 else 0
     green = 170 if code & 2 else 0
     blue = 170 if code & 4 else 0
@@ -696,6 +751,9 @@ def _ansi_color(code, theme):
 # Input handlers
 # ----------------------------------------------------------------------------------------------------------------------
 class InputHandler(object):
+    """
+    Base class for handling user inputs
+    """
     def __init__(self):
         # references set by the outout window instance that owns the handler.
         self.edit = None
@@ -703,6 +761,9 @@ class InputHandler(object):
 
 
 class ImmediateInputHandler(InputHandler):
+    """
+    Write ascii key code immediately to the process' stdin.
+    """
     def key_press_event(self, event):
         """
         Directly writes the ascii code of the key to the process' stdin.
@@ -723,10 +784,14 @@ def _qkey_to_ascii(event):
     """
     (Try to) convert the Qt key event to the corresponding ASCII sequence for
     the terminal. This works fine for standard alphanumerical characters, but
-    most other characters require terminal specific control sequences.
+    most other characters require terminal specific control_modifier sequences.
     The conversion below works for TERM="linux' terminals.
     """
-    if event.modifiers() == QtCore.Qt.ControlModifier:
+    if sys.platform == 'darwin':
+        control_modifier = QtCore.Qt.MetaModifier
+    else:
+        control_modifier = QtCore.Qt.ControlModifier
+    if event.modifiers() == control_modifier:
         if event.key() == QtCore.Qt.Key_P:
             return b'\x10'
         elif event.key() == QtCore.Qt.Key_N:
@@ -809,10 +874,75 @@ def _qkey_to_ascii(event):
             return None
 
 
+class CommandHistory(object):
+    """
+    A very basic history of commands.
+
+    Use add_command when user press RETURN, use scroll_up/scroll_down to scroll the history.
+    """
+    def __init__(self):
+        self._history = []
+        self._index = -1
+
+    def add_command(self, command):
+        """
+        Adds a command to the history and reset history index.
+        """
+        try:
+            self._history.remove(command)
+        except ValueError:
+            pass
+        self._history.insert(0, command)
+        self._index = -1
+
+    def scroll_up(self):
+        """
+        Returns the previous command, if any.
+        """
+        self._index += 1
+        nb_commands = len(self._history)
+        if self._index >= nb_commands:
+            self._index = nb_commands - 1
+        try:
+            return self._history[self._index]
+        except IndexError:
+            return ''
+
+    def scroll_down(self):
+        """
+        Returns the next command if any.
+        """
+        self._index -= 1
+        if self._index < 0:
+            self._index = -1
+            return ''
+        try:
+            return self._history[self._index]
+        except IndexError:
+            return ''
+
+
 class BufferedInputHandler(InputHandler):
+    """
+    Bufferise user inputs until user press RETURN.
+
+    Use :class:`CommandHistory` to manage the history of commands/inputs.
+    """
     def __init__(self):
         super(BufferedInputHandler, self).__init__()
         self._input_buffer = ''
+        self._history = CommandHistory()
+
+    def _insert_command(self, command):
+        """
+        Insert command by replacing the current input buffer and display it on the text edit.
+        """
+        tc = self.edit.textCursor()
+        for _ in self._input_buffer:
+            tc.deletePreviousChar()
+        tc.insertText(command)
+        self._input_buffer = command
+        self.edit.setTextCursor(tc)
 
     def key_press_event(self, event):
         """
@@ -836,6 +966,12 @@ class BufferedInputHandler(InputHandler):
                     self.process.write(b'\r')
                 self.process.write(b'\n')
                 return False
+        if event.key() == QtCore.Qt.Key_Up:
+            self._insert_command(self._history.scroll_up())
+            return False
+        if event.key() == QtCore.Qt.Key_Down:
+            self._insert_command(self._history.scroll_down())
+            return False
         if event.key() in [QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter]:
             # send the user input to the child process
             if self.edit.flg_use_pty:
@@ -845,6 +981,7 @@ class BufferedInputHandler(InputHandler):
                 for _ in self._input_buffer:
                     tc.deletePreviousChar()
                 self.edit.setTextCursor(tc)
+            self._history.add_command(self._input_buffer)
             if sys.platform == 'win32':
                 self._input_buffer += "\r"
             self._input_buffer += "\n"
@@ -865,6 +1002,9 @@ class BufferedInputHandler(InputHandler):
 # Formatter
 # ----------------------------------------------------------------------------------------------------------------------
 class OutputFormat:
+    """
+    Enumerates the possible output formats.
+    """
     #: format used to display normal messages
     NormalMessageFormat = 0
     #: format used to display normal messages
@@ -873,9 +1013,15 @@ class OutputFormat:
     CustomFormat = 2
 
 
-class OutputFormatter:
+class OutputFormatter(object):
+    """
+    Perform formatting (draw text, move cursor,...).
+    """
     @property
     def color_scheme(self):
+        """
+        Gets/Sets the formatter color scheme
+        """
         return self._color_scheme
 
     @color_scheme.setter
@@ -902,13 +1048,22 @@ class OutputFormatter:
         self.flg_bash = False
 
     def append_message(self, text, output_format=OutputFormat.NormalMessageFormat):
+        """
+        Parses and append message to the text edit.
+        """
         self._append_message(text, self._formats[output_format])
 
     def flush(self):
+        """
+        Flush intermediary resutls: close the format scope.
+        """
         self._parser.end_format_scope()
 
     # Utility methods
     def _append_message(self, text, char_format):
+        """
+        Parses text and executes parsed operations.
+        """
         self._cursor = self._text_edit.textCursor()
         operations = self._parser.parse_text(FormattedText(text, char_format))
         for i, operation in enumerate(operations):
@@ -926,6 +1081,9 @@ class OutputFormatter:
                     self._text_edit.repaint()
 
     def _init_formats(self):
+        """
+        Initialise default formats.
+        """
         theme = self._color_scheme
         # normal message format
         fmt = QtGui.QTextCharFormat()
@@ -947,6 +1105,9 @@ class OutputFormatter:
 
     # Commands implementation
     def _draw(self, data):
+        """
+        Draw text
+        """
         self._cursor.clearSelection()
         self._cursor.setPosition(self._last_cursor_pos)
 
@@ -958,8 +1119,6 @@ class OutputFormatter:
             parts = txt.split('\x08')
         else:
             parts = [txt]
-
-        self._cursor.beginEditBlock()
 
         for i, part in enumerate(parts):
             if part:
@@ -978,7 +1137,11 @@ class OutputFormatter:
                         self._draw_chars(data, to_draw)
                         to_draw = ''
                         self._erase_in_line(0)
-                        if self._cursor.positionInBlock() > 80 and self.flg_bash:
+                        try:
+                            nchar = part[n + 1]
+                        except IndexError:
+                            nchar = None
+                        if self._cursor.positionInBlock() > 80 and self.flg_bash and nchar != '\n':
                             self._linefeed()
                         self._cursor.movePosition(self._cursor.StartOfBlock)
                         self._text_edit.setTextCursor(self._cursor)
@@ -989,10 +1152,12 @@ class OutputFormatter:
             if i != len(parts) - 1:
                 self._cursor_back(1)
         self._last_cursor_pos = self._cursor.position()
-        self._cursor.endEditBlock()
         self._text_edit.setTextCursor(self._cursor)
 
     def _draw_chars(self, data, to_draw):
+        """
+        Draw the specified charachters using the specified format.
+        """
         i = 0
         while not self._cursor.atBlockEnd() and i < len(to_draw) and len(to_draw) > 1:
             self._cursor.deleteChar()
@@ -1000,6 +1165,9 @@ class OutputFormatter:
         self._cursor.insertText(to_draw, data.fmt)
 
     def _linefeed(self):
+        """
+        Performs a line feed.
+        """
         last_line = self._cursor.blockNumber() == self._text_edit.blockCount() - 1
         if self._cursor.atEnd() or last_line:
             if last_line:
@@ -1008,8 +1176,12 @@ class OutputFormatter:
         else:
             self._cursor.movePosition(self._cursor.Down)
             self._cursor.movePosition(self._cursor.StartOfBlock)
+        self._text_edit.setTextCursor(self._cursor)
 
     def _cursor_down(self, value):
+        """
+        Moves the cursor down by ``value``.
+        """
         self._cursor.clearSelection()
         if self._cursor.atEnd():
             self._cursor.insertText('\n')
@@ -1018,6 +1190,9 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _cursor_up(self, value):
+        """
+        Moves the cursor up by ``value``.
+        """
         value = int(value)
         if value == 0:
             value = 1
@@ -1026,12 +1201,18 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _cursor_position(self, data):
+        """
+        Moves the cursor position.
+        """
         column, line = self._get_line_and_col(data)
         self._move_cursor_to_line(line)
         self._move_cursor_to_column(column)
         self._last_cursor_pos = self._cursor.position()
 
     def _move_cursor_to_column(self, column):
+        """
+        Moves the cursor to the specified column, if possible.
+        """
         last_col = len(self._cursor.block().text())
         self._cursor.movePosition(self._cursor.EndOfBlock)
         to_insert = ''
@@ -1044,6 +1225,9 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _move_cursor_to_line(self, line):
+        """
+        Moves the cursor to the specified line, if possible.
+        """
         last_line = self._text_edit.document().blockCount() - 1
         self._cursor.clearSelection()
         self._cursor.movePosition(self._cursor.End)
@@ -1057,10 +1241,18 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _cursor_horizontal_absolute(self, column):
+        """
+        Moves the cursor to the specified column, if possible.
+        """
         self._move_cursor_to_column(int(column) - 1)
 
     @staticmethod
     def _get_line_and_col(data):
+        """
+        Gets line and column from a string like the following: "1;5" or "1;" or ";5"
+
+        and convers the column/line numbers to 0 base.
+        """
         try:
             line, column = data.split(';')
         except AttributeError:
@@ -1082,6 +1274,9 @@ class OutputFormatter:
         return column, line
 
     def _erase_in_line(self, value):
+        """
+        Erases charachters in line.
+        """
         initial_pos = self._cursor.position()
         if value == 0:
             # delete end of line
@@ -1099,6 +1294,9 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _erase_display(self, value):
+        """
+        Erases display.
+        """
         if value == 0:
             # delete end of line
             self._cursor.movePosition(self._cursor.End, self._cursor.KeepAnchor)
@@ -1113,6 +1311,9 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _cursor_back(self, value):
+        """
+        Moves the cursor back.
+        """
         if value <= 0:
             value = 1
         self._cursor.movePosition(self._cursor.Left, self._cursor.MoveAnchor, value)
@@ -1120,6 +1321,9 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _cursor_forward(self, value):
+        """
+        Moves the cursor forward.
+        """
         if value <= 0:
             value = 1
         self._cursor.movePosition(self._cursor.Right, self._cursor.MoveAnchor, value)
@@ -1127,6 +1331,9 @@ class OutputFormatter:
         self._last_cursor_pos = self._cursor.position()
 
     def _delete_chars(self, value):
+        """
+        Deletes the specified number of charachters.
+        """
         value = int(value)
         if value <= 0:
             value = 1
@@ -1148,7 +1355,7 @@ def _init_default_scheme():
     if OutputWindow.DefaultColorScheme is None:
         OutputWindow.DefaultColorScheme = OutputWindow.create_color_scheme()
 
-
+# Initialize non-palette dependant themes.
 OutputWindow.LinuxColorScheme = OutputWindow.create_color_scheme(
     background=QColor('black'), foreground=QColor('white'), red=QColor('#FF5555'), green=QColor('#55FF55'),
     yellow=QColor('#FFFF55'), blue=QColor('#5555FF'), magenta=QColor('#FF55FF'), cyan=QColor('#55FFFF'))
@@ -1173,7 +1380,7 @@ def pty_wrapper_main():
     """
     Main function of the pty wrapper script
     """
-    import pty
+    from pyqode.core.widgets import pty
     # fixme: find a way to use a pty and keep stdout and stderr as separate channels
     pty.spawn(sys.argv[1:])
 

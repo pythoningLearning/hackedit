@@ -3,8 +3,9 @@ This module contains a dock manager widget and all the classes needed to make
 it work.
 
 """
+import logging
+
 from PyQt5 import QtCore, QtWidgets
-from pyqode.core.api.utils import _logger
 
 
 class VButton(QtWidgets.QPushButton):
@@ -160,7 +161,7 @@ QPushButton:hover {
                 self._on_dock_visiblity_changed)
             self.dock_widgets.remove(dock_widget)
         except (KeyError, ValueError, RuntimeError):
-            _logger().log(1, 'failed to remove dock widget')
+            _logger().debug('failed to remove dock widget')
         if not self.dock_widgets:
             self.hide()
         else:
@@ -269,3 +270,7 @@ class DockWidgetsManager(QtCore.QObject):
     def update_style(self):
         for bar in self._managers.values():
             bar.setup_stylesheet()
+
+
+def _logger():
+    return logging.getLogger(__name__)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/Users/Colin/Documents/hackedit/data/forms/dlg_run_process.ui'
+# Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/dlg_run_process.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.6.1.dev1604260930
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -14,7 +14,7 @@ class Ui_Dialog(object):
         Dialog.resize(534, 248)
         self.gridLayout = QtWidgets.QGridLayout(Dialog)
         self.gridLayout.setObjectName("gridLayout")
-        self.console = InteractiveConsole(Dialog)
+        self.console = OutputWindow(Dialog)
         self.console.setObjectName("console")
         self.gridLayout.addWidget(self.console, 0, 0, 1, 1)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
@@ -29,9 +29,10 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.console.setToolTip(_translate("Dialog", "Process output"))
-        self.buttonBox.setToolTip(_translate("Dialog", "Cancel operation"))
+        from hackedit.api.gettext import get_translation
+        _ = get_translation(package="hackedit")
+        Dialog.setWindowTitle(_("Dialog"))
+        self.console.setToolTip(_("Process output"))
+        self.buttonBox.setToolTip(_("Cancel operation"))
 
-from pyqode.core.widgets import InteractiveConsole
+from pyqode.core.widgets import OutputWindow

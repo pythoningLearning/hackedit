@@ -26,6 +26,9 @@ import qcrash
 import keyring
 import binaryornot
 import chardet
+import coloredlogs
+import humanfriendly
+import colorama
 
 
 BUILD = os.path.abspath('hackedit/vendor')
@@ -85,5 +88,6 @@ except FileExistsError:
 finally:
     embed_packages([
         future, pygments, qdarkstyle, jedi, pep8, pyflakes, pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol,
-        pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring, binaryornot, chardet
+        pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring, binaryornot, chardet, coloredlogs, colorama,
+        humanfriendly
     ])

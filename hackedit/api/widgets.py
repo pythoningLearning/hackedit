@@ -10,7 +10,7 @@ from PyQt5 import QtGui, QtWidgets, QtCore, QtPrintSupport
 from pygments.lexers.diff import DiffLexer
 from pyqode.core import api, modes, panels
 from pyqode.core.api import ColorScheme, utils
-from pyqode.core.widgets import InteractiveConsole
+from pyqode.core.widgets import OutputWindow
 
 from hackedit.app import settings
 from hackedit.api import plugins, special_icons
@@ -252,7 +252,7 @@ class RunWidget(QtWidgets.QWidget):
         return self.ui.tabWidget.currentWidget()
 
     def run_program(self, pgm, args=None, cwd=None, env=None,
-                    klass=InteractiveConsole, name=None):
+                    klass=OutputWindow, name=None):
         """
         Runs a program in an interactive console.
 
@@ -261,7 +261,7 @@ class RunWidget(QtWidgets.QWidget):
         :param cwd: working directory
         :param env: program environment.
         :param klass: interactive console class. Default is
-            :class:`pyqode.core.widgets.InteractiveConsole`.
+            :class:`pyqode.core.widgets.OutputWindow.
         """
         if name is None:
             name = QtCore.QFileInfo(pgm).completeBaseName()
@@ -276,13 +276,12 @@ class RunWidget(QtWidgets.QWidget):
             self.ui.tabWidget.addTab(tab, name)
         else:
             self.ui.tabWidget.setTabText(self.ui.tabWidget.indexOf(tab), name)
-        tab.apply_color_scheme(ColorScheme(settings.color_scheme()))
         self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.indexOf(tab))
         tab.pgm = pgm
         tab.args = args
         tab.cwd = cwd
         tab.env = env
-        tab.start_process(pgm, args, cwd, env)
+        tab.start_process(pgm, arguments=args, working_dir=cwd, env=env, print_command=True)
         tab.process_finished.connect(self._on_process_finished)
         tab.identifier = pgm
         self.ui.bt_run.setIcon(self.icon_stop)
@@ -297,9 +296,7 @@ class RunWidget(QtWidgets.QWidget):
         return tab
 
     def apply_preferences(self):
-        for i in range(self.ui.tabWidget.count()):
-            w = self.ui.tabWidget.widget(i)
-            w.apply_color_scheme(ColorScheme(settings.color_scheme()))
+        pass
 
     def closeEvent(self, event):
         for i in reversed(range(self.ui.tabWidget.count())):
@@ -330,7 +327,8 @@ class RunWidget(QtWidgets.QWidget):
                 self.main_window.save_all()
             except AttributeError:
                 pass  # _window is None, e.g. in test suite
-            tab.start_process(tab.pgm, tab.args, tab.cwd, tab.env)
+            tab.start_process(tab.pgm, arguments=tab.args, working_dir=tab.cwd, env=tab.env,
+                              print_command=True)
             self.ui.bt_run.setIcon(self.icon_stop)
 
     def _rm_tab(self, index):
@@ -529,10 +527,6 @@ class DlgRunProcess(QtWidgets.QDialog):
         self.bt_close.setEnabled(False)
         self.bt_cancel.clicked.connect(self.cancel)
         self.ui.console.process_finished.connect(self.on_finished)
-        self.ui.console.write_app_messages = False
-        self.ui.console.stderr_color = self.ui.console.stdout_color
-        self.ui.console.apply_color_scheme(
-            ColorScheme(settings.color_scheme()))
 
     def cancel(self):
         self.ui.console.stop_process()
@@ -548,7 +542,8 @@ class DlgRunProcess(QtWidgets.QDialog):
                     autoclose=False):
         dlg = cls(parent, autoclose=autoclose)
         dlg.setWindowTitle(_('Running %s %s') % (program, ' '.join(arguments)))
-        dlg.ui.console.start_process(program, args=arguments, cwd=cwd, env=env)
+        dlg.ui.console.start_process(program, arguments=arguments, working_dir=cwd, env=env,
+                                     print_command=True)
         ret = dlg.exec_()
         return dlg.ui.console.process.exitCode() == 0 and ret == cls.Accepted
 

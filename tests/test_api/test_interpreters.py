@@ -2,7 +2,7 @@ import os
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqode.core.widgets import InteractiveConsole
+from pyqode.core.widgets import OutputWindow
 
 from hackedit.api import project
 from hackedit.api.interpreters import (
@@ -94,7 +94,7 @@ class TestInterpreterManager:
 
 class FakeScriptRunnerPlugin(ScriptRunnerPlugin):
     def __init__(self, window):
-        super().__init__(window, PythonManager(), InteractiveConsole)
+        super().__init__(window, PythonManager(), OutputWindow)
 
 
 def test_scriptrunnerplugin(qtbot):

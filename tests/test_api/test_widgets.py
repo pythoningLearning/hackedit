@@ -4,7 +4,7 @@ import time
 
 import pytest
 from PyQt5 import QtCore, QtGui, QtTest
-from pyqode.core.widgets import InteractiveConsole
+from pyqode.core.widgets import OutputWindow
 
 from hackedit.api import widgets
 
@@ -100,7 +100,7 @@ class TestRunWidget:
         w = self.get_widget(qtbot)
         assert w.ui.tabWidget.count() == 0
         tab = w.run_program(sys.executable, ['-m', 'pip', '-V'])
-        assert isinstance(tab, InteractiveConsole)
+        assert isinstance(tab, OutputWindow)
         assert w.ui.tabWidget.count() == 1
         tab.process.waitForFinished()
         w.apply_preferences()  # for coverage

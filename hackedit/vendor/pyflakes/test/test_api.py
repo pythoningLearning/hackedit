@@ -11,7 +11,6 @@ import tempfile
 from pyflakes.messages import UnusedImport
 from pyflakes.reporter import Reporter
 from pyflakes.api import (
-    main,
     checkPath,
     checkRecursive,
     iterSourceCode,
@@ -23,14 +22,6 @@ if sys.version_info < (3,):
 else:
     from io import StringIO
     unichr = chr
-
-try:
-    sys.pypy_version_info
-    PYPY = True
-except AttributeError:
-    PYPY = False
-
-ERROR_HAS_COL_NUM = ERROR_HAS_LAST_LINE = sys.version_info >= (3, 2) or PYPY
 
 
 def withStderrTo(stderr, f, *args, **kwargs):
@@ -51,33 +42,6 @@ class Node(object):
     def __init__(self, lineno, col_offset=0):
         self.lineno = lineno
         self.col_offset = col_offset
-
-
-class SysStreamCapturing(object):
-
-    """Replaces sys.stdin, sys.stdout and sys.stderr with StringIO objects."""
-
-    def __init__(self, stdin):
-        self._stdin = StringIO(stdin or '')
-
-    def __enter__(self):
-        self._orig_stdin = sys.stdin
-        self._orig_stdout = sys.stdout
-        self._orig_stderr = sys.stderr
-
-        sys.stdin = self._stdin
-        sys.stdout = self._stdout_stringio = StringIO()
-        sys.stderr = self._stderr_stringio = StringIO()
-
-        return self
-
-    def __exit__(self, *args):
-        self.output = self._stdout_stringio.getvalue()
-        self.error = self._stderr_stringio.getvalue()
-
-        sys.stdin = self._orig_stdin
-        sys.stdout = self._orig_stdout
-        sys.stderr = self._orig_stderr
 
 
 class LoggingReporter(object):
@@ -348,25 +312,18 @@ def baz():
             evaluate(source)
         except SyntaxError:
             e = sys.exc_info()[1]
-            if not PYPY:
-                self.assertTrue(e.text.count('\n') > 1)
+            self.assertTrue(e.text.count('\n') > 1)
         else:
             self.fail()
 
         sourcePath = self.makeTempFile(source)
-
-        if PYPY:
-            message = 'EOF while scanning triple-quoted string literal'
-        else:
-            message = 'invalid syntax'
-
         self.assertHasErrors(
             sourcePath,
             ["""\
-%s:8:11: %s
+%s:8:11: invalid syntax
     '''quux'''
           ^
-""" % (sourcePath, message)])
+""" % (sourcePath,)])
 
     def test_eofSyntaxError(self):
         """
@@ -374,22 +331,13 @@ def baz():
         syntax error reflects the cause for the syntax error.
         """
         sourcePath = self.makeTempFile("def foo(")
-        if PYPY:
-            result = """\
-%s:1:7: parenthesis is never closed
-def foo(
-      ^
-""" % (sourcePath,)
-        else:
-            result = """\
+        self.assertHasErrors(
+            sourcePath,
+            ["""\
 %s:1:9: unexpected EOF while parsing
 def foo(
         ^
-""" % (sourcePath,)
-
-        self.assertHasErrors(
-            sourcePath,
-            [result])
+""" % (sourcePath,)])
 
     def test_eofSyntaxErrorWithTab(self):
         """
@@ -397,16 +345,13 @@ def foo(
         syntax error reflects the cause for the syntax error.
         """
         sourcePath = self.makeTempFile("if True:\n\tfoo =")
-        column = 5 if PYPY else 7
-        last_line = '\t   ^' if PYPY else '\t     ^'
-
         self.assertHasErrors(
             sourcePath,
             ["""\
-%s:2:%s: invalid syntax
+%s:2:7: invalid syntax
 \tfoo =
-%s
-""" % (sourcePath, column, last_line)])
+\t     ^
+""" % (sourcePath,)])
 
     def test_nonDefaultFollowsDefaultSyntaxError(self):
         """
@@ -419,8 +364,8 @@ def foo(bar=baz, bax):
     pass
 """
         sourcePath = self.makeTempFile(source)
-        last_line = '       ^\n' if ERROR_HAS_LAST_LINE else ''
-        column = '8:' if ERROR_HAS_COL_NUM else ''
+        last_line = '       ^\n' if sys.version_info >= (3, 2) else ''
+        column = '8:' if sys.version_info >= (3, 2) else ''
         self.assertHasErrors(
             sourcePath,
             ["""\
@@ -438,8 +383,8 @@ def foo(bar=baz, bax):
 foo(bar=baz, bax)
 """
         sourcePath = self.makeTempFile(source)
-        last_line = '            ^\n' if ERROR_HAS_LAST_LINE else ''
-        column = '13:' if ERROR_HAS_COL_NUM or PYPY else ''
+        last_line = '            ^\n' if sys.version_info >= (3, 2) else ''
+        column = '13:' if sys.version_info >= (3, 2) else ''
 
         if sys.version_info >= (3, 5):
             message = 'positional argument follows keyword argument'
@@ -462,15 +407,8 @@ foo(bar=baz, bax)
         sourcePath = self.makeTempFile(r"foo = '\xyz'")
         if ver < (3,):
             decoding_error = "%s: problem decoding source\n" % (sourcePath,)
-        elif PYPY:
-            # pypy3 only
-            decoding_error = """\
-%s:1:6: %s: ('unicodeescape', b'\\\\xyz', 0, 2, 'truncated \\\\xXX escape')
-foo = '\\xyz'
-     ^
-""" % (sourcePath, 'UnicodeDecodeError')
         else:
-            last_line = '      ^\n' if ERROR_HAS_LAST_LINE else ''
+            last_line = '      ^\n' if ver >= (3, 2) else ''
             # Column has been "fixed" since 3.2.4 and 3.3.1
             col = 1 if ver >= (3, 3, 1) or ((3, 2, 4) <= ver < (3, 3)) else 2
             decoding_error = """\
@@ -536,21 +474,8 @@ x = "%s"
 x = "%s"
 """ % SNOWMAN).encode('utf-8')
         sourcePath = self.makeTempFile(source)
-
-        if PYPY and sys.version_info < (3, ):
-            message = ('\'ascii\' codec can\'t decode byte 0xe2 '
-                       'in position 21: ordinal not in range(128)')
-            result = """\
-%s:0:0: %s
-x = "\xe2\x98\x83"
-        ^\n""" % (sourcePath, message)
-
-        else:
-            message = 'problem decoding source'
-            result = "%s: problem decoding source\n" % (sourcePath,)
-
         self.assertHasErrors(
-            sourcePath, [result])
+            sourcePath, ["%s: problem decoding source\n" % (sourcePath,)])
 
     def test_misencodedFileUTF16(self):
         """
@@ -616,8 +541,8 @@ class IntegrationTests(TestCase):
         """
         Launch a subprocess running C{pyflakes}.
 
-        @param paths: Command-line arguments to pass to pyflakes.
-        @param stdin: Text to use as stdin.
+        @param args: Command-line arguments to pass to pyflakes.
+        @param kwargs: Options passed on to C{subprocess.Popen}.
         @return: C{(returncode, stdout, stderr)} of the completed pyflakes
             process.
         """
@@ -628,7 +553,7 @@ class IntegrationTests(TestCase):
         if stdin:
             p = subprocess.Popen(command, env=env, stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            (stdout, stderr) = p.communicate(stdin.encode('ascii'))
+            (stdout, stderr) = p.communicate(stdin)
         else:
             p = subprocess.Popen(command, env=env,
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -676,21 +601,6 @@ class IntegrationTests(TestCase):
         """
         If no arguments are passed to C{pyflakes} then it reads from stdin.
         """
-        d = self.runPyflakes([], stdin='import contraband')
+        d = self.runPyflakes([], stdin='import contraband'.encode('ascii'))
         expected = UnusedImport('<stdin>', Node(1), 'contraband')
         self.assertEqual(d, ("%s%s" % (expected, os.linesep), '', 1))
-
-
-class TestMain(IntegrationTests):
-    """
-    Tests of the pyflakes main function.
-    """
-
-    def runPyflakes(self, paths, stdin=None):
-        try:
-            with SysStreamCapturing(stdin) as capture:
-                main(args=paths)
-        except SystemExit as e:
-            return (capture.output, capture.error, e.code)
-        else:
-            raise RuntimeError('SystemExit not raised')

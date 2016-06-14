@@ -24,35 +24,23 @@ Before running this script, you should:
 
 """
 import glob
-import logging
 import os
 import os.path as osp
 import sys
 
 
-logger = logging.getLogger('boostrap')
-sh = logging.StreamHandler()
-formatter = logging.Formatter(
-    fmt='%(asctime)s.%(msecs)03d::%(levelname)s::%(name)s::%(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S')
-sh.setFormatter(formatter)
-logger.addHandler(sh)
-logger.setLevel(logging.INFO)
-
-
 # --------- bootstrapping HackEdit
-logger.info("Executing HackEdit from source checkout")
+print("Executing HackEdit from source checkout")
 
 # ------ patching sys.path
 DEVPATH = osp.dirname(osp.abspath(__file__))
 sys.path.insert(0, DEVPATH)
 
-logger.info("01. Patched sys.path with %r", DEVPATH)
+print("01. Patched sys.path with %r" % DEVPATH)
 
 # ------ check if python setup.py develop has been executed
 if len(glob.glob('*.egg-info')) == 0:
-    logger.warning('Please run ``(sudo) pip3 install -e .`` to install '
-                   'all dependencies and plugins...')
+    print('Please run ``(sudo) pip3 install -e .`` to install all dependencies and plugins...')
 
 # ------ check PyQt5
 try:
@@ -60,11 +48,11 @@ try:
     from PyQt5.QtCore import QT_VERSION_STR
     from PyQt5.QtGui import QIcon
 except ImportError:
-    logger.exception('02. Failed to import PyQt5, package not found.')
+    print('02. Failed to import PyQt5, package not found.')
     sys.exit(1)
 else:
-    logger.info('02. Imported PyQt5')
-    logger.info('    [Qt %s, PyQt5 %s]' % (QT_VERSION_STR, PYQT_VERSION_STR))
+    print('02. Imported PyQt5')
+    print('    [Qt %s, PyQt5 %s]' % (QT_VERSION_STR, PYQT_VERSION_STR))
     icons_path = os.path.join(sys.prefix, 'share', 'hackedit', 'icons')
     if 'linux' not in sys.platform.lower() and not os.path.exists(icons_path):
         paths = QIcon.themeSearchPaths()
@@ -77,12 +65,12 @@ try:
     from hackedit.main import main
     from hackedit.app import versions
 except ImportError:
-    logger.exception('03. Failed to import hackedit')
+    print('03. Failed to import hackedit')
 else:
     all_versions = versions.get_versions()
-    logger.info("03. Imported HackEdit %s (%s)" % (
+    print("03. Imported HackEdit %s (%s)" % (
         all_versions['hackedit'], versions.get_vcs_revision()))
-    logger.info("    [Python %s %dbits, on %s]" % (
+    print("    [Python %s %dbits, on %s]" % (
         all_versions['python'], all_versions['bitness'],
         all_versions['system']))
     main()

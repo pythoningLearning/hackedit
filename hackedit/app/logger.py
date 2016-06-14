@@ -5,10 +5,29 @@ import glob
 import logging
 import os
 
+import coloredlogs
+
 from hackedit.api import system
 
 #: reference to the file handler
 file_handler = None
+
+
+FIELD_STYLES = dict(
+    asctime=dict(color='green'),
+    hostname=dict(color='magenta'),
+    levelname=dict(color='cyan', bold=True),
+    programname=dict(color='cyan'),
+    name=dict(color='magenta'))
+
+LEVEL_STYLES = dict(
+    debug=dict(color='green'),
+    info=dict(),
+    pyqodedebug=dict(color='cyan'),
+    pyqodedebugcomm=dict(color='magenta'),
+    warning=dict(color='yellow'),
+    error=dict(color='red'),
+    critical=dict(color='red', bold=True))
 
 
 def get_path():
@@ -38,14 +57,16 @@ def setup(level=logging.INFO):
     handlers = [
         # a new log will be created on each new day with 5 days backup
         file_handler,
-        logging.StreamHandler()
     ]
+    fmt = '%(levelname)s %(asctime)s:%(msecs)03d %(name)s[%(process)d]  %(message)s'
+    datefmt = '%H:%M:%S'
     logging.basicConfig(
-        level=logging.WARNING, handlers=handlers,
-        format='%(asctime)s:%(msecs)03d::%(levelname)s::%(process)d::%(name)s'
-        '::%(message)s', datefmt='%H:%M:%S')
-    logging.getLogger().setLevel(level)
-    logging.getLogger('hackedit').info('-' * 80)
+        level=level, handlers=handlers,
+        format=fmt, datefmt=datefmt)
+
+    coloredlogs.install(level=level, fmt=fmt, datefmt=datefmt, reconfigure=False,
+                        field_styles=FIELD_STYLES, level_styles=LEVEL_STYLES)
+    file_handler.setLevel(level)
 
 
 def clear_logs():

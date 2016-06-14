@@ -19,6 +19,8 @@ import shlex
 
 from PyQt5 import QtGui, QtCore, QtWidgets
 
+from pyqode.core.widgets import OutputWindow
+
 from . import (editor, events, plugins, project, shortcuts, widgets, window,
                signals, special_icons, system, utils)
 from hackedit.app import mime_types
@@ -194,7 +196,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
     #: Parameter specifies whether there is an active config or not.
     config_refreshed = QtCore.pyqtSignal(bool)
 
-    def __init__(self, _window, interpreter_manager, run_console=None):
+    def __init__(self, _window, interpreter_manager, run_console=OutputWindow):
         super().__init__(_window)
         self.run_console = run_console
         self.interpreter_manager = interpreter_manager
