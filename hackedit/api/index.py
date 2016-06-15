@@ -198,6 +198,7 @@ def get_symbols(name_filter='', projects=None, file=None):
 
     :return: A generator that yields :class:`Symbol`.
     """
+    file_path = file
     if projects and file:
         raise ValueError('Cannot set both file and projects parameter')
     project_ids = None
@@ -206,13 +207,64 @@ def get_symbols(name_filter='', projects=None, file=None):
     file_id = None
     if file:
         with db.DbHelper() as dbh:
-            file_id = dbh.get_file_by_path(file)[db.COL_FILE_ID]
-    with db.DbHelper() as dbh:
-        for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids,
-                                    name_filter=name_filter):
-            file_item = dbh.get_file_by_id(item[db.COL_SYMBOL_FILE_ID])
-            if item and file_item:
-                yield Symbol(item), File(file_item)
+            file = dbh.get_file_by_path(file)
+            if file:
+                file_id = file[db.COL_FILE_ID]
+            else:
+                file_id = None  # file out of the current project and not in a project that as been indexed.
+    if file_id:
+        with db.DbHelper() as dbh:
+            for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids,
+                                        name_filter=name_filter):
+                file_item = dbh.get_file_by_id(item[db.COL_SYMBOL_FILE_ID])
+                if item and file_item:
+                    yield Symbol(item), File(file_item)
+    else:
+        from hackedit.api import editor
+
+        def flatten(definitions):
+            """
+            Flattens the document structure tree as a simple sequential list.
+            """
+            ret_val = []
+            for de in definitions:
+                ret_val.append(de)
+                for sub_d in de.children:
+                    ret_val.append(sub_d)
+                    ret_val += flatten(sub_d.children)
+            return ret_val
+
+        editor = editor.get_current_editor()
+        if editor:
+            try:
+                outline = editor.modes.get('OutlineMode')
+            except (AttributeError, KeyError):
+                return
+            else:
+                class Obj(object):
+                    pass
+
+                for d in flatten(outline.definitions):
+                    symbol = Obj()
+                    symbol.name = d.name
+                    symbol.id = 0
+                    symbol.line = d.line
+                    symbol.column = d.column
+                    symbol.icon_theme = d.icon[0]
+                    symbol.icon_path = d.icon[1]
+                    symbol.file_id = 0
+                    symbol.project_id = 0
+                    symbol.parent_symbol_id = None
+
+                    file = Obj()
+
+                    file.name = os.path.split(file_path)[1]
+                    file.id = 0
+                    file.path = file_path
+                    file.time_stamp = 0
+                    file.project_id = 0
+
+                    yield symbol, file
 
 
 @_if_indexing_enabled
