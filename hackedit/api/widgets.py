@@ -281,6 +281,8 @@ class RunWidget(QtWidgets.QWidget):
         tab.args = args
         tab.cwd = cwd
         tab.env = env
+        tab.font_name = settings.editor_font()
+        tab.font_size = settings.editor_font_size()
         tab.start_process(pgm, arguments=args, working_dir=cwd, env=env, print_command=True)
         tab.process_finished.connect(self._on_process_finished)
         tab.identifier = pgm
@@ -296,7 +298,10 @@ class RunWidget(QtWidgets.QWidget):
         return tab
 
     def apply_preferences(self):
-        pass
+        for i in range(self.ui.tabWidget.count()):
+            w = self.ui.tabWidget.widget(i)
+            w.font_name = settings.editor_font()
+            w.font_size = settings.editor_font_size()
 
     def closeEvent(self, event):
         for i in reversed(range(self.ui.tabWidget.count())):

@@ -6,6 +6,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.widgets import Terminal as TerminalWidget
 
 from hackedit import api
+from hackedit.app import settings
 
 
 class Terminal(api.plugins.WorkspacePlugin):
@@ -24,3 +25,7 @@ class Terminal(api.plugins.WorkspacePlugin):
 
     def close(self):
         self.widget.close()
+
+    def apply_preferences(self):
+        self.widget.font_name = settings.editor_font()
+        self.widget.font_size = settings.editor_font_size()

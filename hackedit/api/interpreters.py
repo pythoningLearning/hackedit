@@ -387,6 +387,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
     def apply_preferences(self):
         self._action_run.setShortcut(shortcuts.get(
             'Run', _('Run'), 'F9'))
+        if self._run_widget:
+            self._run_widget.apply_preferences()
 
     def _setup_combo_box(self):
         # add a combo box to choose the run configuration to use
@@ -433,6 +435,7 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
 
     def _create_dock(self):
         self._run_widget = window.get_run_widget()
+        self._run_widget.apply_preferences()
 
     def _on_current_config_changed(self, index):
         if self._loading_configs:
