@@ -211,63 +211,65 @@ def get_symbols(name_filter='', projects=None, file=None):
             if file:
                 file_id = file[db.COL_FILE_ID]
             else:
-                file_id = None  # file out of the current project and not in a project that as been indexed.
-    if file_id:
-        with db.DbHelper() as dbh:
-            for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids,
-                                        name_filter=name_filter):
-                file_item = dbh.get_file_by_id(item[db.COL_SYMBOL_FILE_ID])
-                if item and file_item:
-                    yield Symbol(item), File(file_item)
-    else:
-        from hackedit.api import editor
+                # file out of the current project and not in a project that as been indexed.
+                from hackedit.api import editor
 
-        def flatten(definitions):
-            """
-            Flattens the document structure tree as a simple sequential list.
-            """
-            ret_val = []
-            for de in definitions:
-                ret_val.append(de)
-                for sub_d in de.children:
-                    ret_val.append(sub_d)
-                    ret_val += flatten(sub_d.children)
-            return ret_val
+                def flatten(definitions):
+                    """
+                    Flattens the document structure tree as a simple sequential list.
+                    """
+                    ret_val = []
+                    for de in definitions:
+                        ret_val.append(de)
+                        for sub_d in de.children:
+                            ret_val.append(sub_d)
+                            ret_val += flatten(sub_d.children)
+                    return ret_val
 
-        editor = editor.get_current_editor()
-        if editor:
-            try:
-                outline = editor.modes.get('OutlineMode')
-            except (AttributeError, KeyError):
+                editor = editor.get_current_editor()
+                if editor:
+                    try:
+                        outline = editor.modes.get('OutlineMode')
+                    except (AttributeError, KeyError):
+                        return
+                    else:
+                        class Obj(object):
+                            """
+                            Needed to be able to dynamically define the needed attributes... (power of ducj typing)
+                            """
+                            pass
+
+                        for d in flatten(outline.definitions):
+                            symbol = Obj()
+                            symbol.name = d.name
+                            symbol.id = 0
+                            symbol.line = d.line
+                            symbol.column = d.column
+                            symbol.icon_theme = d.icon[0]
+                            symbol.icon_path = d.icon[1]
+                            symbol.file_id = 0
+                            symbol.project_id = 0
+                            symbol.parent_symbol_id = None
+
+                            file = Obj()
+
+                            file.name = os.path.split(file_path)[1]
+                            file.id = 0
+                            file.path = file_path
+                            file.time_stamp = 0
+                            file.project_id = 0
+
+                            yield symbol, file
                 return
-            else:
-                class Obj(object):
-                    """
-                    Needed to be able to dynamically define the needed attributes... (power of ducj typing)
-                    """
-                    pass
 
-                for d in flatten(outline.definitions):
-                    symbol = Obj()
-                    symbol.name = d.name
-                    symbol.id = 0
-                    symbol.line = d.line
-                    symbol.column = d.column
-                    symbol.icon_theme = d.icon[0]
-                    symbol.icon_path = d.icon[1]
-                    symbol.file_id = 0
-                    symbol.project_id = 0
-                    symbol.parent_symbol_id = None
+    with db.DbHelper() as dbh:
+        for item in dbh.get_symbols(file_id=file_id, project_ids=project_ids,
+                                    name_filter=name_filter):
+            file_item = dbh.get_file_by_id(item[db.COL_SYMBOL_FILE_ID])
+            if item and file_item:
+                yield Symbol(item), File(file_item)
 
-                    file = Obj()
 
-                    file.name = os.path.split(file_path)[1]
-                    file.id = 0
-                    file.path = file_path
-                    file.time_stamp = 0
-                    file.project_id = 0
-
-                    yield symbol, file
 
 
 @_if_indexing_enabled
