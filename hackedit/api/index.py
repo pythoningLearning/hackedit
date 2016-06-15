@@ -242,6 +242,9 @@ def get_symbols(name_filter='', projects=None, file=None):
                 return
             else:
                 class Obj(object):
+                    """
+                    Needed to be able to dynamically define the needed attributes... (power of ducj typing)
+                    """
                     pass
 
                 for d in flatten(outline.definitions):
