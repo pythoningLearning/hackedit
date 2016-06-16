@@ -114,23 +114,6 @@ def main():
 
     _logger().info('starting up...')
 
-    try:
-        import hackedit_python
-    except ImportError:
-        _logger().debug('hackedit-python not installed')
-    else:
-        assert hackedit_python
-        # THIS IS A HACK
-        # On Ubuntu 15.04, if we don't do that, future instance will segfault.
-        # and it must be done before showing the splash screen
-        try:
-            from IPython.qt.inprocess import QtInProcessKernelManager
-        except ImportError:
-            _logger().debug('ipython not installed')
-        else:
-            _kernel_manager = QtInProcessKernelManager()
-            _kernel_manager.start_kernel()
-
     # Setup splash screen
     if settings.show_splashscreen():
         from hackedit.app.forms import hackedit_rc

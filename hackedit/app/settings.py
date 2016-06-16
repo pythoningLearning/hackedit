@@ -597,7 +597,7 @@ def color_scheme():
     """
     Gets the color scheme to use.
 
-    The color scheme defines the color of the editor widgets and the IPython plugin colors.
+    The color scheme defines the color of the editor widgets and the Python console.
 
     :return: Color scheme name.
     """

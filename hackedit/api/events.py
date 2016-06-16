@@ -18,45 +18,6 @@ There are 3 level of notification:
 To post an event notifications, create a :class:`Event` instance and pass it
 to the :func:`post` function.
 
-Example::
-
-    def test():
-        '''
-        Test notifications system.
-
-        Paste the following code in the IPython console to test it:
-
-        from hackedit.api.events import test; test()
-        '''
-        from PyQt5 import QtWidgets
-
-        def show_msg_box():
-            QtWidgets.QMessageBox.information(
-                QtWidgets.qApp.activeWindow(), 'Click me',
-                'Bravo! You successfully clicked on an event link')
-
-        action = QtWidgets.QAction(None)
-        action.setText('Click me')
-        action.setObjectName('actionClickHere')
-        action.triggered.connect(show_msg_box)
-
-        post(Event('Information event', 'An information message...',
-                   custom_actions=[action]))
-        post(Event('Warning event', 'A warning message...', level=WARNING))
-        post(Event('Error event', 'An error message...', level=ERROR))
-
-
-    def test_info():
-        post(Event('Information event', 'An information message...'))
-
-
-    def test_warning():
-        post(Event('Warning event', 'A warning message...', level=WARNING))
-
-
-    def test_error():
-        post(Event('Error event', 'An error message...', level=ERROR))
-
 """
 import traceback
 import datetime

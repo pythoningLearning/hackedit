@@ -46,9 +46,6 @@ Example::
         'Example task 3', task_function, callback, args=(100,),
         use_thread=True)
 
-.. note:: You can run this example from within hackedit, just paste this
-          code in the IPython console ;)
-
 """
 from ._shared import _window
 

@@ -27,8 +27,7 @@ the coverage as high as possible.
     This makes the API easier to use, i.e. you don't have to know anything
     about the main window and its underlying implementation. This also opens
     up lots of possibilities: you can use the api from within HackEdit itself,
-    e.g. through the IPython plugin, you can also use the API to script the
-    application and so on...
+    e.g. through the developer console plugin...
 
 """
 from . import editor

@@ -16,7 +16,7 @@ def _window():
     or a WindowPlugin).
 
     If there is no caller object, the active window is used, this allow
-    to hack HackEdit from the IPython console!
+    to hack HackEdit from the developer console!
 
     This is used to simplify the public API: plugins don't need to pass
     the `window` parameter to the public API functions everytime...
