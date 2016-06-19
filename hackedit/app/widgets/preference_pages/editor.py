@@ -1,5 +1,6 @@
 from PyQt5 import QtGui
 from pyqode.core.managers import FileManager
+from pyqode.core.modes import CodeCompletionMode
 
 from hackedit.app import settings
 from hackedit.api.widgets import PreferencePage
@@ -50,7 +51,7 @@ class Editor(PreferencePage):
         settings.set_eol_convention(FileManager.EOL.System)
         settings.set_autodetect_eol(True)
         settings.set_cc_trigger_len(0)
-        settings.set_cc_filter_mode(1)  # subsequence filter mode
+        settings.set_cc_filter_mode(CodeCompletionMode.FILTER_FUZZY)  # subsequence filter mode
         settings.set_cc_show_tooltips(False)
         settings.set_cc_case_sensitive(False)
         settings.set_auto_complete(True)

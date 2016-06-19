@@ -2,12 +2,12 @@
 Provides a simplified access to the common application settings (not specific
 to a plugin).
 """
-import getpass
 import locale
 import logging
 import os
 
 from PyQt5 import QtCore, QtWidgets
+from pyqode.core.modes import CodeCompletionMode
 from pyqode.core.widgets import FileSystemContextMenu
 
 
@@ -497,7 +497,7 @@ def set_cc_trigger_len(val):
 
 
 def cc_filter_mode():
-    return int(_SETTINGS.value('editor/cc_filter_mode', 1))
+    return int(_SETTINGS.value('editor/cc_filter_mode', CodeCompletionMode.FILTER_FUZZY))
 
 
 def set_cc_filter_mode(val):
