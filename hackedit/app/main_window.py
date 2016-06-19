@@ -327,12 +327,21 @@ class MainWindow(QtWidgets.QMainWindow):
         :return The dock widget instance that was added to the window.
         """
         _logger().debug('adding dock widget %r to %r', title, self)
+
+        class DockWidget(QtWidgets.QDockWidget):
+            """
+            Forces focus on the child widget when the dock is shown.
+            """
+            def showEvent(self, ev):
+                super().showEvent(ev)
+                self.widget().setFocus()
+
         if area is None:
             area = QtCore.Qt.BottomDockWidgetArea
         if system.PLASMA_DESKTOP:
             title = title.replace('&', '')
             title = title[:-1] + '&' + title[-1]
-        dock = QtWidgets.QDockWidget(title, self)
+        dock = DockWidget(title, self)
         dock.setShortcutEnabled(False)
         dock.setObjectName('dock%s' % title)
         dock.setWidget(widget)
