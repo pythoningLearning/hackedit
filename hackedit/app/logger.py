@@ -18,7 +18,7 @@ FIELD_STYLES = dict(
     hostname=dict(color='magenta'),
     levelname=dict(color='cyan', bold=True),
     programname=dict(color='cyan'),
-    name=dict(color='magenta'))
+    name=dict(color='blue'))
 
 LEVEL_STYLES = dict(
     debug=dict(color='green'),
