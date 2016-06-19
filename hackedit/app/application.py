@@ -493,7 +493,8 @@ class Application(QtCore.QObject):
         if self.show_windows:
             window.raise_()
             window.show()
-        window.current_tab.setFocus()
+        if window.current_tab:
+            window.current_tab.setFocus()
         self._qapp.setActiveWindow(window)
 
     def _add_new_window(self, path, workspace):
