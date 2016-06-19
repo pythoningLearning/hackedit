@@ -294,6 +294,13 @@ class LocatorWidget(QtWidgets.QFrame):
                 ret = []
                 try:
                     for i, value in enumerate(generator):
+                        if query_fct == index.get_files:
+                            if not os.path.exists(value.path):
+                                continue
+                        elif query_fct == index.get_symbols:
+                            s, f = value
+                            if not os.path.exists(f.path):
+                                continue
                         ret.append(value)
                         if i > LIMIT:
                             break
