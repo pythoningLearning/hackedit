@@ -373,7 +373,7 @@ def set_indexing_enabled(value):
 # Editor settings
 # -----------------------------------------------------------------------------
 def margin_position():
-    return int(_SETTINGS.value('editor/margin_position', 79))
+    return int(_SETTINGS.value('editor/margin_position', 119))
 
 
 def set_margin_position(val):
@@ -497,7 +497,7 @@ def set_cc_trigger_len(val):
 
 
 def cc_filter_mode():
-    return int(_SETTINGS.value('editor/cc_filter_mode', 0))
+    return int(_SETTINGS.value('editor/cc_filter_mode', 1))
 
 
 def set_cc_filter_mode(val):

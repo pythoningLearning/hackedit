@@ -40,7 +40,7 @@ class EditorDisplay(PreferencePage):
     def restore_defaults():
         settings.set_text_wrapping(False)
         settings.set_right_margin(True)
-        settings.set_margin_position(79)
+        settings.set_margin_position(119)
         settings.set_center_on_scroll(True)
         settings.set_highlight_caret_scope(False)
         settings.set_show_line_numbers_panel(True)
