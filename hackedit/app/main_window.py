@@ -382,7 +382,7 @@ class MainWindow(QtWidgets.QMainWindow):
         :param line: column to go to (optional).
         """
         path = os.path.normpath(path)
-        if not os.path.exists(path):
+        if not os.path.exists(path) or os.path.isdir(path):
             return None
         self.about_to_open_tab.emit(path)
         color_scheme = settings.color_scheme()
