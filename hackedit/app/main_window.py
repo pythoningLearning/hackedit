@@ -1145,10 +1145,10 @@ class MainWindow(QtWidgets.QMainWindow):
             _logger().debug('no ExtendedSelectionMode on widget %r', editor)
         else:
             m.action_select_word.setShortcut(shortcuts.get(
-                'Select word', _('Select word'), 'Ctrl+W'))
+                'Select word', _('Select word'), 'Ctrl+Alt+J'))
             m.action_select_extended_word.setShortcut(shortcuts.get(
                 'Select extended word', _('Select extended word'),
-                'Ctrl+Shift+W'))
+                'Ctrl+Shift+J'))
             m.action_select_matched.setShortcut(shortcuts.get(
                 'Matched select', _('Matched select'), 'Ctrl+E'))
             m.action_select_line.setShortcut(shortcuts.get(
