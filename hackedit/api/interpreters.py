@@ -247,16 +247,15 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         else:
             # not in a project, use active project interpreter.
             base_path = project.get_current_project()
-        script = os.path.abspath(os.path.join(base_path, cfg['script']))
-        cwd = os.path.abspath(os.path.join(base_path, cfg['working_dir']))
+        script = normpath(os.path.abspath(os.path.join(base_path, cfg['script'])))
+        cwd = normpath(os.path.abspath(os.path.join(base_path, cfg['working_dir'])))
         args = []
         if cfg['interpreter_options']:
             args += cfg['interpreter_options']
         args += [script]
         if cfg['script_parameters']:
             args += cfg['script_parameters']
-        interpreter = self.interpreter_manager.get_project_interpreter(
-            base_path)
+        interpreter = os.path.normpath(self.interpreter_manager.get_project_interpreter(base_path))
 
         try:
             external_terminal = cfg['run_in_external_terminal']
@@ -780,10 +779,10 @@ def load_configs(path):
     else:
         configs = sorted(configs, key=lambda cfg: cfg['name'])
         for cfg in configs:
-            cfg['script'] = os.path.abspath(
-                os.path.join(base_path, cfg['script']))
-            cfg['working_dir'] = os.path.abspath(
-                os.path.join(base_path, cfg['working_dir']))
+            cfg['script'] = normpath(os.path.abspath(
+                os.path.join(base_path, cfg['script'])))
+            cfg['working_dir'] = normpath(os.path.abspath(
+                os.path.join(base_path, cfg['working_dir'])))
     return configs
 
 
@@ -798,8 +797,8 @@ def save_configs(path, configs):
     # normalise paths; relative paths will work cross-platform
     try:
         for cfg in configs:
-            cfg['script'] = os.path.relpath(cfg['script'], base_path)
-            cfg['working_dir'] = os.path.relpath(cfg['working_dir'], base_path)
+            cfg['script'] = normpath(os.path.relpath(cfg['script'], base_path))
+            cfg['working_dir'] = normpath(os.path.relpath(cfg['working_dir'], base_path))
     except ValueError:
         # invalid config
         _logger().exception('failed normalise path')
@@ -835,6 +834,13 @@ def create_default_config(path):
             'interpreter_options': [],
             'environment': {}
         }
+
+
+def normpath(path):
+    path = os.path.normpath(path)
+    path = path.replace('\\', '/')
+    return path
+
 
 
 def _logger():
