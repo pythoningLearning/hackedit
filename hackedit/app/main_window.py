@@ -383,6 +383,8 @@ class MainWindow(QtWidgets.QMainWindow):
         :param line: line to go to (optional).
         :param line: column to go to (optional).
         """
+        if path is None:
+            return
         path = os.path.normpath(path)
         if not os.path.exists(path) or os.path.isdir(path):
             return None
