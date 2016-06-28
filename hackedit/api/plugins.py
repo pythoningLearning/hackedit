@@ -251,3 +251,14 @@ def get_plugin_instance(plugin_class):
     :param plugin_class: Plugin class
     """
     return _window().get_plugin_instance(plugin_class)
+
+
+def get_script_runner():
+    """
+    Gets the script runner plugin instance if any otherwise returns None.
+
+    :rtype: hackedit.api.interpreters.ScriptRunnerPlugin
+    """
+    from .interpreters import ScriptRunnerPlugin
+
+    return _window().get_plugin_instance(ScriptRunnerPlugin)
