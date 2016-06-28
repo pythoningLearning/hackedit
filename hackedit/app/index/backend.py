@@ -189,7 +189,7 @@ def _recursive_index_dirs(task_handle, directory, ignore_patterns, project_dir, 
     isfile = os.path.isfile
     try:
         dir_paths = listdir(directory)
-    except FileNotFoundError:
+    except OSError:
         return
     for path in dir_paths:
         try:
