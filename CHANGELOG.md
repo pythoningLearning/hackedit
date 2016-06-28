@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/HackEdit/hackedit/tree/HEAD)
-
-[Full Changelog](https://github.com/HackEdit/hackedit/compare/1.0a1...HEAD)
+## [1.0a2](https://github.com/HackEdit/hackedit/tree/1.0a2) (2016-06-28)
+[Full Changelog](https://github.com/HackEdit/hackedit/compare/1.0a1...1.0a2)
 
 **Implemented enhancements:**
 
@@ -11,10 +10,17 @@
 - Add possibility to translate the program into other languages [\#44](https://github.com/HackEdit/hackedit/issues/44)
 - Add option to change used encoding via menu [\#42](https://github.com/HackEdit/hackedit/issues/42)
 - Indexing overhaul [\#26](https://github.com/HackEdit/hackedit/issues/26)
+- Add support for ANSI Escape Codes [\#83](https://github.com/HackEdit/hackedit/pull/83) ([ColinDuquesnoy](https://github.com/ColinDuquesnoy))
 
 **Fixed bugs:**
 
+- AttributeError: 'WelcomeWindow' object has no attribute 'projects' [\#12](https://github.com/HackEdit/hackedit/issues/12)
+- Task \<Indexing project: colin\> failed [\#87](https://github.com/HackEdit/hackedit/issues/87)
+- \[Unhandled exception\]  Terminal: UnicodeDecodeError: 'utf-8' codec can't decode byte 0x82  [\#84](https://github.com/HackEdit/hackedit/issues/84)
+- Exception when browsing symbols of a file that has not been indexed yet [\#82](https://github.com/HackEdit/hackedit/issues/82)
+- Dock widget width not correctly restored if window was maximized [\#81](https://github.com/HackEdit/hackedit/issues/81)
 - TypeError: argument of type 'NoneType' is not iterable [\#77](https://github.com/HackEdit/hackedit/issues/77)
+- Failed to open file: D:\tests\1\PRG1.c [\#76](https://github.com/HackEdit/hackedit/issues/76)
 - Building from git seems broken [\#75](https://github.com/HackEdit/hackedit/issues/75)
 - RuntimeError: wrapped C/C++ object of type HtmlPreviewWid [\#73](https://github.com/HackEdit/hackedit/issues/73)
 - Browser button not working [\#71](https://github.com/HackEdit/hackedit/issues/71)
@@ -24,13 +30,13 @@
 - KeyError: 'results' [\#27](https://github.com/HackEdit/hackedit/issues/27)
 - TypeError: 'NoneType' object is not subscriptable [\#14](https://github.com/HackEdit/hackedit/issues/14)
 - File system / project view: New -\> Template not updated after template sync [\#13](https://github.com/HackEdit/hackedit/issues/13)
-- AttributeError: 'WelcomeWindow' object has no attribute 'projects' [\#12](https://github.com/HackEdit/hackedit/issues/12)
 - Syntax highlighting for other languages, especially C/C [\#8](https://github.com/HackEdit/hackedit/issues/8)
 - AttributeError: 'WizardNew' object has no attribute 'is\_valid' [\#6](https://github.com/HackEdit/hackedit/issues/6)
 - AttributeError: 'Application' object has no attribute '\_last\_window' [\#4](https://github.com/HackEdit/hackedit/issues/4)
 
 **Closed issues:**
 
+- \[Unhandled exception\]  PermissionError: \[WinError 5\] Accès refusé: 'D:/ProjGTerm [\#86](https://github.com/HackEdit/hackedit/issues/86)
 - Could not find a version that satisfies the requirement hackedit \(from versions: 1.0a1\) [\#78](https://github.com/HackEdit/hackedit/issues/78)
 - Getting more done in GitHub with ZenHub [\#50](https://github.com/HackEdit/hackedit/issues/50)
 - CI setup [\#39](https://github.com/HackEdit/hackedit/issues/39)
