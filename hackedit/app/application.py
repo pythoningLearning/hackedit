@@ -368,7 +368,7 @@ class Application(QtCore.QObject):
                     title = _('Failed to activate plugin %r') % plugin_name
                     tb = traceback.format_exc()
                     desc = _('An error has occured during the activation of '
-                             'the plugin...\n\nError=%r') % tb.splitlines()[-1]
+                             'the plugin...\n\nError=%s') % tb
                     event = api.events.PluginLoadErrorEvent(title, desc, e)
                     event.level = api.events.WARNING
                     win.notifications.add(event, force_show=True)
