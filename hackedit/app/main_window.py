@@ -62,6 +62,8 @@ class MainWindow(QtWidgets.QMainWindow):
     about_to_open_tab = QtCore.pyqtSignal(str)
     document_saved = QtCore.pyqtSignal(str, str)
     state_restored = QtCore.pyqtSignal()
+    file_renamed = QtCore.pyqtSignal(str, str)
+    file_deleted = QtCore.pyqtSignal(str)
 
     @property
     def task_manager(self):

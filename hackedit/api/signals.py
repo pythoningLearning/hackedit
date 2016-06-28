@@ -93,6 +93,18 @@ DOCUMENT_SAVED = 'document_saved'
 PROJECT_FILES_AVAILABLE = 'project_files_available'
 
 
+#: Signal emitted when a project file has been renamed
+#: Parameters:
+#:     - old_name (str)
+#:     - new_name (str)
+FILE_RENAMED = 'file_renamed'
+
+#: Signal emitted when a project file has been removed
+#: Parameters:
+#:     - file path
+FILE_DELETED = 'file_deleted'
+
+
 #: The list of valid signals.
 SIGNALS = [
     STATE_RESTORED,
@@ -106,7 +118,8 @@ SIGNALS = [
     CURRENT_PROJECT_CHANGED,
     DOCUMENT_SAVED,
     PROJECT_FILES_AVAILABLE,
-
+    FILE_RENAMED,
+    FILE_DELETED
 ]
 
 
