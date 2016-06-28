@@ -6,7 +6,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqode.core.widgets import Terminal as TerminalWidget
 
 from hackedit import api
-from hackedit.app import settings
+from hackedit.app import settings, generic_pyqode_server
 
 
 class Terminal(api.plugins.WorkspacePlugin):
@@ -16,7 +16,7 @@ class Terminal(api.plugins.WorkspacePlugin):
     def activate(self):
         self.widget = TerminalWidget(parent=api.window.get_main_window())
         dock = api.window.add_dock_widget(self.widget, _('Terminal'), QtGui.QIcon.fromTheme('utilities-terminal'),
-                                          QtCore.Qt.BottomDockWidgetArea)
+                                          QtCore.Qt.BottomDockWidgetArea, backend=generic_pyqode_server.__file__)
         dock.hide()
         dock.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
                            QtWidgets.QSizePolicy.Expanding)
