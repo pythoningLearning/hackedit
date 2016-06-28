@@ -14,9 +14,9 @@ class Terminal(api.plugins.WorkspacePlugin):
     Adds a terminal widget that let your run commands from within the IDE.
     """
     def activate(self):
-        self.widget = TerminalWidget(parent=api.window.get_main_window())
+        self.widget = TerminalWidget(parent=api.window.get_main_window(), backend=generic_pyqode_server.__file__)
         dock = api.window.add_dock_widget(self.widget, _('Terminal'), QtGui.QIcon.fromTheme('utilities-terminal'),
-                                          QtCore.Qt.BottomDockWidgetArea, backend=generic_pyqode_server.__file__)
+                                          QtCore.Qt.BottomDockWidgetArea)
         dock.hide()
         dock.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
                            QtWidgets.QSizePolicy.Expanding)
