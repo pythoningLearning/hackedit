@@ -218,6 +218,8 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
                 _('%s: no interpreter found') % name.capitalize(),
                 level=events.WARNING)
             events.post(ev)
+        signals.connect_slot(signals.FILE_DELETED, self._on_file_deleted)
+        signals.connect_slot(signals.FILE_RENAMED, self._on_file_renamed)
 
     def enable_run(self):
         """
@@ -442,6 +444,36 @@ class ScriptRunnerPlugin(plugins.WorkspacePlugin):
         action = self._configs_combo_box.itemData(index)
         action.setChecked(True)
         self._on_config_action_triggered(action)
+
+    def _on_file_deleted(self, path):
+        path = os.path.normcase(os.path.normpath(path))
+        for proj in project.get_projects():
+            configs = load_configs(proj)
+            valid_configs = []
+            for cfg in configs:
+                cfg_path = os.path.normcase(os.path.normpath(cfg['script']))
+                if cfg_path == path:
+                    continue
+                valid_configs.append(cfg)
+            save_configs(proj, valid_configs)
+        self.refresh()
+
+    def _on_file_renamed(self, old_path, path):
+        old_path = os.path.normcase(os.path.normpath(old_path))
+        path = os.path.normcase(os.path.normpath(path))
+        for proj in project.get_projects():
+            configs = load_configs(proj)
+            valid_configs = []
+            for cfg in configs:
+                cfg_path = os.path.normcase(os.path.normpath(cfg['script']))
+                if cfg_path == old_path:
+                    new_path = path.replace('\\', '/')
+                    cfg['script'] = new_path
+                    cfg['name'] = os.path.splitext(os.path.split(path)[1])[0]
+                    cfg['working_dir'] = os.path.dirname(new_path)
+                valid_configs.append(cfg)
+            save_configs(proj, valid_configs)
+        self.refresh()
 
 
 class _DlgScriptRunConfiguration(QtWidgets.QDialog):

@@ -688,7 +688,6 @@ class ProjectExplorer(QtCore.QObject):
             self.main_window.file_renamed.emit(old_path, new_path)
         api.tasks.start('Update renamed files index', rename_files, None,
                         args=(renamed_files,))
-        # emit file renamed signal
 
     def _on_files_deleted(self, deleted_files):
         for path in deleted_files:
