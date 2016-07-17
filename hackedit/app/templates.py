@@ -85,8 +85,6 @@ def create(template, dest_dir, answers):
                 _logger().exception('failed to open file: %r', src)
             if encoding != 'binary':
                 content = subsitute_vars(content)
-            if file == 'btpad_btn_img_0.png':
-                print(len(content), encoding)
             try:
                 open_file(dst, encoding, to_write=content)
             except PermissionError:

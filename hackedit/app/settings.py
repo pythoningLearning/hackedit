@@ -2,6 +2,7 @@
 Provides a simplified access to the common application settings (not specific
 to a plugin).
 """
+import json
 import locale
 import logging
 import os
@@ -682,3 +683,20 @@ def set_last_open_dir(value):
     Sets the directory used by the last call to QFileDialog.
     """
     _SETTINGS.setValue('_cache/last_open_dir', value)
+
+
+# Compiler configurations
+def load_compiler_configurations():
+    from hackedit.api.compiler import CompilerConfiguration
+    ret_val = {}
+    configs_map = json.loads(_SETTINGS.value('build_and_run/compiler_configs', '{}'))
+    for k, v in configs_map.items():
+        ret_val[k] = CompilerConfiguration().from_json(v)
+    return ret_val
+
+
+def save_compiler_configurations(configs_map):
+    data = {}
+    for k, v in configs_map.items():
+        data[k] = v.to_json()
+    _SETTINGS.setValue('build_and_run/compiler_configs', json.dumps(data))

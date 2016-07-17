@@ -38,7 +38,6 @@ class Indexing(PreferencePage):
         if enabled and enabled != settings.indexing_enabled():
             self.app.flg_force_indexing = True
         settings.set_indexing_enabled(enabled)
-        print(self.app.flg_force_indexing)
 
     def _rm_location(self):
         path = self.ui.list_projects.currentItem().text()

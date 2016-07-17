@@ -44,14 +44,44 @@ class PluginManager:
         self.editor_plugins = []
         #: The list of template provider plugins
         self.template_providers = []
+        #: compiler plugins
+        self.compiler_plugins = {}
+
         #: the map of plugin which failed to load with their traceback
         self.failed_to_load = {}
+
         self._load_template_provider_plugins()
         self._load_editor_plugins()
         self._load_preferences_page_plugins()
         self._load_workspace_plugins()
+        self._load_compiler_plugins()
         FileIconProvider.load_plugins()
         SplittableCodeEditTabWidget.icon_provider_klass = FileIconProvider
+
+    def _load_compiler_plugins(self):
+        """
+        Loads workspace plugins (plugins that are tied to a specific worskpace)
+        """
+        _logger().info('loading compiler plugins')
+        entrypoints = list(pkg_resources.iter_entry_points(plugins.CompilerPlugin.ENTRYPOINT))
+        for entrypoint in entrypoints:
+            _logger().info('  - loading plugin: %s', entrypoint)
+            try:
+                plugin_instance = entrypoint.load()()
+            except Exception as e:
+                _logger().exception('Failed to load compiler plugin')
+                name = str(entrypoint).split('=')[0].strip()
+                self.failed_to_load[name] = traceback.format_exc(), e
+            else:
+                try:
+                    compiler = plugin_instance.get_compiler()
+                except NotImplementedError as e:
+                    _logger().warning('Failed to load compiler plugin, get_compiler not implemented')
+                    name = str(entrypoint).split('=')[0].strip()
+                    self.failed_to_load[name] = traceback.format_exc(), e
+                else:
+                    self.compiler_plugins[compiler.type_name] = plugin_instance
+        _logger().info('available compiler plugins: %r', self.compiler_plugins)
 
     def _load_workspace_plugins(self):
         """

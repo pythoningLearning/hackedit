@@ -24,6 +24,18 @@ def add_mimetype_extension(mimetype, extension):
     mime_types.set_extensions(mimetype, exts)
 
 
+def remove_mimetype_extension(mimetype, extension):
+    exts = mime_types.get_extensions(mimetype)
+    try:
+        exts.remove(extension)
+    except ValueError:
+        return
+    else:
+        exts = list(set(exts))
+        print(exts, mimetype)
+        mime_types.set_extensions(mimetype, exts)
+
+
 def get_mimetype_filter(mtype):
     """
     Gets the open file dialog filter for a given mimetype.
@@ -168,3 +180,33 @@ def is_ignored_path(path, ignore_patterns=None):
         if part and ignore(part):
             return True
     return False
+
+
+def add_environment_var_to_table(table):
+    assert isinstance(table, QtWidgets.QTableWidget)
+    key, ok = QtWidgets.QInputDialog.getText(table, "Add environment variable", "Key:")
+    if not ok:
+        return
+    value, ok = QtWidgets.QInputDialog.getText(table, "Add environment variable", "Value:")
+    if not ok:
+        return
+    index = table.rowCount()
+    table.insertRow(index)
+    key_item = QtWidgets.QTableWidgetItem()
+    key_item.setText(key)
+    value_item = QtWidgets.QTableWidgetItem()
+    value_item.setText(value)
+    table.setItem(index, 0, key_item)
+    table.setItem(index, 1, value_item)
+    table.selectRow(index)
+
+
+def remove_selected_environment_var_from_table(table):
+    assert isinstance(table, QtWidgets.QTableWidget)
+    row = table.currentRow()
+    if row == -1:
+        return
+    table.removeRow(row)
+    row -= 1
+    if row != -1:
+        table.selectRow(row)
