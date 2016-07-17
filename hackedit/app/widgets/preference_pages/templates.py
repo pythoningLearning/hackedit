@@ -49,7 +49,6 @@ class Templates(PreferencePage):
 
     def update_source_templates(self, item):
         if item is None:
-            self.ui.edit_source_path.clear()
             self.ui.list_templates.clear()
             self.ui.group_details.setDisabled(True)
             self.ui.bt_rm_source.setDisabled(True)
