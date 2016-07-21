@@ -363,24 +363,23 @@ class Compiler:
         if not args:
             raise ValueError('args cannot be null')
 
-        original_path = os.environ['PATH']
+        original_env = os.environ.copy()
 
         # make sure to add quotes arround a path that contains spaces
         pgm = self.config.compiler
         if ' ' in pgm:
             pgm = '"%s"' % pgm
 
+        if self.print_output:
+            print(' '.join([pgm] + args))
+
         p_env = self.setup_environment()
-        os.environ['PATH'] = p_env.value('PATH')
+        for k in p_env.keys():
+            os.environ[k] = p_env.value(k)
         process = QtCore.QProcess()
         process.setWorkingDirectory(self.working_dir)
         process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
         process.setProcessEnvironment(p_env)
-
-        command = ' '.join([pgm] + args)
-        if self.print_output:
-            print(command)
-
         process.start(pgm, args)
         process.waitForFinished()
 
@@ -391,7 +390,7 @@ class Compiler:
             status = self._CRASH_CODE
 
         # get compiler output
-        raw_output = process.readAllStandardOutput().data()
+        raw_output = process.readAll().data()
         try:
             output = raw_output.decode(locale.getpreferredencoding()).replace('\r', '')
         except UnicodeDecodeError:
@@ -405,9 +404,9 @@ class Compiler:
             output = process.errorString()
 
         if self.print_output:
-            print('\n'.join([l for l in output.splitlines() if l]))
+            print(output)
 
-        os.environ['PATH'] = original_path
+        os.environ = original_env
 
         return status, output
 
