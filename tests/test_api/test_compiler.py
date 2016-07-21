@@ -247,7 +247,7 @@ class TestCompilerBaseClass:
 
     def test_run_compiler_command(self):
         my_compiler.config.compiler = 'python'
-        ret, output = my_compiler.run_compiler_command(['-c', '"import sys; print(sys.executable)"'])
+        ret, output = my_compiler.run_compiler_command(['--version'])
         assert ret == 0
         assert output != ''
         with pytest.raises(ValueError):

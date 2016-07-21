@@ -1,6 +1,7 @@
 """
 API modules that provides the base classes for adding support for a new compiler in hackedit.
 """
+import sys
 import copy
 import json
 import locale
@@ -363,8 +364,6 @@ class Compiler:
         if not args:
             raise ValueError('args cannot be null')
 
-        original_env = os.environ.copy()
-
         # make sure to add quotes arround a path that contains spaces
         pgm = self.config.compiler
         if ' ' in pgm:
@@ -373,15 +372,12 @@ class Compiler:
         if self.print_output:
             print(' '.join([pgm] + args))
 
-        p_env = self.setup_environment()
-        for k in p_env.keys():
-            os.environ[k] = p_env.value(k)
         process = QtCore.QProcess()
         process.setWorkingDirectory(self.working_dir)
+        process.setProcessEnvironment(self.setup_environment())
         process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
-        process.setProcessEnvironment(p_env)
         process.start(pgm, args)
-        process.waitForFinished()
+        process.waitForFinished(sys.maxsize)
 
         # determine exit code (handle crashed processes)
         if process.exitStatus() != process.Crashed:
@@ -390,7 +386,7 @@ class Compiler:
             status = self._CRASH_CODE
 
         # get compiler output
-        raw_output = process.readAll().data()
+        raw_output = process.readAllStandardOutput().data()
         try:
             output = raw_output.decode(locale.getpreferredencoding()).replace('\r', '')
         except UnicodeDecodeError:
@@ -402,8 +398,6 @@ class Compiler:
 
         if self.print_output:
             print(output)
-
-        os.environ = original_env
 
         return status, output
 
