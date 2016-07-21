@@ -5,4 +5,4 @@ import os
 os.environ['QT_API'] = 'pyqt5'
 
 
-__version__ = '1.0a3.dev1'
+__version__ = '1.0a3.dev2'

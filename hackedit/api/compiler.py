@@ -78,10 +78,7 @@ class CompilerConfigurationWidget(QtWidgets.QWidget):
     configuration (all settings except the compiler directory and the environment variables).
     """
     def is_dirty(self):
-        try:
-            return self.original_config.to_json() != self.config.to_json()
-        except AttributeError:
-            return False
+        return self.original_config.to_json() != self.get_config().to_json()
 
     def set_config(self, config):
         """
@@ -148,36 +145,36 @@ class GenericCompilerCongigWidget(CompilerConfigurationWidget):
                 self.config.compiler_library_path.append(path)
         return super().get_config()
 
-    def _add_abs_include_path(self):
+    def _add_abs_include_path(self):  # pragma: no cover
         path = QtWidgets.QFileDialog.getExistingDirectory(
             self, _('Select an include path'), os.path.expanduser('~'))
         if path:
             self.ui.list_include_paths.addItem(os.path.normpath(path))
 
-    def _add_rel_include_path(self):
+    def _add_rel_include_path(self):  # pragma: no cover
         path, status = QtWidgets.QInputDialog.getText(
             self, _('Add relative include path'), 'Path:')
         if status:
             self.ui.list_include_paths.addItem(path)
 
-    def _rm_include_path(self):
+    def _rm_include_path(self):  # pragma: no cover
         current = self.ui.list_include_paths.currentRow()
         if current != -1:
             self.ui.list_include_paths.takeItem(current)
 
-    def _add_abs_lib_path(self):
+    def _add_abs_lib_path(self):  # pragma: no cover
         path = QtWidgets.QFileDialog.getExistingDirectory(
             self, _('Select a library path'), os.path.expanduser('~'))
         if path:
             self.ui.list_lib_paths.addItem(os.path.normpath(path))
 
-    def _add_rel_lib_path(self):
+    def _add_rel_lib_path(self):  # pragma: no cover
         path, status = QtWidgets.QInputDialog.getText(
             self, _('Add relative library path'), 'Path:')
         if status:
             self.ui.list_lib_paths.addItem(path)
 
-    def _rm_library_path(self):
+    def _rm_library_path(self):  # pragma: no cover
         current = self.ui.list_lib_paths.currentRow()
         if current != -1:
             self.ui.list_lib_paths.takeItem(current)
@@ -192,8 +189,7 @@ class CompilerOutputParser:
     """
     # Gcc output pattern
     OUTPUT_PATTERN_GCC = re.compile(
-        r'^(?P<filename>[\w\.\-_\s]*):(?P<line>\s*\d*):(?P<level>[\w\s]*):'
-        r'(?P<msg>.*)$')
+        r'^(?P<filename>[\w\.\-_\s/]*):(?P<line>\s*\d*):(?P<column>\s*\d*)?:?(?P<level>[\w\s]*):(?P<msg>.*)$')
 
     # MSVC output pattern
     OUTPUT_PATTERN_MSVC = re.compile(
@@ -208,18 +204,19 @@ class CompilerOutputParser:
             patterns = CompilerOutputParser.OUTPUT_PATTERNS
         self.patterns = patterns
 
-    def parse(self, output, working_dir, use_dicts=False):
+    def parse(self, output, working_dir, use_tuples=False):
         """
         Parses compiler command output.
 
         :param output: compiler output string
         :param working_dir: working directory of the compiler, used to find the absolute path of relative file paths.
-        :param use_dicts: True to return a list of dict instead of a list of from pyqode.core.modes.CheckerMessage.
-
+        :param use_tuples: True to return a list of tuple instead of a list of
+            :class:`pyqode.core.modes.CheckerMessage`
         :returns: a list of messages.
         """
-        if not use_dicts:
-            from pyqode.core.modes import CheckerMessage, CheckerMessages
+        from pyqode.core.modes import CheckerMessages
+        if not use_tuples:
+            from pyqode.core.modes import CheckerMessage
         issues = []
         for line in output.splitlines():
             if not line:
@@ -232,30 +229,29 @@ class CompilerOutputParser:
                     except IndexError:
                         filename = ''
                     try:
-                        line = int(m.group('line')) - 1
+                        line_nbr = int(m.group('line')) - 1
                     except IndexError:
-                        line = 0
+                        line_nbr = 0
                     try:
                         level = m.group('level')
                     except IndexError:
                         level = 'warning'
-                    message = m.group('msg')
-                    if 'warning' in level.lower():
+                    try:
+                        message = m.group('msg')
+                    except IndexError:
+                        continue  # a message capture group is mandatory
+                    if 'warning' in level.lower() or 'attention' in level.lower():
                         level = CheckerMessages.WARNING
                     else:
                         level = CheckerMessages.ERROR
                     # make relative path absolute
+                    path = '-'
                     if filename:
-                        path = os.path.abspath(os.path.join(working_dir, filename))
+                        path = os.path.abspath(os.path.join(os.path.expanduser(working_dir), filename))
+                    if use_tuples:
+                        msg = (message, level, line_nbr, 0, None, None, path)
                     else:
-                        path = '-'
-                    if use_dicts:
-                        msg = (message, level, int(line),
-                               0, None, None, path)
-                    else:
-                        msg = CheckerMessage(
-                            message, level, int(line),
-                            path=path)
+                        msg = CheckerMessage(message, level, line_nbr, path=path)
                     issues.append(msg)
                     break
         return issues
@@ -285,22 +281,30 @@ class Compiler:
         - setup_environemt: setup a QProcessEnvironement based on the compiler config
         -
     """
+    _CRASH_CODE = 139
 
-    CRASH_CODE = 139
+    #: associated mimetype
+    mimetypes = []
 
-    # associated mimetype
-    mimetype = ''
-
-    # type name of the compiler
+    #: type name of the compiler
     type_name = ''
 
     def __init__(self, config, working_dir=os.path.expanduser('~'), print_output=True):
+        """
+        :param config: the associated compiler configuration
+        :param working_dir: working directory used to run the compiler process.
+        :param print_output: True to print the compiler output to stdout.
+        """
         assert isinstance(config, CompilerConfiguration)
         self.print_output = print_output
         self.config = config
         self.working_dir = working_dir
 
     def get_full_compiler_path(self):
+        """
+        Resolves the full compiler path using the PATH environment variable if the compiler command is not an
+        absolute path.
+        """
         if os.path.exists(self.config.compiler):
             return self.config.compiler
         else:
@@ -315,6 +319,10 @@ class Compiler:
             return path
 
     def make_destination_folder(self, destination):
+        """
+        Creates the destination folder, destination may be a relative path (relative to the compiler's working dir).
+        """
+        destination = os.path.expanduser(destination)
         if os.path.isabs(destination):
             abs_dest = destination
         else:
@@ -322,27 +330,28 @@ class Compiler:
         if not os.path.exists(abs_dest):
             os.makedirs(abs_dest)
 
-    def check_mtime_rel(self, rel_input_path, rel_output_path):
+    def is_outdated(self, source, destination):
         """
-        Same as with check_mtime but allow to use relative file paths (relative to the working directory).
-        """
-        return self.check_mtime(os.path.join(self.working_dir, rel_input_path),
-                                os.path.join(self.working_dir, rel_output_path))
-
-    def check_mtime(self, input_path, output_path):
-        """
-        Check file modification and returns whether the input is up to date or not.
-
-        Returns True if the input file is outdated and need to be recompiled, otherwise returns false.
+        Checks if the destination is outdated (i.e. the source is newer than the destination).
         """
         try:
-            return os.path.getmtime(input_path) > os.path.getmtime(output_path)
-        except OSError:
-            return True
+            if not os.path.isabs(source):
+                source = os.path.join(self.working_dir, source)
+            if not os.path.isabs(destination):
+                destination = os.path.join(self.working_dir, destination)
+            try:
+                return os.path.getmtime(source) > os.path.getmtime(destination)
+            except OSError:
+                return True
+        except (TypeError, AttributeError):
+            raise ValueError('Invalid source and destinations')
 
-    def run_compiler(self, args):
+    def run_compiler_command(self, args):
         """
         Run a compiler command in a subprocess and returns its return code and output.
+
+        .. note:: The output will be printed to stdout if the ``print_output`` parameter of the constructor has been
+            set to True.
 
         :param args: compiler arguments.
         :returns: (return_code, output)
@@ -379,7 +388,7 @@ class Compiler:
         if process.exitStatus() != process.Crashed:
             status = process.exitCode()
         else:
-            status = self.CRASH_CODE
+            status = self._CRASH_CODE
 
         # get compiler output
         raw_output = process.readAllStandardOutput().data()
@@ -413,7 +422,7 @@ class Compiler:
         PATH = os.environ['PATH']
 
         # Retrieve msvc environment vars if needed
-        if self.config.vcvarsall:
+        if system.WINDOWS and self.config.vcvarsall:
             vc_vars = msvc.query_vcvarsall(self.config.vcvarsall, self.config.vcvarsall_arch)
             for k, v in vc_vars.items():
                 if k != 'path':
@@ -480,7 +489,7 @@ def get_configurations(mimetype):
     # gets the list of compiler type names that are available for the mimetype
     for plugin in plugins.get_compiler_plugins():
         compiler = plugin.get_compiler()
-        if compiler.mimetype == mimetype:
+        if mimetype in compiler.mimetypes:
             typenames.append(compiler.type_name)
     for type_name in typenames:
         ret_val += plugins.get_compiler_plugin(type_name).get_auto_detected_configs()
