@@ -400,9 +400,6 @@ class Compiler:
             output = str(raw_output).replace("b'", '')[:-1].replace(
                 '\\r\\n', '\n').replace('\\\\', '\\')
 
-        if not output and status != 1:
-            output = process.errorString()
-
         if self.print_output:
             print(output)
 
