@@ -130,7 +130,7 @@ In file included from /usr/include/stdio.h:27:0,
 
     assert messages[0].line == 0
     assert messages[3].line == 1
-    assert messages[0].path == os.path.expanduser('~/Documents/test.cbl')
+    assert messages[0].path == os.path.normpath(os.path.expanduser('~/Documents/test.cbl'))
     assert messages[0].status == CheckerMessages.ERROR
     assert messages[-1].status == CheckerMessages.WARNING
 
@@ -156,7 +156,7 @@ class TestCompilerBaseClass:
         my_compiler.get_full_compiler_path() == __file__
 
         # resolve full name using PATH
-        cfg.compiler = 'python3'
+        cfg.compiler = 'python'
         assert os.path.exists(my_compiler.get_full_compiler_path())
 
         # should return an empty string if program path cannot be resolved using PATH
@@ -244,9 +244,9 @@ class TestCompilerBaseClass:
             my_compiler.config.compiler = 'python'
             my_compiler.run_compiler_command([])
 
+        # cover the case where "" must be appended to the program name but hard to test
         my_compiler.config.compiler = 'py thon'
         ret, output = my_compiler.run_compiler_command(['--version'])
-        assert ret != 0
 
 
 def test_get_configurations_by_mtype():
@@ -255,6 +255,7 @@ def test_get_configurations_by_mtype():
     except ImportError:
         return
     else:
-        _ = pytest_hackedit.app()
+        assert hackedit_cobol
+        pytest_hackedit.app()
         configs = compiler.get_configurations('text/x-cobol')
         assert len(configs) >= 1
