@@ -404,6 +404,9 @@ class Compiler:
         if not output and status != 1:
             output = process.errorString()
 
+        if self.print_output:
+            print('\n'.join([l for l in output.splitlines() if l]))
+
         os.environ['PATH'] = original_path
 
         return status, output
