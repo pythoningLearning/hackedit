@@ -453,6 +453,8 @@ class Compiler:
 
         env.insert('PATH', PATH)
 
+        _logger().debug('compiler environment: \n%s' % '\n'.join(env.toStringList()))
+
         return env
 
     def get_version(self, include_all=True):
