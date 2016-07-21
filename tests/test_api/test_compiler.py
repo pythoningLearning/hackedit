@@ -151,6 +151,19 @@ class TestCompilerBaseClass:
         with pytest.raises(NotImplementedError):
             my_compiler.compile_files(['test.cbl'], 'bin', 'test', target_type=compiler.TargetType.SHARED_LIBRARY)
 
+    def test_constructor(self):
+        c = compiler.Compiler(compiler.CompilerConfiguration())
+        assert c.working_dir == os.path.expanduser('~')
+        assert c.print_output is True
+
+        c = compiler.Compiler(compiler.CompilerConfiguration(), working_dir=wd)
+        assert c.working_dir == wd
+        assert c.print_output is True
+
+        c = compiler.Compiler(compiler.CompilerConfiguration(), working_dir=wd, print_output=False)
+        assert c.working_dir == wd
+        assert c.print_output is False
+
     def test_get_full_compiler_path(self):
         # using an absolute path is the easiest case
         my_compiler.get_full_compiler_path() == __file__
