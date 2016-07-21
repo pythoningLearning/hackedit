@@ -137,8 +137,8 @@ class TestRunWidget:
         QtTest.QTest.qWait(10)
         assert t.is_running
         qtbot.mouseClick(w.ui.bt_run, QtCore.Qt.LeftButton)
-        assert not t.is_running
         qtbot.wait(1000)
+        assert not t.is_running
         qtbot.mouseClick(w.ui.bt_run, QtCore.Qt.LeftButton)
         assert t.is_running
         t.process.waitForFinished()
