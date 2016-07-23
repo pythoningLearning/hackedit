@@ -21,6 +21,7 @@ class CompilersController(QtCore.QObject):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
+        self._updating_config = False
         self._current_config = None
         self._current_config_editable = False
         self._connect_slots()
@@ -186,8 +187,7 @@ class CompilersController(QtCore.QObject):
             self.ui.edit_vcvarsall.setText(path)
 
     def _select_compiler_path(self):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self.ui.bt_add_compiler, 'Select compiler', self.ui.edit_compiler.text())
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(self.ui.bt_add_compiler, 'Select compiler')
         if path:
             return True, path
         return False, ''
@@ -245,6 +245,7 @@ class CompilersController(QtCore.QObject):
         return cfg
 
     def _update_compiler_config(self, *args):
+        self._updating_config = True
         self._save_current_config()
         current_item = self.ui.tree_compilers.currentItem()
         if current_item is None or current_item.parent() is None:
@@ -253,6 +254,7 @@ class CompilersController(QtCore.QObject):
             editable = False
             clonable = False
             self._current_config = None
+            self._current_config_editable = None
             self._display_config(None, None)
         else:
             clonable = True
@@ -272,12 +274,11 @@ class CompilersController(QtCore.QObject):
         self.ui.bt_delete_compiler.setEnabled(editable)
         self.ui.bt_check_compiler.setEnabled(clonable)
         self.ui.bt_clone_compiler.setEnabled(clonable)
+        self._updating_config = False
 
     def _display_config(self, config, widget_class):
         if config is None:
             config = compiler.CompilerConfig()
-        else:
-            assert isinstance(config, compiler.CompilerConfig)
         self.ui.edit_compiler.setText(config.compiler)
         self.ui.table_env_vars.clearContents()
         self.ui.table_env_vars.setRowCount(0)
@@ -312,6 +313,8 @@ class CompilersController(QtCore.QObject):
         self._update_env_var_buttons()
 
     def _update_current_config_meta(self):
+        if self._updating_config:
+            return
         item = self.ui.tree_compilers.currentItem()
         if item is None:
             return

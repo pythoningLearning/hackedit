@@ -19,6 +19,7 @@ class BuildAndRun(PreferencePage):
         self.ui = settings_page_build_and_run_ui.Ui_Form()
         self.ui.setupUi(self)
         self.compilers = CompilersController(self.ui)
+        self.ui.tab_categories.setCurrentIndex(0)
 
     def reset(self):
         self.compilers.reset()
