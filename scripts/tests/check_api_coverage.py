@@ -11,6 +11,8 @@ python3 scripts/check_api_coverage.py
 import os
 import sys
 
+if 'tests' in os.getcwd():
+    os.chdir('../..')
 os.environ['PYTEST_QT_API'] = 'pyqt5'
 
 os.system('%s setup.py  test -a "--cov hackedit/api --cov-report term '

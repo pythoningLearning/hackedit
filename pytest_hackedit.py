@@ -13,7 +13,7 @@ from hackedit.api import project
 from hackedit.app import settings
 
 
-APP = None
+__APP = None
 
 
 class MainWindow:
@@ -64,8 +64,8 @@ def app():
     """
     from hackedit.app.application import Application
     from hackedit.app import argparser
-    global APP
-    if APP is None:
+    global __APP
+    if __APP is None:
         sys.argv = [sys.argv[0]]
-        APP = Application(QtWidgets.qApp, None, args=argparser.parse_args())
-    return APP
+        __APP = Application(QtWidgets.qApp, None, args=argparser.parse_args())
+    return __APP

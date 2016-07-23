@@ -1,11 +1,11 @@
 environment:
     matrix:
-        - PYTHON: "C:\\Python34"
-          PYTHON_VERSION: "3.4.x" # currently 3.4.3
+        - PYTHON: "C:\\Python35"
+          PYTHON_VERSION: "3.5.x" # currently 3.4.3
           PYTHON_ARCH: "32"
 
-        - PYTHON: "C:\\Python34-x64"
-          PYTHON_VERSION: "3.4.x" # currently 3.4.3
+        - PYTHON: "C:\\Python35-x64"
+          PYTHON_VERSION: "3.5.x" # currently 3.4.3
           PYTHON_ARCH: "64"
 
 install:
@@ -14,10 +14,10 @@ install:
   # Check that we have the expected version and architecture for Python
   - python --version
   - python -c "import struct; print(struct.calcsize('P') * 8)"
-  # Install pyqt
-  - python -u scripts\install-qt.py
-  # Update pip and setuptools
+  # Update pip setuptools
   - python -m pip install --upgrade pip setuptools
+  # Install pyqt5
+  - pip install PyQt5
   # Install pytest and pytest-qt
   - pip install pytest pytest-qt
   # install hackedit in development mode

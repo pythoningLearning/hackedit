@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 
@@ -145,7 +146,7 @@ class Workspaces(PreferencePage):
             try:
                 doc = self.app.plugin_manager.workspace_plugins[p].__doc__
             except KeyError as e:
-                print('KeyError', e, self.app.plugin_manager.workspace_plugins)
+                _logger().warning('KeyError', e, self.app.plugin_manager.workspace_plugins)
             else:
                 item = QtWidgets.QListWidgetItem()
                 item.setText(p)
@@ -235,4 +236,8 @@ class Workspaces(PreferencePage):
             with open(path, 'w') as f:
                 json.dump(content, f)
         except OSError:
-            print('failed to save workspace')
+            _logger().warn('failed to save workspace')
+
+
+def _logger():
+    return logging.getLogger(__name__)

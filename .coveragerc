@@ -38,9 +38,9 @@ exclude_lines =
     # Don't complain if platform specific code isn't run
     .*if sys.platform.*:
     .*if.*platform.*:
-    .*if WINDOWS:
-    .*if DARWIN:
-    .*if LINUX:
+    .*if.*WINDOWS.*:
+    .*if.*DARWIN.*:
+    .*if.*LINUX.*:
     if QtGui.QIcon.hasThemeIcon\(.*\):
     if theme == '':
 

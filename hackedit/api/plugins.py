@@ -16,6 +16,7 @@ dict in your setup.py.
 """
 from PyQt5.QtCore import QObject
 
+from . import _shared
 from ._shared import _window
 
 
@@ -244,6 +245,45 @@ class TemplateProviderPlugin:
         pass
 
 
+class CompilerPlugin:
+    """
+    This kind of plugin let you add support for a new compiler in HackEdit.
+    """
+
+    ENTRYPOINT = 'hackedit.plugins.compilers'
+
+    def get_compiler_icon(self):
+        from hackedit.api import special_icons
+        return special_icons.run_build()
+
+    def get_compiler(self):
+        """
+        Gets the associated compiler instance that inherit from :class:`hackedit.api.compilers.Compiler`.
+        """
+        raise NotImplementedError()
+
+    def get_compiler_config_widget(self):
+        """
+        Gets the associated compiler configuration widget that inherit from
+        :class:`hackedit.api.compilers.CompilerConfigurationWidget`.
+        """
+        raise NotImplementedError()
+
+    def get_auto_detected_configs(self):
+        """
+        Get the list of autodetected compiler configurations.
+        """
+        raise NotImplementedError()
+
+    def create_new_configuration(self, name, compiler_dir):
+        """
+        Creates a new configuration.
+
+        :param name: unique name of the configuration.
+        """
+        raise NotImplementedError()
+
+
 def get_plugin_instance(plugin_class):
     """
     Returns the plugin instance that match a given plugin **class**.
@@ -251,6 +291,26 @@ def get_plugin_instance(plugin_class):
     :param plugin_class: Plugin class
     """
     return _window().get_plugin_instance(plugin_class)
+
+
+def get_compiler_plugins():
+    """
+    Returns a list of all known compiler classes
+    """
+    ret_val = []
+    for plugin in _shared.APP.plugin_manager.compiler_plugins.values():
+        ret_val.append(plugin)
+    return ret_val
+
+
+def get_compiler_plugin(compiler_type_name):
+    """
+    Gets the compiler plugin that match the specified compiler_type_name.
+    """
+    try:
+        return _shared.APP.plugin_manager.compiler_plugins[compiler_type_name]
+    except TypeError:
+        return None
 
 
 def get_script_runner():

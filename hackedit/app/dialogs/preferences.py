@@ -5,7 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from hackedit.app import settings
 from hackedit.app.forms import dlg_preferences_ui
 from hackedit.app.widgets import preference_pages
-from hackedit.api import system
+from hackedit.api import system, plugins
 
 
 def _logger():
@@ -151,6 +151,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
     def _setup_builtin_pages(self):
         env = preference_pages.Environment()
         self._add_page(env)
+        self._add_page(preference_pages.BuildAndRun())
         self._add_page(preference_pages.Editor())
 
         self._add_page(preference_pages.Behaviour())
@@ -164,6 +165,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         self._add_page(preference_pages.Shortcuts())
         self._add_page(preference_pages.Templates())
         self._add_page(preference_pages.Workspaces())
+
 
     def _setup_plugin_pages(self):
         pages = []
@@ -232,7 +234,7 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
             if parent:
                 parent = parent[0]
             else:
-                print('parent not found', widget.category)
+                _logger().warning('parent category %r not found', widget.category)
         if parent:
             parent.addChild(item)
         else:

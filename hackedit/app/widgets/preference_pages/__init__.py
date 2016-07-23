@@ -1,4 +1,5 @@
 from .behaviour import Behaviour
+from .build_and_run import BuildAndRun
 from .editor import Editor
 from .editor_colors import EditorColors
 from .editor_display import EditorDisplay
@@ -13,6 +14,7 @@ from .workspaces import Workspaces
 
 __all__ = [
     'Behaviour',
+    'BuildAndRun',
     'Editor',
     'EditorColors',
     'EditorDisplay',
