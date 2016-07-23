@@ -542,8 +542,16 @@ def _memoize(obj):
     @functools.wraps(obj)
     def memoizer(*args, **kwargs):
         if args not in cache:
-            cache[args] = obj(*args, **kwargs)
-        return cache[args]
+            try:
+                ret = obj(*args, **kwargs)
+            except Exception as e:
+                ret = e
+            finally:
+                cache[args] = ret
+        ret = cache[args]
+        if isinstance(ret, Exception):
+            raise ret
+        return ret
     return memoizer
 
 
