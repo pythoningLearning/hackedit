@@ -27,7 +27,7 @@ class TargetType:
     OBJECT_FILE = 3
 
 
-class CompilerConfig:
+class CompilerConfig(utils.JSonisable, utils.Copyable):
     """
     Stores a compiler configuration.
     """
@@ -50,27 +50,6 @@ class CompilerConfig:
         self.vcvarsall_arch = 'x86'
         #: type_name of the associated compiler
         self.type_name = ''
-
-    def to_json(self):
-        """
-        Converts the configuration to a json object
-        """
-        return json.dumps(self.__dict__, indent=4, sort_keys=True)
-
-    def from_json(self, json_content):
-        """
-        Import config values from a json object.
-        """
-        content = json.loads(json_content)
-        for k, v in content.items():
-            setattr(self, k, v)
-        return self
-
-    def copy(self):
-        """
-        Returns a copy of the configuration that can be changed without altering this instance.
-        """
-        return copy.deepcopy(self)
 
     def __repr__(self):
         return 'CompilerConfig(' + self.to_json() + ')\n'
@@ -287,8 +266,6 @@ class Compiler:
         - setup_environemt: setup a QProcessEnvironement based on the compiler config
         -
     """
-    _CRASH_CODE = 139
-
     #: associated mimetype
     mimetypes = []
 
@@ -434,58 +411,9 @@ class Compiler:
         :returns: (return_code, output)
         :rtype: (int, str)
         """
-        def quoted(pgm):
-            if ' ' in pgm:
-                pgm = '"%s"' % pgm
-            return pgm
-
-        def create_process(pgm):
-            process = QtCore.QProcess()
-            process.setWorkingDirectory(self.working_dir)
-            process.setProcessEnvironment(self.get_process_environment())
-            process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
-            return process
-
-        def get_process_exit_code(process):
-            if process.exitStatus() != process.Crashed:
-                return process.exitCode()
-            else:
-                return self._CRASH_CODE
-
-        def get_process_output(process):
-            # get compiler output
-            raw_output = process.readAllStandardOutput().data()
-            try:
-                output = raw_output.decode(locale.getpreferredencoding()).replace('\r', '')
-            except UnicodeDecodeError:
-                # This is a hack to get a meaningful output when compiling a file
-                # from UNC path using a batch file on some systems, see
-                # https://github.com/OpenCobolIDE/OpenCobolIDE/issues/188
-                output = str(raw_output).replace("b'", '')[:-1].replace('\\r\\n', '\n').replace('\\\\', '\\')
-            return output
-
-        pgm = quoted(self.config.compiler)
-
-        if not pgm:
-            raise ValueError('compiler cannot be empty')
-
-        if not args:
-            raise ValueError('command arguments cannot be empty')
-
-        process = create_process(pgm)
-        process.start(pgm, args)
-        process.waitForFinished(sys.maxsize)
-        exit_code = get_process_exit_code(process)
-        output = get_process_output(process)
-
-        if self.print_output:
-            print(' '.join([pgm] + args))
-            print(output)
-
-        if exit_code != 0 and not output and process.error() != process.UnknownError:
-            output = process.errorString()
-
-        return exit_code, output
+        process = utils.BlockingProcess(working_dir=self.working_dir, environment=self.get_process_environment(),
+                                        print_output=self.print_output)
+        return process.run(self.config.compiler, args)
 
 
 def get_configs_for_mimetype(mimetype):
