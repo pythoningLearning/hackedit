@@ -119,6 +119,7 @@ class CompilersController(QtCore.QObject):
         item.setSelected(True)
         self.ui.tree_compilers.setCurrentItem(item)
         self._update_compiler_config()
+        self.names.add(name)
 
     def _clone_compiler(self):
         cloned_config = self._current_config.copy()
@@ -142,6 +143,10 @@ class CompilersController(QtCore.QObject):
             return
         item = self.ui.tree_compilers.currentItem()
         self.user_configs.pop(self._current_config.name)
+        try:
+            self.names.remove(self._current_config.name)
+        except ValueError:
+            pass
         self._current_config = None
         parent = item.parent()
         parent.removeChild(item)
@@ -228,7 +233,6 @@ class CompilersController(QtCore.QObject):
 
     def _get_updated_config(self):
         cfg = self.ui.stacked_compiler_options.current_widget.get_config()
-        assert isinstance(cfg, compiler.CompilerConfig)
         cfg.compiler = self.ui.edit_compiler.text().strip()
         env_vars = {}
         for i in range(self.ui.table_env_vars.rowCount()):
@@ -300,8 +304,11 @@ class CompilersController(QtCore.QObject):
             self.ui.stacked_compiler_options.setCurrentIndex(0)
             self.ui.stacked_compiler_options.current_widget = widget
             widget.set_config(config)
+            # trick to force qt to adjust the settings tab widget size
+            index = self.ui.tab_compiler_settings.currentIndex()
             self.ui.tab_compiler_settings.setCurrentIndex(1)
             self.ui.tab_compiler_settings.setCurrentIndex(0)
+            self.ui.tab_compiler_settings.setCurrentIndex(index)
         self._update_env_var_buttons()
 
     def _update_current_config_meta(self):
