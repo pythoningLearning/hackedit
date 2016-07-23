@@ -480,6 +480,9 @@ class Compiler:
             print(' '.join([pgm] + args))
             print(output)
 
+        if exit_code != 0 and not output and process.error() != process.UnknownError:
+            output = process.errorString()
+
         return exit_code, output
 
 
