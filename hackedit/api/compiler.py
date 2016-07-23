@@ -8,7 +8,6 @@ import logging
 import os
 import re
 import sys
-from abc import abstractmethod
 
 from PyQt5 import QtCore, QtWidgets
 
@@ -304,30 +303,27 @@ class Compiler:
         self.config = config
         self.working_dir = working_dir
 
-    @abstractmethod
     def get_version(self, include_all=True):
         """
         Gets the compiler version string.
 
         :param include_all: True to include the whole version information, False to get the version number only.
         """
-        pass
+        raise NotImplementedError()
 
-    @abstractmethod
     def check_compiler(self):
         """
         Checks the compiler configuration.
 
         :raises: CompilerCheckFailedError if the check failed.
         """
-        pass
+        raise NotImplementedError()
 
-    @abstractmethod
     def compile_files(self, sources, destination, target_name, target_type=TargetType.EXECUTABLE):
         """
         Compile a series of files and link them together (if necessary).
         """
-        pass
+        raise NotImplementedError()
 
     def get_process_environment(self):
         """
