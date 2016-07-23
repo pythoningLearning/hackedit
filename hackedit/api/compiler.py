@@ -81,7 +81,7 @@ class CompilerConfigWidget(QtWidgets.QWidget):
     configuration (all settings except the compiler directory and the environment variables).
     """
     def is_dirty(self):
-        return self.original_config.to_json() != self.get_config().to_json()
+        return self._original_config.to_json() != self.get_config().to_json()
 
     def set_config(self, config):
         """
@@ -89,8 +89,8 @@ class CompilerConfigWidget(QtWidgets.QWidget):
 
         :param config: CompilerConfig
         """
-        self.original_config = config
-        self.config = config.copy()
+        self._original_config = config
+        self._config = config.copy()
 
     def get_config(self):
         """
@@ -98,12 +98,12 @@ class CompilerConfigWidget(QtWidgets.QWidget):
 
         :rtype: CompilerConfig
         """
-        return self.config
+        return self._config
 
 
 class GenericCompilerCongigWidget(CompilerConfigWidget):
     """
-    Generic config widgets that let user define the include paths, the library paths, the libraries to link
+    Generic _config widgets that let user define the include paths, the library paths, the libraries to link
     with and add custom compiler switches.
     """
     def __init__(self, parent=None):
@@ -134,18 +134,18 @@ class GenericCompilerCongigWidget(CompilerConfigWidget):
         self.ui.edit_libs.setText(' '.join(config.libraries))
 
     def get_config(self):
-        self.config.flags = [token for token in self.ui.edit_flags.text().split(' ') if token]
-        self.config.libraries = [token for token in self.ui.edit_libs.text().split(' ') if token]
-        self.config.include_paths.clear()
+        self._config.flags = [token for token in self.ui.edit_flags.text().split(' ') if token]
+        self._config.libraries = [token for token in self.ui.edit_libs.text().split(' ') if token]
+        self._config.include_paths.clear()
         for i in range(self.ui.list_include_paths.count()):
             path = self.ui.list_include_paths.item(i).text()
             if path:
-                self.config.include_paths.append(path)
-        self.config.library_paths.clear()
+                self._config.include_paths.append(path)
+        self._config.library_paths.clear()
         for i in range(self.ui.list_lib_paths.count()):
             path = self.ui.list_lib_paths.item(i).text()
             if path:
-                self.config.library_paths.append(path)
+                self._config.library_paths.append(path)
         return super().get_config()
 
     def _add_abs_include_path(self):  # pragma: no cover
@@ -490,6 +490,13 @@ def get_configs_for_mimetype(mimetype):
     from hackedit.api import plugins
     from hackedit.app import settings
 
+    def get_user_configs_for_type_name(type_name):
+        ret_val = []
+        for config in settings.load_compiler_configurations().values():
+            if config.type_name == type_name:
+                ret_val.append(config)
+        return ret_val
+
     ret_val = []
     typenames = []
     # gets the list of compiler type names that are available for the mimetype
@@ -499,9 +506,8 @@ def get_configs_for_mimetype(mimetype):
             typenames.append(compiler.type_name)
     for type_name in typenames:
         ret_val += plugins.get_compiler_plugin(type_name).get_auto_detected_configs()
-        for config in settings.load_compiler_configurations().values():
-            if config.type_name == type_name:
-                ret_val.append(config)
+        ret_val += get_user_configs_for_type_name(type_name)
+
     return ret_val
 
 
