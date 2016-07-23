@@ -1,6 +1,7 @@
 """
 API modules that provides the base classes for adding support for a new compiler in hackedit.
 """
+import functools
 import copy
 import json
 import locale
@@ -11,7 +12,7 @@ import sys
 
 from PyQt5 import QtCore, QtWidgets
 
-from hackedit.api import system
+from hackedit.api import system, utils
 from hackedit.app import msvc
 from hackedit.app.forms import compiler_config_ui
 
@@ -363,7 +364,7 @@ class Compiler:
             env.insert(k, v)
 
         # Prepend compiler path
-        compiler_path = self._get_full_compiler_path()
+        compiler_path = self.get_full_compiler_path()
         if compiler_path and os.path.exists(os.path.dirname(compiler_path)):
             compiler_dir = os.path.dirname(compiler_path)
             PATH = compiler_dir + os.pathsep + PATH
@@ -374,7 +375,7 @@ class Compiler:
 
         return env
 
-    def _get_full_compiler_path(self):
+    def get_full_compiler_path(self):
         """
         Resolves the full compiler path using the PATH environment variable if the compiler command is not an
         absolute path.
@@ -461,12 +462,6 @@ class Compiler:
                 output = str(raw_output).replace("b'", '')[:-1].replace('\\r\\n', '\n').replace('\\\\', '\\')
             return output
 
-        if not self.config.compiler:
-            raise ValueError('pgm cannot be null')
-
-        if not args:
-            raise ValueError('args cannot be null')
-
         pgm = quoted(self.config.compiler)
         process = create_process(pgm)
         process.start(pgm, args)
@@ -509,6 +504,34 @@ def get_configs_for_mimetype(mimetype):
         ret_val += get_user_configs_for_type_name(type_name)
 
     return ret_val
+
+
+def check_compiler(compiler):
+    """
+    High level function that checks if a compiler_config works for a the specific compiler klass.
+
+    The result is cached to prevent running checks that have already been tested.
+    """
+    classname = compiler.__class__.__name__
+    json_config = compiler.config.to_json()
+    _perform_check(classname, json_config, compiler=compiler)
+
+
+def _memoize_compiler_config(obj):
+    cache = obj.cache = {}
+
+    @functools.wraps(obj)
+    def memoizer(*args, **kwargs):
+        if args not in cache:
+            cache[args] = obj(*args, **kwargs)
+        return cache[args]
+    return memoizer
+
+
+@_memoize_compiler_config
+def _perform_check(classname, json_config, compiler=None):
+    if compiler:
+        compiler.check_compiler()
 
 
 def _logger():

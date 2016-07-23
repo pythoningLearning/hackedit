@@ -163,15 +163,15 @@ class TestCompilerBaseClass:
 
     def test_get_full_compiler_path(self):
         # using an absolute path is the easiest case
-        my_compiler._get_full_compiler_path() == __file__
+        my_compiler.get_full_compiler_path() == __file__
 
         # resolve full name using PATH
         cfg.compiler = 'python'
-        assert os.path.exists(my_compiler._get_full_compiler_path())
+        assert os.path.exists(my_compiler.get_full_compiler_path())
 
         # should return an empty string if program path cannot be resolved using PATH
         cfg.compiler = 'foo'
-        assert my_compiler._get_full_compiler_path() == ''
+        assert my_compiler.get_full_compiler_path() == ''
 
         cfg.compiler == __file__
 

@@ -1,7 +1,8 @@
+import os
 from PyQt5 import QtCore, QtWidgets
 
 
-from hackedit.api.compiler import CompilerCheckFailedError
+from hackedit.api.compiler import CompilerCheckFailedError, check_compiler
 from hackedit.app.forms import dlg_check_compiler_ui
 
 
@@ -12,19 +13,23 @@ class DlgCheckCompiler(QtWidgets.QDialog):
         self.ui = dlg_check_compiler_ui.Ui_Dialog()
         self.ui.setupUi(self)
         self.compiler = compiler
-        version = self.compiler.get_version(include_all=True)
-        self.ui.textEdit.setText(version)
-        self.ui.buttonBox.button(self.ui.buttonBox.Apply).setText(
-            _('Check compilation'))
-        self.ui.buttonBox.button(self.ui.buttonBox.Apply).clicked.connect(
-            self._check_compiler)
-        self.ui.buttonBox.button(self.ui.buttonBox.Apply).setDisabled(
-            not version)
+        button = self.get_check_compilation_button()
+        button.setText(_('Check compilation'))
+        button.clicked.connect(self._check_compiler)
+        if not os.path.exists(compiler.get_full_compiler_path()):
+            self.ui.textEdit.setText(_('Compiler not found'))
+            button.setDisabled(True)
+        else:
+            version = self.compiler.get_version(include_all=True)
+            self.ui.textEdit.setText(version if version else _('Unable to find compiler version'))
+
+    def get_check_compilation_button(self):
+        return self.ui.buttonBox.button(self.ui.buttonBox.Apply)
 
     def _check_compiler(self):
         QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
         try:
-            self.compiler.check_compiler()
+            check_compiler(self.compiler)
         except CompilerCheckFailedError as e:
             self.ui.textEdit.setText(_('<h1 style="color:red;">Compiler check failed!</h1>'))
             self.ui.textEdit.append(_('<h2>Exit code<b>:</h2><p>%d</p>' % e.return_code))
