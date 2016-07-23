@@ -1,35 +1,12 @@
 from PyQt5 import QtCore, QtWidgets
 
-from hackedit.api import compiler, special_icons, plugins, system, utils
-from hackedit.api.widgets import PreferencePage
+from hackedit.api import compiler, plugins, system, utils
 from hackedit.app import settings
 from hackedit.app.dialogs import dlg_check_compiler
-from hackedit.app.forms import settings_page_build_and_run_ui
 
 
 ITEM_AUTO_DETECTED = 0
 ITEM_MANUAL = 1
-
-
-class BuildAndRun(PreferencePage):
-    can_reset = True
-    can_restore_defaults = True
-    can_apply = True
-
-    def __init__(self):
-        super().__init__(_('Build And Run'), icon=special_icons.run_build())
-        self.ui = settings_page_build_and_run_ui.Ui_Form()
-        self.ui.setupUi(self)
-        self.compilers = CompilersController(self.ui)
-
-    def reset(self):
-        self.compilers.reset()
-
-    def restore_defaults(self):
-        self.compilers.restore_defaults()
-
-    def save(self):
-        self.compilers.apply()
 
 
 class CompilersController(QtCore.QObject):
@@ -37,6 +14,7 @@ class CompilersController(QtCore.QObject):
         super().__init__()
         self.ui = ui
         self._current_config = None
+        self._current_config_editable = False
         self._connect_slots()
 
     def _connect_slots(self):
@@ -86,14 +64,14 @@ class CompilersController(QtCore.QObject):
     def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None):
         parent = self.ui.tree_compilers.topLevelItem(item_type)
         if plugin is None:
-            plugin = plugins.get_compiler_plugin(config.compiler_type_name)
+            plugin = plugins.get_compiler_plugin(config.type_name)
         if plugin is None:
             return
         icon = plugin.get_compiler_icon()
         item = QtWidgets.QTreeWidgetItem()
         item.setIcon(0, icon)
         item.setText(0, config.name)
-        item.setText(1, config.compiler_type_name)
+        item.setText(1, config.type_name)
         item.setData(0, QtCore.Qt.UserRole, plugin.get_compiler_config_widget())
         item.setData(1, QtCore.Qt.UserRole, config)
         self.names.add(config.name)
@@ -118,11 +96,11 @@ class CompilersController(QtCore.QObject):
 
     def _clone_compiler(self):
         cloned_config = self._current_config.copy()
-        plugin = plugins.get_compiler_plugin(cloned_config.compiler_type_name)
-        ok, name = self._get_name(cloned_config.compiler_type_name)
+        plugin = plugins.get_compiler_plugin(cloned_config.type_name)
+        ok, name = self._get_name(cloned_config.type_name)
         if not ok:
             return
-        assert isinstance(cloned_config, compiler.CompilerConfiguration)
+        assert isinstance(cloned_config, compiler.CompilerConfig)
         cloned_config.name = name
         self.user_configs[name] = cloned_config
         item = self._add_config_item(cloned_config, plugin=plugin)
@@ -145,7 +123,7 @@ class CompilersController(QtCore.QObject):
 
     def _check_compiler(self):
         cfg = self._get_updated_config()
-        plugin = plugins.get_compiler_plugin(cfg.compiler_type_name)
+        plugin = plugins.get_compiler_plugin(cfg.type_name)
         compiler = plugin.get_compiler()(cfg, print_output=False)
         dlg_check_compiler.DlgCheckCompiler.check(self.ui.bt_check_compiler, compiler)
 
@@ -207,7 +185,7 @@ class CompilersController(QtCore.QObject):
         return name != '' and name not in self.names
 
     def _save_current_config(self):
-        if self._current_config:
+        if self._current_config and self._current_config_editable:
             cfg = self._get_updated_config()
             cfg.name = self._current_config.name
 
@@ -223,14 +201,14 @@ class CompilersController(QtCore.QObject):
 
     def _get_updated_config(self):
         cfg = self.ui.stacked_compiler_options.current_widget.get_config()
-        assert isinstance(cfg, compiler.CompilerConfiguration)
+        assert isinstance(cfg, compiler.CompilerConfig)
         cfg.compiler = self.ui.edit_compiler.text().strip()
         env_vars = {}
         for i in range(self.ui.table_env_vars.rowCount()):
             k = self.ui.table_env_vars.item(i, 0).text()
             v = self.ui.table_env_vars.item(i, 1).text()
             env_vars[k] = v
-        cfg.compiler_environment_variables = env_vars
+        cfg.environment_variables = env_vars
         cfg.vcvarsall = self.ui.edit_vcvarsall.text()
         cfg.vcvarsall_arch = self.ui.combo_vcvarsall_arch.currentText().strip()
         return cfg
@@ -255,7 +233,9 @@ class CompilersController(QtCore.QObject):
             parent_item = current_item.parent()
             parent_item_index = self.ui.tree_compilers.indexOfTopLevelItem(parent_item)
             editable = parent_item_index != ITEM_AUTO_DETECTED
-            self._current_config = config if editable else None
+            # self._current_config = config if editable else None
+            self._current_config_editable = editable
+            self._current_config = config
         self.ui.tab_default_options.setEnabled(editable)
         self.ui.tab_compiler_setup.setEnabled(editable)
         self.ui.bt_delete_compiler.setEnabled(editable)
@@ -264,13 +244,13 @@ class CompilersController(QtCore.QObject):
 
     def _display_config(self, config, widget_class):
         if config is None:
-            config = compiler.CompilerConfiguration()
+            config = compiler.CompilerConfig()
         else:
-            assert isinstance(config, compiler.CompilerConfiguration)
+            assert isinstance(config, compiler.CompilerConfig)
         self.ui.edit_compiler.setText(config.compiler)
         self.ui.table_env_vars.clearContents()
         self.ui.table_env_vars.setRowCount(0)
-        for k, v in sorted(config.compiler_environment_variables.items(), key=lambda x: x[0]):
+        for k, v in sorted(config.environment_variables.items(), key=lambda x: x[0]):
             index = self.ui.table_env_vars.rowCount()
             self.ui.table_env_vars.insertRow(index)
             key = QtWidgets.QTableWidgetItem()

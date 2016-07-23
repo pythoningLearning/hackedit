@@ -10,54 +10,51 @@ from hackedit.api import compiler
 
 
 def create_test_config():
-    cfg = compiler.CompilerConfiguration()
+    cfg = compiler.CompilerConfig()
     cfg.name = 'Test'
     cfg.compiler = __file__
-    cfg.compiler_flags = ['-debug']
-    cfg.compiler_include_path = ['/usr/share/include']
-    cfg.compiler_library_path = ['/usr/lib']
-    cfg.compiler_libraries = ['QtCore']
-    cfg.compiler_environment_variables = {'COB_CONFIG_DIR': '/usr/share/gnu-cobol/config/'}
+    cfg.flags = ['-debug']
+    cfg.include_paths = ['/usr/share/include']
+    cfg.library_paths = ['/usr/lib']
+    cfg.libraries = ['QtCore']
+    cfg.environment_variables = {'COB_CONFIG_DIR': '/usr/share/gnu-cobol/config/'}
     cfg.vcvarsall = ''
     cfg.vcvarsall_arch = 'x86'
-    cfg.compiler_type_name = 'GnuCOBOL'
-    cfg.custom_options = {}
+    cfg.type_name = 'GnuCOBOL'
 
     return cfg
 
 
 class TestCompilerConfig:
     def test_default(self):
-        cfg = compiler.CompilerConfiguration()
+        cfg = compiler.CompilerConfig()
         assert cfg.name == ''
         assert cfg.compiler == ''
-        assert cfg.compiler_flags == []
-        assert cfg.compiler_include_path == []
-        assert cfg.compiler_library_path == []
-        assert cfg.compiler_libraries == []
-        assert cfg.compiler_environment_variables == {}
+        assert cfg.flags == []
+        assert cfg.include_paths == []
+        assert cfg.library_paths == []
+        assert cfg.libraries == []
+        assert cfg.environment_variables == {}
         assert cfg.vcvarsall == ''
         assert cfg.vcvarsall_arch == 'x86'
-        assert cfg.compiler_type_name == ''
-        assert cfg.custom_options == {}
+        assert cfg.type_name == ''
 
     def test_custom_config(self):
         cfg = create_test_config()
         assert cfg.name == 'Test'
         assert cfg.compiler == __file__
-        assert cfg.compiler_flags == ['-debug']
-        assert cfg.compiler_include_path == ['/usr/share/include']
-        assert cfg.compiler_library_path == ['/usr/lib']
-        assert cfg.compiler_libraries == ['QtCore']
-        assert cfg.compiler_environment_variables == {'COB_CONFIG_DIR': '/usr/share/gnu-cobol/config/'}
+        assert cfg.flags == ['-debug']
+        assert cfg.include_paths == ['/usr/share/include']
+        assert cfg.library_paths == ['/usr/lib']
+        assert cfg.libraries == ['QtCore']
+        assert cfg.environment_variables == {'COB_CONFIG_DIR': '/usr/share/gnu-cobol/config/'}
         assert cfg.vcvarsall == ''
         assert cfg.vcvarsall_arch == 'x86'
-        assert cfg.compiler_type_name == 'GnuCOBOL'
-        assert cfg.custom_options == {}
+        assert cfg.type_name == 'GnuCOBOL'
 
     def test_serialization(self):
         cfg = create_test_config()
-        assert cfg.to_json() == compiler.CompilerConfiguration().from_json(cfg.to_json()).to_json()
+        assert cfg.to_json() == compiler.CompilerConfig().from_json(cfg.to_json()).to_json()
 
     def test_copy(self):
         cfg = create_test_config()
@@ -67,7 +64,7 @@ class TestCompilerConfig:
 
 
 def test_compiler_config_widget(qtbot):
-    widget = compiler.CompilerConfigurationWidget()
+    widget = compiler.CompilerConfigWidget()
     qtbot.addWidget(widget)
     cfg = create_test_config()
     widget.set_config(cfg)
@@ -98,10 +95,10 @@ def test_generic_compiler_config_widget(qtbot):
     assert widget.is_dirty() is True
     assert widget.get_config().to_json() != cfg.to_json()
     updated_cfg = widget.get_config()
-    assert updated_cfg.compiler_include_path == ['/usr/share/include', '../include']
-    assert updated_cfg.compiler_library_path == ['/usr/lib', '../libs']
-    assert updated_cfg.compiler_flags == ['-debug', '-Wall', '--verbose']
-    assert updated_cfg.compiler_libraries == ['QtCore', 'QtWidgets', 'QtGui']
+    assert updated_cfg.include_paths == ['/usr/share/include', '../include']
+    assert updated_cfg.library_paths == ['/usr/lib', '../libs']
+    assert updated_cfg.flags == ['-debug', '-Wall', '--verbose']
+    assert updated_cfg.libraries == ['QtCore', 'QtWidgets', 'QtGui']
 
 
 def test_parser_gcc():
@@ -152,29 +149,29 @@ class TestCompilerBaseClass:
             my_compiler.compile_files(['test.cbl'], 'bin', 'test', target_type=compiler.TargetType.SHARED_LIBRARY)
 
     def test_constructor(self):
-        c = compiler.Compiler(compiler.CompilerConfiguration())
+        c = compiler.Compiler(compiler.CompilerConfig())
         assert c.working_dir == os.path.expanduser('~')
         assert c.print_output is True
 
-        c = compiler.Compiler(compiler.CompilerConfiguration(), working_dir=wd)
+        c = compiler.Compiler(compiler.CompilerConfig(), working_dir=wd)
         assert c.working_dir == wd
         assert c.print_output is True
 
-        c = compiler.Compiler(compiler.CompilerConfiguration(), working_dir=wd, print_output=False)
+        c = compiler.Compiler(compiler.CompilerConfig(), working_dir=wd, print_output=False)
         assert c.working_dir == wd
         assert c.print_output is False
 
     def test_get_full_compiler_path(self):
         # using an absolute path is the easiest case
-        my_compiler.get_full_compiler_path() == __file__
+        my_compiler._get_full_compiler_path() == __file__
 
         # resolve full name using PATH
         cfg.compiler = 'python'
-        assert os.path.exists(my_compiler.get_full_compiler_path())
+        assert os.path.exists(my_compiler._get_full_compiler_path())
 
         # should return an empty string if program path cannot be resolved using PATH
         cfg.compiler = 'foo'
-        assert my_compiler.get_full_compiler_path() == ''
+        assert my_compiler._get_full_compiler_path() == ''
 
         cfg.compiler == __file__
 
@@ -182,7 +179,7 @@ class TestCompilerBaseClass:
         # absolute dest folder
         path = os.path.join(wd, 'bin1')
         assert os.path.exists(path) is False
-        my_compiler.make_destination_folder(path)
+        my_compiler._make_destination_folder(path)
         assert os.path.exists(path) is True
         os.rmdir(path)
 
@@ -190,7 +187,7 @@ class TestCompilerBaseClass:
         path = '~/bin1'
         expanded_path = os.path.expanduser(path)
         assert os.path.exists(path) is False
-        my_compiler.make_destination_folder(path)
+        my_compiler._make_destination_folder(path)
         assert os.path.exists(expanded_path) is True
         os.rmdir(expanded_path)
 
@@ -198,7 +195,7 @@ class TestCompilerBaseClass:
         name = 'bin1'
         path = os.path.join(wd, name)
         assert os.path.exists(path) is False
-        my_compiler.make_destination_folder(name)
+        my_compiler._make_destination_folder(name)
         assert os.path.exists(path) is True
         os.rmdir(path)
 
@@ -213,53 +210,53 @@ class TestCompilerBaseClass:
         with open(destination_path, 'w'):
             pass
 
-        outdated = my_compiler.is_outdated(source_path, destination_path)
+        outdated = my_compiler._is_outdated(source_path, destination_path)
         assert outdated is False
-        outdated = my_compiler.is_outdated(destination_path, source_path)
+        outdated = my_compiler._is_outdated(destination_path, source_path)
         assert outdated is True
 
         # this should work with relative paths as well
-        outdated = my_compiler.is_outdated(source, dest)
+        outdated = my_compiler._is_outdated(source, dest)
         assert outdated is False
-        outdated = my_compiler.is_outdated(dest, source)
+        outdated = my_compiler._is_outdated(dest, source)
         assert outdated is True
 
         # check corner cases (things that do not exist or strange args)
-        outdated = my_compiler.is_outdated('/foo/bar', '')
+        outdated = my_compiler._is_outdated('/foo/bar', '')
         assert outdated is True
-        outdated = my_compiler.is_outdated('', '')
+        outdated = my_compiler._is_outdated('', '')
         assert outdated is False
         with pytest.raises(ValueError):
-            outdated = my_compiler.is_outdated(None, None)
+            outdated = my_compiler._is_outdated(None, None)
         with pytest.raises(ValueError):
-            outdated = my_compiler.is_outdated(4, 5.2)
+            outdated = my_compiler._is_outdated(4, 5.2)
 
         os.remove(source_path)
         os.remove(destination_path)
 
     def test_setup_environment(self):
         cfg.compiler = __file__
-        cfg.compiler_environment_variables['PATH'] = wd
-        cfg.compiler_environment_variables['EMPTY'] = ''
-        env = my_compiler.setup_environment()
+        cfg.environment_variables['PATH'] = wd
+        cfg.environment_variables['EMPTY'] = ''
+        env = my_compiler.get_process_environment()
         assert env.contains('PATH')
         assert env.value('PATH').startswith(wd)
 
     def test_run_compiler_command(self):
         my_compiler.config.compiler = 'python'
-        ret, output = my_compiler.run_compiler_command(['--version'])
+        ret, output = my_compiler._run_compiler_command(['--version'])
         assert ret == 0
         assert output != ''
         with pytest.raises(ValueError):
             my_compiler.config.compiler = ''
-            my_compiler.run_compiler_command(['-c', '"import sys; print(sys.executable)"'])
+            my_compiler._run_compiler_command(['-c', '"import sys; print(sys.executable)"'])
         with pytest.raises(ValueError):
             my_compiler.config.compiler = 'python'
-            my_compiler.run_compiler_command([])
+            my_compiler._run_compiler_command([])
 
         # cover the case where "" must be appended to the program name but hard to test
         my_compiler.config.compiler = 'py thon'
-        ret, output = my_compiler.run_compiler_command(['--version'])
+        ret, output = my_compiler._run_compiler_command(['--version'])
 
 
 def test_get_configurations_by_mtype():
@@ -270,5 +267,5 @@ def test_get_configurations_by_mtype():
     else:
         assert hackedit_cobol
         pytest_hackedit.app()
-        configs = compiler.get_configurations('text/x-cobol')
+        configs = compiler.get_configs_for_mimetype('text/x-cobol')
         assert len(configs) >= 1

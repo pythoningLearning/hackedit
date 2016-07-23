@@ -687,11 +687,11 @@ def set_last_open_dir(value):
 
 # Compiler configurations
 def load_compiler_configurations():
-    from hackedit.api.compiler import CompilerConfiguration
+    from hackedit.api.compiler import CompilerConfig
     ret_val = {}
     configs_map = json.loads(_SETTINGS.value('build_and_run/compiler_configs', '{}'))
     for k, v in configs_map.items():
-        ret_val[k] = CompilerConfiguration().from_json(v)
+        ret_val[k] = CompilerConfig().from_json(v)
     return ret_val
 
 

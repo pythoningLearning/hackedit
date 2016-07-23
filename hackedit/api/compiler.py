@@ -1,13 +1,14 @@
 """
 API modules that provides the base classes for adding support for a new compiler in hackedit.
 """
-import sys
 import copy
 import json
 import locale
 import logging
 import os
 import re
+import sys
+from abc import abstractmethod
 
 from PyQt5 import QtCore, QtWidgets
 
@@ -26,7 +27,7 @@ class TargetType:
     OBJECT_FILE = 3
 
 
-class CompilerConfiguration:
+class CompilerConfig:
     """
     Stores a compiler configuration.
     """
@@ -36,20 +37,19 @@ class CompilerConfiguration:
         #: Directory where the compiler can be found, use an emtpy path to use the system configuration.
         self.compiler = ''
         #: Compiler flags that will be appended to every compiler command.
-        self.compiler_flags = []
+        self.flags = []
         #: List of include paths (used for copybooks in COBOL).
-        self.compiler_include_path = []
+        self.include_paths = []
         #: List of libraries to include
-        self.compiler_library_path = []
-        self.compiler_libraries = []
+        self.library_paths = []
+        #: List of libraries to link with
+        self.libraries = []
         #: Custom environment variables
-        self.compiler_environment_variables = {}
+        self.environment_variables = {}
         self.vcvarsall = ''
         self.vcvarsall_arch = 'x86'
         #: type_name of the associated compiler
-        self.compiler_type_name = ''
-        #: a map of custom option in case you need to extend the compiler config
-        self.custom_options = {}
+        self.type_name = ''
 
     def to_json(self):
         """
@@ -58,6 +58,9 @@ class CompilerConfiguration:
         return json.dumps(self.__dict__, indent=4, sort_keys=True)
 
     def from_json(self, json_content):
+        """
+        Import config values from a json object.
+        """
         content = json.loads(json_content)
         for k, v in content.items():
             setattr(self, k, v)
@@ -70,10 +73,10 @@ class CompilerConfiguration:
         return copy.deepcopy(self)
 
     def __repr__(self):
-        return 'CompilerConfiguration(' + self.to_json() + ')\n'
+        return 'CompilerConfig(' + self.to_json() + ')\n'
 
 
-class CompilerConfigurationWidget(QtWidgets.QWidget):
+class CompilerConfigWidget(QtWidgets.QWidget):
     """
     Base class for writing a compiler configuration widget. Such a widget is used to edit the options of a compiler
     configuration (all settings except the compiler directory and the environment variables).
@@ -85,7 +88,7 @@ class CompilerConfigurationWidget(QtWidgets.QWidget):
         """
         Sets the compiler configuration (update widget properties).
 
-        :param config: CompilerConfiguration
+        :param config: CompilerConfig
         """
         self.original_config = config
         self.config = config.copy()
@@ -94,12 +97,12 @@ class CompilerConfigurationWidget(QtWidgets.QWidget):
         """
         Gets the edited compiler configuration.
 
-        :rtype: CompilerConfiguration
+        :rtype: CompilerConfig
         """
         return self.config
 
 
-class GenericCompilerCongigWidget(CompilerConfigurationWidget):
+class GenericCompilerCongigWidget(CompilerConfigWidget):
     """
     Generic config widgets that let user define the include paths, the library paths, the libraries to link
     with and add custom compiler switches.
@@ -116,34 +119,34 @@ class GenericCompilerCongigWidget(CompilerConfigurationWidget):
         self.ui.bt_delete_lib_path.clicked.connect(self._rm_library_path)
 
     def set_config(self, config):
-        assert isinstance(config, CompilerConfiguration)
+        assert isinstance(config, CompilerConfig)
         super().set_config(config)
-        self.ui.edit_flags.setText(' '.join(config.compiler_flags))
+        self.ui.edit_flags.setText(' '.join(config.flags))
         self.ui.list_include_paths.clear()
-        for path in config.compiler_include_path:
+        for path in config.include_paths:
             item = QtWidgets.QListWidgetItem()
             item.setText(path)
             self.ui.list_include_paths.addItem(item)
         self.ui.list_lib_paths.clear()
-        for path in config.compiler_library_path:
+        for path in config.library_paths:
             item = QtWidgets.QListWidgetItem()
             item.setText(path)
             self.ui.list_lib_paths.addItem(item)
-        self.ui.edit_libs.setText(' '.join(config.compiler_libraries))
+        self.ui.edit_libs.setText(' '.join(config.libraries))
 
     def get_config(self):
-        self.config.compiler_flags = [token for token in self.ui.edit_flags.text().split(' ') if token]
-        self.config.compiler_libraries = [token for token in self.ui.edit_libs.text().split(' ') if token]
-        self.config.compiler_include_path.clear()
+        self.config.flags = [token for token in self.ui.edit_flags.text().split(' ') if token]
+        self.config.libraries = [token for token in self.ui.edit_libs.text().split(' ') if token]
+        self.config.include_paths.clear()
         for i in range(self.ui.list_include_paths.count()):
             path = self.ui.list_include_paths.item(i).text()
             if path:
-                self.config.compiler_include_path.append(path)
-        self.config.compiler_library_path.clear()
+                self.config.include_paths.append(path)
+        self.config.library_paths.clear()
         for i in range(self.ui.list_lib_paths.count()):
             path = self.ui.list_lib_paths.item(i).text()
             if path:
-                self.config.compiler_library_path.append(path)
+                self.config.library_paths.append(path)
         return super().get_config()
 
     def _add_abs_include_path(self):  # pragma: no cover
@@ -296,114 +299,42 @@ class Compiler:
         :param working_dir: working directory used to run the compiler process.
         :param print_output: True to print the compiler output to stdout.
         """
-        assert isinstance(config, CompilerConfiguration)
+        assert isinstance(config, CompilerConfig)
         self.print_output = print_output
         self.config = config
         self.working_dir = working_dir
 
-    def get_full_compiler_path(self):
+    @abstractmethod
+    def get_version(self, include_all=True):
         """
-        Resolves the full compiler path using the PATH environment variable if the compiler command is not an
-        absolute path.
+        Gets the compiler version string.
+
+        :param include_all: True to include the whole version information, False to get the version number only.
         """
-        if os.path.exists(self.config.compiler):
-            return self.config.compiler
-        else:
-            try:
-                PATH = self.config.compiler_environment_variables['PATH']
-            except KeyError:
-                PATH = ''
-            PATH += os.pathsep + os.environ['PATH']
-            path = system.which(self.config.compiler, path=PATH)
-            if path is None:
-                path = ''
-            return path
+        pass
 
-    def make_destination_folder(self, destination):
+    @abstractmethod
+    def check_compiler(self):
         """
-        Creates the destination folder, destination may be a relative path (relative to the compiler's working dir).
+        Checks the compiler configuration.
+
+        :raises: CompilerCheckFailedError if the check failed.
         """
-        destination = os.path.expanduser(destination)
-        if os.path.isabs(destination):
-            abs_dest = destination
-        else:
-            abs_dest = os.path.join(self.working_dir, destination)
-        if not os.path.exists(abs_dest):
-            os.makedirs(abs_dest)
+        pass
 
-    def is_outdated(self, source, destination):
+    @abstractmethod
+    def compile_files(self, sources, destination, target_name, target_type=TargetType.EXECUTABLE):
         """
-        Checks if the destination is outdated (i.e. the source is newer than the destination).
+        Compile a series of files and link them together (if necessary).
         """
-        try:
-            if not os.path.isabs(source):
-                source = os.path.join(self.working_dir, source)
-            if not os.path.isabs(destination):
-                destination = os.path.join(self.working_dir, destination)
-            try:
-                return os.path.getmtime(source) > os.path.getmtime(destination)
-            except OSError:
-                return True
-        except (TypeError, AttributeError):
-            raise ValueError('Invalid source and destinations')
+        pass
 
-    def run_compiler_command(self, args):
+    def get_process_environment(self):
         """
-        Run a compiler command in a subprocess and returns its return code and output.
+        Returns the process environemnt that needs to be setup to run a compiler command or to run the compiled
+        program.
 
-        .. note:: The output will be printed to stdout if the ``print_output`` parameter of the constructor has been
-            set to True.
-
-        :param args: compiler arguments.
-        :returns: (return_code, output)
-        :rtype: (int, str)
-        """
-        if not self.config.compiler:
-            raise ValueError('pgm cannot be null')
-
-        if not args:
-            raise ValueError('args cannot be null')
-
-        # make sure to add quotes arround a path that contains spaces
-        pgm = self.config.compiler
-        if ' ' in pgm:
-            pgm = '"%s"' % pgm
-
-        if self.print_output:
-            print(' '.join([pgm] + args))
-
-        process = QtCore.QProcess()
-        process.setWorkingDirectory(self.working_dir)
-        process.setProcessEnvironment(self.setup_environment())
-        process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
-        process.start(pgm, args)
-        process.waitForFinished(sys.maxsize)
-
-        # determine exit code (handle crashed processes)
-        if process.exitStatus() != process.Crashed:
-            status = process.exitCode()
-        else:
-            status = self._CRASH_CODE
-
-        # get compiler output
-        raw_output = process.readAllStandardOutput().data()
-        try:
-            output = raw_output.decode(locale.getpreferredencoding()).replace('\r', '')
-        except UnicodeDecodeError:
-            # This is a hack to get a meaningful output when compiling a file
-            # from UNC path using a batch file on some systems, see
-            # https://github.com/OpenCobolIDE/OpenCobolIDE/issues/188
-            output = str(raw_output).replace("b'", '')[:-1].replace(
-                '\\r\\n', '\n').replace('\\\\', '\\')
-
-        if self.print_output:
-            print(output)
-
-        return status, output
-
-    def setup_environment(self):
-        """
-        Setup the compiler process environemnt
+        :rtype: QtCore.QProvessEnvironment
         """
         env = QtCore.QProcessEnvironment()
 
@@ -427,7 +358,7 @@ class Compiler:
                     PATH = v
 
         # Setup compiler environement variables
-        for k, v in self.config.compiler_environment_variables.items():
+        for k, v in self.config.environment_variables.items():
             if not v:
                 continue
             if k == 'PATH':
@@ -436,7 +367,7 @@ class Compiler:
             env.insert(k, v)
 
         # Prepend compiler path
-        compiler_path = self.get_full_compiler_path()
+        compiler_path = self._get_full_compiler_path()
         if compiler_path and os.path.exists(os.path.dirname(compiler_path)):
             compiler_dir = os.path.dirname(compiler_path)
             PATH = compiler_dir + os.pathsep + PATH
@@ -447,32 +378,116 @@ class Compiler:
 
         return env
 
-    def get_version(self, include_all=True):
+    def _get_full_compiler_path(self):
         """
-        Gets the compiler version string.
-
-        :param include_all: True to include the whole version information, False to get the version number only.
+        Resolves the full compiler path using the PATH environment variable if the compiler command is not an
+        absolute path.
         """
-        raise NotImplementedError()
+        if os.path.exists(self.config.compiler):
+            return self.config.compiler
+        else:
+            try:
+                PATH = self.config.environment_variables['PATH']
+            except KeyError:
+                PATH = ''
+            PATH += os.pathsep + os.environ['PATH']
+            path = system.which(self.config.compiler, path=PATH)
+            if path is None:
+                path = ''
+            return path
 
-    def check_compiler(self):
+    def _make_destination_folder(self, destination):
         """
-        Checks the compiler configuration.
-
-        :raises: CompilerCheckFailedError if the check failed.
+        Creates the destination folder, destination may be a relative path (relative to the compiler's working dir).
         """
-        raise NotImplementedError()
+        destination = os.path.expanduser(destination)
+        if os.path.isabs(destination):
+            abs_dest = destination
+        else:
+            abs_dest = os.path.join(self.working_dir, destination)
+        if not os.path.exists(abs_dest):
+            os.makedirs(abs_dest)
 
-    def compile_files(self, sources, destination, target_name, target_type=TargetType.EXECUTABLE):
+    def _is_outdated(self, source, destination):
         """
-        Compile a series of files and link them together (if necessary).
+        Checks if the destination is outdated (i.e. the source is newer than the destination).
         """
-        raise NotImplementedError()
+        try:
+            if not os.path.isabs(source):
+                source = os.path.join(self.working_dir, source)
+            if not os.path.isabs(destination):
+                destination = os.path.join(self.working_dir, destination)
+            try:
+                return os.path.getmtime(source) > os.path.getmtime(destination)
+            except OSError:
+                return True
+        except (TypeError, AttributeError):
+            raise ValueError('Invalid source and destinations')
+
+    def _run_compiler_command(self, args):
+        """
+        Run a compiler command in a subprocess and returns its return code and output.
+
+        .. note:: The output will be printed to stdout if the ``print_output`` parameter of the constructor has been
+            set to True.
+
+        :param args: compiler arguments.
+        :returns: (return_code, output)
+        :rtype: (int, str)
+        """
+        def quoted(pgm):
+            if ' ' in pgm:
+                pgm = '"%s"' % pgm
+            return pgm
+
+        def create_process(pgm):
+            process = QtCore.QProcess()
+            process.setWorkingDirectory(self.working_dir)
+            process.setProcessEnvironment(self.get_process_environment())
+            process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
+            return process
+
+        def get_process_exit_code(process):
+            if process.exitStatus() != process.Crashed:
+                return process.exitCode()
+            else:
+                return self._CRASH_CODE
+
+        def get_process_output(process):
+            # get compiler output
+            raw_output = process.readAllStandardOutput().data()
+            try:
+                output = raw_output.decode(locale.getpreferredencoding()).replace('\r', '')
+            except UnicodeDecodeError:
+                # This is a hack to get a meaningful output when compiling a file
+                # from UNC path using a batch file on some systems, see
+                # https://github.com/OpenCobolIDE/OpenCobolIDE/issues/188
+                output = str(raw_output).replace("b'", '')[:-1].replace('\\r\\n', '\n').replace('\\\\', '\\')
+            return output
+
+        if not self.config.compiler:
+            raise ValueError('pgm cannot be null')
+
+        if not args:
+            raise ValueError('args cannot be null')
+
+        pgm = quoted(self.config.compiler)
+        process = create_process(pgm)
+        process.start(pgm, args)
+        process.waitForFinished(sys.maxsize)
+        exit_code = get_process_exit_code(process)
+        output = get_process_output(process)
+
+        if self.print_output:
+            print(' '.join([pgm] + args))
+            print(output)
+
+        return exit_code, output
 
 
-def get_configurations(mimetype):
+def get_configs_for_mimetype(mimetype):
     """
-    Gets all the possible compiler configurations for the given mimetype.
+    Gets all the possible compiler configs for the given mimetype.
 
     I.e. get all gcc configs, all GnuCOBOL configs,...
     """
@@ -489,7 +504,7 @@ def get_configurations(mimetype):
     for type_name in typenames:
         ret_val += plugins.get_compiler_plugin(type_name).get_auto_detected_configs()
         for config in settings.load_compiler_configurations().values():
-            if config.compiler_type_name == type_name:
+            if config.type_name == type_name:
                 ret_val.append(config)
     return ret_val
 
