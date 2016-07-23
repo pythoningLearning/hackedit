@@ -107,9 +107,11 @@ class GenericCompilerCongigWidget(CompilerConfigWidget):
     Generic _config widgets that let user define the include paths, the library paths, the libraries to link
     with and add custom compiler switches.
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, ui_form=None):
         super().__init__(parent=parent)
-        self.ui = compiler_config_ui.Ui_Form()
+        if ui_form is None:
+            ui_form = compiler_config_ui.Ui_Form()
+        self.ui = ui_form
         self.ui.setupUi(self)
         self.ui.bt_abs_include_path.clicked.connect(self._add_abs_include_path)
         self.ui.bt_rel_include_path.clicked.connect(self._add_rel_include_path)
