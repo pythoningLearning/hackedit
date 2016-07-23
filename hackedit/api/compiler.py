@@ -463,6 +463,13 @@ class Compiler:
             return output
 
         pgm = quoted(self.config.compiler)
+
+        if not pgm:
+            raise ValueError('compiler cannot be empty')
+
+        if not args:
+            raise ValueError('command arguments cannot be empty')
+
         process = create_process(pgm)
         process.start(pgm, args)
         process.waitForFinished(sys.maxsize)
@@ -511,6 +518,8 @@ def check_compiler(compiler):
     High level function that checks if a compiler_config works for a the specific compiler klass.
 
     The result is cached to prevent running checks that have already been tested.
+
+    :raises: CompilerCheckFailedError in case of failure
     """
     classname = compiler.__class__.__name__
     json_config = compiler.config.to_json()
