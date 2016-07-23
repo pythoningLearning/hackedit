@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from hackedit.api import compiler, plugins, system, utils
 from hackedit.app import settings
@@ -7,6 +7,14 @@ from hackedit.app.dialogs import dlg_check_compiler
 
 ITEM_AUTO_DETECTED = 0
 ITEM_MANUAL = 1
+
+COL_NAME = 0
+COL_TYPE = 1
+COL_VERSION = 2
+
+DATA_COL_WIDGET = COL_NAME
+DATA_COL_CONFIG = COL_TYPE
+DATA_COL_PLUGIN = COL_VERSION
 
 
 class CompilersController(QtCore.QObject):
@@ -28,6 +36,7 @@ class CompilersController(QtCore.QObject):
         self.ui.bt_add_env_var.clicked.connect(self._add_env_var)
         self.ui.bt_rm_env_var.clicked.connect(self._rm_env_var)
         self.ui.table_env_vars.itemSelectionChanged.connect(self._update_env_var_buttons)
+        self.ui.edit_compiler.textChanged.connect(self._update_current_config_meta)
 
     def reset(self):
         self.names = set()
@@ -49,8 +58,11 @@ class CompilersController(QtCore.QObject):
         self.user_configs = settings.load_compiler_configurations()
         for key, value in sorted(self.user_configs.items(), key=lambda x: x[0]):
             self._add_config_item(value)
-        self.ui.tree_compilers.header().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.tree_compilers.header().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.ui.tree_compilers.header().setStretchLastSection(False)
+        self.ui.tree_compilers.header().setDefaultSectionSize(16)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_NAME, QtWidgets.QHeaderView.ResizeToContents)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_TYPE, QtWidgets.QHeaderView.ResizeToContents)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_VERSION, QtWidgets.QHeaderView.Stretch)
         self.ui.tree_compilers.expandAll()
         self._update_compiler_config()
 
@@ -61,19 +73,33 @@ class CompilersController(QtCore.QObject):
         self._save_current_config()
         settings.save_compiler_configurations(self.user_configs)
 
+    def _get_compiler_status_icon(self, plugin, config):
+        comp = plugin.get_compiler()(config)
+        icon = plugin.get_compiler_icon()
+        try:
+            compiler.check_compiler(comp)
+        except compiler.CompilerCheckFailedError:
+            icon = QtGui.QIcon.fromTheme('dialog-error')
+        return icon
+
+    def _get_compiler_version(self, plugin, config):
+        comp = plugin.get_compiler()(config)
+        return compiler.get_version(comp, include_all=False)
+
     def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None):
         parent = self.ui.tree_compilers.topLevelItem(item_type)
         if plugin is None:
             plugin = plugins.get_compiler_plugin(config.type_name)
         if plugin is None:
             return
-        icon = plugin.get_compiler_icon()
         item = QtWidgets.QTreeWidgetItem()
-        item.setIcon(0, icon)
-        item.setText(0, config.name)
-        item.setText(1, config.type_name)
-        item.setData(0, QtCore.Qt.UserRole, plugin.get_compiler_config_widget())
-        item.setData(1, QtCore.Qt.UserRole, config)
+        item.setIcon(COL_NAME, self._get_compiler_status_icon(plugin, config))
+        item.setText(COL_NAME, config.name)
+        item.setText(COL_TYPE, config.type_name)
+        item.setText(COL_VERSION, self._get_compiler_version(plugin, config))
+        item.setData(DATA_COL_WIDGET, QtCore.Qt.UserRole, plugin.get_compiler_config_widget())
+        item.setData(DATA_COL_CONFIG, QtCore.Qt.UserRole, config)
+        item.setData(DATA_COL_PLUGIN, QtCore.Qt.UserRole, plugin)
         self.names.add(config.name)
         parent.addChild(item)
         return item
@@ -138,13 +164,14 @@ class CompilersController(QtCore.QObject):
 
     def _add_env_var(self):
         utils.add_environment_var_to_table(self.ui.table_env_vars)
+        self._update_current_config_meta()
 
     def _rm_env_var(self):
         utils.remove_selected_environment_var_from_table(self.ui.table_env_vars)
+        self._update_current_config_meta()
 
     def _update_env_var_buttons(self):
         r = self.ui.table_env_vars.currentRow()
-        print(r)
         self.ui.bt_rm_env_var.setEnabled(r != -1)
 
     def _select_vcvarsall(self):
@@ -197,7 +224,7 @@ class CompilersController(QtCore.QObject):
             for index in range(manual.childCount()):
                 item = manual.child(index)
                 if item.text(0) == cfg.name:
-                    item.setData(1, QtCore.Qt.UserRole, cfg)
+                    item.setData(DATA_COL_CONFIG, QtCore.Qt.UserRole, cfg)
 
     def _get_updated_config(self):
         cfg = self.ui.stacked_compiler_options.current_widget.get_config()
@@ -226,8 +253,8 @@ class CompilersController(QtCore.QObject):
         else:
             clonable = True
             self.ui.tab_compiler_settings.show()
-            config = current_item.data(1, QtCore.Qt.UserRole)
-            widget_class = current_item.data(0, QtCore.Qt.UserRole)
+            config = current_item.data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
+            widget_class = current_item.data(DATA_COL_WIDGET, QtCore.Qt.UserRole)
             self._display_config(config, widget_class)
             # prevent user from editing an auto detected configuration
             parent_item = current_item.parent()
@@ -276,3 +303,17 @@ class CompilersController(QtCore.QObject):
             self.ui.tab_compiler_settings.setCurrentIndex(1)
             self.ui.tab_compiler_settings.setCurrentIndex(0)
         self._update_env_var_buttons()
+
+    def _update_current_config_meta(self):
+        item = self.ui.tree_compilers.currentItem()
+        if item is None:
+            return
+        try:
+            config = self._get_updated_config()
+        except AttributeError:
+            return
+        plugin = item.data(DATA_COL_PLUGIN, QtCore.Qt.UserRole)
+        if not config or not plugin:
+            return
+        item.setIcon(COL_NAME, self._get_compiler_status_icon(plugin, config))
+        item.setText(COL_VERSION, self._get_compiler_version(plugin, config))

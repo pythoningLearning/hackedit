@@ -515,9 +515,8 @@ def get_configs_for_mimetype(mimetype):
 
 def check_compiler(compiler):
     """
-    High level function that checks if a compiler_config works for a the specific compiler klass.
-
-    The result is cached to prevent running checks that have already been tested.
+    Check if the compiler instance works. The result is cached to prevent testing configurations that have already
+    been tested.
 
     :raises: CompilerCheckFailedError in case of failure
     """
@@ -526,7 +525,18 @@ def check_compiler(compiler):
     _perform_check(classname, json_config, compiler=compiler)
 
 
-def _memoize_compiler_config(obj):
+def get_version(compiler, include_all=False):
+    """
+    Gets the version of the specified compiler and cache the results to prevent from running the compiler process
+    uselessy.
+
+    :returns: the compiler's version
+    """
+    path = compiler.get_full_compiler_path()
+    return _get_version(path, include_all, compiler=compiler)
+
+
+def _memoize(obj):
     cache = obj.cache = {}
 
     @functools.wraps(obj)
@@ -537,10 +547,17 @@ def _memoize_compiler_config(obj):
     return memoizer
 
 
-@_memoize_compiler_config
+@_memoize
 def _perform_check(classname, json_config, compiler=None):
     if compiler:
         compiler.check_compiler()
+
+
+@_memoize
+def _get_version(compiler_path, include_all, compiler=None):
+    if compiler:
+        return compiler.get_version(include_all=include_all)
+    return ''
 
 
 def _logger():

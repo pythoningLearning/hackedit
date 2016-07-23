@@ -44,6 +44,9 @@ class DlgCheckCompiler(QtWidgets.QDialog):
             self.ui.textEdit.setText(msg)
         finally:
             QtWidgets.qApp.restoreOverrideCursor()
+        tc = self.ui.textEdit.textCursor()
+        tc.setPosition(0)
+        self.ui.textEdit.setTextCursor(tc)
 
     @classmethod
     def check(cls, parent, compiler):
