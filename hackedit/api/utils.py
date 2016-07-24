@@ -1,6 +1,7 @@
 """
 A set of utility functions that plugin would use.
 """
+import functools
 import sys
 import locale
 import copy
@@ -402,3 +403,39 @@ class CommandBuilder:
         if '$' in ret_val:
             raise CommandBuildFailedError(_('some patterns could not be replaced: %r') % ret_val)
         return ret_val
+
+
+def is_outdated(source, destination, working_dir=''):
+    """
+    Checks if the destination is outdated (i.e. the source is newer than the destination).
+    """
+    try:
+        if not os.path.isabs(source):
+            source = os.path.join(working_dir, source)
+        if not os.path.isabs(destination):
+            destination = os.path.join(working_dir, destination)
+        try:
+            return os.path.getmtime(source) > os.path.getmtime(destination)
+        except OSError:
+            return True
+    except (TypeError, AttributeError):
+        raise ValueError('Invalid source and destinations')
+
+
+def memoize_args(obj):
+    cache = obj.cache = {}
+
+    @functools.wraps(obj)
+    def memoizer(*args, **kwargs):
+        if args not in cache:
+            try:
+                ret = obj(*args, **kwargs)
+            except Exception as e:
+                ret = e
+            finally:
+                cache[args] = ret
+        ret = cache[args]
+        if isinstance(ret, Exception):
+            raise ret
+        return ret
+    return memoizer

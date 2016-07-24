@@ -293,7 +293,7 @@ class Compiler:
 
     def check_compiler(self):
         """
-        Checks the compiler configuration.
+        Checks if the compiler is working.
 
         :raises: CompilerCheckFailedError if the check failed.
         """
@@ -469,32 +469,13 @@ def get_version(compiler, include_all=False):
     return _get_version(path, include_all, compiler=compiler)
 
 
-def _memoize(obj):
-    cache = obj.cache = {}
-
-    @functools.wraps(obj)
-    def memoizer(*args, **kwargs):
-        if args not in cache:
-            try:
-                ret = obj(*args, **kwargs)
-            except Exception as e:
-                ret = e
-            finally:
-                cache[args] = ret
-        ret = cache[args]
-        if isinstance(ret, Exception):
-            raise ret
-        return ret
-    return memoizer
-
-
-@_memoize
+@utils.memoize_args
 def _perform_check(classname, json_config, compiler=None):
     if compiler:
         compiler.check_compiler()
 
 
-@_memoize
+@utils.memoize_args
 def _get_version(compiler_path, include_all, compiler=None):
     if compiler:
         return compiler.get_version(include_all=include_all)
