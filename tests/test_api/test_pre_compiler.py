@@ -6,15 +6,16 @@ import pytest
 
 from hackedit.api import pre_compiler
 
-from . import echo_pre_compiler
+
+echo_pre_compiler = os.path.join(os.path.dirname(__file__), 'echo_pre_compiler.py')
 
 
 class EchoPrecompilerConfig(pre_compiler.PreCompilerConfig):
     def __init__(self):
         super().__init__()
         self.name = 'Echo'
-        self.command_pattern = '%s $flags -o $output_file_name -i $input_file_name' % echo_pre_compiler.__file__
-        self.version_command_args = [echo_pre_compiler.__file__, '--version']
+        self.command_pattern = '%s $flags -o $output_file_name -i $input_file_name' % echo_pre_compiler
+        self.version_command_args = [echo_pre_compiler, '--version']
         self.version_regex = r'.*(?P<version>\d\.\d\.\d).*'
         self.output_pattern = '$input_file_name.py'
         self.path = sys.executable
