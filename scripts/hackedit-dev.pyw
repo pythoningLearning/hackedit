@@ -17,7 +17,7 @@ python3 scripts/hackedit-dev.pyw
 
 """
 import os
-os.environ['HACKEDIT_VENDOR_PATH'] = 'no-override'
+os.environ['HACKEDIT_IGNORE_VENDOR_PATH'] = '1'
 
 if __name__ == '__main__':
     from hackedit.main import main

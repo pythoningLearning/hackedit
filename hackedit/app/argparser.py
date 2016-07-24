@@ -32,6 +32,4 @@ def parse_args():
     parser.add_argument('--autoquit', dest='autoquit', action='store_true',
                         help='Automatically quit the app after a small delay,'
                              'for testing purposes')
-    parser.add_argument('--dev', dest='dev', action='store_true',
-                        help='Enable developer mode (yellowish toolbars)')
     return parser.parse_args()

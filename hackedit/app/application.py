@@ -67,6 +67,7 @@ class Application(QtCore.QObject):
         super().__init__()
         _shared.APP = self
         self.editor_windows = []
+
         show_msg_on_splash(_('Setting up except hook...'))
         self._setup_except_hook()
         self.flg_force_indexing = False

@@ -106,7 +106,7 @@ def main():
         log_level = logging.DEBUG
     logger.setup(log_level)
 
-    _logger().info('starting up...')
+    _logger().info('hackedit vendor path: %s', os.environ.get('HACKEDIT_VENDOR_PATH'))
 
     # Setup splash screen
     if settings.show_splashscreen():
