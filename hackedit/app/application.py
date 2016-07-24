@@ -266,10 +266,10 @@ class Application(QtCore.QObject):
             self._qapp.setStyleSheet(load_stylesheet_pyqt5())
         else:
             self._qapp.setStyleSheet('')
-        if self._args.dev:
+        if os.environ.get('HACKEDIT_DEV_MODE') is not None:
             self._qapp.setStyleSheet(
                 self._qapp.styleSheet() +
-                '\nQToolBar{background-color: #80AA80;color: white;}')
+                '\nQToolBar{background-color: #AAAA80;color: white;}')
         self.tray_icon.setVisible(settings.show_tray_icon())
         mime_types.load()
         icons.init()

@@ -9,7 +9,7 @@ import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
+vendor = os.environ['HACKEDIT_VENDOR_PATH']
 
 
 def setup_sqlite3():
