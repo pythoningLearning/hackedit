@@ -16,15 +16,15 @@ file_handler = None
 FIELD_STYLES = dict(
     asctime=dict(color='green'),
     hostname=dict(color='magenta'),
-    levelname=dict(color='cyan', bold=True),
+    levelname=dict(color='magenta', bold=True),
     programname=dict(color='cyan'),
-    name=dict(color='blue'))
+    name=dict(color='cyan'))
 
 LEVEL_STYLES = dict(
     debug=dict(color='green'),
     info=dict(),
-    pyqodedebug=dict(color='cyan'),
-    pyqodedebugcomm=dict(color='magenta'),
+    pyqodedebug=dict(color='green'),
+    pyqodedebugcomm=dict(color='green'),
     warning=dict(color='yellow'),
     error=dict(color='red'),
     critical=dict(color='red', bold=True))
