@@ -162,6 +162,11 @@ class PreCompiler:
             exit_code, output = self.pre_compile_file(input_path)
             if exit_code != 0 or not os.path.exists(abs_output_path):
                 raise PreCompilerCheckFailed(output, exit_code)
+            with open(abs_output_path) as fout:
+                content = fout.read()
+            if not content:
+                raise PreCompilerCheckFailed(_('PreCompiler output file is empty. This may indicate a configuration '
+                                               'issue.\n\nTest Output:\n%r') % output, exit_code)
             # check succeeded, clean up time
             rm_file(input_path)
             rm_file(output_path)

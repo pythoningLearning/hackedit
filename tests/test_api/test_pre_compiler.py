@@ -1,17 +1,20 @@
 import os
-import pytest
 import sys
-import argparse
 import tempfile
+
+import pytest
+
 from hackedit.api import pre_compiler
+
+from . import echo_pre_compiler
 
 
 class EchoPrecompilerConfig(pre_compiler.PreCompilerConfig):
     def __init__(self):
         super().__init__()
         self.name = 'Echo'
-        self.command_pattern = '%s $flags -o $output_file_name -i $input_file_name' % __file__
-        self.version_command_args = [__file__, '--version']
+        self.command_pattern = '%s $flags -o $output_file_name -i $input_file_name' % echo_pre_compiler.__file__
+        self.version_command_args = [echo_pre_compiler.__file__, '--version']
         self.version_regex = r'.*(?P<version>\d\.\d\.\d).*'
         self.output_pattern = '$input_file_name.py'
         self.path = sys.executable
@@ -115,21 +118,3 @@ class TestPreCompiler:
             os.remove(output_path)
         except OSError:
             return
-
-
-def echo_precompiler():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-o', '--output-file', help='Output file')
-    parser.add_argument('-i', '--input-file', help='Input file')
-    parser.add_argument('-V', '--version', help='Show version', action='store_true')
-    args = parser.parse_args()
-    if args.version:
-        print('Echo preparser v1.0.0')
-        print('Waow, such a great program! ^^')
-        sys.exit()
-    with open(args.input_file, 'r') as fin, open(args.output_file, 'w') as fout:
-        fout.write(fin.read())
-
-
-if __name__ == '__main__':
-    echo_precompiler()
