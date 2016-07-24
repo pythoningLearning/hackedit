@@ -9,13 +9,7 @@ import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import hackedit
-vendor = os.environ.get('HACKEDIT_VENDOR_PATH')
-if not vendor:
-    vendor = os.path.join(os.path.dirname(hackedit.__file__), 'vendor')
-    os.environ['HACKEDIT_VENDOR_PATH'] = vendor
-sys.path.insert(0, vendor)
-os.environ['PATH'] = vendor + os.pathsep + os.environ['PATH']
+
 
 
 def setup_sqlite3():

@@ -5,9 +5,9 @@
 # sys.path
 future
 pygments
--e git://github.com/ColinDuquesnoy/jedi.git@bugfix/performances_degradation#egg=jedi
+jedi
 pep8
-pyflakes
+pyflakes==1.0.0
 restructuredtext_lint
 qdarkstyle
 qcrash

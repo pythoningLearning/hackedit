@@ -61,7 +61,6 @@ that are not used are just being ignored.
 """
 
 import copy
-import sys
 from itertools import chain
 
 from jedi.parser import tree
@@ -80,7 +79,7 @@ from jedi.evaluate import helpers
 
 
 class Evaluator(object):
-    def __init__(self, grammar, sys_path=None):
+    def __init__(self, grammar):
         self.grammar = grammar
         self.memoize_cache = {}  # for memoize decorators
         # To memorize modules -> equals `sys.modules`.
@@ -89,13 +88,6 @@ class Evaluator(object):
         self.recursion_detector = recursion.RecursionDetector()
         self.execution_recursion_detector = recursion.ExecutionRecursionDetector()
         self.analysis = []
-        if sys_path is None:
-            sys_path = sys.path
-        self.sys_path = copy.copy(sys_path)
-        try:
-            self.sys_path.remove('')
-        except ValueError:
-            pass
 
     def wrap(self, element):
         if isinstance(element, tree.Class):
