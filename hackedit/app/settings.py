@@ -685,7 +685,9 @@ def set_last_open_dir(value):
     _SETTINGS.setValue('_cache/last_open_dir', value)
 
 
-# Compiler configurations
+# -----------------------------------------------------------------------------
+# Build & Run
+# -----------------------------------------------------------------------------
 def load_compiler_configurations():
     from hackedit.api.compiler import CompilerConfig
     ret_val = {}
@@ -700,3 +702,19 @@ def save_compiler_configurations(configs_map):
     for k, v in configs_map.items():
         data[k] = v.to_json()
     _SETTINGS.setValue('build_and_run/compiler_configs', json.dumps(data))
+
+
+def load_pre_compiler_configurations():
+    from hackedit.api.pre_compiler import PreCompilerConfig
+    ret_val = {}
+    configs_map = json.loads(_SETTINGS.value('build_and_run/pre_compiler_configs', '{}'))
+    for k, v in configs_map.items():
+        ret_val[k] = PreCompilerConfig().from_json(v)
+    return ret_val
+
+
+def save_pre_compiler_configurations(configs_map):
+    data = {}
+    for k, v in configs_map.items():
+        data[k] = v.to_json()
+    _SETTINGS.setValue('build_and_run/pre_compiler_configs', json.dumps(data))

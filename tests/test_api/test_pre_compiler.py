@@ -19,7 +19,7 @@ class EchoPrecompilerConfig(pre_compiler.PreCompilerConfig):
         self.version_regex = r'.*(?P<version>\d\.\d\.\d).*'
         self.output_pattern = '$input_file_name.py'
         self.path = sys.executable
-        self.associated_extensions = ['.pye']
+        self.associated_extensions = ['*.pye']
         with open(__file__) as ftest:
             self.test_file_content = ftest.read()
         self.type_name = 'Echo'
@@ -81,7 +81,7 @@ class TestPreCompiler:
         assert len(version.splitlines()) == 1
         assert version == '1.0.0'
 
-        assert self.broken_precompiler.get_version() == '-'
+        assert self.broken_precompiler.get_version() == 'PreCompiler not found'
 
         test_precompiler = pre_compiler.PreCompiler(pre_compiler.CustomPreCompilerConfig())
         test_precompiler.config.version_command_args = ['--version']

@@ -446,10 +446,10 @@ class FileIconProvider(QtWidgets.QFileIconProvider):
         """
         Loads FileIconProviderPlugins.
         """
-        _logger().debug('loading icon provider plugins')
+        _logger().info('loading icon provider plugins')
         for entrypoint in pkg_resources.iter_entry_points(
                 plugins.FileIconProviderPlugin.ENTRYPOINT):
-            _logger().debug('  - loading plugin: %s', entrypoint)
+            _logger().info('  - loading plugin: %s', entrypoint)
             try:
                 plugin = entrypoint.load()
             except ImportError:

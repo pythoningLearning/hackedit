@@ -243,7 +243,8 @@ class CompilerOutputParser:
 
 
 class CompilerCheckFailedError(utils.ProgramCheckFailedError):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__('Compiler', _logger, *args, **kwargs)
 
 
 class Compiler:
@@ -348,8 +349,6 @@ class Compiler:
 
         env.insert('PATH', PATH)
 
-        _logger().debug('compiler environment: \n%s' % '\n'.join(env.toStringList()))
-
         return env
 
     def get_full_compiler_path(self):
@@ -409,9 +408,15 @@ class Compiler:
         :returns: (return_code, output)
         :rtype: (int, str)
         """
-        process = utils.BlockingProcess(working_dir=self.working_dir, environment=self.get_process_environment(),
-                                        print_output=self.print_output)
-        return process.run(self.config.compiler, args)
+        env = self.get_process_environment()
+        _logger().debug('compiler command: %s', ' '.join([self.config.compiler] + args))
+        _logger().debug('working directory: %s', self.working_dir)
+        _logger().debug('compiler environment: %s', env.toStringList())
+        process = utils.BlockingProcess(working_dir=self.working_dir, environment=env, print_output=self.print_output)
+        exit_code, output = process.run(self.config.compiler, args)
+        _logger().debug('exit code: %d', exit_code)
+        _logger().debug('output:\n%s', output)
+        return exit_code, output
 
 
 def get_configs_for_mimetype(mimetype):

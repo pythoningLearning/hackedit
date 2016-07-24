@@ -33,6 +33,7 @@ class PreCompilerConfig(utils.JSonisable, utils.Copyable):
         self.version_command_args = []
         #: the regex used to extract the version info from the version_command output
         self.version_regex = r'(?P<version>\d\.\d\.\d)'
+        #: PreCompiler type name
         self.type_name = ''
 
 
@@ -45,7 +46,8 @@ class CustomPreCompilerConfig(PreCompilerConfig):
 
 
 class PreCompilerCheckFailed(utils.ProgramCheckFailedError):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__('PreCompiler', _logger, *args, **kwargs)
 
 
 class PreCompiler:
@@ -97,15 +99,14 @@ class PreCompiler:
                             continue
             return text.splitlines()[0]
 
-        _logger().info('check pre-compiler version: %s', self.config.path)
-        ret_val = ''
-        if not self.config.version_command_args:
-            ret_val = '-'
-        elif os.path.exists(self.config.path):
+        _logger().debug('getting pre-compiler version: %s', self.config.path)
+        ret_val = _('version not found')
+        exists = os.path.exists(self.config.path)
+        if exists and self.config.version_command_args:
             status, output = self._run_command(self.config.version_command_args)
             if status == 0 and output:
                 ret_val = output if include_all else get_version_number(output)
-        else:
+        elif not exists:
             ret_val = _('PreCompiler not found')
         return ret_val
 
@@ -141,7 +142,7 @@ class PreCompiler:
             return os.path.join(self.working_dir, path)
 
         def create_test_file():
-            ext = self.config.associated_extensions[0]
+            ext = self.config.associated_extensions[0].replace('*', '')
             file_name = 'test' + ext
             path = resolve_path(file_name)
             rm_file(path)
@@ -158,10 +159,11 @@ class PreCompiler:
                 raise PreCompilerCheckFailed(
                     _('Failed to remove %r before checking if pre-compilation works.\n'
                       'Please remove this file before attempting a new pre-compilation check!') %
-                    abs_output_path, -1)
+                    abs_output_path, -1, error_leve=PreCompilerCheckFailed.WARNING)
             exit_code, output = self.pre_compile_file(input_path)
             if exit_code != 0 or not os.path.exists(abs_output_path):
                 raise PreCompilerCheckFailed(output, exit_code)
+            print('compiler check results', exit_code, output, os.path.exists(abs_output_path), abs_output_path)
             with open(abs_output_path) as fout:
                 content = fout.read()
             if not content:
@@ -171,12 +173,11 @@ class PreCompiler:
             rm_file(input_path)
             rm_file(output_path)
 
+        _logger().info('checking pre-compiler config: %s', self.config.to_json())
         if not os.path.exists(self.config.path):
             raise PreCompilerCheckFailed(_('PreCompiler path does not exists'), -1)
         if not self.config.associated_extensions:
             raise PreCompilerCheckFailed(_('There is no associated extensions'), -1)
-        if not self.config.output_pattern:
-            raise PreCompilerCheckFailed(_('There is no output pattern'), -1)
         if not self.config.output_pattern:
             raise PreCompilerCheckFailed(_('There is no output pattern'), -1)
         if not self.config.command_pattern:
@@ -186,6 +187,14 @@ class PreCompiler:
                 perform_check()
             except OSError as e:
                 raise PreCompilerCheckFailed(_('An unexpected error occured: %s') % e, -1)
+            else:
+                _logger().info('pre-compiler check succeeded')
+        else:
+            raise PreCompilerCheckFailed(_(
+                "Cannot perform pre-compiler check because we don't know how to create a validation test for this "
+                'type of pre-compiler.\n'
+                'The configuration seems correct but the pre-compiler might not work...'),
+                0, error_level=PreCompilerCheckFailed.WARNING)
 
     def _is_outdated(self, source, destination):
         return utils.is_outdated(source, destination, working_dir=self.working_dir)
@@ -200,8 +209,12 @@ class PreCompiler:
         return builder
 
     def _run_command(self, args):
+        _logger().debug('pre-compiler command: %s', ' '.join([self.config.path] + args))
         process = utils.BlockingProcess(working_dir=self.working_dir, print_output=self.print_output)
-        return process.run(self.config.path, args)
+        exit_code, output = process.run(self.config.path, args)
+        _logger().debug('exit code: %d', exit_code)
+        _logger().debug('output:\n%s', output)
+        return exit_code, output
 
 
 def check_pre_compiler(pre_compiler):

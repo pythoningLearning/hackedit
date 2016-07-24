@@ -237,7 +237,6 @@ class Application(QtCore.QObject):
             self._splash = None
             delattr(self, '_splash')
 
-        _logger().debug('running')
         nb_window = 0
         for path in self._args.paths:
             if self.open_path(path):

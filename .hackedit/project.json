@@ -36,14 +36,15 @@
         "working_dir": "scripts/git-hooks"
     },
     {
-        "environment": {},
+        "environment": {
+            "HACKEDIT_DEV_MODE": "1",
+            "HACKEDIT_IGNORE_VENDOR_PATH": "1"
+        },
         "interpreter_options": [],
         "name": "hackedit-dev",
         "run_in_external_terminal": false,
         "script": "scripts/hackedit-dev.pyw",
-        "script_parameters": [
-            "--dev"
-        ],
+        "script_parameters": [],
         "working_dir": "."
     },
     {

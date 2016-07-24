@@ -46,6 +46,8 @@ class PluginManager:
         self.template_providers = []
         #: compiler plugins
         self.compiler_plugins = {}
+        #: pre-compiler plugins
+        self.pre_compiler_plugins = {}
 
         #: the map of plugin which failed to load with their traceback
         self.failed_to_load = {}
@@ -55,8 +57,33 @@ class PluginManager:
         self._load_preferences_page_plugins()
         self._load_workspace_plugins()
         self._load_compiler_plugins()
+        self._load_pre_compiler_plugins()
         FileIconProvider.load_plugins()
         SplittableCodeEditTabWidget.icon_provider_klass = FileIconProvider
+
+    def _load_pre_compiler_plugins(self):
+        """
+        Loads workspace plugins (plugins that are tied to a specific worskpace)
+        """
+        _logger().info('loading pre-compiler plugins')
+        entrypoints = list(pkg_resources.iter_entry_points(plugins.PreCompilerPlugin.ENTRYPOINT))
+        for entrypoint in entrypoints:
+            _logger().info('  - loading plugin: %s', entrypoint)
+            try:
+                plugin_instance = entrypoint.load()()
+            except Exception as e:
+                _logger().exception('Failed to load compiler plugin')
+                name = str(entrypoint).split('=')[0].strip()
+                self.failed_to_load[name] = traceback.format_exc(), e
+            else:
+                try:
+                    type_name = plugin_instance.get_pre_compiler_type_name()
+                except NotImplementedError as e:
+                    _logger().warning('Failed to load pre-compiler plugin, get_pre_compiler_type_name not implemented')
+                    name = str(entrypoint).split('=')[0].strip()
+                    self.failed_to_load[name] = traceback.format_exc(), e
+                else:
+                    self.pre_compiler_plugins[type_name] = plugin_instance
 
     def _load_compiler_plugins(self):
         """
@@ -81,7 +108,6 @@ class PluginManager:
                     self.failed_to_load[name] = traceback.format_exc(), e
                 else:
                     self.compiler_plugins[compiler.type_name] = plugin_instance
-        _logger().info('available compiler plugins: %r', self.compiler_plugins)
 
     def _load_workspace_plugins(self):
         """
@@ -100,8 +126,6 @@ class PluginManager:
                 self.failed_to_load[name] = traceback.format_exc(), e
             else:
                 self.workspace_plugins[plugin_class.__name__] = plugin_class
-        _logger().debug('available workspace plugins: %r',
-                        self.workspace_plugins)
 
     def _load_preferences_page_plugins(self):
         """
@@ -120,8 +144,6 @@ class PluginManager:
                 self.failed_to_load[name] = traceback.format_exc(), e
             else:
                 self.preferences_page_plugins.append(plugin_class)
-        _logger().debug('preferences page plugins: %r',
-                        self.preferences_page_plugins)
 
     def _load_template_provider_plugins(self):
         """
@@ -140,8 +162,6 @@ class PluginManager:
                 self.failed_to_load[name] = traceback.format_exc(), e
             else:
                 self.template_providers.append(plugin_class())
-        _logger().debug('template providers plugins: %r',
-                        self.template_providers)
 
     def _load_editor_plugins(self):
         """

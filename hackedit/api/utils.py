@@ -222,7 +222,7 @@ class JSonisable:
         """
         Converts the configuration to a json object
         """
-        return json.dumps(self.__dict__, indent=4, sort_keys=True)
+        return json.dumps(self.__dict__, sort_keys=True)
 
     def from_json(self, json_content):
         """
@@ -423,9 +423,20 @@ def is_outdated(source, destination, working_dir=''):
 
 
 class ProgramCheckFailedError(Exception):
-    def __init__(self, message, return_code):
+    WARNING = 0
+    ERROR = 1
+
+    def __init__(self, program, logger, message, return_code=None, error_level=None):
+        if error_level is None:
+            error_level = self.ERROR
+        self.error_level = error_level
         self.message = message
         self.return_code = return_code
+        if self.error_level == self.WARNING:
+            log_fct = logger().warn
+        else:
+            log_fct = logger().error
+        log_fct('%s check failed: %r' % (program, self.message))
 
 
 def memoize_args(obj):

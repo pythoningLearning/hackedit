@@ -14,6 +14,7 @@ This module describes the entrypoints interface, each "interface" has a
 dict in your setup.py.
 
 """
+from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QObject
 
 from . import _shared
@@ -247,9 +248,8 @@ class TemplateProviderPlugin:
 
 class CompilerPlugin:
     """
-    This kind of plugin let you add support for a new compiler in HackEdit.
+    Adds support for a new compiler in HackEdit.
     """
-
     ENTRYPOINT = 'hackedit.plugins.compilers'
 
     def get_compiler_icon(self):
@@ -275,13 +275,81 @@ class CompilerPlugin:
         """
         raise NotImplementedError()
 
-    def create_new_configuration(self, name, compiler_dir):
+    def _select_compiler_path(self, parent):
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select compiler')
+        if path:
+            return True, path
+        return False, ''
+
+    def create_new_configuration_with_dialog(self, parent, name):
+        """
+        Creates a new compiler configuration with the ability to show a wizard/dialog to ask more inputs from the user.
+
+        The default implementation just asks for the compiler path but you can overwrite it to show your own dialog
+
+        This method should rely on `create_new_configuration` to create the final configuration.
+        """
+        status, path = self._select_compiler_path(parent)
+        if not status:
+            return None
+        return self.create_new_configuration(name, path)
+
+    def create_new_configuration(self, name, compiler_path, extra_options=None):
+        """
+        Creates a new configuration.
+
+        :param name: unique name of the configuration.
+        :param compiler_path: compiler path or command
+        :param extra_options: optional extra options
+        """
+        raise NotImplementedError()
+
+
+class PreCompilerPlugin:
+    """
+    Adds support for a new pre-compiler in HackEdit.
+    """
+
+    ENTRYPOINT = 'hackedit.plugins.pre_compilers'
+
+    def get_pre_compiler_icon(self):
+        return QtGui.QIcon.fromTheme('checkbox')
+
+    def get_pre_compiler_type_name(self):
+        raise NotImplementedError()
+
+    def get_auto_detected_configs(self):
+        """
+        Get the list of autodetected compiler configurations.
+        """
+        raise NotImplementedError()
+
+    def create_new_configuration_with_dialog(self, parent, name):
+        """
+        Creates a new configuration with the ability to show a wizard/dialog to ask more inputs from the user.
+
+        The default implementation just asks for the compiler path but you can overwrite it to show your own dialog.
+
+        This method should rely on `create_new_configuration` to create the final configuration.
+        """
+        status, path = self._select_pre_compiler_path(parent)
+        if not status:
+            return None
+        return self.create_new_configuration(name, path)
+
+    def create_new_configuration(self, name, path, extra_options):
         """
         Creates a new configuration.
 
         :param name: unique name of the configuration.
         """
         raise NotImplementedError()
+
+    def _select_pre_compiler_path(self, parent):
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pre-compiler')
+        if path:
+            return True, path
+        return False, ''
 
 
 def get_plugin_instance(plugin_class):
@@ -309,6 +377,26 @@ def get_compiler_plugin(compiler_type_name):
     """
     try:
         return _shared.APP.plugin_manager.compiler_plugins[compiler_type_name]
+    except TypeError:
+        return None
+
+
+def get_pre_compiler_plugins():
+    """
+    Returns a list of all known compiler classes
+    """
+    ret_val = []
+    for plugin in _shared.APP.plugin_manager.pre_compiler_plugins.values():
+        ret_val.append(plugin)
+    return ret_val
+
+
+def get_pre_compiler_plugin(pre_compiler_type_name):
+    """
+    Gets the compiler plugin that match the specified compiler_type_name.
+    """
+    try:
+        return _shared.APP.plugin_manager.pre_compiler_plugins[pre_compiler_type_name]
     except TypeError:
         return None
 

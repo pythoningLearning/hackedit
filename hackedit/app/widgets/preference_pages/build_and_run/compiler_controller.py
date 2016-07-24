@@ -4,6 +4,8 @@ from hackedit.api import compiler, plugins, system, utils
 from hackedit.app import settings
 from hackedit.app.dialogs import dlg_check_compiler
 
+from .base import BuildAndRunTabController
+
 
 ITEM_AUTO_DETECTED = 0
 ITEM_MANUAL = 1
@@ -17,7 +19,7 @@ DATA_COL_CONFIG = COL_TYPE
 DATA_COL_PLUGIN = COL_VERSION
 
 
-class CompilersController(QtCore.QObject):
+class CompilersController(BuildAndRunTabController):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
@@ -28,6 +30,7 @@ class CompilersController(QtCore.QObject):
 
     def _connect_slots(self):
         self.ui.tree_compilers.itemSelectionChanged.connect(self._update_compiler_config)
+        self.ui.tree_compilers.itemClicked.connect(self._update_compiler_config)
         self.ui.bt_clone_compiler.clicked.connect(self._clone_compiler)
         self.ui.bt_delete_compiler.clicked.connect(self._delete_compiler)
         self.ui.bt_check_compiler.clicked.connect(self._check_compiler)
@@ -37,13 +40,13 @@ class CompilersController(QtCore.QObject):
         self.ui.bt_add_env_var.clicked.connect(self._add_env_var)
         self.ui.bt_rm_env_var.clicked.connect(self._rm_env_var)
         self.ui.table_env_vars.itemSelectionChanged.connect(self._update_env_var_buttons)
+        self.ui.table_env_vars.itemChanged.connect(self._update_current_config_meta)
         self.ui.edit_compiler.textChanged.connect(self._update_current_config_meta)
 
     def reset(self):
         self.names = set()
         mnu_compiler_types = QtWidgets.QMenu()
         self.ui.bt_add_compiler.setMenu(mnu_compiler_types)
-        # fill compiler tree widget
         for item_type in [ITEM_AUTO_DETECTED, ITEM_MANUAL]:
             item = self.ui.tree_compilers.topLevelItem(item_type)
             while item.childCount():
@@ -70,21 +73,23 @@ class CompilersController(QtCore.QObject):
     def restore_defaults(self):
         settings.save_compiler_configurations({})
 
-    def apply(self):
+    def save(self):
         self._save_current_config()
         settings.save_compiler_configurations(self.user_configs)
 
-    def _get_compiler_status_icon(self, plugin, config):
+    def _get_compiler_status_meta(self, plugin, config):
         comp = plugin.get_compiler()(config)
-        icon = plugin.get_compiler_icon()
+        comp.print_output = False
+        icon, tooltip = self.get_success_status_meta(plugin.get_compiler_icon())
         try:
             compiler.check_compiler(comp)
-        except compiler.CompilerCheckFailedError:
-            icon = QtGui.QIcon.fromTheme('dialog-error')
-        return icon
+        except utils.ProgramCheckFailedError as e:
+            icon, tooltip = self.get_error_status_meta(e)
+        return icon, tooltip
 
     def _get_compiler_version(self, plugin, config):
         comp = plugin.get_compiler()(config)
+        comp.print_output = False
         return compiler.get_version(comp, include_all=False)
 
     def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None):
@@ -94,7 +99,9 @@ class CompilersController(QtCore.QObject):
         if plugin is None:
             return
         item = QtWidgets.QTreeWidgetItem()
-        item.setIcon(COL_NAME, self._get_compiler_status_icon(plugin, config))
+        icon, tooltip = self._get_compiler_status_meta(plugin, config)
+        item.setIcon(COL_NAME, icon)
+        item.setToolTip(COL_NAME, tooltip)
         item.setText(COL_NAME, config.name)
         item.setText(COL_TYPE, config.type_name)
         item.setText(COL_VERSION, self._get_compiler_version(plugin, config))
@@ -107,14 +114,13 @@ class CompilersController(QtCore.QObject):
 
     def _add_compiler(self):
         compiler_type_name = self.sender().text()
-        ok, name = self._get_name(compiler_type_name)
-        if not ok:
-            return
-        ok, path = self._select_compiler_path()
+        ok, name = self.get_name(self.ui.bt_add_compiler, compiler_type_name)
         if not ok:
             return
         plugin = plugins.get_compiler_plugin(compiler_type_name)
-        config = plugin.create_new_configuration(name, path)
+        config = plugin.create_new_configuration_with_dialog(self.ui.bt_add_compiler, name)
+        if config is None:
+            return
         self.user_configs[config.name] = config
         item = self._add_config_item(config, plugin=plugin)
         item.setSelected(True)
@@ -125,7 +131,7 @@ class CompilersController(QtCore.QObject):
     def _clone_compiler(self):
         cloned_config = self._current_config.copy()
         plugin = plugins.get_compiler_plugin(cloned_config.type_name)
-        ok, name = self._get_name(cloned_config.type_name)
+        ok, name = self.get_name(self.ui.bt_clone_compiler, cloned_config.type_name)
         if not ok:
             return
         assert isinstance(cloned_config, compiler.CompilerConfig)
@@ -160,8 +166,9 @@ class CompilersController(QtCore.QObject):
         dlg_check_compiler.DlgCheckCompiler.check(self.ui.bt_check_compiler, compiler)
 
     def _select_compiler(self):
-        status, path = self._select_compiler_path()
-        if status:
+        status, path = self.select_path(self.ui.bt_select_compiler, _('Select compiler'),
+                                        directory=self.ui.edit_compiler.text())
+        if status and path:
             self.ui.edit_compiler.setText(path)
 
     def _on_msvc_support_togggled(self, state):
@@ -181,40 +188,10 @@ class CompilersController(QtCore.QObject):
         self.ui.bt_rm_env_var.setEnabled(r != -1)
 
     def _select_vcvarsall(self):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self.ui.bt_select_vcvarsall, 'Select vcvarsall.bat', 'C:\\')
-        if path:
+        status, path = self.select_path(self.ui.bt_select_vcvarsall, _('Select vcvarsall.bat'),
+                                        self.ui.edit_vcvarsall.text())
+        if status and path:
             self.ui.edit_vcvarsall.setText(path)
-
-    def _select_compiler_path(self):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(self.ui.bt_add_compiler, 'Select compiler')
-        if path:
-            return True, path
-        return False, ''
-
-    def _get_name(self, compiler_type_name):
-        name = ''
-        while not self._check_name(name):
-            if name:
-                QtWidgets.QMessageBox.warning(self.ui.bt_add_compiler, 'Invalid name',
-                                              'The name %r is already used for another configuration' % name)
-            name, ok = QtWidgets.QInputDialog.getText(self.ui.bt_add_compiler,
-                                                      'Add new compiler', 'Name:', QtWidgets.QLineEdit.Normal,
-                                                      self._suggest_name(compiler_type_name))
-            if not ok:
-                return False, ''
-        return True, name
-
-    def _suggest_name(self, name):
-        i = 1
-        original = name
-        while not self._check_name(name):
-            name = original + '_%d' % (i + 1)
-            i += 1
-        return name
-
-    def _check_name(self, name):
-        return name != '' and name not in self.names
 
     def _save_current_config(self):
         if self._current_config and self._current_config_editable:
@@ -262,11 +239,9 @@ class CompilersController(QtCore.QObject):
             config = current_item.data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
             widget_class = current_item.data(DATA_COL_WIDGET, QtCore.Qt.UserRole)
             self._display_config(config, widget_class)
-            # prevent user from editing an auto detected configuration
             parent_item = current_item.parent()
             parent_item_index = self.ui.tree_compilers.indexOfTopLevelItem(parent_item)
             editable = parent_item_index != ITEM_AUTO_DETECTED
-            # self._current_config = config if editable else None
             self._current_config_editable = editable
             self._current_config = config
         self.ui.tab_default_options.setEnabled(editable)
@@ -325,5 +300,7 @@ class CompilersController(QtCore.QObject):
         plugin = item.data(DATA_COL_PLUGIN, QtCore.Qt.UserRole)
         if not config or not plugin:
             return
-        item.setIcon(COL_NAME, self._get_compiler_status_icon(plugin, config))
+        icon, tooltip = self._get_compiler_status_meta(plugin, config)
+        item.setIcon(COL_NAME, icon)
+        item.setToolTip(COL_NAME, tooltip)
         item.setText(COL_VERSION, self._get_compiler_version(plugin, config))

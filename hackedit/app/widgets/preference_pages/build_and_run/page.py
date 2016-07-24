@@ -3,6 +3,7 @@ from hackedit.api.widgets import PreferencePage
 from hackedit.app.forms import settings_page_build_and_run_ui
 
 from .compiler_controller import CompilersController
+from .pre_compiler_controller import PreCompilersController
 
 
 ITEM_AUTO_DETECTED = 0
@@ -18,14 +19,20 @@ class BuildAndRun(PreferencePage):
         super().__init__(_('Build And Run'), icon=special_icons.run_build())
         self.ui = settings_page_build_and_run_ui.Ui_Form()
         self.ui.setupUi(self)
-        self.compilers = CompilersController(self.ui)
+        self.controllers = [
+            CompilersController(self.ui),
+            PreCompilersController(self.ui)
+        ]
         self.ui.tab_categories.setCurrentIndex(0)
 
     def reset(self):
-        self.compilers.reset()
+        for controller in self.controllers:
+            controller.reset()
 
     def restore_defaults(self):
-        self.compilers.restore_defaults()
+        for controller in self.controllers:
+            controller.restore_defaults()
 
     def save(self):
-        self.compilers.apply()
+        for controller in self.controllers:
+            controller.save()

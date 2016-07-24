@@ -601,7 +601,7 @@
              <widget class="QLineEdit" name="edit_pre_compiler_flags"/>
             </item>
             <item row="4" column="0">
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="lbl_command_pattern">
               <property name="text">
                <string>Command pattern:</string>
               </property>
@@ -618,7 +618,7 @@
              </widget>
             </item>
             <item row="5" column="1">
-             <widget class="QLineEdit" name="lineEdit_2"/>
+             <widget class="QLineEdit" name="edit_pre_compiler_output_pattern"/>
             </item>
            </layout>
           </widget>

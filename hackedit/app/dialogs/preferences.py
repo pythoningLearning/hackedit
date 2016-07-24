@@ -22,6 +22,7 @@ class DlgPreferences(QtWidgets.QDialog):
 
     def __init__(self, parent, app):
         super().__init__(parent)
+        _logger().info('opening preferences dialog')
         if DlgPreferences.color_highlight_background is None:
             DlgPreferences.color_highlight_background = \
                 self.palette().color(QtGui.QPalette.Highlight).name()
@@ -34,9 +35,7 @@ class DlgPreferences(QtWidgets.QDialog):
         self._connect_slots()
         # force reload of settings
         settings.load()
-        self._setup_builtin_pages()
-        self._setup_editor_pages()
-        self._setup_plugin_pages()
+        self._setup_pages()
         self._ui.categories.sortByColumn(0, QtCore.Qt.AscendingOrder)
         self._ui.categories.expandAll()
         self.restore_state()
@@ -117,9 +116,12 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         buttons.button(buttons.Apply).setVisible(w.can_apply)
 
     def _reset(self):
+        _logger().info('resetting settings: %s', self._ui.pages.currentWidget().name)
         self._ui.pages.currentWidget().reset()
+        _logger().debug('settings resetted')
 
     def _restore_defaults(self):
+        _logger().info('restoring default settings: %s', self._ui.pages.currentWidget().name)
         QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
         self._ui.pages.currentWidget().restore_defaults()
         self._reset()
@@ -127,8 +129,10 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         for i in range(self._ui.pages.count()):
             page = self._ui.pages.widget(i)
             page.save()
+        _logger().debug('settings restored')
 
     def _apply(self):
+        _logger().info('saving settings: %s', self._ui.pages.currentWidget().name)
         # save all settings
         QtWidgets.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
         try:
@@ -141,31 +145,35 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
                 page.reset()
         finally:
             QtWidgets.qApp.restoreOverrideCursor()
+        _logger().debug('settings saved')
 
     def restore_state(self):
+        _logger().debug('restoring window stated')
         index = int(QtCore.QSettings().value(
             '_cache/preferences_page_index', 0))
         item = self._find_item_by_index(index)
         self._ui.categories.setCurrentItem(item)
+        _logger().debug('window stated restored')
 
-    def _setup_builtin_pages(self):
+    def _setup_pages(self):
+        self._add_page(preference_pages.BuildAndRun())
         env = preference_pages.Environment()
         self._add_page(env)
-        self._add_page(preference_pages.BuildAndRun())
-        self._add_page(preference_pages.Editor())
-
         self._add_page(preference_pages.Behaviour())
-        colors = preference_pages.EditorColors()
-        env.colors = colors
-        self._add_page(colors)
-        self._add_page(preference_pages.EditorDisplay())
         self._add_page(preference_pages.Indexing())
         self._add_page(preference_pages.Mimetypes())
         self._add_page(preference_pages.Notifications())
         self._add_page(preference_pages.Shortcuts())
+        self._add_page(preference_pages.Editor())
+        colors = preference_pages.EditorColors()
+        env.colors = colors
+        self._add_page(colors)
+        self._add_page(preference_pages.EditorDisplay())
+        self._setup_editor_pages()
+
         self._add_page(preference_pages.Templates())
         self._add_page(preference_pages.Workspaces())
-
+        self._setup_plugin_pages()
 
     def _setup_plugin_pages(self):
         pages = []
@@ -203,11 +211,13 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         self._apply()
         QtCore.QSettings().setValue(
             '_cache/preferences_page_index', self._ui.pages.currentIndex())
+        _logger().info('dialog accepted')
         super().accept()
 
     def reject(self):
         QtCore.QSettings().setValue(
             '_cache/preferences_page_index', self._ui.pages.currentIndex())
+        _logger().info('dialog rejected')
         super().reject()
 
     def _add_page(self, widget):
@@ -217,6 +227,8 @@ border-radius:3px;''' % (DlgPreferences.color_highlight_background,
         :param widget: page widget
         :type widget: hackedit.api.widgets.PreferencePage
         """
+        name = widget.name if not widget.category else '%s - %s' % (widget.category, widget.name)
+        _logger().info('adding page %r', name)
         if widget is None:
             return
         widget.setContentsMargins(0, 0, 0, 0)
