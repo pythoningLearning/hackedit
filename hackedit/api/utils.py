@@ -311,3 +311,94 @@ class BlockingProcess(QtCore.QProcess):
         if ' ' in string:
             string = '"%s"' % string
         return string
+
+
+class CommandBuildFailedError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+class CommandBuilder:
+    """
+    Build a command based on a pattern and a dict of options.
+
+    The pattern is a list of string with substitutable options: $xyz where xyz is a key of the options_dict.
+
+    Example::
+
+        >>> builder = CommandBuilder('-o $output_file_name -i $input_file_name', {
+                'output_file_name': 'bin/test',
+                'input_file_name': 'test.cbl'
+            })
+        >>> builder.as_list()
+        ['-o', 'bin/test', '-i', 'test.cbl']
+        >>> builder.as_string()
+        '-o bin/test -i test.cbl'
+
+    """
+    def __init__(self, pattern, options_dict):
+        """
+        :param pattern: the command pattern string.
+        :type pattern: str
+        :param options_dict: the options_dict
+        :type options_dict: dict
+        """
+        self._pattern = pattern
+        self._options_dict = options_dict
+        self._result = self._build()
+
+    def as_string(self):
+        """
+        Returns the built command as a single string.
+        """
+        return ' '.join(self.as_list())
+
+    def as_list(self):
+        """
+        Returns the built command as a list.
+        """
+        return [t.strip() for t in self._result.strip().split(' ') if t]
+
+    @staticmethod
+    def get_pattern_option(string, pattern):
+        """
+        Find the option that is associated with the pattern if any.
+
+        Example:
+
+            >>> CommandBuilder.get_pattern_option('-I$includes', '$includes')
+            '-I'
+            >>> CommandBuilder.get_pattern_option('-I $includes', '$includes')
+            ''
+        """
+        try:
+            i = string.index(pattern)
+        except ValueError:
+            option = ''
+        else:
+            option = ''
+            i -= 1
+            while i >= 0 and string[i] != ' ':
+                option = string[i] + option
+                i -= 1
+        return option
+
+    def _build(self):
+        ret_val = self._pattern
+        for k in self._options_dict.keys():
+            pattern = '$%s' % k
+            value = self._options_dict[k]
+            if isinstance(value, list):
+                option = self.get_pattern_option(ret_val, pattern)
+                if option:
+                    # repeat option foreach value in the list
+                    ret_val = ret_val.replace(option + pattern, ' '.join([option + val for val in value]))
+                    continue
+                else:
+                    value = ' '.join(value)
+            elif not isinstance(value, str):
+                value = str(value)
+            ret_val = ret_val.replace('$%s' % k, value)
+        if '$' in ret_val:
+            raise CommandBuildFailedError(_('some patterns could not be replaced: %r') % ret_val)
+        return ret_val
