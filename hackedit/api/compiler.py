@@ -242,10 +242,8 @@ class CompilerOutputParser:
         return issues
 
 
-class CompilerCheckFailedError(Exception):
-    def __init__(self, message, return_code):
-        self.message = message
-        self.return_code = return_code
+class CompilerCheckFailedError(utils.ProgramCheckFailedError):
+    pass
 
 
 class Compiler:

@@ -422,6 +422,12 @@ def is_outdated(source, destination, working_dir=''):
         raise ValueError('Invalid source and destinations')
 
 
+class ProgramCheckFailedError(Exception):
+    def __init__(self, message, return_code):
+        self.message = message
+        self.return_code = return_code
+
+
 def memoize_args(obj):
     cache = obj.cache = {}
 
