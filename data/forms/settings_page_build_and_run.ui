@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tab_categories">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_compilers">
       <attribute name="icon">
@@ -704,6 +704,12 @@
          </property>
          <item>
           <widget class="QToolButton" name="bt_add_pre_compiler">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -759,6 +765,16 @@
            <property name="icon">
             <iconset theme="edit-delete">
              <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bt_make_default_pre_compiler">
+           <property name="text">
+            <string>Make default</string>
+           </property>
+           <property name="icon">
+            <iconset theme="emblem-favorite"/>
            </property>
           </widget>
          </item>

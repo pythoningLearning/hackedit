@@ -1,254 +1,19 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 
 from hackedit.api import compiler, plugins, system, utils
 from hackedit.app import settings
-from hackedit.app.dialogs import dlg_check_compiler
 
 from .base import BuildAndRunTabController
 
 
-ITEM_AUTO_DETECTED = 0
-ITEM_MANUAL = 1
-
-COL_NAME = 0
-COL_TYPE = 1
-COL_VERSION = 2
-COL_DEFAULT = 3
-
-DATA_COL_WIDGET = COL_NAME
-DATA_COL_CONFIG = COL_TYPE
-DATA_COL_PLUGIN = COL_VERSION
-
-
 class CompilersController(BuildAndRunTabController):
     def __init__(self, ui):
-        super().__init__()
-        self.ui = ui
-        self._config_to_select = ''
-        self._item_to_select = None
-        self._updating_config = False
-        self._current_config = None
-        self._current_config_editable = False
-        self._connect_slots()
-
-    def _connect_slots(self):
-        self.ui.tree_compilers.itemSelectionChanged.connect(self._update_compiler_config)
-        self.ui.tree_compilers.itemClicked.connect(self._update_compiler_config)
-        self.ui.bt_clone_compiler.clicked.connect(self._clone_compiler)
-        self.ui.bt_delete_compiler.clicked.connect(self._delete_compiler)
-        self.ui.bt_make_default_compiler.clicked.connect(self._make_default)
-        self.ui.bt_check_compiler.clicked.connect(self._check_compiler)
-        self.ui.bt_select_compiler.clicked.connect(self._select_compiler)
-        self.ui.bt_select_vcvarsall.clicked.connect(self._select_vcvarsall)
-        self.ui.group_msvc.toggled.connect(self._on_msvc_support_togggled)
-        self.ui.bt_add_env_var.clicked.connect(self._add_env_var)
-        self.ui.bt_rm_env_var.clicked.connect(self._rm_env_var)
-        self.ui.table_env_vars.itemSelectionChanged.connect(self._update_env_var_buttons)
-        self.ui.table_env_vars.itemChanged.connect(self._update_current_config_meta)
-        self.ui.edit_compiler.textChanged.connect(self._update_current_config_meta)
-
-    def reset(self):
-        self.names = set()
-        mnu_compiler_types = QtWidgets.QMenu()
-        self.ui.bt_add_compiler.setMenu(mnu_compiler_types)
-        for item_type in [ITEM_AUTO_DETECTED, ITEM_MANUAL]:
-            item = self.ui.tree_compilers.topLevelItem(item_type)
-            while item.childCount():
-                item.removeChild(item.child(0))
-        # add autodetected confis
-        for plugin in plugins.get_compiler_plugins():
-            action = mnu_compiler_types.addAction(plugin.get_compiler().type_name)
-            action.setIcon(plugin.get_compiler_icon())
-            action.triggered.connect(self._add_compiler)
-            compiler_type_name = plugin.get_compiler().type_name
-            default = settings.get_default_compiler(compiler_type_name)
-            for config in plugin.get_auto_detected_configs():
-                if default is None:
-                    default = config.name
-                    settings.set_default_compiler(compiler_type_name, config.name)
-                if not self._config_to_select:
-                    self._config_to_select = config.name
-                is_default = False
-                if default == config.name:
-                    is_default = True
-                self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin, is_default=is_default,
-                                      select=self._config_to_select == config.name)
-        self.ui.tree_compilers.setCurrentItem(None)
-        # add user defined configuration
-        self.user_configs = settings.load_compiler_configurations()
-        for key, value in sorted(self.user_configs.items(), key=lambda x: x[0]):
-            default = settings.get_default_compiler(value.type_name)
-            is_default = False
-            if default is None:
-                default = value.name
-            if default == value.name:
-                is_default = True
-            if not self._config_to_select:
-                self._config_to_select = config.name
-            self._add_config_item(value, is_default=is_default, select=self._config_to_select == value.name)
-        self.ui.tree_compilers.header().setStretchLastSection(False)
-        self.ui.tree_compilers.header().setDefaultSectionSize(16)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_NAME, QtWidgets.QHeaderView.Stretch)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_TYPE, QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_VERSION, QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.tree_compilers.setHeaderLabels(['Name', 'Type', 'Version', ''])
-        self.ui.tree_compilers.expandAll()
-        if self._item_to_select:
-            self.ui.tree_compilers.setCurrentItem(self._item_to_select)
-        self._update_compiler_config()
-
-    def restore_defaults(self):
-        settings.save_compiler_configurations({})
-
-    def save(self):
-        self._save_current_config()
-        settings.save_compiler_configurations(self.user_configs)
-
-    def _get_compiler_status_meta(self, plugin, config):
-        comp = plugin.get_compiler()(config)
-        comp.print_output = False
-        icon, tooltip = self.get_success_status_meta(plugin.get_compiler_icon())
-        try:
-            compiler.check_compiler(comp)
-        except utils.ProgramCheckFailedError as e:
-            icon, tooltip = self.get_error_status_meta(e)
-        return icon, tooltip
-
-    def _get_compiler_version(self, plugin, config):
-        comp = plugin.get_compiler()(config)
-        comp.print_output = False
-        return compiler.get_version(comp, include_all=False)
-
-    def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None, is_default=False, select=False):
-        parent = self.ui.tree_compilers.topLevelItem(item_type)
-        if plugin is None:
-            plugin = plugins.get_compiler_plugin(config.type_name)
-        if plugin is None:
-            return
-        item = QtWidgets.QTreeWidgetItem()
-        icon, tooltip = self._get_compiler_status_meta(plugin, config)
-        item.setIcon(COL_NAME, icon)
-        item.setToolTip(COL_NAME, tooltip)
-        item.setText(COL_NAME, config.name)
-        item.setText(COL_TYPE, config.type_name)
-        icon = QtGui.QIcon.fromTheme('emblem-favorite') if is_default else QtGui.QIcon()
-        item.setIcon(COL_DEFAULT, icon)
-        item.setText(COL_VERSION, self._get_compiler_version(plugin, config))
-        item.setData(DATA_COL_WIDGET, QtCore.Qt.UserRole, plugin.get_compiler_config_widget())
-        item.setData(DATA_COL_CONFIG, QtCore.Qt.UserRole, config)
-        item.setData(DATA_COL_PLUGIN, QtCore.Qt.UserRole, plugin)
-        item.setSelected(select)
-        if select:
-            self._item_to_select = item
-        self.names.add(config.name)
-        parent.addChild(item)
-        return item
-
-    def _add_compiler(self):
-        compiler_type_name = self.sender().text()
-        ok, name = self.get_name(self.ui.bt_add_compiler, compiler_type_name)
-        if not ok:
-            return
-        plugin = plugins.get_compiler_plugin(compiler_type_name)
-        config = plugin.create_new_configuration_with_dialog(self.ui.bt_add_compiler, name)
-        if config is None:
-            return
-        self.user_configs[config.name] = config
-        item = self._add_config_item(config, plugin=plugin)
-        item.setSelected(True)
-        self.ui.tree_compilers.setCurrentItem(item)
-        self._update_compiler_config()
-        self.names.add(name)
-
-    def _clone_compiler(self):
-        cloned_config = self._current_config.copy()
-        plugin = plugins.get_compiler_plugin(cloned_config.type_name)
-        ok, name = self.get_name(self.ui.bt_clone_compiler, cloned_config.type_name)
-        if not ok:
-            return
-        assert isinstance(cloned_config, compiler.CompilerConfig)
-        cloned_config.name = name
-        self.user_configs[name] = cloned_config
-        item = self._add_config_item(cloned_config, plugin=plugin)
-        item.setSelected(True)
-        self.ui.tree_compilers.setCurrentItem(item)
-        self._update_compiler_config()
-
-    def _delete_compiler(self):
-        answer = QtWidgets.QMessageBox.question(
-            self.ui.bt_delete_compiler, "Remove compiler",
-            'Are you sure you want to remove the compiler configuration %r' % self._current_config.name)
-        if answer == QtWidgets.QMessageBox.No:
-            return
-        item = self.ui.tree_compilers.currentItem()
-        self.user_configs.pop(self._current_config.name)
-        try:
-            self.names.remove(self._current_config.name)
-        except ValueError:
-            pass
-        self._current_config = None
-        parent = item.parent()
-        parent.removeChild(item)
-        self._update_compiler_config()
-
-    def _make_default(self):
-        name = self.ui.tree_compilers.currentItem().text(COL_NAME)
-        config = self.ui.tree_compilers.currentItem().data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
-        settings.set_default_compiler(config.type_name, name)
-        self._config_to_select = name
-        self.save()
-        self.reset()
-
-    def _check_compiler(self):
-        cfg = self._get_updated_config()
-        plugin = plugins.get_compiler_plugin(cfg.type_name)
-        compiler = plugin.get_compiler()(cfg, print_output=False)
-        dlg_check_compiler.DlgCheckCompiler.check(self.ui.bt_check_compiler, compiler)
-
-    def _select_compiler(self):
-        status, path = self.select_path(self.ui.bt_select_compiler, _('Select compiler'),
-                                        directory=self.ui.edit_compiler.text())
-        if status and path:
-            self.ui.edit_compiler.setText(path)
-
-    def _on_msvc_support_togggled(self, state):
-        if not state:
-            self.ui.edit_vcvarsall.clear()
-
-    def _add_env_var(self):
-        utils.add_environment_var_to_table(self.ui.table_env_vars)
-        self._update_current_config_meta()
-
-    def _rm_env_var(self):
-        utils.remove_selected_environment_var_from_table(self.ui.table_env_vars)
-        self._update_current_config_meta()
-
-    def _update_env_var_buttons(self):
-        r = self.ui.table_env_vars.currentRow()
-        self.ui.bt_rm_env_var.setEnabled(r != -1)
-
-    def _select_vcvarsall(self):
-        status, path = self.select_path(self.ui.bt_select_vcvarsall, _('Select vcvarsall.bat'),
-                                        self.ui.edit_vcvarsall.text())
-        if status and path:
-            self.ui.edit_vcvarsall.setText(path)
-
-    def _save_current_config(self):
-        if self._current_config and self._current_config_editable:
-            cfg = self._get_updated_config()
-            cfg.name = self._current_config.name
-
-            # save config changes in temporary map
-            self.user_configs[self._current_config.name] = cfg
-
-            # update associate item data to keep in sync
-            manual = self.ui.tree_compilers.topLevelItem(ITEM_MANUAL)
-            for index in range(manual.childCount()):
-                item = manual.child(index)
-                if item.text(0) == cfg.name:
-                    item.setData(DATA_COL_CONFIG, QtCore.Qt.UserRole, cfg)
+        super().__init__(plugins.get_compiler_plugins, plugins.get_compiler_plugin, compiler.check_compiler,
+                         settings.load_compiler_configurations, settings.save_compiler_configurations,
+                         settings.get_default_compiler, settings.set_default_compiler,
+                         ui, ui.tree_compilers, ui.bt_add_compiler, ui.bt_clone_compiler,
+                         ui.bt_delete_compiler, ui.bt_make_default_compiler, ui.bt_check_compiler,
+                         ui.tab_compiler_settings, _('Check compilation'))
 
     def _get_updated_config(self):
         cfg = self.ui.stacked_compiler_options.current_widget.get_config()
@@ -262,37 +27,6 @@ class CompilersController(BuildAndRunTabController):
         cfg.vcvarsall = self.ui.edit_vcvarsall.text()
         cfg.vcvarsall_arch = self.ui.combo_vcvarsall_arch.currentText().strip()
         return cfg
-
-    def _update_compiler_config(self, *args):
-        self._updating_config = True
-        self._save_current_config()
-        current_item = self.ui.tree_compilers.currentItem()
-        if current_item is None or current_item.parent() is None:
-            # no item selected or top level item
-            self.ui.tab_compiler_settings.hide()
-            editable = False
-            clonable = False
-            self._current_config = None
-            self._current_config_editable = None
-            self._display_config(None, None)
-        else:
-            clonable = True
-            self.ui.tab_compiler_settings.show()
-            config = current_item.data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
-            widget_class = current_item.data(DATA_COL_WIDGET, QtCore.Qt.UserRole)
-            self._display_config(config, widget_class)
-            parent_item = current_item.parent()
-            parent_item_index = self.ui.tree_compilers.indexOfTopLevelItem(parent_item)
-            editable = parent_item_index != ITEM_AUTO_DETECTED
-            self._current_config_editable = editable
-            self._current_config = config
-        self.ui.tab_default_options.setEnabled(editable)
-        self.ui.tab_compiler_setup.setEnabled(editable)
-        self.ui.bt_delete_compiler.setEnabled(editable)
-        self.ui.bt_check_compiler.setEnabled(clonable)
-        self.ui.bt_clone_compiler.setEnabled(clonable)
-        self.ui.bt_make_default_compiler.setEnabled(clonable)
-        self._updating_config = False
 
     def _display_config(self, config, widget_class):
         if config is None:
@@ -330,20 +64,65 @@ class CompilersController(BuildAndRunTabController):
             self.ui.tab_compiler_settings.setCurrentIndex(index)
         self._update_env_var_buttons()
 
-    def _update_current_config_meta(self):
-        if self._updating_config:
-            return
-        item = self.ui.tree_compilers.currentItem()
-        if item is None:
-            return
+    def _get_plugin_type_name(self, plugin):
+        return plugin.get_compiler().type_name
+
+    def _get_plugin_icon(self, plugin):
+        return plugin.get_compiler_icon()
+
+    def _get_status_icon_and_tooltip(self, plugin, config):
+        comp = plugin.get_compiler()(config)
+        comp.print_output = False
+        icon, tooltip = self._get_success_status_meta(plugin.get_compiler_icon())
         try:
-            config = self._get_updated_config()
-        except AttributeError:
-            return
-        plugin = item.data(DATA_COL_PLUGIN, QtCore.Qt.UserRole)
-        if not config or not plugin:
-            return
-        icon, tooltip = self._get_compiler_status_meta(plugin, config)
-        item.setIcon(COL_NAME, icon)
-        item.setToolTip(COL_NAME, tooltip)
-        item.setText(COL_VERSION, self._get_compiler_version(plugin, config))
+            compiler.check_compiler(comp)
+        except utils.ProgramCheckFailedError as e:
+            icon, tooltip = self._get_error_status_meta(e)
+        return icon, tooltip
+
+    def _get_version(self, plugin, config):
+        comp = plugin.get_compiler()(config)
+        comp.print_output = False
+        return compiler.get_version(comp, include_all=False)
+
+    def _get_program_runner(self, config, plugin):
+        return plugin.get_compiler()(config, print_output=False)
+
+    def _connect_slots(self):
+        super()._connect_slots()
+        self.ui.bt_select_compiler.clicked.connect(self._select_compiler)
+        self.ui.bt_select_vcvarsall.clicked.connect(self._select_vcvarsall)
+        self.ui.group_msvc.toggled.connect(self._on_msvc_support_togggled)
+        self.ui.bt_add_env_var.clicked.connect(self._add_env_var)
+        self.ui.bt_rm_env_var.clicked.connect(self._rm_env_var)
+        self.ui.table_env_vars.itemSelectionChanged.connect(self._update_env_var_buttons)
+        self.ui.table_env_vars.itemChanged.connect(self._update_current_config_meta)
+        self.ui.edit_compiler.textChanged.connect(self._update_current_config_meta)
+
+    def _select_compiler(self):
+        status, path = self._select_path(self.ui.bt_select_compiler, _('Select compiler'),
+                                         directory=self.ui.edit_compiler.text())
+        if status and path:
+            self.ui.edit_compiler.setText(path)
+
+    def _on_msvc_support_togggled(self, state):
+        if not state:
+            self.ui.edit_vcvarsall.clear()
+
+    def _add_env_var(self):
+        utils.add_environment_var_to_table(self.ui.table_env_vars)
+        self._update_current_config_meta()
+
+    def _rm_env_var(self):
+        utils.remove_selected_environment_var_from_table(self.ui.table_env_vars)
+        self._update_current_config_meta()
+
+    def _update_env_var_buttons(self):
+        r = self.ui.table_env_vars.currentRow()
+        self.ui.bt_rm_env_var.setEnabled(r != -1)
+
+    def _select_vcvarsall(self):
+        status, path = self._select_path(self.ui.bt_select_vcvarsall, _('Select vcvarsall.bat'),
+                                         self.ui.edit_vcvarsall.text())
+        if status and path:
+            self.ui.edit_vcvarsall.setText(path)

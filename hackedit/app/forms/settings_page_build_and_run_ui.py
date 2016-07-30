@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/colin/Documents/hackedit/data/forms/settings_page_build_and_run.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.7
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -200,6 +200,8 @@ class Ui_Form(object):
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.tree_pre_compilers = QtWidgets.QTreeWidget(self.tab_pre_compilers)
         self.tree_pre_compilers.setObjectName("tree_pre_compilers")
+        icon = QtGui.QIcon.fromTheme("emblem-favorite")
+        self.tree_pre_compilers.headerItem().setIcon(3, icon)
         item_0 = QtWidgets.QTreeWidgetItem(self.tree_pre_compilers)
         item_0 = QtWidgets.QTreeWidgetItem(self.tree_pre_compilers)
         self.tree_pre_compilers.header().setCascadingSectionResizes(False)
@@ -253,6 +255,11 @@ class Ui_Form(object):
         self.verticalLayout_7.setContentsMargins(6, 6, 6, 6)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.bt_add_pre_compiler = QtWidgets.QToolButton(self.tab_pre_compilers)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.bt_add_pre_compiler.sizePolicy().hasHeightForWidth())
+        self.bt_add_pre_compiler.setSizePolicy(sizePolicy)
         self.bt_add_pre_compiler.setMinimumSize(QtCore.QSize(100, 0))
         icon = QtGui.QIcon.fromTheme("list-add")
         self.bt_add_pre_compiler.setIcon(icon)
@@ -271,6 +278,11 @@ class Ui_Form(object):
         self.bt_delete_pre_compiler.setIcon(icon)
         self.bt_delete_pre_compiler.setObjectName("bt_delete_pre_compiler")
         self.verticalLayout_7.addWidget(self.bt_delete_pre_compiler)
+        self.bt_make_default_pre_compiler = QtWidgets.QPushButton(self.tab_pre_compilers)
+        icon = QtGui.QIcon.fromTheme("emblem-favorite")
+        self.bt_make_default_pre_compiler.setIcon(icon)
+        self.bt_make_default_pre_compiler.setObjectName("bt_make_default_pre_compiler")
+        self.verticalLayout_7.addWidget(self.bt_make_default_pre_compiler)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_7.addItem(spacerItem2)
         self.bt_check_pre_compiler = QtWidgets.QPushButton(self.tab_pre_compilers)
@@ -399,7 +411,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.tab_categories)
 
         self.retranslateUi(Form)
-        self.tab_categories.setCurrentIndex(2)
+        self.tab_categories.setCurrentIndex(1)
         self.tab_compiler_settings.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -468,6 +480,7 @@ class Ui_Form(object):
         self.bt_clone_pre_compiler.setText(_("Clone"))
         self.bt_delete_pre_compiler.setToolTip(_("Delete the selected compiler"))
         self.bt_delete_pre_compiler.setText(_("Delete"))
+        self.bt_make_default_pre_compiler.setText(_("Make default"))
         self.bt_check_pre_compiler.setToolTip(_("Check if the selected compiler works"))
         self.bt_check_pre_compiler.setText(_("Check"))
         self.tab_categories.setTabText(self.tab_categories.indexOf(self.tab_pre_compilers), _("Pre-compilers"))

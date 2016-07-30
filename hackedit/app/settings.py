@@ -690,45 +690,62 @@ def set_last_open_dir(value):
 # -----------------------------------------------------------------------------
 def load_compiler_configurations():
     from hackedit.api.compiler import CompilerConfig
-    ret_val = {}
-    configs_map = json.loads(_SETTINGS.value('build_and_run/compiler_configs', '{}'))
-    for k, v in configs_map.items():
-        ret_val[k] = CompilerConfig().from_json(v)
-    return ret_val
+    return _load_configs(CompilerConfig, 'compiler_configs')
 
 
 def save_compiler_configurations(configs_map):
-    data = {}
-    for k, v in configs_map.items():
-        data[k] = v.to_json()
-    _SETTINGS.setValue('build_and_run/compiler_configs', json.dumps(data))
+    _save_configs('compiler_configs', configs_map)
 
 
-def get_default_compiler(compiler_type_name):
-    defaults_map = json.loads(_SETTINGS.value('build_and_run/default_compilers', '{}'))
-    try:
-        return defaults_map[compiler_type_name]
-    except KeyError:
-        return None
+def get_default_compiler(type_name):
+    return _get_default_config_name(type_name, 'default_compilers')
 
 
-def set_default_compiler(compiler_type_name, compiler_name):
-    defaults_map = json.loads(_SETTINGS.value('build_and_run/default_compilers', '{}'))
-    defaults_map[compiler_type_name] = compiler_name
-    _SETTINGS.setValue('build_and_run/default_compilers', json.dumps(defaults_map))
+def set_default_compiler(type_name, name):
+    _set_default_config_name(type_name, name, 'default_compilers')
 
 
 def load_pre_compiler_configurations():
     from hackedit.api.pre_compiler import PreCompilerConfig
-    ret_val = {}
-    configs_map = json.loads(_SETTINGS.value('build_and_run/pre_compiler_configs', '{}'))
-    for k, v in configs_map.items():
-        ret_val[k] = PreCompilerConfig().from_json(v)
-    return ret_val
+    return _load_configs(PreCompilerConfig, 'pre_compiler_configs')
 
 
 def save_pre_compiler_configurations(configs_map):
+    _save_configs('pre_compiler_configs', configs_map)
+
+
+def get_default_pre_compiler(type_name):
+    return _get_default_config_name(type_name, 'default_pre_compilers')
+
+
+def set_default_pre_compiler(type_name, name):
+    _set_default_config_name(type_name, name, 'default_pre_compilers')
+
+
+def _load_configs(config_type, opt_name):
+    ret_val = {}
+    configs_map = json.loads(_SETTINGS.value('build_and_run/%s' % opt_name, '{}'))
+    for k, v in configs_map.items():
+        ret_val[k] = config_type().from_json(v)
+    return ret_val
+
+
+def _save_configs(opt_name, configs_map):
     data = {}
     for k, v in configs_map.items():
         data[k] = v.to_json()
-    _SETTINGS.setValue('build_and_run/pre_compiler_configs', json.dumps(data))
+    _SETTINGS.setValue('build_and_run/%s' % opt_name, json.dumps(data))
+
+
+def _get_default_config_name(type_name, opt_name):
+    defaults_map = json.loads(_SETTINGS.value('build_and_run/%s' % opt_name, '{}'))
+    try:
+        return defaults_map[type_name]
+    except KeyError:
+        return None
+
+
+def _set_default_config_name(type_name, name, opt_name):
+    defaults_map = json.loads(_SETTINGS.value('build_and_run/%s' % opt_name, '{}'))
+    defaults_map[type_name] = name
+    _SETTINGS.setValue('build_and_run/%s' % opt_name, json.dumps(defaults_map))
