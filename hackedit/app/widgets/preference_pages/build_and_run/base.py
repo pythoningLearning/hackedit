@@ -1,5 +1,4 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from hackedit.api import plugins
 from hackedit.app.dialogs import dlg_check_compiler
 
 
@@ -43,6 +42,7 @@ class BuildAndRunTabController(QtCore.QObject):
         self._config_to_select = ''
         self._item_to_select = None
         self._updating_config = False
+        self._loading = False
         self._current_config = None
         self._current_config_editable = False
         self._connect_slots()
@@ -77,6 +77,8 @@ class BuildAndRunTabController(QtCore.QObject):
         self.bt_check.clicked.connect(self._check_config)
 
     def _update_config(self, *args):
+        if self._loading:
+            return
         self._updating_config = True
         self._save_current_config()
         current_item = self.tree.currentItem()
@@ -99,6 +101,8 @@ class BuildAndRunTabController(QtCore.QObject):
             editable = parent_item_index != ITEM_AUTO_DETECTED
             self._current_config_editable = editable
             self._current_config = config
+            self._config_to_select = config.name
+            print('to_select', self._config_to_select)
         self.settings_widget.setEnabled(editable)
         self.bt_remove.setEnabled(editable)
         self.bt_check.setEnabled(clonable)
@@ -182,6 +186,7 @@ class BuildAndRunTabController(QtCore.QObject):
             self.bt_check, program_runner, bt_check_message=self.bt_check_message, check_function=self.fct_check)
 
     def reset(self):
+        self._loading = True
         self.names = set()
         mnu_add = QtWidgets.QMenu()
         self.bt_add.setMenu(mnu_add)
@@ -194,6 +199,8 @@ class BuildAndRunTabController(QtCore.QObject):
         self.user_configs = self.fct_settings_load()
         self._add_config_items(sorted(self.user_configs.values(), key=lambda x: x.name), ITEM_MANUAL)
         self._setup_tree()
+        self._loading = False
+        self._update_config()
 
     def _setup_tree(self):
         self.tree.header().setStretchLastSection(False)
@@ -218,6 +225,7 @@ class BuildAndRunTabController(QtCore.QObject):
             is_default = False
             if default == config.name:
                 is_default = True
+            print('to_select', self._config_to_select)
             if not self._config_to_select:
                 self._config_to_select = config.name
             select = False
