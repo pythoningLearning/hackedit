@@ -15,24 +15,46 @@ class PreCompilerConfig(utils.JSonisable, utils.Copyable):
     def __init__(self):
         #: name of the configuration
         self.name = ''
+
         #: path of the pre-compiler
         self.path = ''
+
         #: the list of associated extensions
         self.associated_extensions = []
+
         #: the list of pre-compiler flags
         self.flags = []
+
         #: the pre-compiler output pattern, used to deduce the pre-compiler output file path
+        #:
+        #: E.g.::
+        #:
+        #:    $input_file_name.abc (file.xyz -> file.abc)
+        #:
         self.output_pattern = ''
+
         #: describes how to build the pre compiler command
+        #: the following macros can be used:
+        #:    - $input_file
+        #:    - $input_file_name
+        #:    - $output_file
+        #:    - $output_file_name
+        #:    - $flags
+        #:
         self.command_pattern = ''
+
         #: set whether the command pattern is editable, False by default
         self.command_pattern_editable = False
+
         #: the content of the test file used to test the pre-compiler automatically
         self.test_file_content = ''
+
         #: the arguments needed to check the version:
         self.version_command_args = []
+
         #: the regex used to extract the version info from the version_command output
         self.version_regex = r'(?P<version>\d\.\d\.\d)'
+
         #: PreCompiler type name
         self.type_name = ''
 
@@ -41,7 +63,7 @@ class CustomPreCompilerConfig(PreCompilerConfig):
     def __init__(self):
         super().__init__()
         self.command_pattern_editable = True
-        self.command_pattern = '$flags -o $output_file_name -i $input_file_name'
+        self.command_pattern = '$flags -o $output_file -i $input_file'
         self.type_name = 'Custom'
 
 
@@ -68,13 +90,10 @@ class PreCompiler:
         """
         Gets the output filename for the specified input input_file_path.
         """
-        input_file_name_with_extension = os.path.split(input_file_path)[1]
-        input_file_name = os.path.splitext(input_file_name_with_extension)[0]
+        input_file_name = os.path.splitext(os.path.split(input_file_path)[1])[0]
         # todo use a command builder and also use it in the compiler API
         command_builder = utils.CommandBuilder(self.config.output_pattern, {
-            'input_file_name_with_extension': input_file_name_with_extension,
             'input_file_name': input_file_name,
-            'input_file_path': input_file_path
             })
         return command_builder.as_string()
 
@@ -201,10 +220,13 @@ class PreCompiler:
 
     def _make_command(self, input_path, output_path):
         options = {
-            'input_file_name': input_path,
-            'output_file_name': output_path,
+            'input_file': input_path,
+            'input_file_name': os.path.splitext(input_path)[0],
+            'output_file': output_path,
+            'output_file_name': os.path.splitext(output_path)[0],
             'flags': self.config.flags
         }
+        print(options)
         builder = utils.CommandBuilder(self.config.command_pattern, options)
         return builder
 

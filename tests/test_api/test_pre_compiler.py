@@ -14,7 +14,7 @@ class EchoPrecompilerConfig(pre_compiler.PreCompilerConfig):
     def __init__(self):
         super().__init__()
         self.name = 'Echo'
-        self.command_pattern = '%s $flags -o $output_file_name -i $input_file_name' % echo_pre_compiler
+        self.command_pattern = '%s $flags -o $output_file -i $input_file' % echo_pre_compiler
         self.version_command_args = [echo_pre_compiler, '--version']
         self.version_regex = r'.*(?P<version>\d\.\d\.\d).*'
         self.output_pattern = '$input_file_name.py'
@@ -49,7 +49,7 @@ class TestPreCompilerConfig:
         assert config.associated_extensions == []
         assert config.flags == []
         assert config.output_pattern == ''
-        assert config.command_pattern == '$flags -o $output_file_name -i $input_file_name'
+        assert config.command_pattern == '$flags -o $output_file -i $input_file'
         assert config.command_pattern_editable is True
         assert config.test_file_content == ''
         assert config.version_command_args == []

@@ -87,7 +87,8 @@ class PreCompilersController(BuildAndRunTabController):
         plugin = plugins.get_pre_compiler_plugin(type_name)
         config = plugin.create_new_configuration_with_dialog(self.ui.bt_add_pre_compiler, name)
         if config is None:
-            self.user_configs[config.name] = config
+            return
+        self.user_configs[config.name] = config
         item = self._add_config_item(config, plugin=plugin)
         item.setSelected(True)
         self.ui.tree_pre_compilers.setCurrentItem(item)
