@@ -704,6 +704,20 @@ def save_compiler_configurations(configs_map):
     _SETTINGS.setValue('build_and_run/compiler_configs', json.dumps(data))
 
 
+def get_default_compiler(compiler_type_name):
+    defaults_map = json.loads(_SETTINGS.value('build_and_run/default_compilers', '{}'))
+    try:
+        return defaults_map[compiler_type_name]
+    except KeyError:
+        return None
+
+
+def set_default_compiler(compiler_type_name, compiler_name):
+    defaults_map = json.loads(_SETTINGS.value('build_and_run/default_compilers', '{}'))
+    defaults_map[compiler_type_name] = compiler_name
+    _SETTINGS.setValue('build_and_run/default_compilers', json.dumps(defaults_map))
+
+
 def load_pre_compiler_configurations():
     from hackedit.api.pre_compiler import PreCompilerConfig
     ret_val = {}

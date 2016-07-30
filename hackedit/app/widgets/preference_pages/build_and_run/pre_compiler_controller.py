@@ -14,6 +14,7 @@ COL_NAME = 0
 COL_TYPE = 1
 COL_VERSION = 2
 
+
 DATA_COL_WIDGET = COL_NAME
 DATA_COL_CONFIG = COL_TYPE
 DATA_COL_PLUGIN = COL_VERSION
@@ -26,6 +27,8 @@ class PreCompilersController(BuildAndRunTabController):
         """
         super().__init__()
         self.ui = ui
+        self._config_to_select = ''
+        self._item_to_select = None
         self._updating_config = False
         self._current_config = None
         self._current_config_editable = False
@@ -52,19 +55,26 @@ class PreCompilersController(BuildAndRunTabController):
             action.setIcon(plugin.get_pre_compiler_icon())
             action.triggered.connect(self._add_config)
             for config in plugin.get_auto_detected_configs():
-                self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin)
+                if not self._config_to_select:
+                    self._config_to_select = config.name
+                self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin,
+                                      select=self._config_to_select == config.name)
         self.ui.tree_pre_compilers.setCurrentItem(None)
 
         # add user defined configuration
         self.user_configs = settings.load_pre_compiler_configurations()
         for key, value in sorted(self.user_configs.items(), key=lambda x: x[0]):
-            self._add_config_item(value)
+            if not self._config_to_select:
+                self._config_to_select = value.name
+            self._add_config_item(value, select=self._config_to_select == value.name)
         self.ui.tree_pre_compilers.header().setStretchLastSection(False)
         self.ui.tree_pre_compilers.header().setDefaultSectionSize(16)
         self.ui.tree_pre_compilers.header().setSectionResizeMode(COL_NAME, QtWidgets.QHeaderView.ResizeToContents)
         self.ui.tree_pre_compilers.header().setSectionResizeMode(COL_TYPE, QtWidgets.QHeaderView.ResizeToContents)
         self.ui.tree_pre_compilers.header().setSectionResizeMode(COL_VERSION, QtWidgets.QHeaderView.Stretch)
         self.ui.tree_pre_compilers.expandAll()
+        if self._item_to_select:
+            self.ui.tree_pre_compilers.setCurrentItem(self._item_to_select)
         self._update_config()
 
     def clear_tree(self):
@@ -139,7 +149,7 @@ class PreCompilersController(BuildAndRunTabController):
         precompiler = pre_compiler.PreCompiler(config, print_output=False)
         return pre_compiler.get_version(precompiler, include_all=False)
 
-    def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None):
+    def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None, select=False):
         parent = self.ui.tree_pre_compilers.topLevelItem(item_type)
         if plugin is None:
             plugin = plugins.get_pre_compiler_plugin(config.type_name)
@@ -155,6 +165,9 @@ class PreCompilersController(BuildAndRunTabController):
         item.setText(COL_VERSION, version)
         item.setData(DATA_COL_CONFIG, QtCore.Qt.UserRole, config)
         item.setData(DATA_COL_PLUGIN, QtCore.Qt.UserRole, plugin)
+        item.setSelected(select)
+        if select:
+            self._item_to_select = item
         self.names.add(config.name)
         parent.addChild(item)
         return item

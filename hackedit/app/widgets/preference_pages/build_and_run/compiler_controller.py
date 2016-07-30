@@ -13,6 +13,7 @@ ITEM_MANUAL = 1
 COL_NAME = 0
 COL_TYPE = 1
 COL_VERSION = 2
+COL_DEFAULT = 3
 
 DATA_COL_WIDGET = COL_NAME
 DATA_COL_CONFIG = COL_TYPE
@@ -23,6 +24,8 @@ class CompilersController(BuildAndRunTabController):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
+        self._config_to_select = ''
+        self._item_to_select = None
         self._updating_config = False
         self._current_config = None
         self._current_config_editable = False
@@ -33,6 +36,7 @@ class CompilersController(BuildAndRunTabController):
         self.ui.tree_compilers.itemClicked.connect(self._update_compiler_config)
         self.ui.bt_clone_compiler.clicked.connect(self._clone_compiler)
         self.ui.bt_delete_compiler.clicked.connect(self._delete_compiler)
+        self.ui.bt_make_default_compiler.clicked.connect(self._make_default)
         self.ui.bt_check_compiler.clicked.connect(self._check_compiler)
         self.ui.bt_select_compiler.clicked.connect(self._select_compiler)
         self.ui.bt_select_vcvarsall.clicked.connect(self._select_vcvarsall)
@@ -56,19 +60,43 @@ class CompilersController(BuildAndRunTabController):
             action = mnu_compiler_types.addAction(plugin.get_compiler().type_name)
             action.setIcon(plugin.get_compiler_icon())
             action.triggered.connect(self._add_compiler)
+            compiler_type_name = plugin.get_compiler().type_name
+            default = settings.get_default_compiler(compiler_type_name)
             for config in plugin.get_auto_detected_configs():
-                self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin)
+                if default is None:
+                    default = config.name
+                    settings.set_default_compiler(compiler_type_name, config.name)
+                if not self._config_to_select:
+                    self._config_to_select = config.name
+                is_default = False
+                if default == config.name:
+                    is_default = True
+                self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin, is_default=is_default,
+                                      select=self._config_to_select == config.name)
         self.ui.tree_compilers.setCurrentItem(None)
         # add user defined configuration
         self.user_configs = settings.load_compiler_configurations()
         for key, value in sorted(self.user_configs.items(), key=lambda x: x[0]):
-            self._add_config_item(value)
+            default = settings.get_default_compiler(value.type_name)
+            is_default = False
+            if default is None:
+                default = value.name
+            if default == value.name:
+                is_default = True
+            if not self._config_to_select:
+                self._config_to_select = config.name
+            self._add_config_item(value, is_default=is_default, select=self._config_to_select == value.name)
         self.ui.tree_compilers.header().setStretchLastSection(False)
         self.ui.tree_compilers.header().setDefaultSectionSize(16)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_NAME, QtWidgets.QHeaderView.ResizeToContents)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_NAME, QtWidgets.QHeaderView.Stretch)
         self.ui.tree_compilers.header().setSectionResizeMode(COL_TYPE, QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.tree_compilers.header().setSectionResizeMode(COL_VERSION, QtWidgets.QHeaderView.Stretch)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_VERSION, QtWidgets.QHeaderView.ResizeToContents)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
+        self.ui.tree_compilers.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
+        self.ui.tree_compilers.setHeaderLabels(['Name', 'Type', 'Version', ''])
         self.ui.tree_compilers.expandAll()
+        if self._item_to_select:
+            self.ui.tree_compilers.setCurrentItem(self._item_to_select)
         self._update_compiler_config()
 
     def restore_defaults(self):
@@ -93,7 +121,7 @@ class CompilersController(BuildAndRunTabController):
         comp.print_output = False
         return compiler.get_version(comp, include_all=False)
 
-    def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None):
+    def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None, is_default=False, select=False):
         parent = self.ui.tree_compilers.topLevelItem(item_type)
         if plugin is None:
             plugin = plugins.get_compiler_plugin(config.type_name)
@@ -105,10 +133,15 @@ class CompilersController(BuildAndRunTabController):
         item.setToolTip(COL_NAME, tooltip)
         item.setText(COL_NAME, config.name)
         item.setText(COL_TYPE, config.type_name)
+        icon = QtGui.QIcon.fromTheme('emblem-favorite') if is_default else QtGui.QIcon()
+        item.setIcon(COL_DEFAULT, icon)
         item.setText(COL_VERSION, self._get_compiler_version(plugin, config))
         item.setData(DATA_COL_WIDGET, QtCore.Qt.UserRole, plugin.get_compiler_config_widget())
         item.setData(DATA_COL_CONFIG, QtCore.Qt.UserRole, config)
         item.setData(DATA_COL_PLUGIN, QtCore.Qt.UserRole, plugin)
+        item.setSelected(select)
+        if select:
+            self._item_to_select = item
         self.names.add(config.name)
         parent.addChild(item)
         return item
@@ -159,6 +192,14 @@ class CompilersController(BuildAndRunTabController):
         parent = item.parent()
         parent.removeChild(item)
         self._update_compiler_config()
+
+    def _make_default(self):
+        name = self.ui.tree_compilers.currentItem().text(COL_NAME)
+        config = self.ui.tree_compilers.currentItem().data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
+        settings.set_default_compiler(config.type_name, name)
+        self._config_to_select = name
+        self.save()
+        self.reset()
 
     def _check_compiler(self):
         cfg = self._get_updated_config()
@@ -250,6 +291,7 @@ class CompilersController(BuildAndRunTabController):
         self.ui.bt_delete_compiler.setEnabled(editable)
         self.ui.bt_check_compiler.setEnabled(clonable)
         self.ui.bt_clone_compiler.setEnabled(clonable)
+        self.ui.bt_make_default_compiler.setEnabled(clonable)
         self._updating_config = False
 
     def _display_config(self, config, widget_class):
