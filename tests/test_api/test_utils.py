@@ -83,10 +83,6 @@ def test_is_ignored_path():
 
 
 class TestCommandBuilder:
-    def test_command_builder_get_pattern_option(self):
-        assert utils.CommandBuilder.get_pattern_option('-I$includes', '$includes') == '-I'
-        assert utils.CommandBuilder.get_pattern_option('-I $includes', '$includes') == ''
-
     def test_simple_command(self):
         options_dict = {
             'output_file_name': 'bin/test',
@@ -96,6 +92,19 @@ class TestCommandBuilder:
         builder = utils.CommandBuilder(pattern, options_dict)
         assert builder.as_list() == ['-o', 'bin/test', '-i', 'test.cbl']
         assert builder.as_string() == '-o bin/test -i test.cbl'
+
+    def test_similar_options(self):
+        options_dict = {
+            'output_file': 'bin/test.py',
+            'output_file_name': 'bin/test',
+            'input_file': 'test.cbl',
+            'input_file_name': 'test'
+        }
+        pattern = '-o $output_file_name.cob -i $input_file_name.scb'
+        builder = utils.CommandBuilder(pattern, options_dict)
+        print(builder.as_list())
+        assert builder.as_list() == ['-o', 'bin/test.cob', '-i', 'test.scb']
+        assert builder.as_string() == '-o bin/test.cob -i test.scb'
 
     def test_command_with_non_string_args(self):
         options_dict = {
@@ -133,4 +142,6 @@ class TestCommandBuilder:
             'input_file_name': 'test.cbl'
         }
         with pytest.raises(utils.CommandBuildFailedError):
-            utils.CommandBuilder(pattern, options_dict)
+            utils.CommandBuilder(pattern, options_dict).as_list()
+        with pytest.raises(utils.CommandBuildFailedError):
+            utils.CommandBuilder(pattern, options_dict).as_string()

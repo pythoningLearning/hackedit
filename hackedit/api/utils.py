@@ -344,65 +344,80 @@ class CommandBuilder:
         :param options_dict: the options_dict
         :type options_dict: dict
         """
+        self._result = None
         self._pattern = pattern
         self._options_dict = options_dict
-        self._result = self._build()
 
     def as_string(self):
         """
         Returns the built command as a single string.
         """
+        self._build()
         return ' '.join(self.as_list())
 
     def as_list(self):
         """
         Returns the built command as a list.
         """
+        self._build()
         return [t.strip() for t in self._result.strip().split(' ') if t]
 
-    @staticmethod
-    def get_pattern_option(string, pattern):
+    def _build(self):
+        if self._result is not None:
+            return
+        args = []
+        for pattern in self._pattern.strip().split(' '):
+            if '$' in pattern:
+                args.append(self._build_pattern(pattern))
+            else:
+                args.append(pattern)
+        self._result = ' '.join(args)
+
+    def _build_pattern(self, pattern):
+        index = pattern.find('$')
+        key = pattern[index + 1:]
+        option = pattern[:index]
+        k = self.find_closest_key(key)
+        if k:
+            value = self._options_dict[k]
+            remaining = key.replace(k, '')
+            if option:
+                return self._get_value_with_option(option, value, remaining)
+            else:
+                return self._get_value(value, remaining)
+        else:
+            raise CommandBuildFailedError(_('Pattern %r not found in options dict') % pattern)
+
+    def find_closest_key(self, key):
         """
-        Find the option that is associated with the pattern if any.
-
-        Example:
-
-            >>> CommandBuilder.get_pattern_option('-I$includes', '$includes')
-            '-I'
-            >>> CommandBuilder.get_pattern_option('-I $includes', '$includes')
-            ''
+        :type key: str
         """
         try:
-            i = string.index(pattern)
+            key = key[:key.index('.')]
         except ValueError:
-            option = ''
-        else:
-            option = ''
-            i -= 1
-            while i >= 0 and string[i] != ' ':
-                option = string[i] + option
-                i -= 1
-        return option
-
-    def _build(self):
-        ret_val = self._pattern
+            pass
+        found = {}
         for k in self._options_dict.keys():
-            pattern = '$%s' % k
-            value = self._options_dict[k]
-            if isinstance(value, list):
-                option = self.get_pattern_option(ret_val, pattern)
-                if option:
-                    # repeat option foreach value in the list
-                    ret_val = ret_val.replace(option + pattern, ' '.join([option + val for val in value]))
-                    continue
-                else:
-                    value = ' '.join(value)
-            elif not isinstance(value, str):
-                value = str(value)
-            ret_val = ret_val.replace('$%s' % k, value)
-        if '$' in ret_val:
-            raise CommandBuildFailedError(_('some patterns could not be replaced: %r') % ret_val)
-        return ret_val
+            if k in key:
+                found[len(k)] = k
+        for klen in sorted(found.keys()):
+            if klen >= len(key):
+                return found[klen]
+        return None
+
+    @staticmethod
+    def _get_value(value, remaining):
+        if isinstance(value, list):
+            return ' '.join([v + remaining for v in value])
+        else:
+            return str(value) + remaining
+
+    @staticmethod
+    def _get_value_with_option(option, value, remaining):
+        if isinstance(value, list):
+            return ' '.join([option + v + remaining + ' ' for v in value])
+        else:
+            return option + str(value) + remaining
 
 
 def is_outdated(source, destination, working_dir=''):
