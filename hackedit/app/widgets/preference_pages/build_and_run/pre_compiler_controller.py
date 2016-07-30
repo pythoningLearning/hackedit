@@ -205,6 +205,7 @@ class PreCompilersController(BuildAndRunTabController):
         self.ui.bt_delete_pre_compiler.setEnabled(editable)
         self.ui.bt_check_pre_compiler.setEnabled(clonable)
         self.ui.bt_clone_pre_compiler.setEnabled(clonable)
+        self.ui.group_pre_compiler_settings.setEnabled(editable)
         self._updating_config = False
 
     def _display_config(self, config=None):

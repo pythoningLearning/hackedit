@@ -182,7 +182,6 @@ class PreCompiler:
             exit_code, output = self.pre_compile_file(input_path)
             if exit_code != 0 or not os.path.exists(abs_output_path):
                 raise PreCompilerCheckFailed(output, exit_code)
-            print('compiler check results', exit_code, output, os.path.exists(abs_output_path), abs_output_path)
             with open(abs_output_path) as fout:
                 content = fout.read()
             if not content:
@@ -226,7 +225,6 @@ class PreCompiler:
             'output_file_name': os.path.splitext(output_path)[0],
             'flags': self.config.flags
         }
-        print(options)
         builder = utils.CommandBuilder(self.config.command_pattern, options)
         return builder
 
