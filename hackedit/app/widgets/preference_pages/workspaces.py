@@ -51,7 +51,6 @@ class Workspaces(PreferencePage):
             self.ui.list_workspaces.addItem(item)
         self.ui.list_workspaces.setCurrentRow(0)
 
-    @QtCore.pyqtSlot()
     def _add_workspace(self, *_, content=None):
         if content is None:
             content = {
@@ -68,11 +67,9 @@ class Workspaces(PreferencePage):
         self.reset()
         self._show_workspace(name)
 
-    @QtCore.pyqtSlot()
     def _cpy_workspace(self):
         self._add_workspace(content=self._get_current_workspace().copy())
 
-    @QtCore.pyqtSlot()
     def _rm_workspace(self):
         w = self._get_current_workspace()
         a = QtWidgets.QMessageBox.question(
@@ -82,7 +79,6 @@ class Workspaces(PreferencePage):
             os.remove(w['path'])
             self.reset()
 
-    @QtCore.pyqtSlot()
     def _add_plugin(self):
         to_add = self.ui.list_available_plugins.currentItem().text()
         w = self._get_current_workspace()
@@ -91,7 +87,6 @@ class Workspaces(PreferencePage):
         self.reset()
         self._show_workspace(w['name'])
 
-    @QtCore.pyqtSlot()
     def _rm_plugin(self):
         to_remove = self.ui.list_used_plugins.currentItem().text()
         w = self._get_current_workspace()

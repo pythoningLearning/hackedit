@@ -93,11 +93,9 @@ class WelcomeWindow(QtWidgets.QMainWindow):
                 self.size(),
                 QtWidgets.qApp.desktop().availableGeometry()))
 
-    @QtCore.pyqtSlot()
     def _quit(self):
         self.app.quit()
 
-    @QtCore.pyqtSlot(QtWidgets.QListWidgetItem)
     def on_list_recents_itemClicked(self, item):
         """
         Opens the recent item.
@@ -107,7 +105,6 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         _logger().debug('recent item clicked: %r', path)
         self.app.open_path(path)
 
-    @QtCore.pyqtSlot()
     def on_list_recents_remove_current_requested(self):
         """ Removes the currently selected recent file """
         filename = self._ui.list_recents.currentItem().data(
@@ -115,23 +112,19 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         _logger().debug('remove recent item requested: %r', filename)
         self.app.get_recent_files_manager().remove(filename)
 
-    @QtCore.pyqtSlot()
     def on_list_recents_clear_requested(self):
         """ Clears the list of recent files """
         _logger().debug('clear recents requested')
         self.app.get_recent_files_manager().clear()
 
-    @QtCore.pyqtSlot()
     def on_bt_new_clicked(self):
         common.create_new(self.app, self)
 
-    @QtCore.pyqtSlot()
     def on_bt_open_clicked(self):
         """ Opens a file """
         _logger().debug('bt_open clicked')
         common.open_folder(None, self.app)
 
-    @QtCore.pyqtSlot()
     def update_recents(self):
         """
         Updates the recent files list.
@@ -154,18 +147,14 @@ class WelcomeWindow(QtWidgets.QMainWindow):
             item.setData(QtCore.Qt.UserRole, file)
             self._ui.list_recents.addItem(item)
 
-    @QtCore.pyqtSlot()
     def _show_about(self):
         common.show_about(self)
 
-    @QtCore.pyqtSlot()
     def _report_bug(self):
         common.report_bug(self)
 
-    @QtCore.pyqtSlot()
     def _edit_preferences(self):
         common.edit_preferences(self, self.app)
 
-    @QtCore.pyqtSlot()
     def _check_for_update(self):
         common.check_for_update(self)

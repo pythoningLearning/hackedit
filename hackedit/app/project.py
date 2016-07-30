@@ -236,7 +236,6 @@ class ProjectExplorer(QtCore.QObject):
             self.workspaces_menu.addAction(a)
         ag.triggered.connect(self._on_workspace_action_clicked)
 
-    @QtCore.pyqtSlot(QtWidgets.QAction)
     def _on_workspace_action_clicked(self, action):
         prj = api.project.get_root_project()
         open_path = self.main_window.app.open_path

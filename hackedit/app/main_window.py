@@ -559,9 +559,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setGeometry(geometry)
         _logger().debug('restoreGeometry: OK')
 
-        self.restoreState(QtCore.QSettings().value(
-            '_window/state_' + key, b''))
-        _logger().debug('restoreState: OK')
+        # self.restoreState(QtCore.QSettings().value('_window/state_' + key))
+        # _logger().debug('restoreState: OK')
 
         if not self._ui.menuTools.actions():
             self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
@@ -948,7 +947,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def _on_new_triggered(self):
         common.create_new(self.app, self, self.current_project)
 
-    @QtCore.pyqtSlot(QtWidgets.QWidget)
     def on_current_tab_changed(self, tab):
         self._current_tab = tab
         _logger().debug('current tab changed: %r', tab)
@@ -993,12 +991,10 @@ class MainWindow(QtWidgets.QMainWindow):
                     _logger().debug('failed to reset cursor infos labels, '
                                     'widget deleted (window is closing...)')
 
-    @QtCore.pyqtSlot()
     def on_action_open_triggered(self):
         """ Opens a project directory"""
         common.open_folder(self, self.app)
 
-    @QtCore.pyqtSlot()
     def on_action_open_file_triggered(self):
         """
         Opens a file.
@@ -1009,7 +1005,6 @@ class MainWindow(QtWidgets.QMainWindow):
             settings.set_last_open_dir(os.path.dirname(path))
             self.open_file(path)
 
-    @QtCore.pyqtSlot()
     def on_a_fullscreen_triggered(self):
         state = self._ui.a_fullscreen.isChecked()
         if state:
@@ -1017,21 +1012,17 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.showNormal()
 
-    @QtCore.pyqtSlot()
     def on_a_menu_triggered(self):
         state = self._ui.a_menu.isChecked()
         settings.set_show_menu(state)
         self._update_menu_visibility()
 
-    @QtCore.pyqtSlot()
     def _report_bug(self):
         common.report_bug(self)
 
-    @QtCore.pyqtSlot()
     def _show_about(self):
         common.show_about(self)
 
-    @QtCore.pyqtSlot()
     def _check_for_update(self):
         common.check_for_update(self)
 

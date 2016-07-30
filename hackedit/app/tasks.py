@@ -141,7 +141,6 @@ class Task(QtCore.QObject):
         self.worker.deleteLater()
         self.worker = None
 
-    @QtCore.pyqtSlot()
     def cancel(self):
         """
         Cancels the worker by setting :attr:`_flg_abort` to True.
