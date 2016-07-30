@@ -174,7 +174,8 @@ class Ui_Form(object):
         self.bt_check_compiler.setObjectName("bt_check_compiler")
         self.verticalLayout_2.addWidget(self.bt_check_compiler)
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
-        self.tab_categories.addTab(self.tab_compilers, "")
+        icon = QtGui.QIcon.fromTheme("run-build")
+        self.tab_categories.addTab(self.tab_compilers, icon, "")
         self.tab_pre_compilers = QtWidgets.QWidget()
         self.tab_pre_compilers.setObjectName("tab_pre_compilers")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.tab_pre_compilers)
@@ -265,7 +266,8 @@ class Ui_Form(object):
         self.bt_check_pre_compiler.setObjectName("bt_check_pre_compiler")
         self.verticalLayout_7.addWidget(self.bt_check_pre_compiler)
         self.horizontalLayout_5.addLayout(self.verticalLayout_7)
-        self.tab_categories.addTab(self.tab_pre_compilers, "")
+        icon = QtGui.QIcon.fromTheme("database-index")
+        self.tab_categories.addTab(self.tab_pre_compilers, icon, "")
         self.tab_interpreters = QtWidgets.QWidget()
         self.tab_interpreters.setObjectName("tab_interpreters")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.tab_interpreters)
@@ -275,11 +277,12 @@ class Ui_Form(object):
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         self.gridLayout_4.addWidget(self.label_6, 0, 0, 1, 1)
-        self.tab_categories.addTab(self.tab_interpreters, "")
+        icon = QtGui.QIcon.fromTheme("system-run")
+        self.tab_categories.addTab(self.tab_interpreters, icon, "")
         self.verticalLayout.addWidget(self.tab_categories)
 
         self.retranslateUi(Form)
-        self.tab_categories.setCurrentIndex(1)
+        self.tab_categories.setCurrentIndex(0)
         self.tab_compiler_settings.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -352,6 +355,6 @@ class Ui_Form(object):
         self.tab_categories.setTabText(self.tab_categories.indexOf(self.tab_pre_compilers), _("Pre-compilers"))
         self.tab_categories.setTabToolTip(self.tab_categories.indexOf(self.tab_pre_compilers), _("<html><head/><body><p>This tab let your configure pre-compilers or transpilers used by the hackedit\'s build system</p><p><br/></p><p>Pre-compilers are tools that process a source file into another source file (e.g. sass, flex, bison or any tools that let you extend a language with custom syntax).</p><p><br/></p><p>The pre-compiler pass will alaways occur before the compiler pass.</p></body></html>"))
         self.label_6.setText(_("Not Implemented"))
-        self.tab_categories.setTabText(self.tab_categories.indexOf(self.tab_interpreters), _("Interpeters"))
+        self.tab_categories.setTabText(self.tab_categories.indexOf(self.tab_interpreters), _("Interpreters"))
 
 from hackedit.api.widgets import PathLineEdit

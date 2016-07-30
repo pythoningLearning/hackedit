@@ -49,6 +49,7 @@ class PreCompilersController(BuildAndRunTabController):
         # autodetected configs
         for plugin in plugins.get_pre_compiler_plugins():
             action = mnu_compiler_types.addAction(plugin.get_pre_compiler_type_name())
+            action.setIcon(plugin.get_pre_compiler_icon())
             action.triggered.connect(self._add_config)
             for config in plugin.get_auto_detected_configs():
                 self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin)
@@ -126,7 +127,7 @@ class PreCompilersController(BuildAndRunTabController):
         self._update_config()
 
     def _get_pre_compiler_status_meta(self, plugin, config):
-        precompiler = pre_compiler.PreCompiler(config)
+        precompiler = pre_compiler.PreCompiler(config, print_output=False)
         icon, tooltip = self.get_success_status_meta(plugin.get_pre_compiler_icon())
         try:
             pre_compiler.check_pre_compiler(precompiler)
@@ -135,7 +136,7 @@ class PreCompilersController(BuildAndRunTabController):
         return icon, tooltip
 
     def _get_pre_compiler_version(self, config):
-        precompiler = pre_compiler.PreCompiler(config)
+        precompiler = pre_compiler.PreCompiler(config, print_output=False)
         return pre_compiler.get_version(precompiler, include_all=False)
 
     def _add_config_item(self, config, item_type=ITEM_MANUAL, plugin=None):

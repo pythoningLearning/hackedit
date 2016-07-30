@@ -20,9 +20,12 @@
    <item>
     <widget class="QTabWidget" name="tab_categories">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_compilers">
+      <attribute name="icon">
+       <iconset theme="run-build"/>
+      </attribute>
       <attribute name="title">
        <string>Compilers</string>
       </attribute>
@@ -479,6 +482,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_pre_compilers">
+      <attribute name="icon">
+       <iconset theme="database-index"/>
+      </attribute>
       <attribute name="title">
        <string>Pre-compilers</string>
       </attribute>
@@ -731,8 +737,11 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_interpreters">
+      <attribute name="icon">
+       <iconset theme="system-run"/>
+      </attribute>
       <attribute name="title">
-       <string>Interpeters</string>
+       <string>Interpreters</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">

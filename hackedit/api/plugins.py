@@ -313,7 +313,7 @@ class PreCompilerPlugin:
     ENTRYPOINT = 'hackedit.plugins.pre_compilers'
 
     def get_pre_compiler_icon(self):
-        return QtGui.QIcon.fromTheme('checkbox')
+        return QtGui.QIcon.fromTheme('database-index')
 
     def get_pre_compiler_type_name(self):
         raise NotImplementedError()

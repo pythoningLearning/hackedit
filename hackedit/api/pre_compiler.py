@@ -118,7 +118,7 @@ class PreCompiler:
                             continue
             return text.splitlines()[0]
 
-        _logger().debug('getting pre-compiler version: %s', self.config.path)
+        _logger().info('getting pre-compiler version: %s', ' '.join(self.config.version_command_args))
         ret_val = _('version not found')
         exists = os.path.exists(self.config.path)
         if exists and self.config.version_command_args:
@@ -127,6 +127,7 @@ class PreCompiler:
                 ret_val = output if include_all else get_version_number(output)
         elif not exists:
             ret_val = _('PreCompiler not found')
+        _logger().info('pre-compiler version: %s', ret_val)
         return ret_val
 
     def pre_compile_file(self, file):
@@ -191,7 +192,7 @@ class PreCompiler:
             rm_file(input_path)
             rm_file(output_path)
 
-        _logger().info('checking pre-compiler config: %s', self.config.to_json())
+        _logger().info('checking pre-compiler config %r: %s', self.config.name, self.config.to_json())
         if not os.path.exists(self.config.path):
             raise PreCompilerCheckFailed(_('PreCompiler path does not exists'), -1)
         if not self.config.associated_extensions:

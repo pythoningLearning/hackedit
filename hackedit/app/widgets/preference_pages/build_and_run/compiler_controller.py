@@ -54,6 +54,7 @@ class CompilersController(BuildAndRunTabController):
         # add autodetected confis
         for plugin in plugins.get_compiler_plugins():
             action = mnu_compiler_types.addAction(plugin.get_compiler().type_name)
+            action.setIcon(plugin.get_compiler_icon())
             action.triggered.connect(self._add_compiler)
             for config in plugin.get_auto_detected_configs():
                 self._add_config_item(config, item_type=ITEM_AUTO_DETECTED, plugin=plugin)
