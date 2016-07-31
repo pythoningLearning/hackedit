@@ -142,9 +142,6 @@ setup(
             'generic_workspace = hackedit.plugins.workspaces:GenericWorkspace',
             'empty_workspace = hackedit.plugins.workspaces:EmptyWorkspace',
         ],
-        'hackedit.plugins.pre_compilers': [
-            'custom_pre_compiler = hackedit.plugins.custom_pre_compiler:CustomPreCompilerPlugin'
-        ],
         'pygments.styles': [
             'aube = hackedit.styles.aube:AubeStyle',
             'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',

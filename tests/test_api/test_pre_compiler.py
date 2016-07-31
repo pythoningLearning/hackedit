@@ -41,21 +41,6 @@ class TestPreCompilerConfig:
         assert config.version_regex == r'(?P<version>\d\.\d\.\d)'
         assert config.type_name == ''
 
-    def test_custom(self):
-        config = pre_compiler.CustomPreCompilerConfig()
-
-        assert config.name == ''
-        assert config.path == ''
-        assert config.associated_extensions == []
-        assert config.flags == []
-        assert config.output_pattern == ''
-        assert config.command_pattern == '$flags -o $output_file -i $input_file'
-        assert config.command_pattern_editable is True
-        assert config.test_file_content == ''
-        assert config.version_command_args == []
-        assert config.version_regex == r'(?P<version>\d\.\d\.\d)'
-        assert config.type_name == 'Custom'
-
     def test_serialization(self):
         config = EchoPrecompilerConfig()
         config.to_json() == pre_compiler.PreCompilerConfig().from_json(config.to_json())
@@ -71,7 +56,7 @@ class TestPreCompiler:
     @classmethod
     def setup_class(cls):
         cls.precompiler = pre_compiler.PreCompiler(EchoPrecompilerConfig(), working_dir=tempfile.gettempdir())
-        cls.broken_precompiler = pre_compiler.PreCompiler(pre_compiler.CustomPreCompilerConfig())
+        cls.broken_precompiler = pre_compiler.PreCompiler(pre_compiler.PreCompilerConfig())
 
     def test_get_version(self):
         version = pre_compiler.get_version(self.precompiler, include_all=True)
@@ -83,11 +68,7 @@ class TestPreCompiler:
 
         assert self.broken_precompiler.get_version() == 'PreCompiler not found'
 
-        test_precompiler = pre_compiler.PreCompiler(pre_compiler.CustomPreCompilerConfig())
-        test_precompiler.config.version_command_args = ['--version']
-        assert test_precompiler.get_version() == 'PreCompiler not found'
-
-        test_precompiler = pre_compiler.PreCompiler(pre_compiler.CustomPreCompilerConfig())
+        test_precompiler = pre_compiler.PreCompiler(EchoPrecompilerConfig())
         test_precompiler.config.path = sys.executable
         test_precompiler.config.version_command_args = ['--version']
         test_precompiler.config.version_regex = ''

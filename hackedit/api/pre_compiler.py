@@ -59,14 +59,6 @@ class PreCompilerConfig(utils.JSonisable, utils.Copyable):
         self.type_name = ''
 
 
-class CustomPreCompilerConfig(PreCompilerConfig):
-    def __init__(self):
-        super().__init__()
-        self.command_pattern_editable = True
-        self.command_pattern = '$flags -o $output_file -i $input_file'
-        self.type_name = 'Custom'
-
-
 class PreCompilerCheckFailed(utils.ProgramCheckFailedError):
     def __init__(self, *args, **kwargs):
         super().__init__('PreCompiler', _logger, *args, **kwargs)
