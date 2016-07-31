@@ -1,4 +1,4 @@
-from jedi._compatibility import encoding, is_py3, u
+from jedi._compatibility import encoding, is_py3
 import inspect
 import os
 import time
@@ -48,10 +48,8 @@ def increase_indent(func):
     def wrapper(*args, **kwargs):
         global _debug_indent
         _debug_indent += 1
-        try:
-            result = func(*args, **kwargs)
-        finally:
-            _debug_indent -= 1
+        result = func(*args, **kwargs)
+        _debug_indent -= 1
         return result
     return wrapper
 
@@ -63,13 +61,13 @@ def dbg(message, *args):
         mod = inspect.getmodule(frm[0])
         if not (mod.__name__ in ignored_modules):
             i = ' ' * _debug_indent
-            debug_function(NOTICE, i + 'dbg: ' + message % tuple(u(repr(a)) for a in args))
+            debug_function(NOTICE, i + 'dbg: ' + message % args)
 
 
 def warning(message, *args):
     if debug_function and enable_warning:
         i = ' ' * _debug_indent
-        debug_function(WARNING, i + 'warning: ' + message % tuple(u(repr(a)) for a in args))
+        debug_function(WARNING, i + 'warning: ' + message % args)
 
 
 def speed(name):

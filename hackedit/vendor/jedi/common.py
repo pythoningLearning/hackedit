@@ -5,8 +5,14 @@ import functools
 import re
 from ast import literal_eval
 
-from jedi._compatibility import unicode, reraise
+from jedi._compatibility import unicode, next, reraise
 from jedi import settings
+
+
+class MultiLevelStopIteration(Exception):
+    """
+    StopIteration's get catched pretty easy by for loops, let errors propagate.
+    """
 
 
 class UncaughtAttributeError(Exception):
@@ -86,11 +92,9 @@ def scale_speed_settings(factor):
     b = settings.max_until_execution_unique
     settings.max_executions *= factor
     settings.max_until_execution_unique *= factor
-    try:
-        yield
-    finally:
-        settings.max_executions = a
-        settings.max_until_execution_unique = b
+    yield
+    settings.max_executions = a
+    settings.max_until_execution_unique = b
 
 
 def indent_block(text, indention='    '):

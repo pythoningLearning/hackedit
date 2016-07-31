@@ -37,6 +37,7 @@ Parser
 Dynamic stuff
 ~~~~~~~~~~~~~
 
+.. autodata:: dynamic_arrays_instances
 .. autodata:: dynamic_array_additions
 .. autodata:: dynamic_params
 .. autodata:: dynamic_params_for_other_modules
@@ -147,9 +148,14 @@ function is being reparsed.
 # dynamic stuff
 # ----------------
 
+dynamic_arrays_instances = True
+"""
+Check for `append`, etc. on array instances like list()
+"""
+
 dynamic_array_additions = True
 """
-check for `append`, etc. on arrays: [], {}, () as well as list/set calls.
+check for `append`, etc. on arrays: [], {}, ()
 """
 
 dynamic_params = True

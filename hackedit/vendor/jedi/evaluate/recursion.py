@@ -4,9 +4,10 @@ must stop recursions going mad. Some settings are here to make |jedi| stop at
 the right time. You can read more about them :ref:`here <settings-recursion>`.
 
 Next to :mod:`jedi.evaluate.cache` this module also makes |jedi| not
-thread-safe. Why?  ``execution_recursion_decorator`` uses class variables to
+thread-safe. Why?  ``ExecutionRecursionDecorator`` uses class variables to
 count the function calls.
 """
+from jedi.parser import representation as pr
 from jedi import debug
 from jedi import settings
 from jedi.evaluate import compiled
@@ -80,24 +81,31 @@ class _RecursionNode(object):
         # Don't check param instances, they are not causing recursions
         # The same's true for the builtins, because the builtins are really
         # simple.
-        self.is_ignored = self.script == compiled.builtin
+        self.is_ignored = isinstance(stmt, pr.Param) \
+            or (self.script == compiled.builtin)
 
     def __eq__(self, other):
         if not other:
             return None
 
+        # List Comprehensions start on the same line as its statement.
+        # Therefore we have the unfortunate situation of the same start_pos for
+        # two statements.
+        is_list_comp = lambda x: isinstance(x, pr.ListComprehension)
         return self.script == other.script \
             and self.position == other.position \
+            and not is_list_comp(self.stmt.parent) \
+            and not is_list_comp(other.parent) \
             and not self.is_ignored and not other.is_ignored
 
 
 def execution_recursion_decorator(func):
-    def run(execution, **kwargs):
+    def run(execution, evaluate_generator=False):
         detector = execution._evaluator.execution_recursion_detector
-        if detector.push_execution(execution):
+        if detector.push_execution(execution, evaluate_generator):
             result = []
         else:
-            result = func(execution, **kwargs)
+            result = func(execution, evaluate_generator)
         detector.pop_execution()
         return result
 
@@ -115,13 +123,13 @@ class ExecutionRecursionDetector(object):
         self.execution_funcs = set()
         self.execution_count = 0
 
-    def __call__(self, execution):
+    def __call__(self, execution, evaluate_generator=False):
         debug.dbg('Execution recursions: %s', execution, self.recursion_level,
                   self.execution_count, len(self.execution_funcs))
-        if self.check_recursion(execution):
+        if self.check_recursion(execution, evaluate_generator):
             result = []
         else:
-            result = self.func(execution)
+            result = self.func(execution, evaluate_generator)
         self.pop_execution()
         return result
 
@@ -129,7 +137,7 @@ class ExecutionRecursionDetector(object):
         cls.parent_execution_funcs.pop()
         cls.recursion_level -= 1
 
-    def push_execution(cls, execution):
+    def push_execution(cls, execution, evaluate_generator):
         in_par_execution_funcs = execution.base in cls.parent_execution_funcs
         in_execution_funcs = execution.base in cls.execution_funcs
         cls.recursion_level += 1
@@ -143,7 +151,7 @@ class ExecutionRecursionDetector(object):
         if isinstance(execution.base, (iterable.Array, iterable.Generator)):
             return False
         module = execution.get_parent_until()
-        if module == compiled.builtin:
+        if evaluate_generator or module == compiled.builtin:
             return False
 
         if in_par_execution_funcs:
