@@ -3,6 +3,7 @@
 #
 # Third party libraries that are distributed through an internal package put on
 # sys.path
+PyQt5
 future
 pygments
 jedi==0.8.1
