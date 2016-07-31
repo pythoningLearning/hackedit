@@ -27,7 +27,6 @@ class BuildAndRunTabController(QtCore.QObject):
         self.settings_widget = settings_widget
         self.fct_get_plugins = fct_get_plugins
         self.fct_get_plugin_by_typename = fct_get_plugin_by_typename
-        self.fct_settings_get_default = fct_settings_get_default
         self.fct_settings_load = fct_settings_load
         self.fct_settings_save = fct_settings_save
         self.fct_settings_get_default = fct_settings_get_default
@@ -192,10 +191,22 @@ class BuildAndRunTabController(QtCore.QObject):
             self.names.remove(self._current_config.name)
         except ValueError:
             pass
+        self._restore_default_item_if_needed()
         self._current_config = None
         parent = item.parent()
         parent.removeChild(item)
         self._update_config()
+
+    def _restore_default_item_if_needed(self):
+        default = self.fct_settings_get_default(self._current_config.mimetypes)
+        if default == self._current_config.name:
+            self.fct_settings_set_default(self._current_config.mimetypes, '')
+            for i in range(self.tree.topLevelItem(0).childCount()):
+                child = self.tree.topLevelItem(0).child(i)
+                if child and child.data(
+                        DATA_COL_CONFIG, QtCore.Qt.UserRole).type_name == self._current_config.type_name:
+                    child.setIcon(COL_DEFAULT, QtGui.QIcon.fromTheme('emblem-favorite'))
+                    break
 
     def _make_default(self):
         name = self.tree.currentItem().text(COL_NAME)
@@ -226,9 +237,9 @@ class BuildAndRunTabController(QtCore.QObject):
             self.tree.setCurrentItem(self._item_to_select)
 
     def _add_config_items(self, configs, item_type):
-        for config in configs:
+        for config in sorted(configs, key= lambda x: x.name):
             default = self.fct_settings_get_default(config.mimetypes)
-            if default is None:
+            if not default:
                 default = config.name
                 self.fct_settings_set_default(config.mimetypes, config.name)
             is_default = False
