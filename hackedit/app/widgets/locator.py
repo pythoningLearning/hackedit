@@ -34,7 +34,7 @@ class LocatorWidget(QtWidgets.QFrame):
     GOTO_SYMBOL_PATTERN = re.compile('^@.*')
     GOTO_SYMBOL_IN_PROJ_PATTERN = re.compile('^!.*')
 
-    MODE_GOTO_ANYTHING = 0
+    MODE_GOTO_FILE = 0
     MODE_GOTO_SYMBOL = 1
     MODE_GOTO_SYMBOL_IN_PROJECT = 2
     MODE_GOTO_LINE = 3
@@ -56,7 +56,7 @@ class LocatorWidget(QtWidgets.QFrame):
         self.ui.lineEdit.setFocus(True)
         self.ui.bt_close.clicked.connect(self.hide)
         self.ui.bt_infos.clicked.connect(self._show_help)
-        self.mode = self.MODE_GOTO_ANYTHING
+        self.mode = self.MODE_GOTO_FILE
         self.ui.treeWidget.currentItemChanged.connect(
             self._on_current_item_changed)
         self.ui.treeWidget.itemDoubleClicked.connect(self._activate)
@@ -65,7 +65,7 @@ class LocatorWidget(QtWidgets.QFrame):
     def showEvent(self, ev):
         self._activated = False
         self.ui.lineEdit.clear()
-        if self.mode == self.MODE_GOTO_ANYTHING:
+        if self.mode == self.MODE_GOTO_FILE:
             self.search_files()
             self.ui.cb_non_project_files.setVisible(True)
         elif self.mode == self.MODE_GOTO_SYMBOL:

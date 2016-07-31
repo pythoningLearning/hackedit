@@ -159,8 +159,8 @@ class ProjectExplorer(QtCore.QObject):
         self._tab_bar_action_show_in_explorer.setText(
             _('Show in %s') % FileSystemContextMenu.get_file_explorer_name())
         self._update_workspaces_menu()
-        self.action_goto_anything.setShortcut(shortcuts.get(
-            'Goto anything', _('Goto anything'), 'Ctrl+T'))
+        self.action_goto_file.setShortcut(shortcuts.get(
+            'Goto file', _('Goto file'), 'Ctrl+T'))
         self.action_goto_symbol.setShortcut(shortcuts.get(
             'Goto symbol', _('Goto symbol'), 'Ctrl+R'))
         self.action_goto_symbol_in_project.setShortcut(shortcuts.get(
@@ -246,11 +246,11 @@ class ProjectExplorer(QtCore.QObject):
 
     def _setup_locator(self):
         menu = api.window.get_menu(_('&Goto'))
-        self.action_goto_anything = menu.addAction(_('Goto anything...'))
-        self.action_goto_anything.setShortcut(shortcuts.get(
-            'Goto anything', _('Goto anything'), 'Ctrl+T'))
-        self.main_window.addAction(self.action_goto_anything)
-        self.action_goto_anything.triggered.connect(self._goto_anything)
+        self.action_goto_file = menu.addAction(_('Goto file...'))
+        self.action_goto_file.setShortcut(shortcuts.get(
+            'Goto file', _('Goto file'), 'Ctrl+T'))
+        self.main_window.addAction(self.action_goto_file)
+        self.action_goto_file.triggered.connect(self._goto_anything)
 
         menu.addSeparator()
 
@@ -287,7 +287,7 @@ class ProjectExplorer(QtCore.QObject):
         action.triggered.connect(self._force_reindex_all_projects)
 
     def _goto_anything(self):
-        self._locator.mode = self._locator.MODE_GOTO_ANYTHING
+        self._locator.mode = self._locator.MODE_GOTO_FILE
         self._show_locator()
 
     def _goto_symbol(self):
