@@ -146,6 +146,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui = main_window_ui.Ui_MainWindow()
         self._ui.setupUi(self)
         self._ui.stackedWidget.setCurrentIndex(1)
+        self._ui.tabs.popup_shortcut = 'Alt+T'
 
         if not QtGui.QIcon.hasThemeIcon('application-exit'):
             self._ui.action_quit.setIcon(QtGui.QIcon.fromTheme('window-close'))
@@ -880,6 +881,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui.tabs.tab_detached.connect(self._on_tab_detached)
         self._ui.tabs.tab_detached.connect(self.editor_detached.emit)
         self._ui.a_print.triggered.connect(self._print)
+        self._ui.a_print.setShortcut(shortcuts.get('Print', _('Print'), 'Ctrl+P'))
 
     def _show_not_implemented_msg(self):
         common.not_implemented_action(self)
