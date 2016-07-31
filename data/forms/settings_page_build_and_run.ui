@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tab_categories">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_compilers">
       <attribute name="icon">
@@ -165,7 +165,11 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="PathLineEdit" name="edit_compiler"/>
+                  <widget class="PathLineEdit" name="edit_compiler">
+                   <property name="toolTip">
+                    <string>Compiler path or command</string>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <widget class="QToolButton" name="bt_select_compiler">
@@ -209,7 +213,11 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLineEdit" name="edit_vcvarsall"/>
+                   <widget class="QLineEdit" name="edit_vcvarsall">
+                    <property name="toolTip">
+                     <string>Path to vcvarsall needed to setup a MSVC based compiler.</string>
+                    </property>
+                   </widget>
                   </item>
                   <item>
                    <widget class="QToolButton" name="bt_select_vcvarsall">
@@ -232,6 +240,9 @@
                 </item>
                 <item row="1" column="1">
                  <widget class="QComboBox" name="combo_vcvarsall_arch">
+                  <property name="toolTip">
+                   <string>The MSVC architecture: 32 bits or 64 bits</string>
+                  </property>
                   <item>
                    <property name="text">
                     <string>x86</string>
@@ -262,7 +273,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The list of environment variables to set before compiling a file.&lt;/p&gt;&lt;p&gt;Note that the values defined in this list erase any previous value you might have defined in your system (empty values are not set).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The list of environment variables to set fore compiling a file.&lt;/p&gt;&lt;p&gt;Note that the values defined in this list erase any previous value you might have defined in your system (except for empty values and for the PATH environment variable which get prepended to the existing PATH).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="selectionMode">
                    <enum>QAbstractItemView::SingleSelection</enum>
@@ -474,6 +485,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="bt_make_default_compiler">
+           <property name="toolTip">
+            <string>Make the selected compiler the default for its type</string>
+           </property>
            <property name="text">
             <string>Make default</string>
            </property>
@@ -623,7 +637,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>Path:</string>
+               <string>Pre-compiler:</string>
               </property>
              </widget>
             </item>
@@ -633,10 +647,17 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="QLineEdit" name="edit_pre_compiler_path"/>
+               <widget class="QLineEdit" name="edit_pre_compiler_path">
+                <property name="toolTip">
+                 <string>Path of the pre-compiler</string>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QToolButton" name="bt_select_pre_compiler_path">
+                <property name="toolTip">
+                 <string>Select pre-compiler</string>
+                </property>
                 <property name="text">
                  <string>...</string>
                 </property>
@@ -652,7 +673,11 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="edit_pre_compiler_flags"/>
+             <widget class="QLineEdit" name="edit_pre_compiler_flags">
+              <property name="toolTip">
+               <string>Pre-compiler flags</string>
+              </property>
+             </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_7">
@@ -662,7 +687,11 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLineEdit" name="edit_pre_compiler_output_pattern"/>
+             <widget class="QLineEdit" name="edit_pre_compiler_output_pattern">
+              <property name="toolTip">
+               <string>Output pattern (e.g. $input_file_name.cob)</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -698,7 +727,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new compiler&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Add a new pre-compiler</string>
            </property>
            <property name="text">
             <string>Add</string>
@@ -724,7 +753,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Clone the selected compiler</string>
+            <string>Clone the selected pre-compiler</string>
            </property>
            <property name="text">
             <string>Clone</string>
@@ -738,7 +767,7 @@
          <item>
           <widget class="QPushButton" name="bt_delete_pre_compiler">
            <property name="toolTip">
-            <string>Delete the selected compiler</string>
+            <string>Delete the selected pre-compiler</string>
            </property>
            <property name="text">
             <string>Delete</string>
@@ -751,6 +780,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="bt_make_default_pre_compiler">
+           <property name="toolTip">
+            <string>Make the selected pre-compiler the default for its type.</string>
+           </property>
            <property name="text">
             <string>Make default</string>
            </property>
@@ -776,7 +808,7 @@
          <item>
           <widget class="QPushButton" name="bt_check_pre_compiler">
            <property name="toolTip">
-            <string>Check if the selected compiler works</string>
+            <string>Check if the selected pre-compiler works</string>
            </property>
            <property name="text">
             <string>Check</string>
@@ -889,122 +921,303 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QTabWidget" name="tab_widget_interpreter_settings">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="title">
-            <string>Packages</string>
+           <property name="currentIndex">
+            <number>0</number>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QTableWidget" name="tableWidget">
-                <property name="toolTip">
-                 <string>The list of installed package for the selected interpreter.</string>
-                </property>
-                <property name="editTriggers">
-                 <set>QAbstractItemView::NoEditTriggers</set>
-                </property>
-                <property name="alternatingRowColors">
-                 <bool>true</bool>
-                </property>
-                <property name="selectionBehavior">
-                 <enum>QAbstractItemView::SelectRows</enum>
-                </property>
-                <property name="sortingEnabled">
-                 <bool>true</bool>
-                </property>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>true</bool>
-                </attribute>
-                <attribute name="verticalHeaderVisible">
-                 <bool>false</bool>
-                </attribute>
-               </widget>
-              </item>
-              <item>
-               <widget class="QProgressBar" name="progress_bar">
-                <property name="maximum">
-                 <number>0</number>
-                </property>
-                <property name="value">
-                 <number>-1</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_10">
-              <item>
-               <widget class="QToolButton" name="bt_add_packages">
-                <property name="toolTip">
-                 <string>Install one or more packages</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset theme="list-add">
-                  <normaloff>../../../hackedit-python/data/forms</normaloff>../../../hackedit-python/data/forms</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QToolButton" name="bt_rm_package">
-                <property name="toolTip">
-                 <string>Uninstall selected package</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset theme="edit-delete">
-                  <normaloff>../../../hackedit-python/data/forms</normaloff>../../../hackedit-python/data/forms</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QToolButton" name="bt_update_package">
-                <property name="toolTip">
-                 <string>Update selected package</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset theme="go-up">
-                  <normaloff>../../../hackedit-python/data/forms</normaloff>../../../hackedit-python/data/forms</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           <widget class="QWidget" name="tab_setup">
+            <attribute name="title">
+             <string>Setup</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <layout class="QFormLayout" name="formLayout_4">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Interpreter:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="PathLineEdit" name="edit_interpreter_path">
+                   <property name="toolTip">
+                    <string>Interpreter path or command</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="bt_select_interpreter">
+                   <property name="toolTip">
+                    <string>Select interpreter</string>
+                   </property>
+                   <property name="text">
+                    <string>...</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="title">
+                <string>Environment</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_9">
+                <item>
+                 <widget class="QTableWidget" name="table_interpreter_env_vars">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The list of environment variables to set for running a script.&lt;/p&gt;&lt;p&gt;Note that the values defined in this list erase any previous value you might have defined in your system (except for empty values  and for the PATH environment variable which get prepended to the existing path).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="selectionMode">
+                   <enum>QAbstractItemView::SingleSelection</enum>
+                  </property>
+                  <property name="selectionBehavior">
+                   <enum>QAbstractItemView::SelectRows</enum>
+                  </property>
+                  <attribute name="horizontalHeaderDefaultSectionSize">
+                   <number>150</number>
+                  </attribute>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderCascadingSectionResizes">
+                   <bool>false</bool>
+                  </attribute>
+                  <column>
+                   <property name="text">
+                    <string>Key</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Value</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_12">
+                  <property name="leftMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>6</number>
+                  </property>
+                  <item>
+                   <widget class="QPushButton" name="bt_add_interpreter_env_var">
+                    <property name="toolTip">
+                     <string>Add an environment variable</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="icon">
+                     <iconset theme="list-add">
+                      <normaloff>../../../hackedit-cobol/data/forms</normaloff>../../../hackedit-cobol/data/forms</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="bt_rm_interpreter_env_var">
+                    <property name="toolTip">
+                     <string>Remove the selected environment variable.</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="icon">
+                     <iconset theme="list-remove">
+                      <normaloff>../../../hackedit-cobol/data/forms</normaloff>../../../hackedit-cobol/data/forms</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer_6">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_packages" native="true">
+            <attribute name="title">
+             <string>Packages</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QTableWidget" name="table_packages">
+                 <property name="toolTip">
+                  <string>The list of installed package for the selected interpreter.</string>
+                 </property>
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Name</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Version</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Latest</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
+                <widget class="QProgressBar" name="progress_bar">
+                 <property name="maximum">
+                  <number>0</number>
+                 </property>
+                 <property name="value">
+                  <number>-1</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QToolButton" name="bt_add_packages">
+                 <property name="toolTip">
+                  <string>Install one or more packages</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset theme="list-add">
+                   <normaloff>../../../hackedit-python/data/forms</normaloff>../../../hackedit-python/data/forms</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="bt_rm_package">
+                 <property name="toolTip">
+                  <string>Uninstall selected package</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset theme="edit-delete">
+                   <normaloff>../../../hackedit-python/data/forms</normaloff>../../../hackedit-python/data/forms</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="bt_update_package">
+                 <property name="toolTip">
+                  <string>Update selected package</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset theme="go-up">
+                   <normaloff>../../../hackedit-python/data/forms</normaloff>../../../hackedit-python/data/forms</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -1038,7 +1251,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new compiler&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Add a new interpreter</string>
            </property>
            <property name="text">
             <string>Add</string>
@@ -1064,7 +1277,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Clone the selected compiler</string>
+            <string>Clone the selected interpreter</string>
            </property>
            <property name="text">
             <string>Clone</string>
@@ -1078,7 +1291,7 @@
          <item>
           <widget class="QPushButton" name="bt_delete_interpreter">
            <property name="toolTip">
-            <string>Delete the selected compiler</string>
+            <string>Delete the selected interpreter</string>
            </property>
            <property name="text">
             <string>Delete</string>
@@ -1091,6 +1304,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="bt_make_default_interpreter">
+           <property name="toolTip">
+            <string>Make the selected interpreter the default for its type.</string>
+           </property>
            <property name="text">
             <string>Make default</string>
            </property>
@@ -1116,7 +1332,7 @@
          <item>
           <widget class="QPushButton" name="bt_check_interpreter">
            <property name="toolTip">
-            <string>Check if the selected compiler works</string>
+            <string>Check if the selected interpreter works</string>
            </property>
            <property name="text">
             <string>Check</string>
