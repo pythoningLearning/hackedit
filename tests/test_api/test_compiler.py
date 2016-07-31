@@ -265,7 +265,7 @@ def test_get_configurations_by_mtype():
     pytest_hackedit.app()
     plugin = plugins.get_compiler_plugin_by_typename('GnuCOBOL')
     config = plugin.create_new_configuration('name', 'cobc')
-    settings.save_pre_compiler_configurations({'test': config})
+    settings.save_compiler_configurations({'test': config})
     mtype_cfg = compiler.get_configs_for_mimetype(config.mimetypes[0])[0]
     mtype_cfg.name = config.name
     assert mtype_cfg.to_json() == config.to_json()
