@@ -27,10 +27,17 @@ class InterpreterController(BuildAndRunTabController):
         cfg.environment_variables = env_vars
         return cfg
 
-    def _display_config(self, config, widget_class):
+    def _display_config(self, config, widget_class, editable):
         if config is None:
             config = interpreter.InterpreterConfig()
         self.ui.edit_interpreter.setText(config.command)
+        self._display_environment_vars(config)
+        package_manager = self._get_package_manager(config)
+        self._display_package_manager(package_manager)
+        self._update_settings_tabs_state(editable, package_manager)
+        self._update_env_var_buttons()
+
+    def _display_environment_vars(self, config):
         self.ui.table_interpreter_env_vars.clearContents()
         self.ui.table_interpreter_env_vars.setRowCount(0)
         for k, v in sorted(config.environment_variables.items(), key=lambda x: x[0]):
@@ -42,12 +49,26 @@ class InterpreterController(BuildAndRunTabController):
             value.setText(v)
             self.ui.table_interpreter_env_vars.setItem(index, 0, key)
             self.ui.table_interpreter_env_vars.setItem(index, 1, value)
+
+    def _display_package_manager(self, package_manager):
+        pass
+
+    def _update_settings_tabs_state(self, editable, package_manager):
+        enable_package_manager = package_manager is not None
+        self.ui.tab_widget_interpreter_settings.setEnabled(True)
+        self.ui.tab_widget_interpreter_settings.setTabEnabled(1, enable_package_manager)
+        if editable or not enable_package_manager:
+            self.ui.tab_widget_interpreter_settings.setCurrentIndex(0)
+        else:
+            self.ui.tab_widget_interpreter_settings.setCurrentIndex(1)
+        self.ui.tab_interpreter_setup.setEnabled(editable)
+
+    def _get_package_manager(self, config):
         plugin = plugins.get_interpreter_plugin_by_typename(config.type_name)
         package_manager = None
         if plugin:
             package_manager = plugin.get_package_manager(config)
-        self.ui.tab_widget_interpreter_settings.setTabEnabled(1, package_manager is not None)
-        self._update_env_var_buttons()
+        return package_manager
 
     def _get_plugin_type_name(self, plugin):
         return plugin.get_interpreter_type_name()

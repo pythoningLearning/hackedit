@@ -28,7 +28,7 @@ class CompilersController(BuildAndRunTabController):
         cfg.vcvarsall_arch = self.ui.combo_vcvarsall_arch.currentText().strip()
         return cfg
 
-    def _display_config(self, config, widget_class):
+    def _display_config(self, config, widget_class, *args):
         if config is None:
             config = compiler.CompilerConfig()
         self.ui.edit_compiler.setText(config.compiler)

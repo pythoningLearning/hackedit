@@ -113,23 +113,24 @@ class BuildAndRunTabController(QtCore.QObject):
         widget_class = current_item.data(DATA_COL_WIDGET, QtCore.Qt.UserRole)
         if current_item is None or current_item.parent() is None:
             # no item selected or top level item
-            self.settings_widget.hide()
             editable = False
             clonable = False
             self._current_config = None
             self._current_config_editable = None
-            self._display_config(None, None)
+            self.settings_widget.setEnabled(editable)
+            self._display_config(None, None, False)
+            self.settings_widget.hide()
         else:
             clonable = True
-            self.settings_widget.show()
-            self._display_config(config, widget_class)
             parent_item = current_item.parent()
             parent_item_index = self.tree.indexOfTopLevelItem(parent_item)
             editable = parent_item_index != ITEM_AUTO_DETECTED
             self._current_config_editable = editable
             self._current_config = config
             self._config_to_select = config.name
-        self.settings_widget.setEnabled(editable)
+            self.settings_widget.setEnabled(editable)
+            self._display_config(config, widget_class, editable)
+            self.settings_widget.show()
         self.bt_remove.setEnabled(editable)
         self.bt_check.setEnabled(clonable)
         self.bt_clone.setEnabled(clonable)
