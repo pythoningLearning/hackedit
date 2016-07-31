@@ -560,8 +560,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setGeometry(geometry)
         _logger().debug('restoreGeometry: OK')
 
-        # self.restoreState(QtCore.QSettings().value('_window/state_' + key))
-        # _logger().debug('restoreState: OK')
+        state = QtCore.QSettings().value('_window/state_' + key)
+        if state:
+            self.restoreState(state)
+            _logger().debug('restoreState: OK')
 
         if not self._ui.menuTools.actions():
             self._ui.menubar.removeAction(self._ui.menuTools.menuAction())
