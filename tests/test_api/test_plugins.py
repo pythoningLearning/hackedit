@@ -73,3 +73,15 @@ def test_get_pre_compiler_plugin_by_typename():
 @pytest.mark.skipif(sys.platform == 'win32', reason='No precompiler on Windows yet')
 def test_get_pre_compiler_plugin_by_mimetype():
     assert plugins.get_pre_compiler_plugin_by_mimetype('text/x-dbpre') is not None
+
+
+def test_get_interpreter_plugins():
+    assert len(plugins.get_interpreter_plugins()) >= 1
+
+
+def test_get_interpreter_plugin_by_typename():
+    assert plugins.get_interpreter_plugin_by_typename('Python') is not None
+
+
+def test_get_interpreter_plugin_by_mimetype():
+    assert plugins.get_interpreter_plugin_by_mimetype('text/x-python') is not None

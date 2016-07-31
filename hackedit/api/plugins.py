@@ -355,6 +355,69 @@ class PreCompilerPlugin:
         return False, ''
 
 
+class InterpreterPlugin:
+    """
+    Adds support for a new interpreter in HackEdit.
+    """
+    ENTRYPOINT = 'hackedit.plugins.interpreters'
+
+    def get_interpreter_icon(self):
+        """
+        Gets the interpreter icon.
+
+        The best is to use icon from theme using the mimetype icon (e.g. QIcon.fromTheme('text-x-python')
+
+        :return: QtGui.QIcon
+        """
+        raise NotImplementedError()
+
+    def get_interpreter_type_name(self):
+        """
+        Gets the interpreter type name
+        :return: str
+        """
+        raise NotImplementedError()
+
+    def get_interpreter_mimetypes(self):
+        """
+        Gets the associated mimetypes
+        """
+        raise NotImplementedError()
+
+    def get_auto_detected_configs(self):
+        """
+        Get the list of autodetected interpreter configurations.
+        """
+        raise NotImplementedError()
+
+    def create_new_configuration_with_dialog(self, parent, name):
+        """
+        Creates a new configuration with the ability to show a wizard/dialog to ask more inputs from the user.
+
+        The default implementation just asks for the interpreter path but you can overwrite it to show your own dialog.
+
+        This method should rely on `create_new_configuration` to create the final configuration.
+        """
+        status, path = self._select_interpreter_path(parent)
+        if not status:
+            return None
+        return self.create_new_configuration(name, path)
+
+    def create_new_configuration(self, name, path, extra_options):
+        """
+        Creates a new configuration.
+
+        :param name: unique name of the configuration.
+        """
+        raise NotImplementedError()
+
+    def _select_interpreter_path(self, parent):
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pinterpreter')
+        if path:
+            return True, path
+        return False, ''
+
+
 def get_plugin_instance(plugin_class):
     """
     Returns the plugin instance that match a given plugin **class**.
@@ -432,6 +495,42 @@ def get_pre_compiler_plugin_by_mimetype(mimetype):
     """
     for plugin in get_pre_compiler_plugins():
         if mimetype in plugin.get_pre_compiler_mimetypes():
+            return plugin
+    return None
+
+
+def get_interpreter_plugins():
+    """
+    Returns a list of all known interpreter plugins.
+
+    :rtype: [InterpreterPlugin]
+    """
+    ret_val = []
+    for plugin in _shared.APP.plugin_manager.interpreter_plugins.values():
+        ret_val.append(plugin)
+    return ret_val
+
+
+def get_interpreter_plugin_by_typename(interpreter_type_name):
+    """
+    Gets the interpreter plugin that match the specified interpreter_type_name.
+
+    :rtype: InterpreterPlugin
+    """
+    try:
+        return _shared.APP.plugin_manager.interpreter_plugins[interpreter_type_name]
+    except TypeError:
+        return None
+
+
+def get_interpreter_plugin_by_mimetype(mimetype):
+    """
+    Gets the interpreter plugin that matches the specified mimetype
+
+    :rtype: InterpreterPlugin
+    """
+    for plugin in get_interpreter_plugins():
+        if mimetype in plugin.get_interpreter_mimetypes():
             return plugin
     return None
 

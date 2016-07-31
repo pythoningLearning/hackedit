@@ -23,7 +23,7 @@ class LoadPluginFailedEvent(events.ExceptionEvent):
         self.level = events.WARNING
 
 
-class PluginManager:
+class PluginManager:  # todo refactor this class, functions are too similar and could be generalized
     """
     Loads and stores the various kind of plugins.
 
@@ -34,22 +34,14 @@ class PluginManager:
     :class:`hackedit.app.Application`.
     """
     def __init__(self):
-        #: Map of workspace plugin classes
         self.workspace_plugins = {}
-        #: List of window plugins.
         self.window_plugins = []
-        #: List of preference pages plugins
         self.preferences_page_plugins = []
-        #: The list of editor plugins classes
         self.editor_plugins = []
-        #: The list of template provider plugins
         self.template_providers = []
-        #: compiler plugins
         self.compiler_plugins = {}
-        #: pre-compiler plugins
         self.pre_compiler_plugins = {}
-
-        #: the map of plugin which failed to load with their traceback
+        self.interpreter_plugins = {}
         self.failed_to_load = {}
 
         self._load_template_provider_plugins()
@@ -58,8 +50,33 @@ class PluginManager:
         self._load_workspace_plugins()
         self._load_compiler_plugins()
         self._load_pre_compiler_plugins()
+        self._load_interpreter_plugins()
         FileIconProvider.load_plugins()
         SplittableCodeEditTabWidget.icon_provider_klass = FileIconProvider
+
+    def _load_interpreter_plugins(self):
+        """
+        Loads workspace plugins (plugins that are tied to a specific worskpace)
+        """
+        _logger().info('loading interpreter plugins')
+        entrypoints = list(pkg_resources.iter_entry_points(plugins.InterpreterPlugin.ENTRYPOINT))
+        for entrypoint in entrypoints:
+            _logger().info('  - loading plugin: %s', entrypoint)
+            try:
+                plugin_instance = entrypoint.load()()
+            except Exception as e:
+                _logger().exception('Failed to load interpreter plugin')
+                name = str(entrypoint).split('=')[0].strip()
+                self.failed_to_load[name] = traceback.format_exc(), e
+            else:
+                try:
+                    type_name = plugin_instance.get_interpreter_type_name()
+                except NotImplementedError as e:
+                    _logger().warning('Failed to load interpreter plugin, get_interpreter_type_name not implemented')
+                    name = str(entrypoint).split('=')[0].strip()
+                    self.failed_to_load[name] = traceback.format_exc(), e
+                else:
+                    self.interpreter_plugins[type_name] = plugin_instance
 
     def _load_pre_compiler_plugins(self):
         """
@@ -72,7 +89,7 @@ class PluginManager:
             try:
                 plugin_instance = entrypoint.load()()
             except Exception as e:
-                _logger().exception('Failed to load compiler plugin')
+                _logger().exception('Failed to load pre-compiler plugin')
                 name = str(entrypoint).split('=')[0].strip()
                 self.failed_to_load[name] = traceback.format_exc(), e
             else:
