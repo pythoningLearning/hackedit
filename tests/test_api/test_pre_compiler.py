@@ -4,8 +4,12 @@ import tempfile
 
 import pytest
 
-from hackedit.api import pre_compiler
+import pytest_hackedit
+from hackedit.api import plugins, pre_compiler, utils
+from hackedit.app import settings
 
+
+utils.add_mimetype_extension('text/x-precompiler-test', '*.pye')
 
 echo_pre_compiler = os.path.join(os.path.dirname(__file__), 'echo_pre_compiler.py')
 
@@ -19,7 +23,7 @@ class EchoPrecompilerConfig(pre_compiler.PreCompilerConfig):
         self.version_regex = r'.*(?P<version>\d\.\d\.\d).*'
         self.output_pattern = '$input_file_name.py'
         self.path = sys.executable
-        self.associated_extensions = ['*.pye']
+        self.mimetypes = ['text/x-precompiler-test']
         with open(__file__) as ftest:
             self.test_file_content = ftest.read()
         self.type_name = 'Echo'
@@ -31,11 +35,10 @@ class TestPreCompilerConfig:
 
         assert config.name == ''
         assert config.path == ''
-        assert config.associated_extensions == []
+        assert config.mimetypes == []
         assert config.flags == []
         assert config.output_pattern == ''
         assert config.command_pattern == ''
-        assert config.command_pattern_editable is False
         assert config.test_file_content == ''
         assert config.version_command_args == []
         assert config.version_regex == r'(?P<version>\d\.\d\.\d)'
@@ -100,3 +103,13 @@ class TestPreCompiler:
             os.remove(output_path)
         except OSError:
             return
+
+
+@pytest.mark.skipif(sys.platform == 'win32', reason='No precompiler on Windows yet')
+def test_get_configs_for_mimetype():
+    pytest_hackedit.app()
+    plugin = plugins.get_pre_compiler_plugin_by_typename('SQL COBOL - dbpre')
+    config = plugin.create_new_configuration('name', 'path', extra_options=('obj', 'copyboks'))
+    settings.save_pre_compiler_configurations({'test': config})
+    mtype_cfgs = pre_compiler.get_configs_for_mimetype(config.mimetypes[0])
+    assert mtype_cfgs[0].to_json() == config.to_json()

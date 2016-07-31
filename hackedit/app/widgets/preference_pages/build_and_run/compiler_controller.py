@@ -8,12 +8,12 @@ from .base import BuildAndRunTabController
 
 class CompilersController(BuildAndRunTabController):
     def __init__(self, ui):
-        super().__init__(plugins.get_compiler_plugins, plugins.get_compiler_plugin, compiler.check_compiler,
-                         settings.load_compiler_configurations, settings.save_compiler_configurations,
-                         settings.get_default_compiler, settings.set_default_compiler,
-                         ui, ui.tree_compilers, ui.bt_add_compiler, ui.bt_clone_compiler,
-                         ui.bt_delete_compiler, ui.bt_make_default_compiler, ui.bt_check_compiler,
-                         ui.tab_compiler_settings, _('Check compilation'))
+        super().__init__(plugins.get_compiler_plugins, plugins.get_compiler_plugin_by_typename,
+                         compiler.check_compiler, settings.load_compiler_configurations,
+                         settings.save_compiler_configurations, settings.get_default_compiler,
+                         settings.set_default_compiler, ui, ui.tree_compilers, ui.bt_add_compiler,
+                         ui.bt_clone_compiler, ui.bt_delete_compiler, ui.bt_make_default_compiler,
+                         ui.bt_check_compiler, ui.tab_compiler_settings, _('Check compilation'))
 
     def _get_updated_config(self):
         cfg = self.ui.stacked_compiler_options.current_widget.get_config()

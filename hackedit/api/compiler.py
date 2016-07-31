@@ -13,7 +13,7 @@ import sys
 from PyQt5 import QtCore, QtWidgets
 
 from hackedit.api import system, utils
-from hackedit.app import msvc
+from hackedit.app import msvc, settings
 from hackedit.app.forms import compiler_config_ui
 
 
@@ -36,6 +36,8 @@ class CompilerConfig(utils.JSonisable, utils.Copyable):
         self.name = ''
         #: Directory where the compiler can be found, use an emtpy path to use the system configuration.
         self.compiler = ''
+        #: The associated mimetypes, use to find a valid file compiler.
+        self.mimetypes = []
         #: Compiler flags that will be appended to every compiler command.
         self.flags = []
         #: List of include paths (used for copybooks in COBOL).
@@ -265,7 +267,7 @@ class Compiler:
         - setup_environemt: setup a QProcessEnvironement based on the compiler config
         -
     """
-    #: associated mimetype
+    #: associated mimetypes
     mimetypes = []
 
     #: type name of the compiler
@@ -426,7 +428,6 @@ def get_configs_for_mimetype(mimetype):
     I.e. get all gcc configs, all GnuCOBOL configs,...
     """
     from hackedit.api import plugins
-    from hackedit.app import settings
 
     def get_user_configs_for_type_name(type_name):
         ret_val = []
@@ -443,7 +444,7 @@ def get_configs_for_mimetype(mimetype):
         if mimetype in compiler.mimetypes:
             typenames.append(compiler.type_name)
     for type_name in typenames:
-        ret_val += plugins.get_compiler_plugin(type_name).get_auto_detected_configs()
+        ret_val += plugins.get_compiler_plugin_by_typename(type_name).get_auto_detected_configs()
         ret_val += get_user_configs_for_type_name(type_name)
 
     return ret_val

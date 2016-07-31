@@ -697,12 +697,12 @@ def save_compiler_configurations(configs_map):
     _save_configs('compiler_configs', configs_map)
 
 
-def get_default_compiler(type_name):
-    return _get_default_config_name(type_name, 'default_compilers')
+def get_default_compiler(mimetypes):
+    return _get_default_config_name(mimetypes, 'default_compilers')
 
 
-def set_default_compiler(type_name, name):
-    _set_default_config_name(type_name, name, 'default_compilers')
+def set_default_compiler(mimetypes, name):
+    _set_default_config_name(mimetypes, name, 'default_compilers')
 
 
 def load_pre_compiler_configurations():
@@ -714,12 +714,12 @@ def save_pre_compiler_configurations(configs_map):
     _save_configs('pre_compiler_configs', configs_map)
 
 
-def get_default_pre_compiler(type_name):
-    return _get_default_config_name(type_name, 'default_pre_compilers')
+def get_default_pre_compiler(mimetypes):
+    return _get_default_config_name(mimetypes, 'default_pre_compilers')
 
 
-def set_default_pre_compiler(type_name, name):
-    _set_default_config_name(type_name, name, 'default_pre_compilers')
+def set_default_pre_compiler(mimetypes, name):
+    _set_default_config_name(mimetypes, name, 'default_pre_compilers')
 
 
 def _load_configs(config_type, opt_name):
@@ -737,15 +737,19 @@ def _save_configs(opt_name, configs_map):
     _SETTINGS.setValue('build_and_run/%s' % opt_name, json.dumps(data))
 
 
-def _get_default_config_name(type_name, opt_name):
+def _get_default_config_name(mimetypes, opt_name):
     defaults_map = json.loads(_SETTINGS.value('build_and_run/%s' % opt_name, '{}'))
     try:
-        return defaults_map[type_name]
+        return defaults_map[_mimetypes_as_key(mimetypes)]
     except KeyError:
         return None
 
 
-def _set_default_config_name(type_name, name, opt_name):
+def _set_default_config_name(mimetypes, name, opt_name):
     defaults_map = json.loads(_SETTINGS.value('build_and_run/%s' % opt_name, '{}'))
-    defaults_map[type_name] = name
+    defaults_map[_mimetypes_as_key(mimetypes)] = name
     _SETTINGS.setValue('build_and_run/%s' % opt_name, json.dumps(defaults_map))
+
+
+def _mimetypes_as_key(mtypes):
+    return '|'.join(mtypes)

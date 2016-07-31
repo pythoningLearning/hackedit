@@ -199,7 +199,7 @@ class BuildAndRunTabController(QtCore.QObject):
     def _make_default(self):
         name = self.tree.currentItem().text(COL_NAME)
         config = self.tree.currentItem().data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
-        self.fct_settings_set_default(config.type_name, name)
+        self.fct_settings_set_default(config.mimetypes, name)
         self._config_to_select = name
         self.save()
         self.reset()
@@ -226,11 +226,10 @@ class BuildAndRunTabController(QtCore.QObject):
 
     def _add_config_items(self, configs, item_type):
         for config in configs:
-            type_name = config.type_name
-            default = self.fct_settings_get_default(type_name)
+            default = self.fct_settings_get_default(config.mimetypes)
             if default is None:
                 default = config.name
-                self.fct_settings_set_default(type_name, config.name)
+                self.fct_settings_set_default(config.mimetypes, config.name)
             is_default = False
             if default == config.name:
                 is_default = True

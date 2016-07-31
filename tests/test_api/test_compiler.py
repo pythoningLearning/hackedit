@@ -1,3 +1,5 @@
+from hackedit.app import settings
+from hackedit.api import plugins
 import time
 import sys
 import os
@@ -260,12 +262,10 @@ class TestCompilerBaseClass:
 
 
 def test_get_configurations_by_mtype():
-    try:
-        import hackedit_cobol
-    except ImportError:
-        return
-    else:
-        assert hackedit_cobol
-        pytest_hackedit.app()
-        configs = compiler.get_configs_for_mimetype('text/x-cobol')
-        assert len(configs) >= 1
+    pytest_hackedit.app()
+    plugin = plugins.get_compiler_plugin_by_typename('GnuCOBOL')
+    config = plugin.create_new_configuration('name', 'cobc')
+    settings.save_pre_compiler_configurations({'test': config})
+    mtype_cfg = compiler.get_configs_for_mimetype(config.mimetypes[0])[0]
+    mtype_cfg.name = config.name
+    assert mtype_cfg.to_json() == config.to_json()

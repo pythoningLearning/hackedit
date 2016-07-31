@@ -19,12 +19,11 @@ install:
  - sudo apt-get update
  - sudo apt-get install -y -qq python3-pyqt5 python3-pyqt5.qtsvg gnome-icon-theme-full --fix-missing
  - pip install pytest pytest-qt pytest-cov coveralls --upgrade
- # install hackedit
  - pip install -e .
- # install a plugin package to make tests more complete
+ - python --quiet setup.py install_data
+ # install official plugins to improve coverage of integration tests
  - pip install git+https://github.com/HackEdit/hackedit-python.git
- # needed for the i18n tests
- - python setup.py install_data
+ - pip install git+https://github.com/HackEdit/hackedit-cobol.git
 
 script:
  - catchsegv py.test --cov hackedit

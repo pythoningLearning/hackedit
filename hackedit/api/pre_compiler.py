@@ -5,10 +5,13 @@ A pre-compiler is any tool that convert a source file of some type to a source f
 flex or all the COBOL preparsers tools).
 """
 import logging
-import re
+import mimetypes
 import os
-from hackedit.api import utils
+import re
 import tempfile
+
+from hackedit.api import utils
+from hackedit.app import settings
 
 
 class PreCompilerConfig(utils.JSonisable, utils.Copyable):
@@ -19,8 +22,8 @@ class PreCompilerConfig(utils.JSonisable, utils.Copyable):
         #: path of the pre-compiler
         self.path = ''
 
-        #: the list of associated extensions
-        self.associated_extensions = []
+        #: the associated mimetypes, specify the file extensions supported by the pre-compiler
+        self.mimetypes = []
 
         #: the list of pre-compiler flags
         self.flags = []
@@ -42,9 +45,6 @@ class PreCompilerConfig(utils.JSonisable, utils.Copyable):
         #:    - $flags
         #:
         self.command_pattern = ''
-
-        #: set whether the command pattern is editable, False by default
-        self.command_pattern_editable = False
 
         #: the content of the test file used to test the pre-compiler automatically
         self.test_file_content = ''
@@ -154,8 +154,8 @@ class PreCompiler:
             return os.path.join(self.working_dir, path)
 
         def create_test_file():
-            ext = self.config.associated_extensions[0].replace('*', '')
-            file_name = 'test' + ext
+            mtype = self.config.mimetypes[0]
+            file_name = 'test' + mimetypes.guess_extension(mtype)
             path = resolve_path(file_name)
             rm_file(path)
             with open(path, 'w') as f:
@@ -187,8 +187,8 @@ class PreCompiler:
         _logger().info('checking pre-compiler config %r: %s', self.config.name, self.config.to_json())
         if not os.path.exists(self.config.path):
             raise PreCompilerCheckFailed(_('PreCompiler path does not exists'), -1)
-        if not self.config.associated_extensions:
-            raise PreCompilerCheckFailed(_('There is no associated extensions'), -1)
+        if not self.config.mimetypes:
+            raise PreCompilerCheckFailed(_('There is no associated mime types'), -1)
         if not self.config.output_pattern:
             raise PreCompilerCheckFailed(_('There is no output pattern'), -1)
         if not self.config.command_pattern:
@@ -228,6 +228,34 @@ class PreCompiler:
         _logger().debug('exit code: %d', exit_code)
         _logger().debug('output:\n%s', output)
         return exit_code, output
+
+
+def get_configs_for_mimetype(mimetype):
+    """
+    Gets all the possible pre-compiler configs for the given mimetype.
+
+    I.e. get all gcc configs, all GnuCOBOL configs,...
+    """
+    from hackedit.api import plugins
+
+    def get_user_configs_for_type_name(type_name):
+        ret_val = []
+        for config in settings.load_pre_compiler_configurations().values():
+            if config.type_name == type_name:
+                ret_val.append(config)
+        return ret_val
+
+    ret_val = []
+    typenames = []
+    # gets the list of compiler type names that are available for the mimetype
+    for plugin in plugins.get_pre_compiler_plugins():
+        if mimetype in plugin.get_pre_compiler_mimetypes():
+            typenames.append(plugin.get_pre_compiler_type_name())
+    for type_name in typenames:
+        ret_val += plugins.get_pre_compiler_plugin_by_typename(type_name).get_auto_detected_configs()
+        ret_val += get_user_configs_for_type_name(type_name)
+
+    return ret_val
 
 
 def check_pre_compiler(pre_compiler):

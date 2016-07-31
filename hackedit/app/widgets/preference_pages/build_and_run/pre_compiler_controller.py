@@ -9,7 +9,7 @@ class PreCompilersController(BuildAndRunTabController):
         """
         :type ui: hackedit.app.forms.settings_page_build_and_run_ui.Ui_Form
         """
-        super().__init__(plugins.get_pre_compiler_plugins, plugins.get_pre_compiler_plugin,
+        super().__init__(plugins.get_pre_compiler_plugins, plugins.get_pre_compiler_plugin_by_typename,
                          pre_compiler.check_pre_compiler, settings.load_pre_compiler_configurations,
                          settings.save_pre_compiler_configurations,  settings.get_default_pre_compiler,
                          settings.set_default_pre_compiler, ui, ui.tree_pre_compilers, ui.bt_add_pre_compiler,
@@ -18,11 +18,8 @@ class PreCompilersController(BuildAndRunTabController):
 
     def _get_updated_config(self):
         cfg = self._current_config.copy()
-        cfg.name = self._current_config.name
         cfg.path = self.ui.edit_pre_compiler_path.text().strip()
-        cfg.associated_extensions = [t for t in self.ui.edit_pre_compiler_extensions.text().strip().split(';') if t]
         cfg.flags = [t for t in self.ui.edit_pre_compiler_flags.text().strip().split(' ') if t]
-        cfg.command_pattern = self.ui.edit_command_pattern.text().strip()
         cfg.output_pattern = self.ui.edit_pre_compiler_output_pattern.text().strip()
         return cfg
 
@@ -30,10 +27,6 @@ class PreCompilersController(BuildAndRunTabController):
         if config is None:
             config = pre_compiler.PreCompilerConfig()
         self.ui.edit_pre_compiler_path.setText(config.path)
-        self.ui.edit_command_pattern.setText(config.command_pattern)
-        self.ui.edit_command_pattern.setVisible(config.command_pattern_editable)
-        self.ui.lbl_command_pattern.setVisible(config.command_pattern_editable)
-        self.ui.edit_pre_compiler_extensions.setText(';'.join(config.associated_extensions))
         self.ui.edit_pre_compiler_flags.setText(' '.join(config.flags))
         self.ui.edit_pre_compiler_output_pattern.setText(config.output_pattern)
 
@@ -63,8 +56,6 @@ class PreCompilersController(BuildAndRunTabController):
         super()._connect_slots()
         self.ui.bt_select_pre_compiler_path.clicked.connect(self._select_pre_compiler_path)
         self.ui.edit_pre_compiler_path.textChanged.connect(self._update_current_config_meta)
-        self.ui.edit_pre_compiler_extensions.textChanged.connect(self._update_current_config_meta)
-        self.ui.edit_pre_compiler_output_pattern.textChanged.connect(self._update_current_config_meta)
 
     def _select_pre_compiler_path(self):
         status, path = self._select_path(self.ui.bt_select_pre_compiler_path, _('Select pre-compiler'),

@@ -1,9 +1,10 @@
+import sys
+
 import pytest
 
-from hackedit.api import plugins
 import pytest_hackedit
-
 from .test_window import PROJ_PATH
+from hackedit.api import plugins
 
 
 class MyWorkspacePlugin(plugins.WorkspacePlugin):
@@ -45,3 +46,30 @@ def test_get_plugin_instance(qtbot):
         assert isinstance(p, DocumentOutline)
         with pytest.raises(TypeError):
             p = plugins.get_plugin_instance(qtbot)
+
+
+def test_get_compiler_plugins():
+    assert len(plugins.get_compiler_plugins()) >= 1
+
+
+def test_get_compiler_plugin_by_typename():
+    assert plugins.get_compiler_plugin_by_typename('GnuCOBOL') is not None
+
+
+def test_get_compiler_plugin_by_mimetype():
+    assert plugins.get_compiler_plugin_by_mimetype('text/x-cobol') is not None
+
+
+@pytest.mark.skipif(sys.platform == 'win32', reason='No precompiler on Windows yet')
+def test_get_pre_compiler_plugins():
+    assert len(plugins.get_pre_compiler_plugins()) >= 1
+
+
+@pytest.mark.skipif(sys.platform == 'win32', reason='No precompiler on Windows yet')
+def test_get_pre_compiler_plugin_by_typename():
+    assert plugins.get_pre_compiler_plugin_by_typename('SQL COBOL - dbpre') is not None
+
+
+@pytest.mark.skipif(sys.platform == 'win32', reason='No precompiler on Windows yet')
+def test_get_pre_compiler_plugin_by_mimetype():
+    assert plugins.get_pre_compiler_plugin_by_mimetype('text/x-dbpre') is not None

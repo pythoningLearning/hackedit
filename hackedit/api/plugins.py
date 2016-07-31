@@ -318,6 +318,9 @@ class PreCompilerPlugin:
     def get_pre_compiler_type_name(self):
         raise NotImplementedError()
 
+    def get_pre_compiler_mimetypes(self):
+        raise NotImplementedError()
+
     def get_auto_detected_configs(self):
         """
         Get the list of autodetected compiler configurations.
@@ -363,7 +366,9 @@ def get_plugin_instance(plugin_class):
 
 def get_compiler_plugins():
     """
-    Returns a list of all known compiler classes
+    Returns a list of all known compiler plugins.
+
+    :rtype: [CompilerPlugin]
     """
     ret_val = []
     for plugin in _shared.APP.plugin_manager.compiler_plugins.values():
@@ -371,19 +376,35 @@ def get_compiler_plugins():
     return ret_val
 
 
-def get_compiler_plugin(compiler_type_name):
+def get_compiler_plugin_by_typename(compiler_type_name):
     """
     Gets the compiler plugin that match the specified compiler_type_name.
+
+    :rtype: CompilerPlugin
     """
     try:
         return _shared.APP.plugin_manager.compiler_plugins[compiler_type_name]
-    except TypeError:
+    except KeyError:
         return None
+
+
+def get_compiler_plugin_by_mimetype(mimetype):
+    """
+    Gets the compiler plugin that match the specified mimetype
+
+    :rtype: CompilerPlugin
+    """
+    for plugin in get_compiler_plugins():
+        if mimetype in plugin.get_compiler().mimetypes:
+            return plugin
+    return None
 
 
 def get_pre_compiler_plugins():
     """
-    Returns a list of all known compiler classes
+    Returns a list of all known pre-compiler plugins
+
+    :rtype: [PreCompilerPlugin]
     """
     ret_val = []
     for plugin in _shared.APP.plugin_manager.pre_compiler_plugins.values():
@@ -391,14 +412,28 @@ def get_pre_compiler_plugins():
     return ret_val
 
 
-def get_pre_compiler_plugin(pre_compiler_type_name):
+def get_pre_compiler_plugin_by_typename(pre_compiler_type_name):
     """
-    Gets the compiler plugin that match the specified compiler_type_name.
+    Gets the pre-compiler plugin that match the specified pre_compiler_type_name.
+
+    :rtype: PreCompilerPlugin
     """
     try:
         return _shared.APP.plugin_manager.pre_compiler_plugins[pre_compiler_type_name]
     except TypeError:
         return None
+
+
+def get_pre_compiler_plugin_by_mimetype(mimetype):
+    """
+    Gets the pre-compiler plugin that matches the specified mimetype
+
+    :rtype: PreCompilerPlugin
+    """
+    for plugin in get_pre_compiler_plugins():
+        if mimetype in plugin.get_pre_compiler_mimetypes():
+            return plugin
+    return None
 
 
 def get_script_runner():

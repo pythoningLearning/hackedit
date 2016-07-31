@@ -1,33 +1,26 @@
 environment:
     matrix:
         - PYTHON: "C:\\Python35"
-          PYTHON_VERSION: "3.5.x" # currently 3.4.3
+          PYTHON_VERSION: "3.5.x"
           PYTHON_ARCH: "32"
 
         - PYTHON: "C:\\Python35-x64"
-          PYTHON_VERSION: "3.5.x" # currently 3.4.3
+          PYTHON_VERSION: "3.5.x"
           PYTHON_ARCH: "64"
 
 install:
-  # Prepend newly installed Python to the PATH of this build
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  # Check that we have the expected version and architecture for Python
   - python --version
   - python -c "import struct; print(struct.calcsize('P') * 8)"
-  # Update pip setuptools
   - python -m pip install --upgrade pip setuptools
-  # Install pyqt5
-  - pip install PyQt5
-  # Install pytest and pytest-qt
-  - pip install pytest pytest-qt
-  # install hackedit in development mode
+  - pip install PyQt5 pytest pytest-qt
   - pip install -e .
   - python setup.py --quiet install_data
-  # install a plugin to make the test suite coverage more complete.
+  # install official plugins to improve coverage of integration tests
   - pip install git+https://github.com/HackEdit/hackedit-python.git
+  - pip install git+https://github.com/HackEdit/hackedit-cobol.git
 
 build: false  # Not a C# project
 
 test_script:
-  # Run the project tests
   - py.test
