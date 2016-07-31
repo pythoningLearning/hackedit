@@ -20,7 +20,7 @@ install:
  - sudo apt-get install -y -qq python3-pyqt5 python3-pyqt5.qtsvg gnome-icon-theme-full --fix-missing
  - pip install pytest pytest-qt pytest-cov coveralls --upgrade
  - pip install -e .
- - python --quiet setup.py install_data
+ - python setup.py --quiet install_data
  # install official plugins to improve coverage of integration tests
  - pip install git+https://github.com/HackEdit/hackedit-python.git
  - pip install git+https://github.com/HackEdit/hackedit-cobol.git
