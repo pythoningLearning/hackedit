@@ -4,6 +4,7 @@ from hackedit.app.forms import settings_page_build_and_run_ui
 
 from .compiler_controller import CompilersController
 from .pre_compiler_controller import PreCompilersController
+from .interpreter_controller import InterpreterController
 
 
 ITEM_AUTO_DETECTED = 0
@@ -21,7 +22,8 @@ class BuildAndRun(PreferencePage):
         self.ui.setupUi(self)
         self.controllers = [
             CompilersController(self.ui),
-            PreCompilersController(self.ui)
+            PreCompilersController(self.ui),
+            InterpreterController(self.ui)
         ]
         self.ui.tab_categories.setCurrentIndex(0)
 

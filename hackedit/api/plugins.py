@@ -411,6 +411,17 @@ class InterpreterPlugin:
         """
         raise NotImplementedError()
 
+    def get_package_manager(self, config):
+        """
+        Returns the associated package manager, if any.
+
+        :param config: interpreter config to pass to the package manager.
+        :type: config: hackedit.api.interpreter.InterpreterConfig
+
+        :rtype: hackedit.api.interpreter.PackageManager
+        """
+        return None
+
     def _select_interpreter_path(self, parent):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pinterpreter')
         if path:
@@ -483,7 +494,7 @@ def get_pre_compiler_plugin_by_typename(pre_compiler_type_name):
     """
     try:
         return _shared.APP.plugin_manager.pre_compiler_plugins[pre_compiler_type_name]
-    except TypeError:
+    except KeyError:
         return None
 
 
@@ -519,7 +530,7 @@ def get_interpreter_plugin_by_typename(interpreter_type_name):
     """
     try:
         return _shared.APP.plugin_manager.interpreter_plugins[interpreter_type_name]
-    except TypeError:
+    except KeyError:
         return None
 
 

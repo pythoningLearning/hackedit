@@ -688,6 +688,7 @@ def set_last_open_dir(value):
 # -----------------------------------------------------------------------------
 # Build & Run
 # -----------------------------------------------------------------------------
+# compilers
 def load_compiler_configurations():
     from hackedit.api.compiler import CompilerConfig
     return _load_configs(CompilerConfig, 'compiler_configs')
@@ -705,6 +706,7 @@ def set_default_compiler(mimetypes, name):
     _set_default_config_name(mimetypes, name, 'default_compilers')
 
 
+# pre-compilers
 def load_pre_compiler_configurations():
     from hackedit.api.pre_compiler import PreCompilerConfig
     return _load_configs(PreCompilerConfig, 'pre_compiler_configs')
@@ -722,6 +724,25 @@ def set_default_pre_compiler(mimetypes, name):
     _set_default_config_name(mimetypes, name, 'default_pre_compilers')
 
 
+# interpreters
+def load_interpreter_configurations():
+    from hackedit.api.interpreter import InterpreterConfig
+    return _load_configs(InterpreterConfig, 'interpreter_configs')
+
+
+def save_interpreter_configurations(configs_map):
+    _save_configs('interpreter_configs', configs_map)
+
+
+def get_default_interpreter(mimetypes):
+    return _get_default_config_name(mimetypes, 'default_interpreters')
+
+
+def set_default_interpreter(mimetypes, name):
+    _set_default_config_name(mimetypes, name, 'default_interpreters')
+
+
+# shared utility functions
 def _load_configs(config_type, opt_name):
     ret_val = {}
     configs_map = json.loads(_SETTINGS.value('build_and_run/%s' % opt_name, '{}'))
