@@ -47,6 +47,31 @@ class BuildAndRunTabController(QtCore.QObject):
         self._current_config_editable = False
         self._connect_slots()
 
+    def reset(self):
+        self._current_config = None
+        self._loading = True
+        self.names = set()
+        mnu_add = QtWidgets.QMenu()
+        self.bt_add.setMenu(mnu_add)
+        self._clear_tree()
+        for plugin in self.fct_get_plugins():
+            action = mnu_add.addAction(self._get_plugin_type_name(plugin))
+            action.setIcon(self._get_plugin_icon(plugin))
+            action.triggered.connect(self._add_config)
+            self._add_config_items(plugin.get_auto_detected_configs(), ITEM_AUTO_DETECTED)
+        self.user_configs = self.fct_settings_load()
+        self._add_config_items(sorted(self.user_configs.values(), key=lambda x: x.name), ITEM_MANUAL)
+        self._setup_tree()
+        self._loading = False
+        self._update_config()
+
+    def restore_defaults(self):
+        self.fct_settings_save({})
+
+    def save(self):
+        self._save_current_config()
+        self.fct_settings_save(self.user_configs)
+
     def _get_updated_config(self):
         raise NotImplementedError()
 
@@ -82,6 +107,10 @@ class BuildAndRunTabController(QtCore.QObject):
         self._updating_config = True
         self._save_current_config()
         current_item = self.tree.currentItem()
+        if current_item is None:
+            return
+        config = current_item.data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
+        widget_class = current_item.data(DATA_COL_WIDGET, QtCore.Qt.UserRole)
         if current_item is None or current_item.parent() is None:
             # no item selected or top level item
             self.settings_widget.hide()
@@ -93,8 +122,6 @@ class BuildAndRunTabController(QtCore.QObject):
         else:
             clonable = True
             self.settings_widget.show()
-            config = current_item.data(DATA_COL_CONFIG, QtCore.Qt.UserRole)
-            widget_class = current_item.data(DATA_COL_WIDGET, QtCore.Qt.UserRole)
             self._display_config(config, widget_class)
             parent_item = current_item.parent()
             parent_item_index = self.tree.indexOfTopLevelItem(parent_item)
@@ -102,7 +129,6 @@ class BuildAndRunTabController(QtCore.QObject):
             self._current_config_editable = editable
             self._current_config = config
             self._config_to_select = config.name
-            print('to_select', self._config_to_select)
         self.settings_widget.setEnabled(editable)
         self.bt_remove.setEnabled(editable)
         self.bt_check.setEnabled(clonable)
@@ -185,23 +211,6 @@ class BuildAndRunTabController(QtCore.QObject):
         dlg_check_compiler.DlgCheckCompiler.check(
             self.bt_check, program_runner, bt_check_message=self.bt_check_message, check_function=self.fct_check)
 
-    def reset(self):
-        self._loading = True
-        self.names = set()
-        mnu_add = QtWidgets.QMenu()
-        self.bt_add.setMenu(mnu_add)
-        self._clear_tree()
-        for plugin in self.fct_get_plugins():
-            action = mnu_add.addAction(self._get_plugin_type_name(plugin))
-            action.setIcon(self._get_plugin_icon(plugin))
-            action.triggered.connect(self._add_config)
-            self._add_config_items(plugin.get_auto_detected_configs(), ITEM_AUTO_DETECTED)
-        self.user_configs = self.fct_settings_load()
-        self._add_config_items(sorted(self.user_configs.values(), key=lambda x: x.name), ITEM_MANUAL)
-        self._setup_tree()
-        self._loading = False
-        self._update_config()
-
     def _setup_tree(self):
         self.tree.header().setStretchLastSection(False)
         self.tree.header().setDefaultSectionSize(16)
@@ -225,7 +234,6 @@ class BuildAndRunTabController(QtCore.QObject):
             is_default = False
             if default == config.name:
                 is_default = True
-            print('to_select', self._config_to_select)
             if not self._config_to_select:
                 self._config_to_select = config.name
             select = False
@@ -235,7 +243,10 @@ class BuildAndRunTabController(QtCore.QObject):
 
     def _add_config_item(self, config, item_type, is_default=False, select=False):
         parent = self.tree.topLevelItem(item_type)
-        plugin = self.fct_get_plugin_by_typename(config.type_name)
+        try:
+            plugin = self.fct_get_plugin_by_typename(config.type_name)
+        except KeyError:
+            return
         if plugin is None:
             return
         item = QtWidgets.QTreeWidgetItem()
@@ -265,13 +276,6 @@ class BuildAndRunTabController(QtCore.QObject):
             item = self.tree.topLevelItem(item_type)
             while item.childCount():
                 item.removeChild(item.child(0))
-
-    def restore_defaults(self):
-        self.fct_settings_save({})
-
-    def save(self):
-        self._save_current_config()
-        self.fct_settings_save(self.user_configs)
 
     def _get_name(self, parent, type_name):
         name = ''
