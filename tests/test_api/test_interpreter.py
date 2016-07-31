@@ -11,7 +11,7 @@ class PythonSysConfig(interpreter.InterpreterConfig):
     def __init__(self):
         super().__init__()
         self.name = 'Python (System)'
-        self.command = 'python3'
+        self.command = 'python'
         self.mimetypes = ['text/x-python']
         self.test_command = ['-c', '"import sys;print(sys.version_info)"']
         self.type_name = 'Python'
@@ -86,4 +86,4 @@ class TestIntepreter:
         command = self.interpreter.make_command('file.py', ['--verbose'], ['-Oo'])
         assert command == [self.interpreter.config.command, '-Oo', 'file.py', '--verbose']
         command = self.sys_interpreter.make_command('file.py', ['--verbose'], ['-Oo'])
-        assert command == ['python3', '-Oo', 'file.py', '--verbose']
+        assert command == ['python', '-Oo', 'file.py', '--verbose']
