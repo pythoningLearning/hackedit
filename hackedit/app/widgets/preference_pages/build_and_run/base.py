@@ -231,7 +231,7 @@ class BuildAndRunTabController(QtCore.QObject):
         self.tree.header().setSectionResizeMode(COL_VERSION, QtWidgets.QHeaderView.ResizeToContents)
         self.tree.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
         self.tree.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
-        self.tree.setHeaderLabels(['Name', 'Type', 'Version', ''])
+        self.tree.setHeaderLabels(['Name', 'Type', 'Version', 'Default'])
         self.tree.expandAll()
         if self._item_to_select:
             self.tree.setCurrentItem(self._item_to_select)

@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tab_categories">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_interpreters">
       <attribute name="icon">
@@ -88,11 +88,7 @@
            </column>
            <column>
             <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="emblem-favorite">
-              <normaloff>.</normaloff>.</iconset>
+             <string>Default</string>
             </property>
            </column>
            <item>
@@ -495,11 +491,7 @@
            </column>
            <column>
             <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="emblem-favorite">
-              <normaloff>.</normaloff>.</iconset>
+             <string>Default</string>
             </property>
            </column>
            <item>
@@ -1001,11 +993,7 @@
            </column>
            <column>
             <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="emblem-favorite">
-              <normaloff>.</normaloff>.</iconset>
+             <string>Default</string>
             </property>
            </column>
            <item>
