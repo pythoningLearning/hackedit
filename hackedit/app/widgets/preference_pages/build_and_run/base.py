@@ -233,15 +233,15 @@ class BuildAndRunTabController(QtCore.QObject):
         self.tree.header().setSectionResizeMode(COL_DEFAULT, QtWidgets.QHeaderView.ResizeToContents)
         self.tree.setHeaderLabels(['Name', 'Type', 'Version', 'Default'])
         self.tree.expandAll()
-        if self._item_to_select:
-            self.tree.setCurrentItem(self._item_to_select)
+        if not self._item_to_select:
+            self._item_to_select = self.tree.topLevelItem(0)
+        self.tree.setCurrentItem(self._item_to_select)
 
     def _add_config_items(self, configs, item_type):
-        for config in sorted(configs, key= lambda x: x.name):
+        for config in sorted(configs, key=lambda x: x.name):
             default = self.fct_settings_get_default(config.mimetypes)
             if not default:
                 default = config.name
-                self.fct_settings_set_default(config.mimetypes, config.name)
             is_default = False
             if default == config.name:
                 is_default = True
@@ -250,7 +250,9 @@ class BuildAndRunTabController(QtCore.QObject):
             select = False
             if self._config_to_select == config.name:
                 select = True
-            self._add_config_item(config, item_type, is_default=is_default, select=select)
+            item = self._add_config_item(config, item_type, is_default=is_default, select=select)
+            if not item and select:
+                self._config_to_select = ''
 
     def _add_config_item(self, config, item_type, is_default=False, select=False):
         parent = self.tree.topLevelItem(item_type)

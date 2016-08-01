@@ -14,4 +14,4 @@ else:
     os.environ['HACKEDIT_VENDOR_PATH'] = 'None'
 
 
-__version__ = '1.0a3.dev78'
+__version__ = '1.0a3.dev79'

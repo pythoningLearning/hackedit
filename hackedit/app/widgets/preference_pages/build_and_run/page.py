@@ -21,9 +21,9 @@ class BuildAndRun(PreferencePage):
         self.ui = settings_page_build_and_run_ui.Ui_Form()
         self.ui.setupUi(self)
         self.controllers = [
+            InterpreterController(self.ui),
             CompilersController(self.ui),
             PreCompilersController(self.ui),
-            InterpreterController(self.ui)
         ]
         self.ui.tab_categories.setCurrentIndex(0)
 
