@@ -1,24 +1,29 @@
 """
 Module for statical analysis.
 """
-
 from jedi import debug
-from jedi.parser import representation as pr
+from jedi.parser import tree
 from jedi.evaluate.compiled import CompiledObject
+
+from jedi.common import unite
 
 
 CODES = {
     'attribute-error': (1, AttributeError, 'Potential AttributeError.'),
     'name-error': (2, NameError, 'Potential NameError.'),
     'import-error': (3, ImportError, 'Potential ImportError.'),
-    'type-error-generator': (4, TypeError, "TypeError: 'generator' object is not subscriptable."),
-    'type-error-too-many-arguments': (5, TypeError, None),
-    'type-error-too-few-arguments': (6, TypeError, None),
-    'type-error-keyword-argument': (7, TypeError, None),
-    'type-error-multiple-values': (8, TypeError, None),
-    'type-error-star-star': (9, TypeError, None),
-    'type-error-star': (10, TypeError, None),
-    'type-error-operation': (11, TypeError, None),
+    'type-error-too-many-arguments': (4, TypeError, None),
+    'type-error-too-few-arguments': (5, TypeError, None),
+    'type-error-keyword-argument': (6, TypeError, None),
+    'type-error-multiple-values': (7, TypeError, None),
+    'type-error-star-star': (8, TypeError, None),
+    'type-error-star': (9, TypeError, None),
+    'type-error-operation': (10, TypeError, None),
+    'type-error-not-iterable': (11, TypeError, None),
+    'type-error-isinstance': (12, TypeError, None),
+    'type-error-not-subscriptable': (13, TypeError, None),
+    'value-error-too-many-values': (14, ValueError, None),
+    'value-error-too-few-values': (15, ValueError, None),
 }
 
 
@@ -63,9 +68,9 @@ class Error(object):
         return hash((self.path, self._start_pos, self.name))
 
     def __repr__(self):
-        return '<%s %s: %s@%s,%s' % (self.__class__.__name__,
-                                     self.name, self.path,
-                                     self._start_pos[0], self._start_pos[1])
+        return '<%s %s: %s@%s,%s>' % (self.__class__.__name__,
+                                      self.name, self.path,
+                                      self._start_pos[0], self._start_pos[1])
 
 
 class Warning(Error):
@@ -73,13 +78,20 @@ class Warning(Error):
 
 
 def add(evaluator, name, jedi_obj, message=None, typ=Error, payload=None):
+    from jedi.evaluate.iterable import MergedNodes
+    while isinstance(jedi_obj, MergedNodes):
+        if len(jedi_obj) != 1:
+            # TODO is this kosher?
+            return
+        jedi_obj = list(jedi_obj)[0]
+
     exception = CODES[name][1]
     if _check_for_exception_catch(evaluator, jedi_obj, exception, payload):
         return
 
     module_path = jedi_obj.get_parent_until().path
     instance = typ(name, module_path, jedi_obj.start_pos, message)
-    debug.warning(str(instance))
+    debug.warning(str(instance), format=False)
     evaluator.analysis.append(instance)
 
 
@@ -97,8 +109,8 @@ def _check_for_setattr(instance):
                for stmt in stmts)
 
 
-def add_attribute_error(evaluator, scope, name_part):
-    message = ('AttributeError: %s has no attribute %s.' % (scope, name_part))
+def add_attribute_error(evaluator, scope, name):
+    message = ('AttributeError: %s has no attribute %s.' % (scope, name))
     from jedi.evaluate.representation import Instance
     # Check for __getattr__/__getattribute__ existance and issue a warning
     # instead of an error, if that happens.
@@ -115,8 +127,8 @@ def add_attribute_error(evaluator, scope, name_part):
     else:
         typ = Error
 
-    payload = scope, name_part
-    add(evaluator, 'attribute-error', name_part, message, typ, payload)
+    payload = scope, name
+    add(evaluator, 'attribute-error', name, message, typ, payload)
 
 
 def _check_for_exception_catch(evaluator, jedi_obj, exception, payload=None):
@@ -127,109 +139,78 @@ def _check_for_exception_catch(evaluator, jedi_obj, exception, payload=None):
     it.
     Returns True if the exception was catched.
     """
-    def check_match(cls):
+    def check_match(cls, exception):
         try:
             return isinstance(cls, CompiledObject) and issubclass(exception, cls.obj)
         except TypeError:
             return False
 
-    def check_try_for_except(obj):
-        while obj.next is not None:
-            obj = obj.next
-            if not obj.inputs:
-                # No import implies a `except:` catch, which catches
-                # everything.
-                return True
+    def check_try_for_except(obj, exception):
+        # Only nodes in try
+        iterator = iter(obj.children)
+        for branch_type in iterator:
+            colon = next(iterator)
+            suite = next(iterator)
+            if branch_type == 'try' \
+                    and not (branch_type.start_pos < jedi_obj.start_pos <= suite.end_pos):
+                return False
 
-            for i in obj.inputs:
-                except_classes = evaluator.eval_statement(i)
+        for node in obj.except_clauses():
+            if node is None:
+                return True  # An exception block that catches everything.
+            else:
+                except_classes = evaluator.eval_element(node)
                 for cls in except_classes:
                     from jedi.evaluate import iterable
                     if isinstance(cls, iterable.Array) and cls.type == 'tuple':
                         # multiple exceptions
-                        for c in cls.values():
-                            if check_match(c):
+                        for typ in unite(cls.py__iter__()):
+                            if check_match(typ, exception):
                                 return True
                     else:
-                        if check_match(cls):
+                        if check_match(cls, exception):
                             return True
-        return False
 
-    def check_hasattr(stmt):
-        expression_list = stmt.expression_list()
+    def check_hasattr(node, suite):
         try:
-            assert len(expression_list) == 1
-            call = expression_list[0]
-            assert isinstance(call, pr.Call) and str(call.name) == 'hasattr'
-            execution = call.execution
-            assert execution and len(execution) == 2
+            assert suite.start_pos <= jedi_obj.start_pos < suite.end_pos
+            assert node.type in ('power', 'atom_expr')
+            base = node.children[0]
+            assert base.type == 'name' and base.value == 'hasattr'
+            trailer = node.children[1]
+            assert trailer.type == 'trailer'
+            arglist = trailer.children[1]
+            assert arglist.type == 'arglist'
+            from jedi.evaluate.param import Arguments
+            args = list(Arguments(evaluator, arglist).unpack())
+            # Arguments should be very simple
+            assert len(args) == 2
 
-            # check if the names match
-            names = evaluator.eval_statement(execution[1])
+            # Check name
+            key, values = args[1]
+            assert len(values) == 1
+            names = list(evaluator.eval_element(values[0]))
             assert len(names) == 1 and isinstance(names[0], CompiledObject)
             assert names[0].obj == str(payload[1])
 
-            objects = evaluator.eval_statement(execution[0])
+            # Check objects
+            key, values = args[0]
+            assert len(values) == 1
+            objects = evaluator.eval_element(values[0])
             return payload[0] in objects
         except AssertionError:
-            pass
-        return False
+            return False
 
     obj = jedi_obj
-    while obj is not None and not obj.isinstance(pr.Function, pr.Class):
-        if obj.isinstance(pr.Flow):
+    while obj is not None and not obj.isinstance(tree.Function, tree.Class):
+        if obj.isinstance(tree.Flow):
             # try/except catch check
-            if obj.command == 'try' and check_try_for_except(obj):
+            if obj.isinstance(tree.TryStmt) and check_try_for_except(obj, exception):
                 return True
             # hasattr check
-            if exception == AttributeError and obj.command in ('if', 'while'):
-                if obj.inputs and check_hasattr(obj.inputs[0]):
+            if exception == AttributeError and obj.isinstance(tree.IfStmt, tree.WhileStmt):
+                if check_hasattr(obj.children[1], obj.children[3]):
                     return True
         obj = obj.parent
 
     return False
-
-
-def get_module_statements(module):
-    """
-    Returns the statements used in a module. All these statements should be
-    evaluated to check for potential exceptions.
-    """
-    def add_stmts(stmts):
-        new = set()
-        for stmt in stmts:
-            if isinstance(stmt, pr.Flow):
-                while stmt is not None:
-                    new |= add_stmts(stmt.inputs)
-                    stmt = stmt.next
-                continue
-            if isinstance(stmt, pr.KeywordStatement):
-                stmt = stmt.stmt
-                if stmt is None:
-                    continue
-
-            for expression in stmt.expression_list():
-                if isinstance(expression, pr.Array):
-                    new |= add_stmts(expression.values)
-
-                if isinstance(expression, pr.StatementElement):
-                    for element in expression.generate_call_path():
-                        if isinstance(element, pr.Array):
-                            new |= add_stmts(element.values)
-            new.add(stmt)
-        return new
-
-    stmts = set()
-    imports = set()
-    for scope in module.walk():
-        imports |= set(scope.imports)
-        stmts |= add_stmts(scope.statements)
-        stmts |= add_stmts(r for r in scope.returns if r is not None)
-
-        try:
-            decorators = scope.decorators
-        except AttributeError:
-            pass
-        else:
-            stmts |= add_stmts(decorators)
-    return stmts, imports

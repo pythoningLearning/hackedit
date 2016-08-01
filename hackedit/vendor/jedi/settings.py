@@ -37,7 +37,6 @@ Parser
 Dynamic stuff
 ~~~~~~~~~~~~~
 
-.. autodata:: dynamic_arrays_instances
 .. autodata:: dynamic_array_additions
 .. autodata:: dynamic_params
 .. autodata:: dynamic_params_for_other_modules
@@ -64,6 +63,7 @@ definitely worse in some cases. But a completion should also be fast.
 .. autodata:: max_function_recursion_level
 .. autodata:: max_executions_without_builtins
 .. autodata:: max_executions
+.. autodata:: max_dynamic_params_depth
 .. autodata:: scale_call_signatures
 
 
@@ -85,13 +85,6 @@ import platform
 case_insensitive_completion = True
 """
 The completion is by default case insensitive.
-"""
-
-add_dot_after_module = False
-"""
-Adds a dot after a module, because a module that is not accessed this way is
-definitely not the normal case. However, in VIM this doesn't work, that's why
-it isn't used at the moment.
 """
 
 add_bracket_after_function = False
@@ -148,14 +141,9 @@ function is being reparsed.
 # dynamic stuff
 # ----------------
 
-dynamic_arrays_instances = True
-"""
-Check for `append`, etc. on array instances like list()
-"""
-
 dynamic_array_additions = True
 """
-check for `append`, etc. on arrays: [], {}, ()
+check for `append`, etc. on arrays: [], {}, () as well as list/set calls.
 """
 
 dynamic_params = True

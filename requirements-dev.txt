@@ -6,7 +6,7 @@
 PyQt5
 future
 pygments
-jedi==0.8.1
+-e git://github.com/davidhalter/jedi.git@dev#egg=jedi
 pep8
 pyflakes==1.0.0
 restructuredtext_lint

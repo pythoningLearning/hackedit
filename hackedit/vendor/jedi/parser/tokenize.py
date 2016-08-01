@@ -13,94 +13,27 @@ from __future__ import absolute_import
 
 import string
 import re
+from collections import namedtuple
 from io import StringIO
-from token import (tok_name, N_TOKENS, ENDMARKER, STRING, NUMBER, NAME, OP,
-                   ERRORTOKEN, NEWLINE)
 
-from jedi._compatibility import u
+from jedi.parser.token import (tok_name, N_TOKENS, ENDMARKER, STRING, NUMBER, opmap,
+                               NAME, OP, ERRORTOKEN, NEWLINE, INDENT, DEDENT)
+from jedi._compatibility import is_py3
+
 
 cookie_re = re.compile("coding[:=]\s*([-\w.]+)")
 
 
-# From here on we have custom stuff (everything before was originally Python
-# internal code).
-FLOWS = ['if', 'else', 'elif', 'while', 'with', 'try', 'except', 'finally']
-
-
-namechars = string.ascii_letters + '_'
+if is_py3:
+    # Python 3 has str.isidentifier() to check if a char is a valid identifier
+    is_identifier = str.isidentifier
+else:
+    namechars = string.ascii_letters + '_'
+    is_identifier = lambda s: s in namechars
 
 
 COMMENT = N_TOKENS
 tok_name[COMMENT] = 'COMMENT'
-
-
-class Token(object):
-    """
-    The token object is an efficient representation of the structure
-    (type, token, (start_pos_line, start_pos_col)). It has indexer
-    methods that maintain compatibility to existing code that expects the above
-    structure.
-
-    >>> repr(Token(1, "test", (1, 1)))
-    "<Token: ('NAME', 'test', (1, 1))>"
-    >>> Token(1, 'bar', (3, 4)).__getstate__()
-    (1, 'bar', 3, 4)
-    >>> a = Token(0, 'baz', (0, 0))
-    >>> a.__setstate__((1, 'foo', 3, 4))
-    >>> a
-    <Token: ('NAME', 'foo', (3, 4))>
-    >>> a.start_pos
-    (3, 4)
-    >>> a.string
-    'foo'
-    >>> a._start_pos_col
-    4
-    >>> Token(1, u("😷"), (1 ,1)).string + "p" == u("😷p")
-    True
-    """
-    __slots__ = ("type", "string", "_start_pos_line", "_start_pos_col")
-
-    def __init__(self, type, string, start_pos):
-        self.type = type
-        self.string = string
-        self._start_pos_line = start_pos[0]
-        self._start_pos_col = start_pos[1]
-
-    def __repr__(self):
-        typ = tok_name[self.type]
-        content = typ, self.string, (self._start_pos_line, self._start_pos_col)
-        return "<%s: %s>" % (type(self).__name__, content)
-
-    @property
-    def start_pos(self):
-        return (self._start_pos_line, self._start_pos_col)
-
-    @property
-    def end_pos(self):
-        """Returns end position respecting multiline tokens."""
-        end_pos_line = self._start_pos_line
-        lines = self.string.split('\n')
-        if self.string.endswith('\n'):
-            lines = lines[:-1]
-            lines[-1] += '\n'
-        end_pos_line += len(lines) - 1
-        end_pos_col = self._start_pos_col
-        # Check for multiline token
-        if self._start_pos_line == end_pos_line:
-            end_pos_col += len(lines[-1])
-        else:
-            end_pos_col = len(lines[-1])
-        return (end_pos_line, end_pos_col)
-
-    # Make cache footprint smaller for faster unpickling
-    def __getstate__(self):
-        return (self.type, self.string, self._start_pos_line, self._start_pos_col)
-
-    def __setstate__(self, state):
-        self.type = state[0]
-        self.string = state[1]
-        self._start_pos_line = state[2]
-        self._start_pos_col = state[3]
 
 
 def group(*choices):
@@ -119,7 +52,10 @@ name = r'\w+'
 
 hex_number = r'0[xX][0-9a-fA-F]+'
 bin_number = r'0[bB][01]+'
-oct_number = r'0[oO][0-7]+'
+if is_py3:
+    oct_number = r'0[oO][0-7]+'
+else:
+    oct_number = '0[0-7]+'
 dec_number = r'(?:0+|[1-9][0-9]*)'
 int_number = group(hex_number, bin_number, oct_number, dec_number)
 exponent = r'[eE][-+]?[0-9]+'
@@ -137,7 +73,7 @@ double = r'[^"\\]*(?:\\.[^"\\]*)*"'
 single3 = r"[^'\\]*(?:(?:\\.|'(?!''))[^'\\]*)*'''"
 # Tail end of """ string.
 double3 = r'[^"\\]*(?:(?:\\.|"(?!""))[^"\\]*)*"""'
-triple = group("[bB]?[rR]?'''", '[bB]?[rR]?"""')
+triple = group("[uUbB]?[rR]?'''", '[uUbB]?[rR]?"""')
 # Single-line ' or " string.
 
 # Because of leftmost-then-longest match semantics, be sure to put the
@@ -145,7 +81,7 @@ triple = group("[bB]?[rR]?'''", '[bB]?[rR]?"""')
 # recognized as two instances of =).
 operator = group(r"\*\*=?", r">>=?", r"<<=?", r"!=",
                  r"//=?", r"->",
-                 r"[+\-*/%&|^=<>]=?",
+                 r"[+\-*@/%&|^=<>]=?",
                  r"~")
 
 bracket = '[][(){}]'
@@ -158,7 +94,8 @@ cont_str = group(r"[bBuU]?[rR]?'[^\n'\\]*(?:\\.[^\n'\\]*)*" +
                  r'[bBuU]?[rR]?"[^\n"\\]*(?:\\.[^\n"\\]*)*' +
                  group('"', r'\\\r?\n'))
 pseudo_extras = group(r'\\\r?\n', comment, triple)
-pseudo_token = whitespace + group(pseudo_extras, number, funny, cont_str, name)
+pseudo_token = group(whitespace) + \
+    group(pseudo_extras, number, funny, cont_str, name)
 
 
 def _compile(expr):
@@ -167,18 +104,23 @@ def _compile(expr):
 
 pseudoprog, single3prog, double3prog = map(
     _compile, (pseudo_token, single3, double3))
+
 endprogs = {"'": _compile(single), '"': _compile(double),
             "'''": single3prog, '"""': double3prog,
             "r'''": single3prog, 'r"""': double3prog,
             "b'''": single3prog, 'b"""': double3prog,
             "u'''": single3prog, 'u"""': double3prog,
-            "br'''": single3prog, 'br"""': double3prog,
             "R'''": single3prog, 'R"""': double3prog,
             "B'''": single3prog, 'B"""': double3prog,
             "U'''": single3prog, 'U"""': double3prog,
+            "br'''": single3prog, 'br"""': double3prog,
             "bR'''": single3prog, 'bR"""': double3prog,
             "Br'''": single3prog, 'Br"""': double3prog,
             "BR'''": single3prog, 'BR"""': double3prog,
+            "ur'''": single3prog, 'ur"""': double3prog,
+            "uR'''": single3prog, 'uR"""': double3prog,
+            "Ur'''": single3prog, 'Ur"""': double3prog,
+            "UR'''": single3prog, 'UR"""': double3prog,
             'r': None, 'R': None, 'b': None, 'B': None}
 
 triple_quoted = {}
@@ -187,43 +129,78 @@ for t in ("'''", '"""',
           "b'''", 'b"""', "B'''", 'B"""',
           "u'''", 'u"""', "U'''", 'U"""',
           "br'''", 'br"""', "Br'''", 'Br"""',
-          "bR'''", 'bR"""', "BR'''", 'BR"""'):
+          "bR'''", 'bR"""', "BR'''", 'BR"""',
+          "ur'''", 'ur"""', "Ur'''", 'Ur"""',
+          "uR'''", 'uR"""', "UR'''", 'UR"""'):
     triple_quoted[t] = t
 single_quoted = {}
 for t in ("'", '"',
           "r'", 'r"', "R'", 'R"',
           "b'", 'b"', "B'", 'B"',
-          "u'", 'u""', "U'", 'U"',
+          "u'", 'u"', "U'", 'U"',
           "br'", 'br"', "Br'", 'Br"',
-          "bR'", 'bR"', "BR'", 'BR"'):
+          "bR'", 'bR"', "BR'", 'BR"',
+          "ur'", 'ur"', "Ur'", 'Ur"',
+          "uR'", 'uR"', "UR'", 'UR"'):
     single_quoted[t] = t
 
 del _compile
 
 tabsize = 8
 
+# TODO add with?
+ALWAYS_BREAK_TOKENS = (';', 'import', 'class', 'def', 'try', 'except',
+                       'finally', 'while', 'return')
 
-def source_tokens(source, line_offset=0):
+
+class TokenInfo(namedtuple('Token', ['type', 'string', 'start_pos', 'prefix'])):
+    def __repr__(self):
+        annotated_type = tok_name[self.type]
+        return ('TokenInfo(type=%s, string=%r, start=%r, prefix=%r)' %
+                self._replace(type=annotated_type))
+
+    @property
+    def exact_type(self):
+        if self.type == OP and self.string in opmap:
+            return opmap[self.string]
+        else:
+            return self.type
+
+
+def source_tokens(source, use_exact_op_types=False):
     """Generate tokens from a the source code (string)."""
-    source = source + '\n'  # end with \n, because the parser needs it
+    source = source
     readline = StringIO(source).readline
-    return generate_tokens(readline, line_offset)
+    return generate_tokens(readline, use_exact_op_types)
 
 
-def generate_tokens(readline, line_offset=0):
+def generate_tokens(readline, use_exact_op_types=False):
     """
-    The original stdlib Python version with minor modifications.
-    Modified to not care about dedents.
+    A heavily modified Python standard library tokenizer.
+
+    Additionally to the default information, yields also the prefix of each
+    token. This idea comes from lib2to3. The prefix contains all information
+    that is irrelevant for the parser like newlines in parentheses or comments.
     """
-    lnum = line_offset
+    paren_level = 0  # count parentheses
+    indents = [0]
+    lnum = 0
+    max = 0
     numchars = '0123456789'
     contstr = ''
     contline = None
-    while True:             # loop over lines in stream
-        line = readline()  # readline returns empty if it's finished. See StringIO
+    # We start with a newline. This makes indent at the first position
+    # possible. It's not valid Python, but still better than an INDENT in the
+    # second line (and not in the first). This makes quite a few things in
+    # Jedi's fast parser possible.
+    new_line = True
+    prefix = ''  # Should never be required, but here for safety
+    additional_prefix = ''
+    while True:            # loop over lines in stream
+        line = readline()  # readline returns empty when finished. See StringIO
         if not line:
             if contstr:
-                yield Token(ERRORTOKEN, contstr, contstr_start)
+                yield TokenInfo(ERRORTOKEN, contstr, contstr_start, prefix)
             break
 
         lnum += 1
@@ -233,7 +210,7 @@ def generate_tokens(readline, line_offset=0):
             endmatch = endprog.match(line)
             if endmatch:
                 pos = endmatch.end(0)
-                yield Token(STRING, contstr + line[:pos], contstr_start)
+                yield TokenInfo(STRING, contstr + line[:pos], contstr_start, prefix)
                 contstr = ''
                 contline = None
             else:
@@ -248,32 +225,52 @@ def generate_tokens(readline, line_offset=0):
                 if line[pos] in '"\'':
                     # If a literal starts but doesn't end the whole rest of the
                     # line is an error token.
-                    txt = txt = line[pos:]
-                yield Token(ERRORTOKEN, txt, (lnum, pos))
+                    txt = line[pos:]
+                yield TokenInfo(ERRORTOKEN, txt, (lnum, pos), prefix)
                 pos += 1
                 continue
 
-            start, pos = pseudomatch.span(1)
+            prefix = additional_prefix + pseudomatch.group(1)
+            additional_prefix = ''
+            start, pos = pseudomatch.span(2)
             spos = (lnum, start)
             token, initial = line[start:pos], line[start]
 
+            if new_line and initial not in '\r\n#':
+                new_line = False
+                if paren_level == 0:
+                    i = 0
+                    while line[i] == '\f':
+                        i += 1
+                        start -= 1
+                    if start > indents[-1]:
+                        yield TokenInfo(INDENT, '', spos, '')
+                        indents.append(start)
+                    while start < indents[-1]:
+                        yield TokenInfo(DEDENT, '', spos, '')
+                        indents.pop()
+
             if (initial in numchars or                      # ordinary number
                     (initial == '.' and token != '.' and token != '...')):
-                yield Token(NUMBER, token, spos)
+                yield TokenInfo(NUMBER, token, spos, prefix)
             elif initial in '\r\n':
-                yield Token(NEWLINE, token, spos)
-            elif initial == '#':
+                if not new_line and paren_level == 0:
+                    yield TokenInfo(NEWLINE, token, spos, prefix)
+                else:
+                    additional_prefix = prefix + token
+                new_line = True
+            elif initial == '#':  # Comments
                 assert not token.endswith("\n")
-                yield Token(COMMENT, token, spos)
+                additional_prefix = prefix + token
             elif token in triple_quoted:
                 endprog = endprogs[token]
                 endmatch = endprog.match(line, pos)
                 if endmatch:                                # all on one line
                     pos = endmatch.end(0)
                     token = line[start:pos]
-                    yield Token(STRING, token, spos)
+                    yield TokenInfo(STRING, token, spos, prefix)
                 else:
-                    contstr_start = (lnum, start)                # multiple lines
+                    contstr_start = (lnum, start)           # multiple lines
                     contstr = line[start:]
                     contline = line
                     break
@@ -282,18 +279,51 @@ def generate_tokens(readline, line_offset=0):
                     token[:3] in single_quoted:
                 if token[-1] == '\n':                       # continued string
                     contstr_start = lnum, start
-                    endprog = (endprogs[initial] or endprogs[token[1]] or
-                               endprogs[token[2]])
+                    endprog = (endprogs.get(initial) or endprogs.get(token[1])
+                               or endprogs.get(token[2]))
                     contstr = line[start:]
                     contline = line
                     break
                 else:                                       # ordinary string
-                    yield Token(STRING, token, spos)
-            elif initial in namechars:                      # ordinary name
-                yield Token(NAME, token, spos)
-            elif initial == '\\' and line[start:] == '\\\n':  # continued stmt
-                continue
+                    yield TokenInfo(STRING, token, spos, prefix)
+            elif is_identifier(initial):                      # ordinary name
+                if token in ALWAYS_BREAK_TOKENS:
+                    paren_level = 0
+                    while True:
+                        indent = indents.pop()
+                        if indent > start:
+                            yield TokenInfo(DEDENT, '', spos, '')
+                        else:
+                            indents.append(indent)
+                            break
+                yield TokenInfo(NAME, token, spos, prefix)
+            elif initial == '\\' and line[start:] in ('\\\n', '\\\r\n'):  # continued stmt
+                additional_prefix += prefix + line[start:]
+                break
             else:
-                yield Token(OP, token, spos)
+                if token in '([{':
+                    paren_level += 1
+                elif token in ')]}':
+                    paren_level -= 1
 
-    yield Token(ENDMARKER, '', (lnum, 0))
+                try:
+                    # This check is needed in any case to check if it's a valid
+                    # operator or just some random unicode character.
+                    exact_type = opmap[token]
+                except KeyError:
+                    exact_type = typ = ERRORTOKEN
+                if use_exact_op_types:
+                    typ = exact_type
+                else:
+                    typ = OP
+                yield TokenInfo(typ, token, spos, prefix)
+
+    if new_line or additional_prefix[-1:] == '\n':
+        end_pos = lnum + 1, 0
+    else:
+        end_pos = lnum, max
+    # As the last position we just take the maximally possible position. We
+    # remove -1 for the last new line.
+    for indent in indents[1:]:
+        yield TokenInfo(DEDENT, '', end_pos, '')
+    yield TokenInfo(ENDMARKER, '', end_pos, additional_prefix)

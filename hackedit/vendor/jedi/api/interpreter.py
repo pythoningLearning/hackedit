@@ -1,108 +1,67 @@
-import inspect
-import re
+"""
+TODO Some parts of this module are still not well documented.
+"""
+import copy
 
-from jedi._compatibility import builtins
-from jedi import debug
-from jedi.common import source_to_unicode
 from jedi.cache import underscore_memoization
-from jedi.evaluate import compiled
-from jedi.evaluate.compiled.fake import get_module
-from jedi.parser import representation as pr
-from jedi.parser.fast import FastParser
 from jedi.evaluate import helpers
+from jedi.evaluate.representation import ModuleWrapper
+from jedi.evaluate.compiled import mixed
 
 
-class InterpreterNamespace(pr.Module):
-    def __init__(self, evaluator, namespace, parser_module):
-        self.namespace = namespace
-        self.parser_module = parser_module
+class MixedModule(object):
+    resets_positions = True
+    type = 'mixed_module'
+
+    def __init__(self, evaluator, parser_module, namespaces):
         self._evaluator = evaluator
+        self._namespaces = namespaces
 
-    @underscore_memoization
-    def get_defined_names(self):
-        for name in self.parser_module.get_defined_names():
-            yield name
-        for key, value in self.namespace.items():
-            yield LazyName(self._evaluator, key, value)
+        self._namespace_objects = [type('jedi_namespace', (), n) for n in namespaces]
+        self._wrapped_module = ModuleWrapper(evaluator, parser_module)
+        # Usually we are dealing with very small code sizes when it comes to
+        # interpreter modules. In this case we just copy the whole syntax tree
+        # to be able to modify it.
+        self._parser_module = copy.deepcopy(parser_module)
 
-    def scope_names_generator(self, position=None):
-        yield self, list(self.get_defined_names())
+        for child in self._parser_module.children:
+            child.parent = self
+
+    def names_dicts(self, search_global):
+        for names_dict in self._wrapped_module.names_dicts(search_global):
+            yield names_dict
+
+        for namespace_obj in self._namespace_objects:
+            m = mixed.MixedObject(self._evaluator, namespace_obj, self._parser_module.name)
+            for names_dict in m.names_dicts(False):
+                yield names_dict
 
     def __getattr__(self, name):
-        return getattr(self.parser_module, name)
+        return getattr(self._parser_module, name)
 
 
 class LazyName(helpers.FakeName):
-    def __init__(self, evaluator, name, value):
+    def __init__(self, evaluator, module, name, value):
         super(LazyName, self).__init__(name)
+        self._module = module
         self._evaluator = evaluator
         self._value = value
         self._name = name
 
+    def is_definition(self):
+        return True
+
     @property
     @underscore_memoization
     def parent(self):
-        obj = self._value
-        parser_path = []
-        if inspect.ismodule(obj):
-            module = obj
-        else:
-            class FakeParent(pr.Base):
-                parent = None  # To avoid having no parent for NamePart.
-                path = None
+        """
+        Creating fake statements for the interpreter.
 
-            names = []
-            try:
-                o = obj.__objclass__
-                names.append(obj.__name__)
-                obj = o
-            except AttributeError:
-                pass
-
-            try:
-                module_name = obj.__module__
-                names.insert(0, obj.__name__)
-            except AttributeError:
-                # Unfortunately in some cases like `int` there's no __module__
-                module = builtins
-            else:
-                module = __import__(module_name)
-            fake_name = helpers.FakeName(names, FakeParent())
-            parser_path = fake_name.names
-        raw_module = get_module(self._value)
-
-        try:
-            path = module.__file__
-        except AttributeError:
-            pass
-        else:
-            path = re.sub('c$', '', path)
-            if path.endswith('.py'):
-                # cut the `c` from `.pyc`
-                with open(path) as f:
-                    source = source_to_unicode(f.read())
-                mod = FastParser(source, path[:-1]).module
-                if not parser_path:
-                    return mod
-                found = self._evaluator.eval_call_path(iter(parser_path), mod, None)
-                if found:
-                    return found[0]
-                debug.warning('Interpreter lookup for Python code failed %s',
-                              mod)
-
-        module = compiled.CompiledObject(raw_module)
-        if raw_module == builtins:
-            # The builtins module is special and always cached.
-            module = compiled.builtin
-        return compiled.create(self._evaluator, self._value, module, module)
+        Here we are trying to link back to Python code, if possible. This means
+        we try to find the python module for a name (not the builtin).
+        """
+        return mixed.create(self._evaluator, self._value)
 
     @parent.setter
     def parent(self, value):
-        """Needed because of the ``representation.Simple`` super class."""
-
-
-def create(evaluator, namespace, parser_module):
-    ns = InterpreterNamespace(evaluator, namespace, parser_module)
-    for attr_name in pr.SCOPE_CONTENTS:
-        for something in getattr(parser_module, attr_name):
-            something.parent = ns
+        """Needed because the super class tries to set parent."""
