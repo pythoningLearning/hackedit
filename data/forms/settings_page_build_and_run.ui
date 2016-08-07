@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tab_categories">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_interpreters">
       <attribute name="icon">
@@ -291,7 +291,11 @@
             <attribute name="title">
              <string>Packages</string>
             </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_7"/>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="PackageManagerWidget" name="package_manager_widget" native="true"/>
+             </item>
+            </layout>
            </widget>
           </widget>
          </item>
@@ -1224,6 +1228,12 @@
    <class>PathLineEdit</class>
    <extends>QLineEdit</extends>
    <header>hackedit.api.widgets</header>
+  </customwidget>
+  <customwidget>
+   <class>PackageManagerWidget</class>
+   <extends>QWidget</extends>
+   <header>hackedit.app.widgets.package_manager</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

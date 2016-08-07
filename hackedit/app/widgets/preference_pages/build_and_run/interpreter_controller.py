@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets
 
-from hackedit.api import interpreter, plugins, system, utils
+from hackedit.api import interpreter, plugins, utils
 from hackedit.app import settings
 
 from .base import BuildAndRunTabController
@@ -23,6 +23,7 @@ class InterpreterController(BuildAndRunTabController):
         for i in range(self.ui.table_interpreter_env_vars.rowCount()):
             k = self.ui.table_interpreter_env_vars.item(i, 0).text()
             v = self.ui.table_interpreter_env_vars.item(i, 1).text()
+            print(env_vars, k, v)
             env_vars[k] = v
         cfg.environment_variables = env_vars
         return cfg
@@ -51,7 +52,7 @@ class InterpreterController(BuildAndRunTabController):
             self.ui.table_interpreter_env_vars.setItem(index, 1, value)
 
     def _display_package_manager(self, package_manager):
-        pass
+        self.ui.package_manager_widget.set_package_manager(package_manager)
 
     def _update_settings_tabs_state(self, editable, package_manager):
         enable_package_manager = package_manager is not None

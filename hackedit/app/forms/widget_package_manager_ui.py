@@ -29,7 +29,7 @@ class Ui_Form(object):
         self.table_packages.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
         self.table_packages.setHorizontalHeaderItem(2, item)
-        self.table_packages.horizontalHeader().setStretchLastSection(True)
+        self.table_packages.horizontalHeader().setStretchLastSection(False)
         self.table_packages.verticalHeader().setVisible(False)
         self.verticalLayout_2.addWidget(self.table_packages)
         self.label_status = QtWidgets.QLabel(Form)

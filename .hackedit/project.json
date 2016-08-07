@@ -51,6 +51,7 @@
         "environment": {},
         "interpreter_options": [],
         "name": "templates",
+        "run_in_external_terminal": false,
         "script": "hackedit/app/templates.py",
         "script_parameters": [],
         "working_dir": "hackedit/app"

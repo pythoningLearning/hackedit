@@ -108,6 +108,9 @@ class Ui_Form(object):
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.tab_packages)
         self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.package_manager_widget = PackageManagerWidget(self.tab_packages)
+        self.package_manager_widget.setObjectName("package_manager_widget")
+        self.horizontalLayout_7.addWidget(self.package_manager_widget)
         self.tab_widget_interpreter_settings.addTab(self.tab_packages, "")
         self.verticalLayout_8.addWidget(self.tab_widget_interpreter_settings)
         self.horizontalLayout_10.addLayout(self.verticalLayout_8)
@@ -416,7 +419,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.tab_categories)
 
         self.retranslateUi(Form)
-        self.tab_categories.setCurrentIndex(2)
+        self.tab_categories.setCurrentIndex(0)
         self.tab_widget_interpreter_settings.setCurrentIndex(0)
         self.tab_compiler_settings.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -536,3 +539,4 @@ class Ui_Form(object):
         self.tab_categories.setTabToolTip(self.tab_categories.indexOf(self.tab_pre_compilers), _("<html><head/><body><p>This tab let your configure pre-compilers or transpilers used by the hackedit\'s build system</p><p><br/></p><p>Pre-compilers are tools that process a source file into another source file (e.g. sass, flex, bison or any tools that let you extend a language with custom syntax).</p><p><br/></p><p>The pre-compiler pass will alaways occur before the compiler pass.</p></body></html>"))
 
 from hackedit.api.widgets import PathLineEdit
+from hackedit.app.widgets.package_manager import PackageManagerWidget

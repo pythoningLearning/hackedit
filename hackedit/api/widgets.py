@@ -15,7 +15,7 @@ from pyqode.core.widgets import OutputWindow
 from hackedit.app import settings
 from hackedit.api import plugins, special_icons
 from hackedit.app.forms import (
-    dlg_progress_ui, dlg_run_process_ui, run_widget_ui,)
+    dlg_progress_ui, dlg_run_process_ui, run_widget_ui, dlg_process_output_ui)
 from hackedit.app.widgets.html_delegate import HTMLDelegate
 
 
@@ -551,6 +551,21 @@ class DlgRunProcess(QtWidgets.QDialog):
                                      print_command=True)
         ret = dlg.exec_()
         return dlg.ui.console.process.exitCode() == 0 and ret == cls.Accepted
+
+
+class DlgProcessOutput(QtWidgets.QDialog):
+    def __init__(self, parent, message, output):
+        super().__init__(parent)
+        self.ui = dlg_process_output_ui.Ui_Dialog()
+        self.ui.setupUi(self)
+        self.setWindowTitle(message)
+        self.ui.label.setText(message)
+        self.ui.widget_process_outpud._formatter.append_message(output)
+
+    @staticmethod
+    def show_dialog(message, output, parent=None):
+        dlg = DlgProcessOutput(parent, message, output)
+        dlg.exec_()
 
 
 class SpinnerLabel(QtWidgets.QLabel):
