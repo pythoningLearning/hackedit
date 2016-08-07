@@ -27,7 +27,7 @@ import glob
 import os
 import os.path as osp
 import sys
-
+import traceback
 
 # --------- bootstrapping HackEdit
 print("Executing HackEdit from source checkout")
@@ -62,10 +62,11 @@ else:
 
 # ------ run the application
 try:
-    from hackedit.main import main
-    from hackedit.app import versions
-except ImportError:
+    from hackedit.main.main_gui import main
+    from hackedit.application.utilities import versions
+except ImportError as e:
     print('03. Failed to import hackedit')
+    print(traceback.format_exc())
 else:
     all_versions = versions.get_versions()
     print("03. Imported HackEdit %s (%s)" % (

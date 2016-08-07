@@ -82,7 +82,7 @@ def clear_cache():
 
 
 # Helpers for bytes handling
-# For 3.2, we deliberately require applications that
+# For 3.2, we deliberately require apps that
 # handle improperly quoted URLs to do their own
 # decoding and encoding. If valid use cases are
 # presented, we may relax this by using latin-1

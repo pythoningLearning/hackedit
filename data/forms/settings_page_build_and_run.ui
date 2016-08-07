@@ -1232,7 +1232,7 @@
   <customwidget>
    <class>PackageManagerWidget</class>
    <extends>QWidget</extends>
-   <header>hackedit.app.widgets.package_manager</header>
+   <header>hackedit.presentation.widgets.package_manager</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

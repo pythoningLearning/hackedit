@@ -5,7 +5,7 @@
 """FeedParser - An email feed parser.
 
 The feed parser implements an interface for incrementally parsing an email
-message, line by line.  This has advantages for certain applications, such as
+message, line by line.  This has advantages for certain apps, such as
 those reading email messages off a socket.
 
 FeedParser.feed() is the primary interface for pushing new data into the

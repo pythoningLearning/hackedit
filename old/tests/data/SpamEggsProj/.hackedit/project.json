@@ -1,0 +1,18 @@
+[
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "module",
+        "script": "module.py",
+        "script_parameters": [],
+        "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "Unnamed",
+        "script": "",
+        "script_parameters": [],
+        "working_dir": "/home/colin/Documents/hackedit/tests/data/SpamEggsProj"
+    }
+]

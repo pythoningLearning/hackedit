@@ -2,7 +2,7 @@
     "files": [
         [
             "data/forms/*.ui",
-            "hackedit/app/forms/"
+            "hackedit/presentation/forms/"
         ]
     ],
     "pyrcc": "pyrcc5",

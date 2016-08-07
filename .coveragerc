@@ -2,12 +2,12 @@
 source = hackedit
 omit =
     # qt design ui files
-    *_ui.py
-    *_rc.py
-    hackedit/vendor/*
+    *vendor*
     tests/*
-    scripts/*
-    *special_icons.py
+    *scripts/*
+    *main_gui.py
+    *msvc.py
+    *_factories*
 
 [report]
 # Regexes for lines to exclude from consideration
@@ -34,6 +34,9 @@ exclude_lines =
     # Don't complain if non importable code is not run
     except ImportError
     except ClassNotFound
+
+    # don't complain if OSError handler code is not run
+    except OSError
 
     # Don't complain if platform specific code isn't run
     .*if sys.platform.*:

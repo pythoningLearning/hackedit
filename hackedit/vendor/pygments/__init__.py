@@ -6,7 +6,7 @@
     Pygments is a syntax highlighting package written in Python.
 
     It is a generic syntax highlighter for general use in all kinds of software
-    such as forum systems, wikis or other applications that need to prettify
+    such as forum systems, wikis or other apps that need to prettify
     source code. Highlights are:
 
     * a wide range of common languages and markup formats is supported

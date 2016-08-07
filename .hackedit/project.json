@@ -50,6 +50,15 @@
     {
         "environment": {},
         "interpreter_options": [],
+        "name": "main_gui",
+        "run_in_external_terminal": false,
+        "script": "hackedit/main/main_gui.py",
+        "script_parameters": [],
+        "working_dir": "hackedit/main"
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
         "name": "templates",
         "run_in_external_terminal": false,
         "script": "hackedit/app/templates.py",
@@ -153,5 +162,13 @@
         "script": "scripts/update_vendor.py",
         "script_parameters": [],
         "working_dir": "."
+    },
+    {
+        "environment": {},
+        "interpreter_options": [],
+        "name": "check_coverage",
+        "script": "scripts/tests/check_coverage.py",
+        "script_parameters": [],
+        "working_dir": "scripts/tests"
     }
 ]

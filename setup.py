@@ -78,8 +78,7 @@ if 'linux' in sys.platform.lower():
     # install launcher on linux
     data_files += [
         ('share/applications', ['data/share/hackedit.desktop']),
-        ('share/icons/hicolor/scalable/apps', [
-            'data/resources/icons/hackedit.svg'])]
+        ('share/icons/hicolor/scalable/apps', ['data/resources/icons/hackedit.svg'])]
 else:
     # distribute icon theme on OSX/Windows
     base = 'data/resources/icons/'
@@ -113,43 +112,43 @@ setup(
     description='The hackable IDE, built with Python3, PyQt5 and pyQode',
     long_description=long_desc,
     test_suite="tests",
-    tests_require=['pytest', 'pytest-qt'],
+    tests_require=['pytest', 'pytest-qt', 'pytest-mock'],
     include_package_data=True,
     zip_safe=False,
     entry_points={
         # Main gui script
-        'gui_scripts': ['hackedit = hackedit.main:main'],
+        'gui_scripts': ['hackedit = hackedit.main.main_gui:main'],
         'console_scripts': [
-            'hackedit-console = hackedit.main:main',
+            'hackedit-console = hackedit.main.main_gui:main',
             console_wrapper_entrypoint] if sys.platform == 'win32' else [
             console_wrapper_entrypoint
         ],
         # Plugin entry-points
-        'hackedit.plugins.editors': [
-            'ImageViewer = hackedit.plugins.image_viewer:ImageViewer',
-            'RstCodeEditPlugin = hackedit.plugins.editors:RstCodeEditPlugin',
-            'JSONCodeEditPlugin = hackedit.plugins.editors:JSONCodeEditPlugin'
+        'hackedit.main.plugins.editors': [
+            'ImageViewer = hackedit.main.plugins.image_viewer:ImageViewer',
+            'RstCodeEditPlugin = hackedit.main.plugins.editors:RstCodeEditPlugin',
+            'JSONCodeEditPlugin = hackedit.main.plugins.editors:JSONCodeEditPlugin'
         ],
-        'hackedit.plugins.file_icon_providers': [],
-        'hackedit.plugins.workspace_plugins': [
-            'Terminal = hackedit.plugins.terminal:Terminal',
-            'FindReplace = hackedit.plugins.find_replace:FindReplace',
-            'DocumentOutline = hackedit.plugins.outline:DocumentOutline',
-            'OpenDocuments = hackedit.plugins.documents:OpenDocuments',
-            'HtmlPreview = hackedit.plugins.html_preview:HtmlPreview'
+        'hackedit.main.plugins.file_icon_providers': [],
+        'hackedit.main.plugins.workspace_plugins': [
+            'Terminal = hackedit.main.plugins.terminal:Terminal',
+            'FindReplace = hackedit.main.plugins.find_replace:FindReplace',
+            'DocumentOutline = hackedit.main.plugins.outline:DocumentOutline',
+            'OpenDocuments = hackedit.main.plugins.documents:OpenDocuments',
+            'HtmlPreview = hackedit.main.plugins.html_preview:HtmlPreview'
         ],
-        'hackedit.plugins.workspace_providers': [
-            'generic_workspace = hackedit.plugins.workspaces:GenericWorkspace',
-            'empty_workspace = hackedit.plugins.workspaces:EmptyWorkspace',
+        'hackedit.main.plugins.workspace_providers': [
+            'generic_workspace = hackedit.main.plugins.workspaces:GenericWorkspace',
+            'empty_workspace = hackedit.main.plugins.workspaces:EmptyWorkspace',
         ],
         'pygments.styles': [
-            'aube = hackedit.styles.aube:AubeStyle',
-            'crepuscule = hackedit.styles.crepuscule:CrepusculeStyle',
-            'ark-dark = hackedit.styles.arkdark:ArkDarkStyle',
-            'midna-dark = hackedit.styles.midnadark:MidnaDarkStyle',
+            'aube = hackedit.presentation.styles.aube:AubeStyle',
+            'crepuscule = hackedit.presentation.styles.crepuscule:CrepusculeStyle',
+            'ark-dark = hackedit.presentation.styles.arkdark:ArkDarkStyle',
+            'midna-dark = hackedit.presentation.styles.midnadark:MidnaDarkStyle',
         ],
         'pyqt_distutils_hooks': [
-            'hackedit_gettext = hackedit.api.gettext:hackedit_gettext_hook']
+            'hackedit_gettext = hackedit.application.i18n:hackedit_gettext_hook']
     },
     cmdclass={
         'test': PyTest,

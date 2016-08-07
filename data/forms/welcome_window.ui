@@ -349,7 +349,7 @@
   <customwidget>
    <class>RecentFilesListWidget</class>
    <extends>QListWidget</extends>
-   <header>hackedit.app.widgets.recents</header>
+   <header>hackedit.presentation.widgets.recents</header>
   </customwidget>
  </customwidgets>
  <resources>

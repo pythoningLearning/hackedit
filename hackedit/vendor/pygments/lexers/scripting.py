@@ -691,7 +691,7 @@ class RexxLexer(RegexLexer):
     `Rexx <http://www.rexxinfo.org/>`_ is a scripting language available for
     a wide range of different platforms with its roots found on mainframe
     systems. It is popular for I/O- and data based tasks and can act as glue
-    language to bind different applications together.
+    language to bind different apps together.
 
     .. versionadded:: 2.0
     """
