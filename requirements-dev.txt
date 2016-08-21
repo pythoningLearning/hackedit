@@ -3,6 +3,7 @@
 #
 # Third party libraries that are distributed through an internal package put on
 # sys.path
+dependency_injector
 PyQt5
 future
 pygments

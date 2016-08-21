@@ -9,6 +9,7 @@ import os
 import shutil
 
 # packages to embed
+import dependency_injector
 import pyqode.qt
 import pyqode.core
 import pyqode.python
@@ -29,6 +30,9 @@ import chardet
 import coloredlogs
 import humanfriendly
 import colorama
+
+if 'scripts' in os.getcwd():
+    os.chdir('..')
 
 
 BUILD = os.path.abspath('hackedit/vendor')
@@ -89,5 +93,5 @@ finally:
     embed_packages([
         future, pygments, qdarkstyle, jedi, pep8, pyflakes, pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol,
         pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring, binaryornot, chardet, coloredlogs, colorama,
-        humanfriendly
+        humanfriendly, dependency_injector
     ])
