@@ -5,6 +5,7 @@ omit =
     *vendor*
     tests/*
     *scripts/*
+    *forms*
     *main_gui.py
     *msvc.py
     *_factories*
