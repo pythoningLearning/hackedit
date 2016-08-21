@@ -8,3 +8,4 @@ scripts/*
 .hackedit/config.py
 hackedit/app/forms/*
 hackedit/vendor/*
+old/*
