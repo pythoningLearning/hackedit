@@ -343,7 +343,7 @@ class Header(object):
 
         Optional linesep is a string to be used to separate the lines of
         the value.  The default value is the most useful for typical
-        Python apps, but it can be set to \r\n to produce RFC-compliant
+        Python applications, but it can be set to \r\n to produce RFC-compliant
         line separators when needed.
         """
         self._normalize()

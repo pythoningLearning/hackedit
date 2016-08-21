@@ -4,6 +4,7 @@
 # Third party libraries that are distributed through an internal package put on
 # sys.path
 dependency_injector
+six
 PyQt5
 future
 pygments
@@ -30,3 +31,4 @@ pytest-qt
 pytest-cov
 pytest-pep8
 pytest-flake8
+pytest-mock

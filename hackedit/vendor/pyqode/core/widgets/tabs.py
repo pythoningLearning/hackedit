@@ -33,7 +33,7 @@ class TabWidget(QTabWidget):
     actions by using the addAction and addSeparator methods).
 
     It exposes a variety of signal and slots for a better integration with
-    your apps( dirty_changed, save_current, save_all, close_all,
+    your applications( dirty_changed, save_current, save_all, close_all,
     close_current, close_others).
 
 

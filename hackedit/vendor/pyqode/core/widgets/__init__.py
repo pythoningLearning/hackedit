@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 This package contains a set of widgets that might be useful when writing
-pyqode apps:
+pyqode applications:
 
     - TextCodeEdit: code edit specialised for plain text
     - GenericCodeEdit: generic code edit, using PygmentsSH.

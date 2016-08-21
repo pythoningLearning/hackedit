@@ -30,6 +30,8 @@ import chardet
 import coloredlogs
 import humanfriendly
 import colorama
+import six
+
 
 if 'scripts' in os.getcwd():
     os.chdir('..')
@@ -93,5 +95,5 @@ finally:
     embed_packages([
         future, pygments, qdarkstyle, jedi, pep8, pyflakes, pyqode.qt, pyqode.core, pyqode.python, pyqode.cobol,
         pyqode.rst, pyqode.json, restructuredtext_lint, qcrash, keyring, binaryornot, chardet, coloredlogs, colorama,
-        humanfriendly, dependency_injector
+        humanfriendly, dependency_injector, six
     ])

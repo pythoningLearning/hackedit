@@ -4,7 +4,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     This file defines a set of types used across Cocoa frameworks from Apple.
-    There is a list of @compilers, @protocols and some other (structs, unions)
+    There is a list of @interfaces, @protocols and some other (structs, unions)
 
     File may be also used as standalone generator for aboves.
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':  # pragma: no cover
                 all_primitives.add(r)
 
 
-    print("ALL compilers: \n")
+    print("ALL interfaces: \n")
     print(all_interfaces)
 
     print("\nALL protocols: \n")
