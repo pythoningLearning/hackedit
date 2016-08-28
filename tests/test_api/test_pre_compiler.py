@@ -3,10 +3,9 @@ import sys
 import tempfile
 
 import pytest
-
-from hackedit.application import pre_compilers
 from hackedit import containers
-from hackedit.application.errors import PreCompilerCheckFailed
+from hackedit.api import pre_compilers
+from hackedit.api.errors import PreCompilerCheckFailed
 
 containers.Services.mime_types().add_mimetype_extension('text/x-precompiler-test', '*.pye')
 

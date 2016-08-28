@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import pytest
-from hackedit.application.utilities.misc import is_ignored_path, is_outdated
+from hackedit.api.utils import is_ignored_path, is_outdated
 
 
 def test_is_ignored_path():

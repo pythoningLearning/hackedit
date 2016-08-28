@@ -1,12 +1,13 @@
 import logging
 import os
 import re
+
 from PyQt5 import QtCore
 
-from hackedit.application import system
-from hackedit.application.errors import InterpreterCheckFailed
-from hackedit.application.utilities.blocking_process import BlockingProcess
-from hackedit.application.utilities.command_builder import CommandBuilder
+from hackedit.api import system
+from hackedit.api.errors import InterpreterCheckFailed
+from hackedit.api.utils import BlockingProcess
+from hackedit.api.utils import CommandBuilder
 
 
 def _logger():

@@ -1,10 +1,10 @@
-import inspect
 import gettext
+import inspect
 import os
-import pytest
 import sys
 
-from hackedit.application import i18n
+import pytest
+from hackedit.api import i18n
 
 
 def test_available_locales():

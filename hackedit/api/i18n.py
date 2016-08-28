@@ -101,7 +101,7 @@ def hackedit_gettext_hook(ui_script_path):  # pragma: no cover
     package_name = cfg.package_name
     content = content.replace(
         '        _translate = QtCore.QCoreApplication.translate',
-        '        from hackedit.application.i18n import get_translation\n'
+        '        from hackedit.api.i18n import get_translation\n'
         '        _ = get_translation(package="%s")' % package_name)
 
     with open(ui_script_path, 'w') as fout:

@@ -63,7 +63,7 @@ else:
 # ------ run the application
 try:
     from hackedit.main.main_gui import main
-    from hackedit.application.utilities import versions
+    from hackedit.infrastructure import versions
 except ImportError as e:
     print('03. Failed to import hackedit')
     print(traceback.format_exc())

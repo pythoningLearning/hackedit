@@ -148,7 +148,7 @@ setup(
             'midna-dark = hackedit.presentation.styles.midnadark:MidnaDarkStyle',
         ],
         'pyqt_distutils_hooks': [
-            'hackedit_gettext = hackedit.application.i18n:hackedit_gettext_hook']
+            'hackedit_gettext = hackedit.api.i18n:hackedit_gettext_hook']
     },
     cmdclass={
         'test': PyTest,

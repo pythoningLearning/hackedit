@@ -149,7 +149,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.application.i18n import get_translation
+        from hackedit.api.i18n import get_translation
         _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("About HackEdit"))
         self.lbl_icon.setText(_("<html><head/><body><p align=\"center\"><img src=\":/icons/hackedit_128.png\"/></p></body></html>"))
@@ -400,7 +400,7 @@ class Ui_Dialog(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">be a consequence of the rest of this License.</span></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:8pt;\"><br /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">  8. If the distribution and/or use of the Program is restricted in</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">certain countries either by patents or by copyrighted compilers, the</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">certain countries either by patents or by copyrighted interfaces, the</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">original copyright holder who places the Program under this License</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">may add an explicit geographical distribution limitation excluding</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:0;\"><span style=\" font-family:\'Ubuntu\'; font-size:8pt;\">those countries, so that distribution is permitted only in or among</span></p>\n"

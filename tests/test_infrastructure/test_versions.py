@@ -1,4 +1,4 @@
-from hackedit.application.utilities import versions
+from hackedit.infrastructure import versions
 
 
 def test_get_vcs_revision_does_not_fail():

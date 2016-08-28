@@ -32,14 +32,14 @@ class EditorPlugin:
         Returns the editor **class** to register.
         :return: a subclass of :class:`pyqode.core.api.CodeEdit`
         """
-        pass
+        raise NotImplementedError()
 
     def get_specific_preferences_page(self):
         """
         Returns a preferences page to edit the settings specific to your
         editor.
         """
-        pass
+        return None
 
     def apply_specific_preferences(self, editor):
         """
@@ -156,7 +156,7 @@ class WorkspaceProviderPlugin:
         }
 
     """
-    METADATA = PluginMetadata('workspace_plugins.workspace_providers')
+    METADATA = PluginMetadata('workspace_providers')
 
     def get_data(self):
         """

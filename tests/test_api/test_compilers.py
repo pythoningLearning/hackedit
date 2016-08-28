@@ -1,10 +1,9 @@
-import time
 import os
 import re
+import time
 
 import pytest
-
-from hackedit.application import compilers, constants, errors
+from hackedit.api import compilers, constants, errors
 
 
 def create_test_config():

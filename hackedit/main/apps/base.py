@@ -4,9 +4,8 @@ import shutil
 import sys
 
 from PyQt5 import QtWidgets
-
 from hackedit import __version__
-from hackedit.application.i18n import get_translation
+from hackedit.api.i18n import get_translation
 from hackedit.containers import Services
 
 

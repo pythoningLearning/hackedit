@@ -1,9 +1,10 @@
 import logging
 import mimetypes
 
-import pkg_resources
 from PyQt5 import QtCore, QtGui, QtWidgets
-from hackedit.application import plugins
+from dependency_injector.injections import inject
+from hackedit.api import plugins
+from hackedit.containers import Services
 from pyqode.core.api import utils
 
 
@@ -13,23 +14,11 @@ class FileIconProvider(QtWidgets.QFileIconProvider):
 
     To extend this class, just create a FileIconProviderPlugin
     """
-    plugins = []
 
-    @classmethod
-    def load_plugins(cls):
-        """
-        Loads FileIconProviderPlugins.
-        """
-        _logger().info('loading icon provider plugins')
-        for entrypoint in pkg_resources.iter_entry_points(plugins.FileIconProviderPlugin.ENTRYPOINT):
-            _logger().info('  - loading plugin: %s', entrypoint)
-            try:
-                plugin = entrypoint._load()
-            except ImportError:
-                _logger().exception('Failed to load plugin because of a '
-                                    'missing a dependency')
-            else:
-                cls.plugins.append(plugin())
+    @inject(plugin_manager=Services.plugin_manager)
+    def __init__(self, plugin_manager):
+        super().__init__()
+        self.plugins = plugin_manager.get_plugins(plugins.FileIconProviderPlugin.METADATA.category).values()
 
     @staticmethod
     def mimetype_icon(path, fallback=None):

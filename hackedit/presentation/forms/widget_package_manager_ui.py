@@ -69,7 +69,7 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.application.i18n import get_translation
+        from hackedit.api.i18n import get_translation
         _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.table_packages.setToolTip(_("The list of installed package for the selected interpreter."))

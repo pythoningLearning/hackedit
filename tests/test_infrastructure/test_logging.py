@@ -1,5 +1,6 @@
 import logging
-from hackedit.application import system
+
+from hackedit.api import system
 from hackedit.containers import Services
 
 

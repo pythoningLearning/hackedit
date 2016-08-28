@@ -1,5 +1,5 @@
 """
-This layer contains the IoC containers used by the most outer layer for building the object graph.
+This layer contains the IoC containers used by the main application to build the application's object graph.
 
 Since ``dependency_injector`` does not resolve dependencies automatically and need to be imported, the inner layers
 are allowed to import this package.

@@ -48,7 +48,7 @@ class Ui_Frame(object):
         QtCore.QMetaObject.connectSlotsByName(Frame)
 
     def retranslateUi(self, Frame):
-        from hackedit.application.i18n import get_translation
+        from hackedit.api.i18n import get_translation
         _ = get_translation(package="hackedit")
         Frame.setWindowTitle(_("Frame"))
         self.bt_infos.setToolTip(_("Help"))

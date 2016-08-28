@@ -1,4 +1,4 @@
-from hackedit.application import mixins
+from hackedit.api import mixins
 
 
 class PreCompilerConfig(mixins.JSonisable, mixins.Copyable):

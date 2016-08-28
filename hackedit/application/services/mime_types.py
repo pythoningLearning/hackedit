@@ -5,14 +5,13 @@ to manipulate user defined mimetypes.
 import json
 import logging
 import mimetypes
-import pkg_resources
 
+import pkg_resources
 from dependency_injector.injections import inject
-from hackedit.application import system
+from hackedit.api import system
+from hackedit.containers import Services
 from pygments.lexers import get_all_lexers, get_lexer_for_mimetype
 from pyqode.core.widgets import SplittableCodeEditTabWidget
-
-from hackedit.containers import Services
 
 
 # monkeypatch pygments.plugin.find_plugin_lexers

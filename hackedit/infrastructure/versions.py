@@ -2,12 +2,11 @@
 Provides some functions to retrieve various version informations.
 """
 import logging
-import subprocess
 import platform
+import subprocess
 import sys
 
 from PyQt5 import QtCore
-
 from hackedit import __version__
 
 
@@ -52,7 +51,7 @@ def get_versions():
     from PyQt5.QtCore import PYQT_VERSION_STR
     from pyqode.core import __version__ as corev
 
-    from hackedit.application import system
+    from hackedit.api import system
 
     distro = ''
     if system.LINUX:

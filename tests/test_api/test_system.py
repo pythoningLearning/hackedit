@@ -1,6 +1,6 @@
 import os
 
-from hackedit.application import system
+from hackedit.api import system
 
 
 def test_which():

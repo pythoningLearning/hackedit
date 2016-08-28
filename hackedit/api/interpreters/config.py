@@ -1,4 +1,4 @@
-from hackedit.application import mixins
+from hackedit.api import mixins
 
 
 class InterpreterConfig(mixins.JSonisable, mixins.Copyable):

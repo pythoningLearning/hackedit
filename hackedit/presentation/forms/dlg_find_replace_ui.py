@@ -124,7 +124,7 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.combo_projects, self.edit_pattern)
 
     def retranslateUi(self, Dialog):
-        from hackedit.application.i18n import get_translation
+        from hackedit.api.i18n import get_translation
         _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Dialog"))
         self.label.setText(_("Text to find:   "))

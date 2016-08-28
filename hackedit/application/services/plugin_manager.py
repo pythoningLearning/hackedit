@@ -1,8 +1,7 @@
 import logging
 
 from dependency_injector.injections import inject
-
-from hackedit.application.plugins import plugin_types
+from hackedit.api.plugins import plugin_types
 from hackedit.containers import Services
 
 
@@ -20,7 +19,7 @@ class PluginManager:
         return self.get_plugins(category)[plugin_name]
 
     def _load_plugins(self, plugin_loader):
-        for plugin in plugin_types():
+        for plugin in sorted(plugin_types(), key=lambda x: x.METADATA.category):
             plugins, failed_to_load = plugin_loader.load_plugins(plugin.METADATA)
             self._plugins[plugin.METADATA.category] = plugins
             self._failed_to_load.update(failed_to_load)

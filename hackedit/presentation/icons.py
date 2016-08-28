@@ -9,8 +9,7 @@ import os
 import sys
 
 from PyQt5.QtGui import QIcon
-
-from hackedit.application import system
+from hackedit.api import system
 
 
 class Icons:

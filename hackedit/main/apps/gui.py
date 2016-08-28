@@ -1,7 +1,7 @@
 import os
 import sys
 
-from hackedit.application import system
+from hackedit.api import system
 from hackedit.containers import Services, View
 from hackedit.presentation.forms import hackedit_rc
 

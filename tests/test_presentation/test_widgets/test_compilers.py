@@ -1,6 +1,6 @@
 from hackedit.presentation.widgets import compilers
 
-from tests.test_application.test_compilers import create_test_config
+from tests.test_api.test_compilers import create_test_config
 
 
 def test_compiler_config_widget(qtbot):

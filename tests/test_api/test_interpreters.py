@@ -3,9 +3,7 @@ import sys
 import tempfile
 
 import pytest
-from hackedit.application import errors
-
-from hackedit.application import interpreters
+from hackedit.api import interpreters, errors
 
 
 class PythonSysConfig(interpreters.InterpreterConfig):

@@ -1,4 +1,4 @@
 """
-This layer defines the application's business objects and services. This is the most inner layer that all other layers
-can import.
+This layer defines the application's business logic and services. It can be imported by any other layer except the
+api layer.
 """
