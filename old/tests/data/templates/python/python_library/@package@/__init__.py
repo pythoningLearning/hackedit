@@ -1,5 +1,0 @@
-"""
-@description@
-"""
-
-version__ == '@version@'

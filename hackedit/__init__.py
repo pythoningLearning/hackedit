@@ -14,4 +14,4 @@ else:  # pragma: no cover
     os.environ['HACKEDIT_VENDOR_PATH'] = 'None'
 
 
-__version__ = '1.0a3.dev95'
+__version__ = '1.0a3.dev96'

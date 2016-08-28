@@ -114,11 +114,11 @@ class PreCompiler:
             input_path = create_test_file()
             output_path = self.get_output_file_name(input_path)
             abs_output_path = resolve_path(output_path)
-            if not rm_file(output_path):
+            if not rm_file(output_path):  # pragma: no cover
                 raise PreCompilerCheckFailed(
                     _('Failed to remove %r before checking if pre-compilation works.\n'
                       'Please remove this file before attempting a new pre-compilation check!') %
-                    abs_output_path, -1, error_leve=PreCompilerCheckFailed.WARNING)
+                    abs_output_path, -1, error_level=PreCompilerCheckFailed.WARNING)
             exit_code, output = self.pre_compile_file(input_path)
             if exit_code != 0 or not os.path.exists(abs_output_path):
                 raise PreCompilerCheckFailed(output, exit_code)

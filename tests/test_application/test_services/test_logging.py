@@ -16,7 +16,7 @@ def test_get_log_path():
 def test_get_log_files():
     log_files = Services.logging().get_log_files()
     assert isinstance(log_files, list)
-    assert 1 <= len(log_files) < 6
+    assert 1 <= len(log_files) < 7
 
 
 def test_clear_log_files():

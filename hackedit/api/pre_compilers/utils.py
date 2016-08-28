@@ -26,12 +26,9 @@ def get_pre_compiler_version(pre_compiler, include_all=False):
 
 @memoize_args
 def _perform_check(classname, json_config, pre_compiler=None):
-    if pre_compiler:
-        pre_compiler.check_pre_compiler()
+    pre_compiler.check_pre_compiler()
 
 
 @memoize_args
 def _get_version(compiler_path, include_all, pre_compiler=None):
-    if pre_compiler:
-        return pre_compiler.get_version(include_all=include_all)
-    return ''
+    return pre_compiler.get_version(include_all=include_all)

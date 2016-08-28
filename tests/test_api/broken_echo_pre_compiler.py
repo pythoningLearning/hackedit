@@ -14,7 +14,7 @@ def echo_precompiler():
         sys.exit()
 
     with open(args.input_file, 'r') as fin, open(args.output_file, 'w') as fout:
-        fout.write(fin.read())
+        pass
 
 
 if __name__ == '__main__':

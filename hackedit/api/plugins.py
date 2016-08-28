@@ -72,7 +72,8 @@ class FileIconProviderPlugin:
         :param file_info: QFileInfo
         :retype: PyQt5.QtGui.QIcon
         """
-        pass
+        from PyQt5 import QtGui
+        return QtGui.QIcon()
 
 
 class WorkspacePlugin(QObject):
@@ -110,7 +111,7 @@ class WorkspacePlugin(QObject):
         You should implement this method to setup your plugin (create widgets,
         connect signals/slots,...)
         """
-        pass
+        raise NotImplementedError()
 
     def close(self):
         """
@@ -131,7 +132,7 @@ class WorkspacePlugin(QObject):
 
         :rtype: hackedit.api.widgets.PreferencePage
         """
-        pass
+        return None
 
     def apply_preferences(self):
         """
@@ -162,7 +163,7 @@ class WorkspaceProviderPlugin:
         """
         Gets the workspace data dictionary.
         """
-        pass
+        return {}
 
 
 class SymbolParserPlugin:
@@ -190,7 +191,7 @@ class SymbolParserPlugin:
         This method will be called automatically when indexing files for any
         file that match one of the supported mimetype.
         """
-        pass
+        return []
 
 
 class PreferencePagePlugin:
@@ -207,7 +208,7 @@ class PreferencePagePlugin:
         """
         Returns the preference page widget.
         """
-        pass
+        return None
 
 
 class TemplateProviderPlugin:
@@ -222,7 +223,7 @@ class TemplateProviderPlugin:
         Gets the label of the provider. The label will appear in the list
         of template sources. It must be carefully chosen.
         """
-        pass
+        return ''
 
     def get_url(self):
         """
@@ -230,7 +231,7 @@ class TemplateProviderPlugin:
         repository) or a local url (pointing to the directory that contains the
         templates)
         """
-        pass
+        return ''
 
 
 class CompilerPlugin:
@@ -239,7 +240,7 @@ class CompilerPlugin:
     """
     METADATA = PluginMetadata('compilers')
 
-    @inject(View.icons)
+    @inject(icons=View.icons)
     def get_compiler_icon(self, icons):
         return icons.run_build()
 
@@ -337,7 +338,7 @@ class PreCompilerPlugin:
             return None
         return self.create_new_configuration(name, path)
 
-    def create_new_configuration(self, name, path, extra_options):
+    def create_new_configuration(self, name, path, extra_options=None):
         """
         Creates a new configuration.
 
@@ -402,7 +403,7 @@ class InterpreterPlugin:
             return None
         return self.create_new_configuration(name, path)
 
-    def create_new_configuration(self, name, path, extra_options):
+    def create_new_configuration(self, name, path, extra_options=None):
         """
         Creates a new configuration.
 

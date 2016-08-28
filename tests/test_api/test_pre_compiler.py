@@ -10,6 +10,7 @@ from hackedit.api.errors import PreCompilerCheckFailed
 containers.Services.mime_types().add_mimetype_extension('text/x-precompiler-test', '*.pye')
 
 echo_pre_compiler = os.path.join(os.path.dirname(__file__), 'echo_pre_compiler.py')
+broken_echo_pre_compiler = os.path.join(os.path.dirname(__file__), 'broken_echo_pre_compiler.py')
 
 
 class EchoPrecompilerConfig(pre_compilers.PreCompilerConfig):
@@ -75,8 +76,34 @@ class TestPreCompiler:
         test_precompiler.config.version_regex = ''
         assert test_precompiler.get_version()
 
-    def test_check(self):
+    def test_check_ok(self):
         pre_compilers.check_pre_compiler(self.precompiler)
+
+    def test_check_broken(self, mock):
+        self.broken_precompiler.test_file_content = None
+        with pytest.raises(PreCompilerCheckFailed):
+            pre_compilers.check_pre_compiler(self.broken_precompiler)
+        self.broken_precompiler.config.path = echo_pre_compiler
+        with pytest.raises(PreCompilerCheckFailed):
+            pre_compilers.check_pre_compiler(self.broken_precompiler)
+        self.broken_precompiler.config.mimetypes = ['test/x-python']
+        with pytest.raises(PreCompilerCheckFailed):
+            pre_compilers.check_pre_compiler(self.broken_precompiler)
+        self.broken_precompiler.config.output_pattern = 'file.egg'
+        with pytest.raises(PreCompilerCheckFailed):
+            pre_compilers.check_pre_compiler(self.broken_precompiler)
+        self.broken_precompiler.config.command_pattern = 'qziodjqozijd'
+        with pytest.raises(PreCompilerCheckFailed):
+            pre_compilers.check_pre_compiler(self.broken_precompiler)
+        self.broken_precompiler.config.mimetypes = ['text/x-python']
+        self.broken_precompiler.config.path = sys.executable
+        self.broken_precompiler.config.test_file_content = 'qziodjqozijd'
+        with pytest.raises(PreCompilerCheckFailed):
+            pre_compilers.check_pre_compiler(self.broken_precompiler)
+        # emtpy result
+        self.broken_precompiler.config.command_pattern = '%s $flags -o $output_file -i $input_file' % \
+                                                         broken_echo_pre_compiler
+        self.broken_precompiler.config.path = sys.executable
         with pytest.raises(PreCompilerCheckFailed):
             pre_compilers.check_pre_compiler(self.broken_precompiler)
 
