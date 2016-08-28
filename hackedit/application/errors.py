@@ -31,6 +31,14 @@ class CompilerCheckFailedError(ProgramCheckFailedError):
         super().__init__('Compiler', _logger, *args, **kwargs)
 
 
+class PreCompilerCheckFailed(ProgramCheckFailedError):
+    def __init__(self, *args, **kwargs):
+        def _logger():
+            return logging.getLogger('pre-compiler')
+
+        super().__init__('PreCompiler', _logger, *args, **kwargs)
+
+
 class InterpreterCheckFailed(ProgramCheckFailedError):
     def __init__(self, type_name, *args, **kwargs):
         def _logger():
