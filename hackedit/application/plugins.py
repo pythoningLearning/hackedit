@@ -9,36 +9,39 @@ values the list of python classes that implement the entrypoint interface.
 This module describes the entrypoints interface, each "interface" has a ``ENTRYPOINT`` attribute, that is the string
 you need to use in the entrypoints dict in your setup.py.
 """
-from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QObject
+from dependency_injector.injections import inject
+
+from hackedit.containers import View
+
+
+class PluginMetadata:
+    def __init__(self, category):
+        self.category = category
+        self.entry_point = 'hackedit.plugins.%s' % category
 
 
 class EditorPlugin:
     """
-    An editor plugin returns the CodeEdit class that needs to be registerd
-    inside the application.
+    An editor plugin returns the CodeEdit class that needs to be registered inside the application.
     """
-    #: setuptools entry point to use for adding new editor plugins.
-    ENTRYPOINT = 'hackedit.plugins.editors'
+    METADATA = PluginMetadata('editors')
 
-    @staticmethod
-    def get_editor_class():
+    def get_editor_class(self):
         """
         Returns the editor **class** to register.
         :return: a subclass of :class:`pyqode.core.api.CodeEdit`
         """
         pass
 
-    @classmethod
-    def get_specific_preferences_page(cls):
+    def get_specific_preferences_page(self):
         """
         Returns a preferences page to edit the settings specific to your
         editor.
         """
         pass
 
-    @classmethod
-    def apply_specific_preferences(cls, editor):
+    def apply_specific_preferences(self, editor):
         """
         Apply the specific preferences to an editor instance
         """
@@ -55,7 +58,7 @@ class FileIconProviderPlugin:
     extensions: :attr:SUPPORTED_EXTENSIONS and a function that will return the
     actual QIcon instance: :func:`icon`.
     """
-    ENTRYPOINT = 'hackedit.plugins.file_icon_providers'
+    METADATA = PluginMetadata('file_icon_providers')
 
     #: the list of supported file extensions. Use the '.' extension for
     #: folders (e.g. if you need to display a custom icon for special folders
@@ -89,9 +92,7 @@ class WorkspacePlugin(QObject):
           :func:`get_preferences_page` on the plugin instance.
 
     """
-
-    #: setuptools entry point to use for adding new editor plugins.
-    ENTRYPOINT = 'hackedit.plugins.workspace_plugins'
+    METADATA = PluginMetadata('workspace_plugins')
 
     def __init__(self, window):
         """
@@ -120,8 +121,7 @@ class WorkspacePlugin(QObject):
         """
         pass
 
-    @classmethod
-    def get_preferences_page(cls):
+    def get_preferences_page(self):
         """
         Returns the plugin config page. A page is a simple widget where you
         expose your plugin's preferences. That page will be automatically shown
@@ -156,13 +156,11 @@ class WorkspaceProviderPlugin:
         }
 
     """
-
-    #: setuptools entry point to use for adding new editor plugins.
-    ENTRYPOINT = 'hackedit.plugins.workspace_providers'
+    METADATA = PluginMetadata('workspace_plugins.workspace_providers')
 
     def get_data(self):
         """
-        Gets the workspace data dictionnary.
+        Gets the workspace data dictionary.
         """
         pass
 
@@ -178,7 +176,7 @@ class SymbolParserPlugin:
     of :class:`pyqode.core.share.Definition` that will be written to the
     project's index database by the indexing backend.
     """
-    ENTRYPOINT = 'hackedit.plugins.symbol_parsers'
+    METADATA = PluginMetadata('symbol_parsers')
 
     #: Specify the mimetypes that can be handled by a particular indexor
     #: plugin
@@ -203,12 +201,9 @@ class PreferencePagePlugin:
     This preference page won't be tied to the plugins category (you're free to
     define a category or not in your preferences page).
     """
+    METADATA = PluginMetadata('preference_pages')
 
-    #: setuptools entry point to use for adding new editor plugins.
-    ENTRYPOINT = 'hackedit.plugins.preference_pages'
-
-    @classmethod
-    def get_preferences_page(cls):
+    def get_preferences_page(self):
         """
         Returns the preference page widget.
         """
@@ -220,7 +215,7 @@ class TemplateProviderPlugin:
     A template provider plugin provides an additional source of templates
     to the application.
     """
-    ENTRYPOINT = 'hackedit.plugins.template_providers'
+    METADATA = PluginMetadata('template_providers')
 
     def get_label(self):
         """
@@ -229,7 +224,7 @@ class TemplateProviderPlugin:
         """
         pass
 
-    def get_url(cls):
+    def get_url(self):
         """
         Gets the template url. This can be a remote url (pointing to a git
         repository) or a local url (pointing to the directory that contains the
@@ -242,11 +237,11 @@ class CompilerPlugin:
     """
     Adds support for a new compiler in HackEdit.
     """
-    ENTRYPOINT = 'hackedit.plugins.compilers'
+    METADATA = PluginMetadata('compilers')
 
-    def get_compiler_icon(self):
-        from hackedit.api import special_icons
-        return special_icons.run_build()
+    @inject(View.icons)
+    def get_compiler_icon(self, icons):
+        return icons.run_build()
 
     def get_compiler(self):
         """
@@ -267,12 +262,6 @@ class CompilerPlugin:
         """
         raise NotImplementedError()
 
-    def _select_compiler_path(self, parent):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select compiler')
-        if path:
-            return True, path
-        return False, ''
-
     def create_new_configuration_with_dialog(self, parent, name):
         """
         Creates a new compiler configuration with the ability to show a wizard/dialog to ask more inputs from the user.
@@ -281,7 +270,15 @@ class CompilerPlugin:
 
         This method should rely on `create_new_configuration` to create the final configuration.
         """
-        status, path = self._select_compiler_path(parent)
+        from PyQt5 import QtWidgets
+
+        def _select_compiler_path():
+            path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select compiler')
+            if path:
+                return True, path
+            return False, ''
+
+        status, path = _select_compiler_path()
         if not status:
             return None
         return self.create_new_configuration(name, path)
@@ -301,10 +298,10 @@ class PreCompilerPlugin:
     """
     Adds support for a new pre-compiler in HackEdit.
     """
-
-    ENTRYPOINT = 'hackedit.plugins.pre_compilers'
+    METADATA = PluginMetadata('pre_compilers')
 
     def get_pre_compiler_icon(self):
+        from PyQt5 import QtGui
         return QtGui.QIcon.fromTheme('database-index')
 
     def get_pre_compiler_type_name(self):
@@ -327,7 +324,15 @@ class PreCompilerPlugin:
 
         This method should rely on `create_new_configuration` to create the final configuration.
         """
-        status, path = self._select_pre_compiler_path(parent)
+        from PyQt5 import QtWidgets
+
+        def _select_pre_compiler_path():
+            path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pre-compiler')
+            if path:
+                return True, path
+            return False, ''
+
+        status, path = _select_pre_compiler_path()
         if not status:
             return None
         return self.create_new_configuration(name, path)
@@ -340,18 +345,12 @@ class PreCompilerPlugin:
         """
         raise NotImplementedError()
 
-    def _select_pre_compiler_path(self, parent):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pre-compiler')
-        if path:
-            return True, path
-        return False, ''
-
 
 class InterpreterPlugin:
     """
     Adds support for a new interpreter in HackEdit.
     """
-    ENTRYPOINT = 'hackedit.plugins.interpreters'
+    METADATA = PluginMetadata('interpreters')
 
     def get_interpreter_icon(self):
         """
@@ -390,7 +389,15 @@ class InterpreterPlugin:
 
         This method should rely on `create_new_configuration` to create the final configuration.
         """
-        status, path = self._select_interpreter_path(parent)
+        from PyQt5 import QtWidgets
+
+        def _select_interpreter_path():
+            path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pinterpreter')
+            if path:
+                return True, path
+            return False, ''
+
+        status, path = _select_interpreter_path()
         if not status:
             return None
         return self.create_new_configuration(name, path)
@@ -414,125 +421,133 @@ class InterpreterPlugin:
         """
         return None
 
-    def _select_interpreter_path(self, parent):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(parent, 'Select pinterpreter')
-        if path:
-            return True, path
-        return False, ''
 
+def plugin_types():
+    return [
+        CompilerPlugin,
+        EditorPlugin,
+        InterpreterPlugin,
+        FileIconProviderPlugin,
+        PreCompilerPlugin,
+        PreferencePagePlugin,
+        SymbolParserPlugin,
+        TemplateProviderPlugin,
+        WorkspacePlugin,
+        WorkspaceProviderPlugin
+    ]
 
-def get_plugin_instance(plugin_class):
-    """
-    Returns the plugin instance that match a given plugin **class**.
-
-    :param plugin_class: Plugin class
-    """
-    return _window().get_plugin_instance(plugin_class)
-
-
-def get_compiler_plugins():
-    """
-    Returns a list of all known compiler plugins.
-
-    :rtype: [CompilerPlugin]
-    """
-    ret_val = []
-    for plugin in _shared.APP.plugin_manager.compiler_plugins.values():
-        ret_val.append(plugin)
-    return ret_val
-
-
-def get_compiler_plugin_by_typename(compiler_type_name):
-    """
-    Gets the compiler plugin that match the specified compiler_type_name.
-
-    :rtype: CompilerPlugin
-    """
-    try:
-        return _shared.APP.plugin_manager.compiler_plugins[compiler_type_name]
-    except KeyError:
-        return None
-
-
-def get_compiler_plugin_by_mimetype(mimetype):
-    """
-    Gets the compiler plugin that match the specified mimetype
-
-    :rtype: CompilerPlugin
-    """
-    for plugin in get_compiler_plugins():
-        if mimetype in plugin.get_compiler().mimetypes:
-            return plugin
-    return None
-
-
-def get_pre_compiler_plugins():
-    """
-    Returns a list of all known pre-compiler plugins
-
-    :rtype: [PreCompilerPlugin]
-    """
-    ret_val = []
-    for plugin in _shared.APP.plugin_manager.pre_compiler_plugins.values():
-        ret_val.append(plugin)
-    return ret_val
-
-
-def get_pre_compiler_plugin_by_typename(pre_compiler_type_name):
-    """
-    Gets the pre-compiler plugin that match the specified pre_compiler_type_name.
-
-    :rtype: PreCompilerPlugin
-    """
-    try:
-        return _shared.APP.plugin_manager.pre_compiler_plugins[pre_compiler_type_name]
-    except KeyError:
-        return None
-
-
-def get_pre_compiler_plugin_by_mimetype(mimetype):
-    """
-    Gets the pre-compiler plugin that matches the specified mimetype
-
-    :rtype: PreCompilerPlugin
-    """
-    for plugin in get_pre_compiler_plugins():
-        if mimetype in plugin.get_pre_compiler_mimetypes():
-            return plugin
-    return None
-
-
-def get_interpreter_plugins():
-    """
-    Returns a list of all known interpreter plugins.
-
-    :rtype: [InterpreterPlugin]
-    """
-    ret_val = []
-    for plugin in _shared.APP.plugin_manager.interpreter_plugins.values():
-        ret_val.append(plugin)
-    return ret_val
-
-
-def get_interpreter_plugin_by_typename(interpreter_type_name):
-    """
-    Gets the interpreter plugin that match the specified interpreter_type_name.
-
-    :rtype: InterpreterPlugin
-    """
-    try:
-        return _shared.APP.plugin_manager.interpreter_plugins[interpreter_type_name]
-    except KeyError:
-        return None
-
-
-def get_interpreter_plugin_by_mimetype(mimetype):
-    """
-    Gets the interpreter plugin that matches the specified mimetype
-
-    :rtype: InterpreterPlugin
-    """
-    for plugin in get_interpreter_plugins():
-        if mimetype in plugin.get_interpreter_mimetypes():
-            return plugin
-    return None
+# def get_plugin_instance(plugin_class):
+#     """
+#     Returns the plugin instance that match a given plugin **class**.
+#
+#     :param plugin_class: Plugin class
+#     """
+#     return _window().get_plugin_instance(plugin_class)
+#
+#
+# def get_compiler_plugins():
+#     """
+#     Returns a list of all known compiler plugins.
+#
+#     :rtype: [CompilerPlugin]
+#     """
+#     ret_val = []
+#     for plugin in _shared.APP.plugin_manager.compiler_plugins.values():
+#         ret_val.append(plugin)
+#     return ret_val
+#
+#
+# def get_compiler_plugin_by_typename(compiler_type_name):
+#     """
+#     Gets the compiler plugin that match the specified compiler_type_name.
+#
+#     :rtype: CompilerPlugin
+#     """
+#     try:
+#         return _shared.APP.plugin_manager.compiler_plugins[compiler_type_name]
+#     except KeyError:
+#         return None
+#
+#
+# def get_compiler_plugin_by_mimetype(mimetype):
+#     """
+#     Gets the compiler plugin that match the specified mimetype
+#
+#     :rtype: CompilerPlugin
+#     """
+#     for plugin in get_compiler_plugins():
+#         if mimetype in plugin.get_compiler().mimetypes:
+#             return plugin
+#     return None
+#
+#
+# def get_pre_compiler_plugins():
+#     """
+#     Returns a list of all known pre-compiler plugins
+#
+#     :rtype: [PreCompilerPlugin]
+#     """
+#     ret_val = []
+#     for plugin in _shared.APP.plugin_manager.pre_compiler_plugins.values():
+#         ret_val.append(plugin)
+#     return ret_val
+#
+#
+# def get_pre_compiler_plugin_by_typename(pre_compiler_type_name):
+#     """
+#     Gets the pre-compiler plugin that match the specified pre_compiler_type_name.
+#
+#     :rtype: PreCompilerPlugin
+#     """
+#     try:
+#         return _shared.APP.plugin_manager.pre_compiler_plugins[pre_compiler_type_name]
+#     except KeyError:
+#         return None
+#
+#
+# def get_pre_compiler_plugin_by_mimetype(mimetype):
+#     """
+#     Gets the pre-compiler plugin that matches the specified mimetype
+#
+#     :rtype: PreCompilerPlugin
+#     """
+#     for plugin in get_pre_compiler_plugins():
+#         if mimetype in plugin.get_pre_compiler_mimetypes():
+#             return plugin
+#     return None
+#
+#
+# def get_interpreter_plugins():
+#     """
+#     Returns a list of all known interpreter plugins.
+#
+#     :rtype: [InterpreterPlugin]
+#     """
+#     ret_val = []
+#     for plugin in _shared.APP.plugin_manager.interpreter_plugins.values():
+#         ret_val.append(plugin)
+#     return ret_val
+#
+#
+# def get_interpreter_plugin_by_typename(interpreter_type_name):
+#     """
+#     Gets the interpreter plugin that match the specified interpreter_type_name.
+#
+#     :rtype: InterpreterPlugin
+#     """
+#     try:
+#         return _shared.APP.plugin_manager.interpreter_plugins[interpreter_type_name]
+#     except KeyError:
+#         return None
+#
+#
+# def get_interpreter_plugin_by_mimetype(mimetype):
+#     """
+#     Gets the interpreter plugin that matches the specified mimetype
+#
+#     :rtype: InterpreterPlugin
+#     """
+#     for plugin in get_interpreter_plugins():
+#         if mimetype in plugin.get_interpreter_mimetypes():
+#             return plugin
+#     return None

@@ -12,8 +12,7 @@ from hackedit.api import plugins, events
 from hackedit.api.widgets import FileIconProvider
 
 
-def _logger():
-    return logging.getLogger(__name__)
+
 
 
 class LoadPluginFailedEvent(events.ExceptionEvent):

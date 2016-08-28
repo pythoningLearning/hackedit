@@ -20,6 +20,7 @@ class BaseApplication(QtWidgets.QApplication):
         self._init_sqlite3()
         get_translation()
         Services.logging().set_level(logging.DEBUG)
+        Services.plugin_manager()
 
     def _init_qt_app(self):
         self.setOrganizationName(self.ORG_NAME)

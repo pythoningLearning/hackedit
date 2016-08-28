@@ -20,8 +20,8 @@ install:
   - pip install -r requirements-dev.txt
   - python setup.py install_data
   # install official plugins to improve coverage of integration tests
-  - pip install git+https://github.com/HackEdit/hackedit-python.git
-  - pip install git+https://github.com/HackEdit/hackedit-cobol.git
+  - pip install git+https://github.com/HackEdit/hackedit-python.git@dev
+  - pip install git+https://github.com/HackEdit/hackedit-cobol.git@dev
 script:
   - py.test --cov hackedit
 
