@@ -62,6 +62,8 @@ class Icons:
     @staticmethod
     def _init_search_path():
         paths = QIcon.themeSearchPaths()
+        paths.append('/usr/share/icons')
+        paths.append('/usr/local/share/icons')
         paths.append(os.path.join(sys.prefix, 'share', 'hackedit', 'icons'))
         paths.append('/usr/local/share/hackedit/icons')
         QIcon.setThemeSearchPaths(list(set(paths)))
