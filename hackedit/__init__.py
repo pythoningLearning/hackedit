@@ -10,8 +10,8 @@ if os.environ.get('HACKEDIT_IGNORE_VENDOR_PATH') is None:
     os.environ['HACKEDIT_VENDOR_PATH'] = vendor
     sys.path.insert(0, vendor)
     os.environ['PATH'] = vendor + os.pathsep + os.environ['PATH']
-else:
+else:  # pragma: no cover
     os.environ['HACKEDIT_VENDOR_PATH'] = 'None'
 
 
-__version__ = '1.0a3.dev84'
+__version__ = '1.0a3.dev85'

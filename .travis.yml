@@ -15,7 +15,7 @@ install:
   - sudo apt-get update
   - sudo apt-get --yes --force-yes install libegl1-mesa gnome-icon-theme-full --fix-missing
   # make sure pip is up to date so that it can install wheels
-  - pip install pip --upgrade
+  - pip install pip coveralls --upgrade
   - pip install -e .
   - pip install -r requirements-dev.txt
   - python setup.py install_data
