@@ -46,7 +46,7 @@ class Icons:
         Gets the system icon theme (this is only useful on linux).
         """
         theme = QIcon.themeName()
-        if theme == '':
+        if theme == '' or theme == 'hicolor':
             if system.LINUX:
                 theme = 'default'
             else:
