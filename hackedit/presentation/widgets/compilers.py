@@ -10,6 +10,8 @@ class CompilerConfigWidget(QtWidgets.QWidget):
     configuration (all settings except the compiler directory and the environment variables).
     """
     def is_dirty(self):
+        if self._original_config is None or self.get_config() is None:
+            return True
         return self._original_config.to_json() != self.get_config().to_json()
 
     def set_config(self, config):
@@ -19,7 +21,10 @@ class CompilerConfigWidget(QtWidgets.QWidget):
         :param config: CompilerConfig
         """
         self._original_config = config
-        self._config = config.copy()
+        if config:
+            self._config = config.copy()
+        else:
+            self._config = None
 
     def get_config(self):
         """
@@ -50,6 +55,8 @@ class GenericCompilerCongigWidget(CompilerConfigWidget):
 
     def set_config(self, config):
         super().set_config(config)
+        if config is None:
+            return
         self.ui.edit_flags.setText(' '.join(config.flags))
         self.ui.list_include_paths.clear()
         for path in config.include_paths:
@@ -64,18 +71,19 @@ class GenericCompilerCongigWidget(CompilerConfigWidget):
         self.ui.edit_libs.setText(' '.join(config.libraries))
 
     def get_config(self):
-        self._config.flags = [token for token in self.ui.edit_flags.text().split(' ') if token]
-        self._config.libraries = [token for token in self.ui.edit_libs.text().split(' ') if token]
-        self._config.include_paths.clear()
-        for i in range(self.ui.list_include_paths.count()):
-            path = self.ui.list_include_paths.item(i).text()
-            if path:
-                self._config.include_paths.append(path)
-        self._config.library_paths.clear()
-        for i in range(self.ui.list_lib_paths.count()):
-            path = self.ui.list_lib_paths.item(i).text()
-            if path:
-                self._config.library_paths.append(path)
+        if self._config:
+            self._config.flags = [token for token in self.ui.edit_flags.text().split(' ') if token]
+            self._config.libraries = [token for token in self.ui.edit_libs.text().split(' ') if token]
+            self._config.include_paths.clear()
+            for i in range(self.ui.list_include_paths.count()):
+                path = self.ui.list_include_paths.item(i).text()
+                if path:
+                    self._config.include_paths.append(path)
+            self._config.library_paths.clear()
+            for i in range(self.ui.list_lib_paths.count()):
+                path = self.ui.list_lib_paths.item(i).text()
+                if path:
+                    self._config.library_paths.append(path)
         return super().get_config()
 
     def _add_abs_include_path(self):  # pragma: no cover
