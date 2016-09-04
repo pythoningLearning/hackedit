@@ -47,10 +47,9 @@ class Icons:
         """
         theme = QIcon.themeName()
         if theme == '' or theme == 'hicolor':
+            theme = 'breeze' if not system.is_dark_theme() else 'breeze-dark'
             if system.LINUX:
                 theme = 'default'
-            else:
-                theme = 'breeze' if not system.is_dark_theme() else 'breeze-dark'
         return theme
 
     @staticmethod
@@ -75,10 +74,10 @@ class Icons:
         Gets the "configure" icon (for actions like configure project/build,...)
         """
         if build and QIcon.hasThemeIcon('run-build-configure'):
-            return QIcon.fromTheme('run-build-configure')  # pragma: no cover
+            return QIcon.fromTheme('run-build-configure')
         if QIcon.hasThemeIcon('configure'):
             return QIcon.fromTheme('configure')
-        else:  # pragma: no cover
+        else:
             return QIcon.fromTheme('apps-system')
 
     @staticmethod
