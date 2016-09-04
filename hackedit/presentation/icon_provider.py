@@ -67,12 +67,16 @@ def _get_mimetype_icon(path, fallback):
         mime = 'text/x-cmake'
     else:
         mime = mimetypes.guess_type(path)[0]
+    print('detected mimetype:', mime)
     if mime:
         icon = mime.replace('/', '-')
-        gicon = 'gnome-mime-%s' % icon
+        gnome_icon = 'gnome-mime-%s' % icon
         has_icon = QtGui.QIcon.hasThemeIcon(icon)
-        if QtGui.QIcon.hasThemeIcon(gicon) and not has_icon:
-            return QtGui.QIcon.fromTheme(gicon)
+        has_gnome_icon = QtGui.QIcon.hasThemeIcon(gnome_icon)
+        print('has icon', icon, has_icon)
+        print('has gnome icon', gnome_icon, has_gnome_icon)
+        if has_gnome_icon and not has_icon:
+            return QtGui.QIcon.fromTheme(gnome_icon)
         elif has_icon:
             return QtGui.QIcon.fromTheme(icon)
     if fallback:
