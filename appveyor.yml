@@ -18,8 +18,8 @@ install:
   - pip install -e .
   - python setup.py --quiet install_data
   # install official plugins to improve coverage of integration tests
-  - pip install git+https://github.com/HackEdit/hackedit-python.git
-  - pip install git+https://github.com/HackEdit/hackedit-cobol.git
+  - pip install git+https://github.com/HackEdit/hackedit-python.git@dev
+  - pip install git+https://github.com/HackEdit/hackedit-cobol.git@dev
 
 build: false  # Not a C# project
 
