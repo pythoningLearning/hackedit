@@ -7,14 +7,13 @@ omit =
     *scripts/*
     *forms*
     *main_gui.py
-    *msvc.py
-    *_factories*
 
 [report]
 # Regexes for lines to exclude from consideration
 exclude_lines =
     # Use to manually exclude a statement from coverage
     pragma: no cover
+
     # Don't complain about missing debug-only code:
     __debug__
     def __repr__
@@ -22,14 +21,10 @@ exclude_lines =
     # Don't complain if tests don't hit defensive assertion code:
     raise AssertionError
     raise NotImplementedError
-    except PermissionError
 
     # Don't complain if non-runnable code isn't run:
-    if 0:
-    if False:
     if __name__ == .__main__.:
     pass
-
     def main\(.*:
 
     # Don't complain if non importable code is not run
@@ -38,6 +33,7 @@ exclude_lines =
 
     # don't complain if OSError handler code is not run
     except OSError
+    except PermissionError
 
     # Don't complain if platform specific code isn't run
     .*if sys.platform.*:
@@ -51,12 +47,3 @@ exclude_lines =
     # Don't complain about _logger function not being called
     logging.getLogger
     _logger
-
-    # Don't complain about question message box dialog not shown
-    .*_interactive*.:
-
-    # skip those classes, they cannot easily be covered by unit tests, they
-    # are covered by functional tests
-    .*ScriptRunnerPlugin.*:
-    .*DlgScriptRunConfiguration.*:
-    save_current_editor_as

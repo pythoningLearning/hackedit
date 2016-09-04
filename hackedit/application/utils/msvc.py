@@ -14,7 +14,7 @@ INTERESTING = set(("include", "lib", "libpath", "path"))
 
 
 @memoized
-def get_vc_vars(vcvarsall, arch):
+def get_vc_vars(vcvarsall, arch):  # pragma: no cover
     """
     Gets the VC environment variables
     :param vcvarsall: path to the vcvarsall batch to run.
@@ -40,7 +40,7 @@ def get_vc_vars(vcvarsall, arch):
     return env
 
 
-def query_vcvarsall(path, arch):
+def query_vcvarsall(path, arch):  # pragma: no cover
     """
     Launch vcvarsall.bat for the given architecture and reads the environment
     variables from the standard output.

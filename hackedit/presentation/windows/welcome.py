@@ -79,19 +79,12 @@ class WelcomeWindow(QtWidgets.QMainWindow):
     def __repr__(self):
         return 'WelcomeWindow()'
 
-    def closeEvent(self, event):
-        super().closeEvent(event)
-
     def showEvent(self, event):
         """ Shows the welcome window centered on the primary screen. """
         super().showEvent(event)
         _logger().debug('show centered')
-        self.setGeometry(
-            QtWidgets.QStyle.alignedRect(
-                QtCore.Qt.LeftToRight,
-                QtCore.Qt.AlignCenter,
-                self.size(),
-                QtWidgets.qApp.desktop().availableGeometry()))
+        self.setGeometry(QtWidgets.QStyle.alignedRect(QtCore.Qt.LeftToRight, QtCore.Qt.AlignCenter, self.size(),
+                                                      QtWidgets.qApp.desktop().availableGeometry()))
 
     def _quit(self):
         QtWidgets.qApp.quit()
@@ -134,13 +127,8 @@ class WelcomeWindow(QtWidgets.QMainWindow):
         self._ui.list_recents.clear()
         for file in self._recent_projects.get_recent_files():
             item = QtWidgets.QListWidgetItem()
-            if os.path.ismount(file):
-                item.setText(file)
-            else:
-                item.setText(
-                    '%s\n%s' % (QtCore.QFileInfo(file).fileName(), file))
-            item.setIcon(FileIconProvider().icon(
-                         QtCore.QFileInfo(file)))
+            item.setText('%s\n%s' % (QtCore.QFileInfo(file).fileName(), file))
+            item.setIcon(FileIconProvider().icon(QtCore.QFileInfo(file)))
             item.setToolTip(file)
             item.setData(QtCore.Qt.UserRole, file)
             self._ui.list_recents.addItem(item)

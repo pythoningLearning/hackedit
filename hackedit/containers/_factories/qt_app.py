@@ -1,4 +1,4 @@
-class QtAppFactory:
-    def __call__(self):  # pragma: no cover
+class QtAppFactory:  # pragma: no cover
+    def __call__(self):
         from hackedit.infrastructure.qt_app import QtApplication
         return QtApplication()

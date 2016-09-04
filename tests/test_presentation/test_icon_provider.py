@@ -14,6 +14,9 @@ class TestFileIconProvider:
         cls.icons = View.icons()
         cls.icon_provider = FileIconProvider()
 
+    def setup_method(self, *_):
+        _get_mimetype_icon.cache.clear()
+
     def test_mimetype_icon(self, mock):
         mock.spy(QIcon, 'fromTheme')
         mock.patch('PyQt5.QtGui.QIcon.hasThemeIcon')
@@ -55,7 +58,6 @@ class TestFileIconProvider:
         self.perform_icon_check(icon_theme_name, icon_type, mock)
 
     def perform_icon_check(self, expected, type_or_info_or_str, mock):
-        _get_mimetype_icon.cache.clear()
         mock.spy(QIcon, 'fromTheme')
         mock.patch('PyQt5.QtGui.QIcon.hasThemeIcon')
         QIcon.hasThemeIcon.return_value = True

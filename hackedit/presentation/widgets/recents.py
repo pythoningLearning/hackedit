@@ -39,13 +39,6 @@ class RecentFilesListWidget(QtWidgets.QListWidget):
         menu.addAction(action_clear)
         menu.exec_(self.mapToGlobal(pt))
 
-    def mousePressEvent(self, e):
-        """
-        Keeps track of the pressed button
-        """
-        self.mouseButton = e.button()
-        super().mousePressEvent(e)
-
     def mouseMoveEvent(self, e):
         """
         Display a pointing hand cursor when over an item. The cursor is

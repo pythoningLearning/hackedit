@@ -1,3 +1,3 @@
-class SplashScreen:
-    def __init__(self):
-        pass
+# class SplashScreen:
+#     def __init__(self):
+#         pass
