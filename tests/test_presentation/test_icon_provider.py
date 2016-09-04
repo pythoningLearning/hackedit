@@ -11,7 +11,7 @@ from PyQt5.QtCore import QFileInfo
 class TestFileIconProvider:
     @classmethod
     def setup_class(cls):
-        cls.icons = View().icons()
+        cls.icons = View.icons()
         cls.icon_provider = FileIconProvider()
 
     def test_mimetype_icon(self, mock):
