@@ -34,7 +34,8 @@ class FileIconProvider(QtWidgets.QFileIconProvider):
         :param fallback: fallback icon path (qrc or file system)
         :returns: QIcon
         """
-        path = 'file.%s' % QtCore.QFileInfo(path).suffix()
+        if 'CMakeLists.txt' not in path:
+            path = 'file.%s' % QtCore.QFileInfo(path).suffix()
         return _get_mimetype_icon(path, fallback)
 
     def icon(self, type_or_info):
@@ -48,16 +49,14 @@ class FileIconProvider(QtWidgets.QFileIconProvider):
                     ret_val = plugin.icon(type_or_info)
                     if ret_val is not None:
                         return ret_val
-                # simplify path to help memoization
-                simplified_path = 'file.%s' % type_or_info.suffix()
-                return self.mimetype_icon(simplified_path)
+                return self.mimetype_icon(type_or_info.absoluteFilePath())
         else:
-            map = {
-                FileIconProvider.File: QtGui.QIcon.fromTheme('text-x-generic'),
-                FileIconProvider.Folder: QtGui.QIcon.fromTheme('folder'),
+            theme_map = {
+                FileIconProvider.File: 'text-x-generic',
+                FileIconProvider.Folder: 'folder',
             }
             try:
-                return map[type_or_info]
+                return QtGui.QIcon.fromTheme(theme_map[type_or_info])
             except KeyError:
                 return super().icon(type_or_info)
 
@@ -77,7 +76,7 @@ def _get_mimetype_icon(path, fallback):
         elif has_icon:
             return QtGui.QIcon.fromTheme(icon)
     if fallback:
-        return QtGui.QIcon(fallback)
+        return fallback
     return QtGui.QIcon.fromTheme('text-x-generic')
 
 
