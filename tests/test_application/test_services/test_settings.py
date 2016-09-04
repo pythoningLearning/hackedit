@@ -1,5 +1,6 @@
 import locale
 import logging
+import os
 
 import pytest
 from PyQt5 import QtCore
@@ -136,6 +137,9 @@ class TestEnvironmentSettings(TestSettingsBase):
         mocker.spy(self.settings._qsettings, 'value')
         mocker.spy(self.settings._qsettings, 'setValue')
         assert getattr(self.settings.environment, name) == default
+
+        if os.environ.get('TRAVIS'):
+            name = 'gnome'
 
         self.settings._qsettings.value.assert_called_once_with('env/' + name, default)
         setattr(self.settings.environment, name, opposite)

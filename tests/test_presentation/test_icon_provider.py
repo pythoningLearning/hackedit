@@ -16,6 +16,8 @@ class TestFileIconProvider:
 
     def test_mimetype_icon(self, mock):
         mock.spy(QIcon, 'fromTheme')
+        mock.patch('PyQt5.QtGui.QIcon.hasThemeIcon')
+        QIcon.hasThemeIcon.return_value = True
         print('available icon themes: ', self.icons.icon_themes())
         print('current icon theme: ', QIcon.themeName())
         icon = self.icon_provider.mimetype_icon('file.py', fallback=None)
@@ -24,6 +26,8 @@ class TestFileIconProvider:
 
     def test_mimetype_icon_for_cmake(self, mock):
         mock.spy(QIcon, 'fromTheme')
+        mock.patch('PyQt5.QtGui.QIcon.hasThemeIcon')
+        QIcon.hasThemeIcon.return_value = True
         icon = self.icon_provider.mimetype_icon('CMakeLists.txt', fallback=None)
         assert isinstance(icon, QIcon)
         QIcon.fromTheme.assert_called_once_with('text-x-cmake')
@@ -53,6 +57,8 @@ class TestFileIconProvider:
     def perform_icon_check(self, expected, type_or_info_or_str, mock):
         _get_mimetype_icon.cache.clear()
         mock.spy(QIcon, 'fromTheme')
+        mock.patch('PyQt5.QtGui.QIcon.hasThemeIcon')
+        QIcon.hasThemeIcon.return_value = True
         icon = self.icon_provider.icon(type_or_info_or_str)
         assert isinstance(icon, QIcon)
         if expected:
