@@ -1,6 +1,7 @@
 import os
 
 import pytest
+from hackedit.containers import View
 from hackedit.presentation.icon_provider import FileIconProvider, _get_mimetype_icon
 
 from PyQt5.QtGui import QIcon
@@ -10,10 +11,13 @@ from PyQt5.QtCore import QFileInfo
 class TestFileIconProvider:
     @classmethod
     def setup_class(cls):
+        cls.icons = View().icons()
         cls.icon_provider = FileIconProvider()
 
     def test_mimetype_icon(self, mock):
         mock.spy(QIcon, 'fromTheme')
+        print('available icon themes: ', self.icons.icon_themes())
+        print('current icon theme: ', QIcon.themeName())
         icon = self.icon_provider.mimetype_icon('file.py', fallback=None)
         assert isinstance(icon, QIcon)
         QIcon.fromTheme.assert_called_once_with('text-x-python')
