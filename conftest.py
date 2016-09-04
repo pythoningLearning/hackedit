@@ -16,7 +16,3 @@ class TestApplication(GuiApplication):
 
 print('HackEdit v%s' % __version__)
 app = TestApplication()
-
-if os.environ.get('TRAVIS', False):
-    from PyQt5.QtGui import QIcon
-    QIcon.setThemeName('gnome')
