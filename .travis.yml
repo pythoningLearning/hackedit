@@ -14,6 +14,7 @@ install:
   # install libegl1-mesa package for the missing libEGL shared object that prevents qt from starting
   - sudo apt-get update
   - sudo apt-get --yes --force-yes install libegl1-mesa gnome-icon-theme-full gksu --fix-missing
+  - gsettings set org.gnome.desktop.interface icon-theme 'gnome'
   # make sure pip is up to date so that it can install wheels
   - pip install pip --upgrade
   - pip install -e .
