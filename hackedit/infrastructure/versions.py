@@ -51,7 +51,7 @@ def get_versions():
     from PyQt5.QtCore import PYQT_VERSION_STR
     from pyqode.core import __version__ as corev
 
-    from hackedit.api import system
+    from hackedit.application import system
 
     distro = ''
     if system.LINUX:

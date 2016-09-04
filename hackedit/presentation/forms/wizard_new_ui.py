@@ -103,7 +103,7 @@ class Ui_Wizard(object):
         Wizard.setTabOrder(self.edit_prj_path, self.bt_select_prj_path)
 
     def retranslateUi(self, Wizard):
-        from hackedit.api.i18n import get_translation
+        from hackedit.application.i18n import get_translation
         _ = get_translation(package="hackedit")
         Wizard.setWindowTitle(_("New"))
         self.wizardPageHome.setTitle(_("Select template"))
@@ -127,4 +127,4 @@ class Ui_Wizard(object):
         self.bt_select_prj_path.setText(_("Browse"))
         self.lbl_prj_location_error.setText(_("TextLabel"))
 
-from hackedit.api.widgets import PathLineEdit
+from hackedit.application.widgets import PathLineEdit

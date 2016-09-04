@@ -4,10 +4,10 @@ import re
 
 from PyQt5 import QtCore
 
-from hackedit.api import system
-from hackedit.api.errors import InterpreterCheckFailed
-from hackedit.api.utils import BlockingProcess
-from hackedit.api.utils import CommandBuilder
+from hackedit.application import system
+from hackedit.application.errors import InterpreterCheckFailed
+from hackedit.application.utils import BlockingProcess
+from hackedit.application.utils import CommandBuilder
 
 
 def _logger():

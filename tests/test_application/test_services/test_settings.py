@@ -3,8 +3,8 @@ import logging
 
 import pytest
 from PyQt5 import QtCore
-from hackedit.api import system
-from hackedit.api.constants import OpenMode
+from hackedit.application import system
+from hackedit.application.constants import OpenMode
 from hackedit.application.services.settings.editor import EditorSettingsSection
 from hackedit.application.services.settings.environment import EnvironmentSettingsSection
 from hackedit.application.services.settings.section import SettingsSection

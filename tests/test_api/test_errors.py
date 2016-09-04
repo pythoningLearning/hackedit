@@ -1,6 +1,6 @@
 import logging
 
-from hackedit.api import errors
+from hackedit.application import errors
 
 
 def test_command_builder_failed_error():

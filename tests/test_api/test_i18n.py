@@ -4,7 +4,7 @@ import os
 import sys
 
 import pytest
-from hackedit.api import i18n
+from hackedit.application import i18n
 
 
 def test_available_locales():

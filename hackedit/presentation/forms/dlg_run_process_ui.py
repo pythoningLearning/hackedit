@@ -29,7 +29,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.i18n import get_translation
+        from hackedit.application.i18n import get_translation
         _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Dialog"))
         self.console.setToolTip(_("Process output"))

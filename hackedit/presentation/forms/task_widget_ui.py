@@ -64,7 +64,7 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.i18n import get_translation
+        from hackedit.application.i18n import get_translation
         _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.group.setTitle(_("Name"))
@@ -72,4 +72,4 @@ class Ui_Form(object):
         self.bt_cancel.setText(_("..."))
         self.lbl_description.setText(_("Description"))
 
-from hackedit.api.widgets import ElidedLabel
+from hackedit.application.widgets import ElidedLabel

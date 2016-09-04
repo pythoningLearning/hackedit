@@ -1,6 +1,6 @@
 import pytest
-from hackedit.api.errors import CommandBuildFailedError
-from hackedit.api.utils import CommandBuilder
+from hackedit.application.errors import CommandBuildFailedError
+from hackedit.application.utils import CommandBuilder
 
 
 class TestCommandBuilder:

@@ -1,7 +1,7 @@
 import logging
 import os
 
-from hackedit.api.utils import BlockingProcess
+from hackedit.application.utils import BlockingProcess
 
 
 class Package:

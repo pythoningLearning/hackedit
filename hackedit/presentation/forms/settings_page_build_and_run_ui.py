@@ -425,7 +425,7 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        from hackedit.api.i18n import get_translation
+        from hackedit.application.i18n import get_translation
         _ = get_translation(package="hackedit")
         Form.setWindowTitle(_("Form"))
         self.tree_interpreters.headerItem().setText(0, _("Name"))
@@ -538,5 +538,5 @@ class Ui_Form(object):
         self.tab_categories.setTabText(self.tab_categories.indexOf(self.tab_pre_compilers), _("Pre-compilers"))
         self.tab_categories.setTabToolTip(self.tab_categories.indexOf(self.tab_pre_compilers), _("<html><head/><body><p>This tab let your configure pre-compilers or transpilers used by the hackedit\'s build system</p><p><br/></p><p>Pre-compilers are tools that process a source file into another source file (e.g. sass, flex, bison or any tools that let you extend a language with custom syntax).</p><p><br/></p><p>The pre-compiler pass will alaways occur before the compiler pass.</p></body></html>"))
 
-from hackedit.api.widgets import PathLineEdit
+from hackedit.application.widgets import PathLineEdit
 from hackedit.presentation.widgets.package_manager import PackageManagerWidget

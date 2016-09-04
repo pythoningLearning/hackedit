@@ -3,7 +3,7 @@ import logging
 import os
 
 import coloredlogs
-from hackedit.api import system
+from hackedit.application import system
 
 #: reference to the file handler
 file_handler = None

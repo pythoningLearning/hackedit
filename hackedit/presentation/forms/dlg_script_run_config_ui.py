@@ -217,7 +217,7 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.bt_rm_env_var, self.list_configs)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.i18n import get_translation
+        from hackedit.application.i18n import get_translation
         _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Python run configuration"))
         self.label_prj_interpreter.setText(_("Project interpreter:"))
@@ -255,4 +255,4 @@ class Ui_Dialog(object):
         self.cb_run_in_external_terminal.setToolTip(_("Check this to run the script in an external terminal."))
         self.cb_run_in_external_terminal.setText(_("Run in external terminal"))
 
-from hackedit.api.widgets import PathLineEdit
+from hackedit.application.widgets import PathLineEdit

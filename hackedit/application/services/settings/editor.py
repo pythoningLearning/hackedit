@@ -1,6 +1,6 @@
 import locale
 
-from hackedit.api import system
+from hackedit.application import system
 from pyqode.core.managers.file import FileManager
 from pyqode.core.modes import CodeCompletionMode
 

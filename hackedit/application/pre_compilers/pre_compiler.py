@@ -4,8 +4,8 @@ import os
 import re
 import tempfile
 
-from hackedit.api.errors import PreCompilerCheckFailed
-from hackedit.api.utils import BlockingProcess, CommandBuilder, is_outdated
+from hackedit.application.errors import PreCompilerCheckFailed
+from hackedit.application.utils import BlockingProcess, CommandBuilder, is_outdated
 
 
 def _logger():

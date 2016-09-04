@@ -2,10 +2,10 @@ import logging
 import os
 
 from PyQt5 import QtCore
-from hackedit.api import system
-from hackedit.api.constants import TargetType
-from hackedit.api.utils import msvc
-from hackedit.api.utils.blocking_process import BlockingProcess
+from hackedit.application import system
+from hackedit.application.constants import TargetType
+from hackedit.application.utils.blocking_process import BlockingProcess
+from hackedit.application.utils import msvc
 
 
 class Compiler:

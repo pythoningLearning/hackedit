@@ -1,4 +1,4 @@
-from hackedit.api.errors import CommandBuildFailedError
+from hackedit.application.errors import CommandBuildFailedError
 
 
 class CommandBuilder:

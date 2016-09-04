@@ -8,7 +8,7 @@ import mimetypes
 
 import pkg_resources
 from dependency_injector.injections import inject
-from hackedit.api import system
+from hackedit.application import system
 from hackedit.containers import Services
 from pygments.lexers import get_all_lexers, get_lexer_for_mimetype
 from pyqode.core.widgets import SplittableCodeEditTabWidget

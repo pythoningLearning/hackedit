@@ -1,7 +1,7 @@
 import builtins
 
 import pytest
-from hackedit.api.utils import memoize_args
+from hackedit.application.utils import memoize_args
 
 def test_memoize_args_working_function(mocker):
     mocker.spy(builtins, 'print')

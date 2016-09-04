@@ -59,7 +59,7 @@ def get_translation(package='hackedit'):
 
     Use this function at the top of each of your plugin modules::
 
-        from hackedit.api.gettext import get_translation
+        from hackedit.application.gettext import get_translation
         _ = get_translation(package='hackedit-python')
         _('translatable string')
 
@@ -101,7 +101,7 @@ def hackedit_gettext_hook(ui_script_path):  # pragma: no cover
     package_name = cfg.package_name
     content = content.replace(
         '        _translate = QtCore.QCoreApplication.translate',
-        '        from hackedit.api.i18n import get_translation\n'
+        '        from hackedit.application.i18n import get_translation\n'
         '        _ = get_translation(package="%s")' % package_name)
 
     with open(ui_script_path, 'w') as fout:

@@ -6,7 +6,7 @@ from PyQt5 import QtGui
 
 import pytest
 
-from hackedit.api import plugins
+from hackedit.application import plugins
 
 
 def test_plugin_metadata():

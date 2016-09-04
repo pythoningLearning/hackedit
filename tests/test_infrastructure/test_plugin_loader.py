@@ -1,6 +1,6 @@
 import pkg_resources
 from hackedit.containers import Services
-from hackedit.api.plugins import PluginMetadata
+from hackedit.application.plugins import PluginMetadata
 
 
 class TestPluginLoader:

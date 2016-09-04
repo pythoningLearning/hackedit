@@ -1,8 +1,8 @@
 import logging
 
 from PyQt5 import QtWidgets
-from hackedit.api import system
-from hackedit.api.constants import OpenMode
+from hackedit.application import system
+from hackedit.application.constants import OpenMode
 from hackedit.containers import View
 from pyqode.core.widgets import FileSystemContextMenu
 

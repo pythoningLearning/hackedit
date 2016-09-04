@@ -1,4 +1,4 @@
-from hackedit.api.utils import memoize_args
+from hackedit.application.utils import memoize_args
 
 
 def check_pre_compiler(pre_compiler):

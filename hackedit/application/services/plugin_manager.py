@@ -1,7 +1,7 @@
 import logging
 
 from dependency_injector.injections import inject
-from hackedit.api.plugins import plugin_types
+from hackedit.application.plugins import plugin_types
 from hackedit.containers import Services
 
 

@@ -3,7 +3,7 @@ import mimetypes
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from dependency_injector.injections import inject
-from hackedit.api import plugins
+from hackedit.application import plugins
 from hackedit.containers import Services
 from pyqode.core.api import utils
 

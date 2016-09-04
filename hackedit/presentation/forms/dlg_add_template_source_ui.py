@@ -54,7 +54,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        from hackedit.api.i18n import get_translation
+        from hackedit.application.i18n import get_translation
         _ = get_translation(package="hackedit")
         Dialog.setWindowTitle(_("Add source"))
         self.label.setText(_("Label:"))
@@ -63,4 +63,4 @@ class Ui_Dialog(object):
         self.edit_url.setToolTip(_("<html><head/><body><p>URL of the template repository. </p><p><br/></p><p>Boss supports both local and remote (git) template repositories.</p></body></html>"))
         self.toolButton.setText(_("..."))
 
-from hackedit.api.widgets import PathLineEdit
+from hackedit.application.widgets import PathLineEdit
